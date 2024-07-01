@@ -16,8 +16,8 @@ public class MypageServiceImpl implements MypageService {
 	private final SqlSession session;
 
 	@Override
-	public String selectEmpPwd(String empPwd) {
-		return dao.selectEmpPwd(session,empPwd);
+	public String selectByEmpNo(String empNo) {
+		return dao.selectByEmpNo(session,empNo);
 	}
 
 	@Override
