@@ -1,0 +1,124 @@
+@charset "UTF-8";
+#mainPage{
+    display: flex;
+}
+#mainPage>div{
+    width: 50%;
+   
+    height: 900px;
+    display: flex;
+    
+}
+#leftPage{
+    background-color: #0033FF;
+    background-image:url(../images/main.png);
+    background-repeat: no-repeat; /* 이미지 반복 여부 */
+    background-position: center; /* 이미지 위치 */
+    background-size: 1000px; /* 이미지 크기 */
+    display: flex;
+}
+#textBox{
+    
+    margin: auto;
+    width: 550px;
+    height: 550px;
+    
+}
+#textBox>p{
+    font-size: 70px;
+    font-weight: 1000;
+    color: white;
+   
+}
+#textBox>p:first-child{
+    margin-top:0;
+}
+#textBox>p:nth-child(2){
+    margin-top: 290px;
+    padding-left: 100px;
+}
+#textBox>p:nth-child(3){
+    margin-top: -80px;
+    padding-left: 170px;
+}
+#loginForm{
+   
+    width: 500px;
+    height: 500px;
+    margin: auto;
+}
+#loginTopText{
+    font-size: 70px;
+    color: #0033FF;
+   
+    margin: auto;
+    padding-left: 30%;
+    font-weight: 1000;
+}
+#logo{
+    width: 300px;
+    
+    height: 150px;
+    margin: auto;
+}
+#logo>img{
+    width: 100%;
+    margin: auto;
+}
+#loginForm>form{
+   
+    height: 250px;     
+}
+#username{
+    width: 280px;
+    height: 50px;
+    border: none;
+    border-radius: 7px;
+    background-color:rgb(201, 200, 200);
+    margin-top: 30px;
+    margin-left: 100px;
+    font-size: 25px;
+    padding-left: 20px;
+}
+#password{
+    width: 280px;
+    height: 50px;
+    border: none;
+    border-radius: 7px;
+    background-color: rgb(201, 200, 200);
+    margin-top: 30px;
+    margin-left: 100px;
+    font-size: 25px;
+   padding-left: 20px;
+}
+#password::placeholder{
+   font-size: 30px;
+   padding-left: 55px;
+}
+#username::placeholder{
+    font-size: 30px;
+    padding-left: 55px;
+    
+ }
+#login{
+    width: 280px;
+    height: 50px;
+    margin-top: 30px;
+    margin-left: 100px;
+    border: none;
+    border-radius: 7px;
+    background-color: #0033FF;
+    color: white;
+    font-size: 30px;
+    
+}
+#loginForm>a{
+    font-size: 20px;
+    text-decoration: none;
+    margin-left: 100px;
+    
+}
+#login:hover{
+    background-color: skyblue;
+    color: black;
+}
