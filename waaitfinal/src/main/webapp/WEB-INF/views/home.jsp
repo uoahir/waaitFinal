@@ -22,5 +22,11 @@
 	비밀번호:<input type="password" name="empPwd">
 	</form>
 	<a href = "${path }/codeboard">코드 작성하는 페이지</a>
+	
+	
+	<div onclick="location.assign('${path }/edoc/home')">전자결재</div>
+	
+	<div onclick="location.assign('${path }/chat/home')">채팅</div>
+	
 </body>
 </html>
