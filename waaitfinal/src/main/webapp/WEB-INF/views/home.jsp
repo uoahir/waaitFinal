@@ -51,7 +51,7 @@
                         </div>
                         <div>
                             <img src="./img/icons8-메시지-40.png" alt="" width="50px">
-                            <p>쪽지</p>
+                            <a href="${path }/mail/mainmail.do">메일</a>
                         </div>
                     </div>
                 </div>
