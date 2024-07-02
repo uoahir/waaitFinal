@@ -64,7 +64,7 @@
                     <div>
                         <div id="overword" class="midTop">
                             <div><p>초과근무</p></div> <!-- 초과 근무 -->
-                         
+                    
                             <div><p>0일</p></div> <!--초과 근무 표기-->
                         </div> 
                         <div id="breakwork" class="midTop">
@@ -83,12 +83,9 @@
                 </div>
               
             </div>
-            <div id="section_3">
-                
+            <div id="section_3">  
             </div>
         </div>
-   
-        
     </section>
 	<a href = "${path }/codeboard">코드 작성하는 페이지</a>
 </body>

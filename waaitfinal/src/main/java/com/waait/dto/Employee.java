@@ -1,5 +1,6 @@
 package com.waait.dto;
 
+import java.sql.Date;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,14 +22,30 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Employee implements UserDetails{
-	private Integer empNo; //시퀀스값
-	private String empName; //사원이름
-	private String empId; 	// 사원 아이디
-	private String empPwd;	// 사원 비밀번호
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private Long empNo;
+    private String empId;
+    private String empPwd;
+    private String deptCode;
+    private String levelCode;
+    private String empName;
+    private Date empStartDate;
+    private Date empEndDate;
+    private String leaveYN;
+    private String empEmail;
+    private String empProfile;
+    private String empGender;
+    private String empBirth;
+    private String empPhone;
+    private String empAddress;
+    private String empSignfile;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> auth  = new HashSet<>();
-	if(empNo==81) { //사원에 대한처리부분
+	if(deptCode.equals("L1")) { //사원에 대한처리부분
 		auth.add(new SimpleGrantedAuthority(EmpAuthority.ADMIN.name()));
 	}
 	auth.add(new SimpleGrantedAuthority(EmpAuthority.USER.name()));
