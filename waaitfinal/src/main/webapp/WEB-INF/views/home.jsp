@@ -2,10 +2,12 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath }" />
-<link rel="stylesheet" type="text/css" href="${path }/resources/css/home.css">
+<link rel="stylesheet" type="text/css" href="${path }/resources/css/home.css"/>
+
 <!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript" src="${path}/resources/js/home.js"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -45,7 +47,7 @@
                         <button id="workstaus">출근하기</button> 
                     </div>
                     <div id="msgpart">
-                        <div>
+                        <div onclick="chatting();">
                             <img src="./img/icons8-메시지-30.png" alt="" width="50px ">
                             <p>메신저</p>
                         </div>
