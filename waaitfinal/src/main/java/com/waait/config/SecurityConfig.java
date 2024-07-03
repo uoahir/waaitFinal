@@ -21,7 +21,7 @@ public class SecurityConfig {
 			throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-						.requestMatchers("/logininfo", "/user","/login", "/WEB-INF/views/**", "/resources/**").permitAll()
+						.requestMatchers("/logininfo","/login", "/WEB-INF/views/**", "/resources/**").permitAll()
 						.requestMatchers("/admin").hasAnyAuthority(EmpAuthority.ADMIN.name())
 						.anyRequest().authenticated()
 						)

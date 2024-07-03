@@ -14,8 +14,8 @@ public class MypageDaoImpl implements MypageDao {
 	private SqlSession session;
 
 	@Override
-	public String selectEmpPwd(SqlSession session, String empPwd) {
-		return session.selectOne("mypage.selectEmpPwd",empPwd);
+	public String selectByEmpNo(SqlSession session, String empNo) {
+		return session.selectOne("mypage.selectByEmpNo",empNo);
 	}
 
 	@Override

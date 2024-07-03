@@ -6,8 +6,8 @@ import com.waait.mypage.model.dto.Mypage;
 
 public interface MypageDao {
 	
-	//원래 비밀번호 가져오기 -> select 
-	String selectEmpPwd(SqlSession session ,String empPwd);
+	//사원번호 통해서 원래 비밀번호 가져오기 -> select 
+	String selectByEmpNo(SqlSession session ,String empNo);
 	//새로운 비밀번호 db에 저장하기 -> insert
 	int newEmpPwd(SqlSession sesion ,Mypage m);
 	
