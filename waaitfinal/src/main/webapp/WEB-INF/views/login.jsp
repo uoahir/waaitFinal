@@ -2,8 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath }" />
-<link rel="stylesheet" type="text/css"
-	href="${path }/resources/css/login.css">
+<link rel="stylesheet" type="text/css" href="${path }/resources/css/login.css">
 <!DOCTYPE html>
 <html>
 <head>

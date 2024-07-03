@@ -53,8 +53,8 @@ public class HomeController {
 
 	@GetMapping("/codeboard")
 	public String codePage(HttpSession session) {
-		Employee employee= (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		System.out.println("session"+employee);
+		Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println("session" + employee);
 		return "codereviewboard/codeboard";
 	}
 
