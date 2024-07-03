@@ -25,6 +25,7 @@
 	
 	
 	<div onclick="location.assign('${path }/edoc/home')">전자결재</div>
+	<div onclick="location.assign('${path }/edoc/insertedoc')">전자결재 작성</div>
 	
 	<div onclick="location.assign('${path }/chat/home')">채팅</div>
 	
