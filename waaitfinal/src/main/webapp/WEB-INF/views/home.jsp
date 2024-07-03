@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript" src="${path}/resources/js/home.js"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/home.css">
@@ -45,7 +46,7 @@
                         <button id="workstaus">출근하기</button> 
                     </div>
                     <div id="msgpart">
-                        <div>
+                        <div onclick="chatting();">
                             <img src="./img/icons8-메시지-30.png" alt="" width="50px ">
                             <p>메신저</p>
                         </div>
@@ -90,10 +91,13 @@
 	<a href = "${path }/codeboard">코드 작성하는 페이지</a>
 	
 	
+<<<<<<< HEAD
 	<div onclick="location.assign('${path }/edoc/home')">전자결재</div>
 	<div onclick="location.assign('${path }/edoc/insertedoc')">전자결재 작성</div>
 	
 	<div onclick="location.assign('${path }/chat/home')">채팅</div>
+=======
+>>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
 	
 </body>
 </html>
