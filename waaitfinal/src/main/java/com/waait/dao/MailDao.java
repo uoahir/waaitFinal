@@ -25,4 +25,8 @@ public class MailDao {
 		return session.selectList("mail.selectMailSetting", empNo);
 	}
 
+	public void setMailSetting(SqlSession session, long empNo) {
+		session.insert("mail.setMailSetting", empNo);
+	}
+
 }

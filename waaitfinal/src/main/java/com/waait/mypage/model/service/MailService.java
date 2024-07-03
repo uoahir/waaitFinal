@@ -30,4 +30,8 @@ public class MailService {
 	public List<MailSetting> getMailSetting(Long empNo) {
 		return dao.getMailSetting(session, empNo);
 	}
+
+	public void setMailSetting(long empNo) {
+		dao.setMailSetting(session, empNo);
+	}
 }

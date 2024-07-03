@@ -37,11 +37,18 @@ public class MailController {
 		Employee employee = getLoginEmpInfo();
 		String receiverMailAddress = employee.getEmpAddress();
 		long empNo = employee.getEmpNo();
+		int numPerpage = 0;
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
 		
 		List<MailSetting> mailSetting = service.getMailSetting(empNo);
-		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", mailSetting.get(0).getMailNumPerpage(),
+		if(mailSetting == null) {
+			service.setMailSetting(empNo);
+			numPerpage = 5;
+		} else {
+			numPerpage = mailSetting.get(0).getMailNumPerpage();			
+		}
+		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
 													"spamDomains", spamDomains, "receiverMailAddress", receiverMailAddress);
 		
 //		String receiverMailAddress = "waait@waait.com";
