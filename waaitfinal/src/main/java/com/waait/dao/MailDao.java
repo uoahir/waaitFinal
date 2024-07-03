@@ -3,6 +3,7 @@ package com.waait.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,10 @@ import com.waait.dto.SpamDomain;
 public class MailDao {
 
 	public List<Mail> getReceiveMail(SqlSession session, Map<String, Object> mailSettings) {
-		 return session.selectList("mail.selectReceiveMail", mailSettings);
+		int cPage = (int) mailSettings.get("cPage");
+		int numPerpage = (int) mailSettings.get("numPerpage");
+		RowBounds rb = new RowBounds((cPage - 1) * numPerpage, numPerpage);
+		return session.selectList("mail.selectReceiveMail", mailSettings, rb);
 	}
 
 	public List<SpamDomain> getSpamDomain(SqlSession session, long empNo) {
