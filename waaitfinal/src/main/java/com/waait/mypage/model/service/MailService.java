@@ -67,4 +67,16 @@ public class MailService {
 		}
 		return result;
 	}
+
+	public Mail getMailDetailByNo(Map<String, Object> param) {
+		return dao.getMailDetailByNo(session, param);
+	}
+
+	public void updateReadStatus(int mailNo) {
+		dao.updateReadStatus(session, mailNo);
+	}
+
+	public int addFavoriteMail(int mailNo) {
+		return dao.addFavoriteMail(session, mailNo);
+	}
 }

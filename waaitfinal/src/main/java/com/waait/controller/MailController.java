@@ -197,11 +197,25 @@ public class MailController {
 	}
 	
 	@GetMapping("/maildetail.do")
-	public void mailDetailView(Model m) {
+	public void mailDetailView(Model model, int mailNo) {
+		String userMailAddress = getLoginEmpInfo().getEmpEmail();
+		Map<String, Object> param = Map.of("mailNo", mailNo, "userMailAddress", userMailAddress);
 		
+		Mail mail = service.getMailDetailByNo(param);
+		updateReadStatus(mailNo);
+		model.addAttribute("mail", mail);
+	}
+	
+	@GetMapping("/addfavorite.do")
+	public @ResponseBody int addFavoriteMail(int mailNo) {
+		return service.addFavoriteMail(mailNo);
 	}
 	
 	private Employee getLoginEmpInfo() {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
+	
+	private void updateReadStatus(int mailNo) {
+		service.updateReadStatus(mailNo);
 	}
 }

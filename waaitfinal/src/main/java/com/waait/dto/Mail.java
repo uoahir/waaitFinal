@@ -16,6 +16,7 @@ public class Mail {
 	private int mailNo;
 	private int employeeNo;
 	private String senderMailAddress;
+	private String senderName;
 	private String mailTitle;
 	private String mailContent;
 	private String mailStatus;

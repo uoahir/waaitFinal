@@ -58,4 +58,16 @@ public class MailDao {
 		return session.delete("mail.deleteSpamDomain", param);
 	}
 
+	public Mail getMailDetailByNo(SqlSession session, Map<String, Object> param) {
+		return session.selectOne("mail.getMailDetailByNo", param);
+	}
+
+	public void updateReadStatus(SqlSession session, int mailNo) {
+		session.update("mail.updateReadStatus", mailNo);
+	}
+
+	public int  addFavoriteMail(SqlSession session, int mailNo) {
+		return session.update("mail.addFavoriteMail", mailNo);
+	}
+
 }

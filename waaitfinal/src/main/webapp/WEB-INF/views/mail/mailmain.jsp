@@ -34,16 +34,21 @@
 			<table>
 				<tr>
 					<th>보낸 사람</th>
-					<th>제목<th>
-					<th>받은 날짜<th>
+					<th>제목</th>
+					<th>받은 날짜</th>
+					<th>읽음 상태</th>
 				</tr>
 				<c:forEach var="mail" items="${mails }">
 					<tr class="mailListTr" id="${mail.mailNo }">
 						<td>
+							<input type="checkbox" name="checkMail">
 							${mail.senderMailAddress }
 						</td>
-						<td>${mail.mailTitle }</td>
+						<td>
+							<a href="">${mail.mailTitle }</a>
+						</td>
 						<td>${mail.mailWriteDate }</td>
+						<td>${mail.mailReadStatus }</td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -53,7 +58,7 @@
 	
 	</div>
 	<div id="myMailBoxContainer">
-		<input type="text" name="myMailBoxName">
+		<input type="text" name="myMailBoxName" placeholder="내 메일함 이름">
 	</div>
 	<div id="userBox">
 		
