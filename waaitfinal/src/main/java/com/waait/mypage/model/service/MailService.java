@@ -1,5 +1,6 @@
 package com.waait.mypage.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.waait.dao.MailDao;
 import com.waait.dto.Mail;
 import com.waait.dto.MailSetting;
+import com.waait.dto.MyMailBox;
 import com.waait.dto.SpamDomain;
 
 import lombok.RequiredArgsConstructor;
@@ -35,8 +37,8 @@ public class MailService {
 		dao.setMailSetting(session, empNo);
 	}
 
-	public void insertSpamDomain(Map<String, Object> param) {
-		dao.insertSpamDomain(session, param);
+	public int insertSpamDomain(Map<String, Object> param) {
+		return dao.insertSpamDomain(session, param);
 	}
 
 	public List<Mail> getAllMail(String loginMemberEmailDomain) {
@@ -45,5 +47,24 @@ public class MailService {
 
 	public List<Mail> getSpamMail(Map<String, Object> param) {
 		return dao.getSpamMail(session, param);
+	}
+
+	public void enrollUserMailBox(Map<String, Object> param) {
+		dao.enrollUserMailBox(session, param);
+	}
+
+	public List<MyMailBox> getMyMailBox(long empNo) {
+		return dao.getMyMailBox(session, empNo);
+	}
+
+	public int deleteSpamDomain(Map<String, Object> param) {
+		int result = 0;
+		String[] domainAddressArr = ((String) param.get("domainAddresses")).split(",");
+		for(String domainAddress : domainAddressArr) {
+			param.put("domainAddress", domainAddress);
+			result = dao.deleteSpamDomain(session, param);
+			if(result == 0) return result;
+		}
+		return result;
 	}
 }

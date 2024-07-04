@@ -23,7 +23,11 @@
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
-	<button onclick="mailSetting()">스팸도메인추가</button>
+	<button onclick="addSpamDomain()">스팸도메인추가</button><br>
+	<input type="text" placeholder="차단해제할 도메인" name="domainAddress">
+	<input type="text" placeholder="차단해제할 도메인" name="domainAddress">
+	<input type="text" placeholder="차단해제할 도메인" name="domainAddress">
+	<button onclick="deleteSpamDomain()">스팸 도메인 삭제</button><br>
 	<button onclick="joinSpamMailBox()">스팸메일함</button>
 	<div id="resultContainer">
 		<c:if test="${not empty mails }">
@@ -33,6 +37,15 @@
 					<th>제목<th>
 					<th>받은 날짜<th>
 				</tr>
+				<c:forEach var="mail" items="${mails }">
+					<tr class="mailListTr" id="${mail.mailNo }">
+						<td>
+							${mail.senderMailAddress }
+						</td>
+						<td>${mail.mailTitle }</td>
+						<td>${mail.mailWriteDate }</td>
+					</tr>
+				</c:forEach>
 			</table>
 		</c:if>
 	</div>
@@ -46,7 +59,7 @@
 		
 	</div>
 	<script>
-		const mailSetting = () => {
+		const addSpamDomain = () => {
 			const spamDomain = document.querySelectorAll("input[name='spamDomain']");
 			let spamDomainString = "";
 			
@@ -76,10 +89,51 @@
 			});
 		}
 		
-		document.querySelecctor("input[name='myMailBoxName']").addEventListener("blur", e => {
+		document.querySelector("input[name='myMailBoxName']").addEventListener("blur", e => {
 			const wantBoxName = e.target.value;
+			if(e.target.value == "") {
+				return;
+			}
+			console.log("wantBoxName : " + wantBoxName);
 			fetch("${path}/mail/enrollmymailbox.do?wantBoxName=" + wantBoxName)
+			.then(response => response.text())
+			.then(data => {
+				if(data == "") {
+					alert("메일함 이름은 중복될 수 없습니다.");
+				} else {
+					document.getElementById("userBox").innerHTML = "<button onclick='goMyMailBox()'>" + data + "</button>";					
+				}
+			});
 		})
+		
+		const deleteSpamDomain = () => {
+			const domainAddress = document.querySelectorAll("input[name='domainAddress']");
+			let domainAddressStr = "";
+			
+			for(let i = 0; i < domainAddress.length; i++) {
+				if(domainAddress.length - 1 == i) {
+					domainAddressStr += domainAddress[i].value;
+				} else {
+					domainAddressStr += domainAddress[i].value + ",";				
+				}
+			}
+			
+			console.log("domainAddressStr : " + domainAddressStr);
+			fetch('${path }/mail/deletespamdomain.do', {
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8'
+				},
+				body : "domainAddresses=" + domainAddressStr
+			})
+		}
+		
+		document.querySelectorAll(".mailListTr").forEach(e => {
+			e.addEventListener("click", e => {
+				const mailPkNo = e.target.parentElement.id;
+				location.assign("${path }/mail/maildetail.do?mailNo=" + mailPkNo);
+			})
+		});
 	</script>
 </body>
 </html>

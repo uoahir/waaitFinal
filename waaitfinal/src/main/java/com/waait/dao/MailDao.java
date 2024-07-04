@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.waait.dto.Mail;
 import com.waait.dto.MailSetting;
+import com.waait.dto.MyMailBox;
 import com.waait.dto.SpamDomain;
 
 @Repository
@@ -33,8 +34,8 @@ public class MailDao {
 		session.insert("mail.setMailSetting", empNo);
 	}
 
-	public void insertSpamDomain(SqlSession session, Map<String, Object> param) {
-		session.insert("mail.setSpamDomain", param);
+	public int insertSpamDomain(SqlSession session, Map<String, Object> param) {
+		return session.insert("mail.setSpamDomain", param);
 	}
 
 	public List<Mail> getAllMail(SqlSession session, String loginMemberEmailDomain) {
@@ -43,6 +44,18 @@ public class MailDao {
 
 	public List<Mail> getSpamMail(SqlSession session, Map<String, Object> param) {
 		return session.selectList("mail.getSpamMail", param);
+	}
+
+	public void enrollUserMailBox(SqlSession session, Map<String, Object> param) {
+		session.selectList("mail.enrollUserMailBox", param);
+	}
+
+	public List<MyMailBox> getMyMailBox(SqlSession session, long empNo) {
+		return session.selectList("mail.getMyMailBox", empNo);
+	}
+
+	public int deleteSpamDomain(SqlSession session, Map<String, Object> param) {
+		return session.delete("mail.deleteSpamDomain", param);
 	}
 
 }

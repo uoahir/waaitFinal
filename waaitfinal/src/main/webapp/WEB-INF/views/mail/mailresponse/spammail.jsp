@@ -8,3 +8,6 @@
 		</c:forEach>
 	</ul>
 </c:if>
+<c:if test="${empty spamMail }">
+	<p>없음</p>
+</c:if>

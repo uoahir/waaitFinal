@@ -1,7 +1,6 @@
 package com.waait.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
 import com.waait.dto.MailSetting;
+import com.waait.dto.MyMailBox;
 import com.waait.dto.SpamDomain;
 import com.waait.mypage.model.service.MailService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 
@@ -30,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class MailController {
 	
 	private final MailService service;
+	private final ObjectMapper mapper;
 	
 	@GetMapping("/mailmain.do")
 	public void changeMailView(Model model,
@@ -112,8 +115,8 @@ public class MailController {
 	}
 	
 	@PostMapping("/settingspamdomain.do")
-	@ResponseBody
-	public void settingSpamDomain(String spamDomain) {
+	public @ResponseBody String settingSpamDomain(String spamDomain) {
+		int result = 0;
 		System.out.println("spamDomain : " + spamDomain);
 		Map<String, Object> param = new HashMap<String, Object>();
 		long empNo = getLoginEmpInfo().getEmpNo();
@@ -123,9 +126,11 @@ public class MailController {
 		for(String domain : domainArr) {
 			param.put("empNo", empNo);
 			param.put("domain", domain);
-			service.insertSpamDomain(param);
+			result = service.insertSpamDomain(param);
 		}
 		
+		if(result > 0) return "성공적으로 등록되었습니다.";
+		else return "등록에 실패했습니다.";
 //		List<Mail> mailList = service.getAllMail(loginMemberEmailDomain);
 //		if(mailList != null && mailList.size() > 0 && !mailList.isEmpty()) {
 //			for(Mail m : mailList) {
@@ -165,8 +170,34 @@ public class MailController {
 	}
 	
 	@GetMapping("/enrollmymailbox.do")
-	@ResponseBody
-	public void enrollUserMailBox(String wantBoxName) {
+	public @ResponseBody String enrollUserMailBox(String wantBoxName, HttpServletResponse res) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		List<MyMailBox> boxList = service.getMyMailBox(empNo);
+		
+		for(MyMailBox mailBox : boxList) {
+			if(mailBox.getMyMailBoxName().equals(wantBoxName)) return null;
+		}
+		
+		Map<String, Object> param = Map.of("empNo", empNo, "wantBoxName", wantBoxName);
+		
+		service.enrollUserMailBox(param);
+		return wantBoxName;
+	}
+	
+	@PostMapping("/deletespamdomain.do")
+	public @ResponseBody int deleteSpamDomain(String domainAddresses) {
+		System.out.println("domainAddress : " + domainAddresses);
+		long empNo = getLoginEmpInfo().getEmpNo();
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("empNo", empNo);
+		param.put("domainAddresses", domainAddresses);
+		service.deleteSpamDomain(param);
+		return 0;
+	}
+	
+	@GetMapping("/maildetail.do")
+	public void mailDetailView(Model m) {
 		
 	}
 	
