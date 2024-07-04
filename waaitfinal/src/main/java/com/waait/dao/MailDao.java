@@ -33,4 +33,12 @@ public class MailDao {
 		session.insert("mail.setMailSetting", empNo);
 	}
 
+	public void insertSpamDomain(SqlSession session, Map<String, Object> param) {
+		session.insert("mail.setSpamDomain", param);
+	}
+
+	public List<Mail> getAllMail(SqlSession session, String loginMemberEmailDomain) {
+		return session.selectList("mail.getAllMail", loginMemberEmailDomain);
+	}
+
 }

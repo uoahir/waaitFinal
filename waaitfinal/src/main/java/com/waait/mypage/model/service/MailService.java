@@ -34,4 +34,12 @@ public class MailService {
 	public void setMailSetting(long empNo) {
 		dao.setMailSetting(session, empNo);
 	}
+
+	public void insertSpamDomain(Map<String, Object> param) {
+		dao.insertSpamDomain(session, param);
+	}
+
+	public List<Mail> getAllMail(String loginMemberEmailDomain) {
+		return dao.getAllMail(session, loginMemberEmailDomain);
+	}
 }

@@ -1,5 +1,6 @@
 package com.waait.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,8 +8,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
@@ -35,21 +38,20 @@ public class MailController {
 //		System.out.println("employee security : " + employee);
 		
 		Employee employee = getLoginEmpInfo();
-		String receiverMailAddress = employee.getEmpAddress();
+		String mailReceiverAddress = employee.getEmpEmail();
 		long empNo = employee.getEmpNo();
 		int numPerpage = 0;
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
-		
 		List<MailSetting> mailSetting = service.getMailSetting(empNo);
-		if(mailSetting == null) {
+		if(mailSetting.size() == 0) {
 			service.setMailSetting(empNo);
 			numPerpage = 5;
 		} else {
-			numPerpage = mailSetting.get(0).getMailNumPerpage();			
+			numPerpage = mailSetting.get(0).getMailNumPerpage();		
 		}
 		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
-													"spamDomains", spamDomains, "receiverMailAddress", receiverMailAddress);
+													"spamDomains", spamDomains, "mailReceiverAddress", mailReceiverAddress);
 		
 		List<Mail> mailList = service.getReceiveMail(mailSettings);
 		System.out.println("가져온 mailList : " + mailList);
@@ -105,6 +107,34 @@ public class MailController {
 		
 		model.addAttribute("mails", mailList);
 		model.addAttribute("pageBar", sb.toString());
+	}
+	
+	@PostMapping("/settingspamdomain.do")
+	@ResponseBody
+	public void settingSpamDomain(String spamDomain) {
+		System.out.println("spamDomain : " + spamDomain);
+		Map<String, Object> param = new HashMap<String, Object>();
+		long empNo = getLoginEmpInfo().getEmpNo();
+		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
+		
+		String[] domainArr = spamDomain.split(",");
+		for(String domain : domainArr) {
+			param.put("empNo", empNo);
+			param.put("domain", domain);
+			service.insertSpamDomain(param);
+		}
+		
+//		List<Mail> mailList = service.getAllMail(loginMemberEmailDomain);
+//		if(mailList != null && mailList.size() > 0 && !mailList.isEmpty()) {
+//			for(Mail m : mailList) {
+//				String senderMailAddress = m.getSenderMailAddress();
+//				for(String spamEmailAddress : domainArr) {
+//					if(senderMailAddress.equals(spamEmailAddress)) {
+//						service.insertSpamMailBox();
+//					}
+//				}
+//			}
+//		} 야발
 	}
 	
 	private Employee getLoginEmpInfo() {
