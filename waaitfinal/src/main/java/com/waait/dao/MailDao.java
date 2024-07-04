@@ -41,4 +41,8 @@ public class MailDao {
 		return session.selectList("mail.getAllMail", loginMemberEmailDomain);
 	}
 
+	public List<Mail> getSpamMail(SqlSession session, Map<String, Object> param) {
+		return session.selectList("mail.getSpamMail", param);
+	}
+
 }

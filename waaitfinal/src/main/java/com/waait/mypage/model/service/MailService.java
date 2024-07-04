@@ -42,4 +42,8 @@ public class MailService {
 	public List<Mail> getAllMail(String loginMemberEmailDomain) {
 		return dao.getAllMail(session, loginMemberEmailDomain);
 	}
+
+	public List<Mail> getSpamMail(Map<String, Object> param) {
+		return dao.getSpamMail(session, param);
+	}
 }

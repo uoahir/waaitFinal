@@ -23,7 +23,28 @@
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
-	<button onclick="mailSetting()">환경설정</button>
+	<button onclick="mailSetting()">스팸도메인추가</button>
+	<button onclick="joinSpamMailBox()">스팸메일함</button>
+	<div id="resultContainer">
+		<c:if test="${not empty mails }">
+			<table>
+				<tr>
+					<th>보낸 사람</th>
+					<th>제목<th>
+					<th>받은 날짜<th>
+				</tr>
+			</table>
+		</c:if>
+	</div>
+	<div id="resultContainer">
+	
+	</div>
+	<div id="myMailBoxContainer">
+		<input type="text" name="myMailBoxName">
+	</div>
+	<div id="userBox">
+		
+	</div>
 	<script>
 		const mailSetting = () => {
 			const spamDomain = document.querySelectorAll("input[name='spamDomain']");
@@ -47,6 +68,18 @@
 			})			
 		}
 		
+		const joinSpamMailBox = () => {
+			fetch("${path}/mail/joinspammail.do")
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("resultContainer").innerHTML = data;
+			});
+		}
+		
+		document.querySelecctor("input[name='myMailBoxName']").addEventListener("blur", e => {
+			const wantBoxName = e.target.value;
+			fetch("${path}/mail/enrollmymailbox.do?wantBoxName=" + wantBoxName)
+		})
 	</script>
 </body>
 </html>

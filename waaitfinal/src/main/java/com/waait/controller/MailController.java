@@ -1,5 +1,7 @@
 package com.waait.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +117,7 @@ public class MailController {
 		System.out.println("spamDomain : " + spamDomain);
 		Map<String, Object> param = new HashMap<String, Object>();
 		long empNo = getLoginEmpInfo().getEmpNo();
-		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
+//		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
 		
 		String[] domainArr = spamDomain.split(",");
 		for(String domain : domainArr) {
@@ -135,6 +137,37 @@ public class MailController {
 //				}
 //			}
 //		} 야발
+	}
+	
+	@GetMapping("/joinspammail.do")
+	public String joinSpamMail(Model model) {
+		List<Mail> spamMailList = new ArrayList<Mail>();
+		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
+		long empNo = getLoginEmpInfo().getEmpNo();
+		
+		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
+		
+//		StringBuffer sb = new StringBuffer();
+		Map<String, Object> param = Map.of("loginMemberEmailDomain", loginMemberEmailDomain, "spamDomains", spamDomains);
+		if(spamDomains != null && spamDomains.size() > 0 && !spamDomains.isEmpty()) {
+//			for(SpamDomain domain : spamDomains) {
+//				sb.append(domain.getSpamDomainAddress() + ",");
+//			}
+			spamMailList = service.getSpamMail(param);
+		}
+//		String[] spamDomainArr = sb.toString().split(",");
+//		Arrays.stream(spamDomainArr).forEach(e -> {
+//			System.out.println("spamDomain : " + e);
+//		});
+		
+		model.addAttribute("spamMail", spamMailList);
+		return "mail/mailresponse/spammail";
+	}
+	
+	@GetMapping("/enrollmymailbox.do")
+	@ResponseBody
+	public void enrollUserMailBox(String wantBoxName) {
+		
 	}
 	
 	private Employee getLoginEmpInfo() {
