@@ -33,6 +33,10 @@ public class MailDao {
 	public void setMailSetting(SqlSession session, long empNo) {
 		session.insert("mail.setMailSetting", empNo);
 	}
+	
+	public int getTotalData(SqlSession session, Map<String, Object> mailSettings) {
+		return session.selectOne("mail.getTotalData", mailSettings);
+	}
 
 	public int insertSpamDomain(SqlSession session, Map<String, Object> param) {
 		return session.insert("mail.setSpamDomain", param);
@@ -69,5 +73,10 @@ public class MailDao {
 	public int addFavoriteMail(SqlSession session, String mailNo) {
 		return session.update("mail.addFavoriteMail", mailNo);
 	}
+
+	public int cancelAddFavorite(SqlSession session, String mailNo) {
+		return session.update("mail.cancelAddFavotie", mailNo);
+	}
+
 
 }

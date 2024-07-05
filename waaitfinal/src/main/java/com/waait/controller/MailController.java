@@ -1,9 +1,11 @@
 package com.waait.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
 import com.waait.dto.MailSetting;
@@ -32,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 public class MailController {
 	
 	private final MailService service;
-	private final ObjectMapper mapper;
+//	private final ObjectMapper mapper;
 	
 	@GetMapping("/mailmain.do")
 	public void changeMailView(Model model,
@@ -61,8 +62,7 @@ public class MailController {
 		List<Mail> mailList = service.getReceiveMail(mailSettings);
 		System.out.println("가져온 mailList : " + mailList);
 		
-		int totalData = mailList.size();
-		System.out.println("list 크기 : " + mailList.size());
+		int totalData = service.getTotalData(mailSettings);
 		int totalPage = (int) Math.ceil((double) totalData/ numPerpage);
 		int pageBarSize = 5;
 		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
@@ -209,9 +209,39 @@ public class MailController {
 	
 	@GetMapping("/addfavorite.do")
 	public @ResponseBody int addFavoriteMail(String mailNo) {
-		System.out.println("controller mailNo : " + mailNo);
-		return service.addFavoriteMail(mailNo);
+		String mailReceiverAddress= getLoginEmpInfo().getEmpEmail();
+		List<Mail> mails = service.getAllMail(mailReceiverAddress);
+		int result = 0;
+		
+		if(mailNo.contains(",")) {
+			String[] mailNoArr = mailNo.split(",");
+//			List<String> mailNoList = Arrays.asList(mailNoArr);
+
+			mails.stream().filter(m -> m.getMailStatus().equals("즐겨찾기")).forEach(m -> {
+				for(int i = 0; i < mailNoArr.length; i++) {
+					if(m.getMailNo() == Integer.parseInt(mailNoArr[i])) {
+						service.cancelAddFavorite(mailNoArr[i]);
+					}
+				}
+			});//addFavoriteMailList = 1, 5, 6 paramMailNo = 1, 2, 3 notAddFavoriteMailList = 2, 3, 4
+			
+			mails.stream().filter(m -> m.getMailStatus().equals("없음")).forEach(m -> {
+				for(int i = 0; i < mailNoArr.length; i++) {
+					if(m.getMailNo() == Integer.parseInt(mailNoArr[i])) {
+						service.cancelAddFavorite(mailNoArr[i]);
+					}
+				}
+			});
+			
+		} else {
+			result = service.cancelAddFavorite(mailNo);
+		}
+
+		result = service.addFavoriteMail(mailNo);
+		return result;
 	}
+	
+	
 	
 	private Employee getLoginEmpInfo() {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

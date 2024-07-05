@@ -47,6 +47,10 @@ public class MailService {
 	public List<Mail> getSpamMail(Map<String, Object> param) {
 		return dao.getSpamMail(session, param);
 	}
+	
+	public int getTotalData(Map<String, Object> mailSettings) {
+		return dao.getTotalData(session, mailSettings);
+	}
 
 	public void enrollUserMailBox(Map<String, Object> param) {
 		dao.enrollUserMailBox(session, param);
@@ -89,4 +93,9 @@ public class MailService {
 		}
 		return result;
 	}
+
+	public int cancelAddFavorite(String mailNo) {
+		return dao.cancelAddFavorite(session, mailNo);
+	}
+
 }

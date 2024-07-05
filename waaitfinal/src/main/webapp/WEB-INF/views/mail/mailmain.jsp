@@ -186,7 +186,13 @@
 		}
 		
 		const buttonAble = () => {
-			document.getElementById("addFavoriteButton").disabled = false;
+			let count = 0;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) count++;
+				
+				if(count == 0) document.getElementById("addFavoriteButton").disabled = true;
+				else document.getElementById("addFavoriteButton").disabled = false;
+			})
 		}
 	</script>
 </body>
