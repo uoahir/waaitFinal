@@ -94,7 +94,7 @@
 			for(let i = 0; i < appArray.length; i++){
 				const $tr = document.createElement("tr");
 				if(appArray[i].checked == true){
-									
+					
 					console.log(appArray[i].value);
 				}
 			}
