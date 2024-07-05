@@ -14,20 +14,20 @@ import com.waait.security.controller.UserPasswordAuthenticationProvider;
 @EnableWebSecurity
 public class SecurityConfig {
 	// 대칭키
-	
+
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http, UserPasswordAuthenticationProvider provider)
 			throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-						.requestMatchers("/logininfo", "/user","/login", "/WEB-INF/views/**", "/resources/**").permitAll()
+						.requestMatchers("/logininfo","/login", "/WEB-INF/views/**", "/resources/**").permitAll()
 						.requestMatchers("/admin").hasAnyAuthority(EmpAuthority.ADMIN.name())
 						.anyRequest().authenticated()
 						)
 				.formLogin(formLogin -> formLogin.loginPage("/login")
-						.loginProcessingUrl("/logininfo")
-						.defaultSuccessUrl("/user")
+						.loginProcessingUrl("/logininfo") //PostMapping("login")
+						.defaultSuccessUrl("/user") //로그인 성공할때 들어가지는 요청주소
 						.usernameParameter("user")
 						.passwordParameter("password"))
 				.authenticationProvider(provider)

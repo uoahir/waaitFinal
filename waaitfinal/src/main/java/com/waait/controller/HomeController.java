@@ -3,6 +3,7 @@ package com.waait.controller;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -27,8 +28,8 @@ public class HomeController {
 	}
 
 	@GetMapping("/user")
-	public String homeForm() {
-		System.out.println("/userPage");
+	public String homeForm(HttpSession session) {
+		
 		return "home";
 
 	}
@@ -53,8 +54,9 @@ public class HomeController {
 
 	@GetMapping("/codeboard")
 	public String codePage(HttpSession session) {
-		Employee employee= (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		System.out.println("session"+employee);
+		System.out.println("이거는 내가 가져온 세션값이야!!"+session.getAttribute("employee"));
+		System.out.println("확인 : " + session.getAttribute("SPRING_SECURITY_CONTEXT"));
+		System.out.println("이거는 객체변환확인"+session.getAttribute("SPRING_SECURITY_CONTEXT"));
 		return "codereviewboard/codeboard";
 	}
 
