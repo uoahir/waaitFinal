@@ -1,4 +1,4 @@
-package com.waait.mypage.model.dto;
+package com.waait.dto;
 
 import javax.validation.constraints.Pattern;
 
