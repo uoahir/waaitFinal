@@ -62,6 +62,7 @@ public class MailController {
 		System.out.println("가져온 mailList : " + mailList);
 		
 		int totalData = mailList.size();
+		System.out.println("list 크기 : " + mailList.size());
 		int totalPage = (int) Math.ceil((double) totalData/ numPerpage);
 		int pageBarSize = 5;
 		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
@@ -207,7 +208,8 @@ public class MailController {
 	}
 	
 	@GetMapping("/addfavorite.do")
-	public @ResponseBody int addFavoriteMail(int mailNo) {
+	public @ResponseBody int addFavoriteMail(String mailNo) {
+		System.out.println("controller mailNo : " + mailNo);
 		return service.addFavoriteMail(mailNo);
 	}
 	

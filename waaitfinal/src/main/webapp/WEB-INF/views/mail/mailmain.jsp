@@ -5,6 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -41,11 +43,11 @@
 				<c:forEach var="mail" items="${mails }">
 					<tr class="mailListTr" id="${mail.mailNo }">
 						<td>
-							<input type="checkbox" name="checkMail">
+							<input type="checkbox" name="checkMail" id="${mail.mailNo }" onclick="buttonAble()">
 							${mail.senderMailAddress }
 						</td>
 						<td>
-							<a href="">${mail.mailTitle }</a>
+							<a href="javascript:goMailDetail(${mail.mailNo })">${mail.mailTitle }</a>
 						</td>
 						<td>${mail.mailWriteDate }</td>
 						<td>${mail.mailReadStatus }</td>
@@ -54,6 +56,10 @@
 			</table>
 		</c:if>
 	</div>
+	<div id="pageBarContainer">
+		${pageBar }
+	</div>
+	<button onclick="addFavorite()" id="addFavoriteButton" disabled>즐겨찾기</button>
 	<div id="resultContainer">
 	
 	</div>
@@ -133,12 +139,55 @@
 			})
 		}
 		
-		document.querySelectorAll(".mailListTr").forEach(e => {
+		const goMailDetail = (mailNo) => {
+			location.assign("${path }/mail/maildetail.do?mailNo=" + mailNo);
+		}
+		/* document.querySelectorAll(".mailListTr").forEach(e => {
 			e.addEventListener("click", e => {
 				const mailPkNo = e.target.parentElement.id;
 				location.assign("${path }/mail/maildetail.do?mailNo=" + mailPkNo);
 			})
-		});
+		}); */
+		
+		const addFavorite = () => {
+			const mailCheckBox = document.querySelectorAll("input[type='checkbox']");
+			let checkedCount = 0;
+			let mailNoStr = "";
+			
+			mailCheckBox.forEach(e => {
+				if(e.checked) {
+					checkedCount++;
+				}
+			})
+			
+			let count = 1;
+			mailCheckBox.forEach(e => {
+				if(e.checked) {
+					if(count == checkedCount) {
+						mailNoStr += e.id;
+					} else {
+						mailNoStr += e.id + ",";						
+					}
+					count++;
+				}
+			})
+			
+			console.log(mailNoStr);
+			
+			fetch("${path}/mail/addfavorite.do?mailNo=" + mailNoStr)
+			.then(response => response.text())
+			.then(data => {
+				if(data == 1) {
+					alert("즐겨찾기 추가");
+				} else {
+					alert("실패");
+				}
+			});
+		}
+		
+		const buttonAble = () => {
+			document.getElementById("addFavoriteButton").disabled = false;
+		}
 	</script>
 </body>
 </html>

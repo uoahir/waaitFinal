@@ -66,7 +66,7 @@ public class MailDao {
 		session.update("mail.updateReadStatus", mailNo);
 	}
 
-	public int  addFavoriteMail(SqlSession session, int mailNo) {
+	public int addFavoriteMail(SqlSession session, String mailNo) {
 		return session.update("mail.addFavoriteMail", mailNo);
 	}
 

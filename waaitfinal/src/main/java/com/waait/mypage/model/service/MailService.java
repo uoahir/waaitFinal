@@ -76,7 +76,18 @@ public class MailService {
 		dao.updateReadStatus(session, mailNo);
 	}
 
-	public int addFavoriteMail(int mailNo) {
-		return dao.addFavoriteMail(session, mailNo);
+	public int addFavoriteMail(String mailNo) {
+		int result = 0;
+		if(mailNo.contains(",")) {
+			String[] mailNoArr = mailNo.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				System.out.println("mailNo 배열 : " + mailNoArr[i]);
+				result = dao.addFavoriteMail(session, mailNoArr[i]);
+				if(result == 0) return result;
+			}
+		} else {
+			return dao.addFavoriteMail(session, mailNo);			
+		}
+		return result;
 	}
 }
