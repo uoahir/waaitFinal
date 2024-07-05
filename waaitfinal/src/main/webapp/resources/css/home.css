@@ -104,6 +104,7 @@ body{
 #msgpart{
     height: 22%;
     display: flex;
+    cursor: pointer;
 }
 #workstaus{
     width: 200px;
