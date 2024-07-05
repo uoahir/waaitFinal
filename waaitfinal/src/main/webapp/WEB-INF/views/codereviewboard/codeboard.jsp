@@ -4,6 +4,7 @@
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/codereviewboard.css">
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/home.css">
 <c:set var = "path" value="${pageContext.request.contextPath}"/>
+<c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,14 +12,14 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	<div>${employee}</div>
 	<header id="header">
         <div id="log"><img src="dd" alt=""></div>
         <div id="menu">
             <div><a href="#">워크플로우</a></div>
             <div><a href="#">근무/휴가</a></div>
             <div><a href="#">프로젝트 관리</a></div>
-            <div><a href="#">일정관리</a></div>
+            <div><a href="#">일정관리</a></div>                                                                                                                             
             <div><a href="#">게시판</a></div>
         </div>
         <div id="noneDiv"></div>
@@ -51,7 +52,10 @@
                 <div><span>댓글</span></div>
                 <div id="comment_list"></div>
             </div>
-        </div>
+        </div> 
+        <a href = "${path }/codereviewboard/page">
+         	코드리뷰 작성페이지 이동                                                                                                                                                                        
+        </a>
         
     </section>
 </body>

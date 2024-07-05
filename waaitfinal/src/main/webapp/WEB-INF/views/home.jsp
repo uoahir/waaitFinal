@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath }" />
+<c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/home.css">
 <!DOCTYPE html>
 <html>
@@ -31,7 +32,7 @@
                         </div>
                         <div>
                         <div id="emp">
-                            <p id="empName">김지연</p>
+                            <p id="empName">${employee.empName }</p>
                             <p id="jobCode">사원</p>
                         </div>
                         <div id="dept">

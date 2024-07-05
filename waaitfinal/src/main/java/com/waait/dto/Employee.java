@@ -22,9 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Employee implements UserDetails{
-    /**
-	 * 
-	 */
+   
 	private static final long serialVersionUID = 1L;
 	private Long empNo;
     private String empId;
