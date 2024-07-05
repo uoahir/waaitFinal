@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+
 <c:set var="path" value="${pageContext.request.contextPath }" />
+<c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
+<link rel="stylesheet" type="text/css" href="${path }/resources/css/home.css">
 <!DOCTYPE html>
+<c:set var="path" value="${pageContext.request.contextPath }" />
 <html>
 <head>
 <script type="text/javascript" src="${path}/resources/js/home.js"></script>
@@ -32,7 +36,7 @@
                         </div>
                         <div>
                         <div id="emp">
-                            <p id="empName">김지연</p>
+                            <p id="empName">${employee.empName }</p>
                             <p id="jobCode">사원</p>
                         </div>
                         <div id="dept">
@@ -91,13 +95,11 @@
 	<a href = "${path }/codeboard">코드 작성하는 페이지</a>
 	
 	
-<<<<<<< HEAD
+
 	<div onclick="location.assign('${path }/edoc/home')">전자결재</div>
 	<div onclick="location.assign('${path }/edoc/insertedoc')">전자결재 작성</div>
 	
 	<div onclick="location.assign('${path }/chat/home')">채팅</div>
-=======
->>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
-	
+
 </body>
 </html>

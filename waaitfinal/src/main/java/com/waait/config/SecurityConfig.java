@@ -14,7 +14,7 @@ import com.waait.security.controller.UserPasswordAuthenticationProvider;
 @EnableWebSecurity
 public class SecurityConfig {
 	// 대칭키
-	
+
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http, UserPasswordAuthenticationProvider provider)
@@ -26,8 +26,8 @@ public class SecurityConfig {
 						.anyRequest().authenticated()
 						)
 				.formLogin(formLogin -> formLogin.loginPage("/login")
-						.loginProcessingUrl("/logininfo")
-						.defaultSuccessUrl("/user")
+						.loginProcessingUrl("/logininfo") //PostMapping("login")
+						.defaultSuccessUrl("/user") //로그인 성공할때 들어가지는 요청주소
 						.usernameParameter("user")
 						.passwordParameter("password"))
 				.authenticationProvider(provider)
