@@ -1,10 +1,10 @@
-package com.waait.mypage.model.service;
+package com.waait.service;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
-import com.waait.mypage.model.dao.MypageDao;
-import com.waait.mypage.model.dto.Mypage;
+import com.waait.dao.MypageDao;
+import com.waait.dto.Employee;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,17 +14,11 @@ public class MypageServiceImpl implements MypageService {
 	
 	private final MypageDao dao;
 	private final SqlSession session;
-
 	@Override
-	public String selectByEmpNo(String empNo) {
-		return dao.selectByEmpNo(session,empNo);
+	public int updateEmpPwd(Employee e) {
+		return dao.updateEmpPwd(session,e);
 	}
 
-	@Override
-	public int newEmpPwd(Mypage m) {
-		return dao.newEmpPwd(session,m);
-	}	
-	
 	
 
 }
