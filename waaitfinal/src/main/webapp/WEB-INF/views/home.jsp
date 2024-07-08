@@ -18,7 +18,7 @@
 	<header id="header">
         <div id="log"><img src="dd" alt=""></div>
         <div id="menu">
-            <div><a href="${path }/">워크플로우</a></div>
+            <div><a href="${path }/edoc/home">워크플로우</a></div>
             <div><a href="#">근무/휴가</a></div>
             <div><a href="#">프로젝트 관리</a></div>
             <div><a href="#">일정관리</a></div>

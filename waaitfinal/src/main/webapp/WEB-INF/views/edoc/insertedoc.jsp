@@ -9,11 +9,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-    <form action="${path }/edoc/insertedocend" method="post" enctype="application/x-www-form-urlencoded" >
+    <form action="${path }/edoc/home" method="post" enctype="application/x-www-form-urlencoded" >
 		<div id="button">
-	        <button onclick="appline();">결재선 지정</button>
-	        <button onclick="insertedoc();">승인요청</button>
-	        <button onclick="save();">임시저장</button>
+	        <button type="button" onclick="appline();">결재선 지정</button>
+	        <button type="submit" onclick="insertedoc();">승인요청</button>
+	        <button type="button" onclick="save();">임시저장</button>
 	        <button>인쇄미리보기</button>
 	    </div>
 	    <div id="title">
@@ -71,7 +71,7 @@
     			
     	}
     	const appline = () => {
-    		window.open("${path}/edoc/appline");
+    		window.open("${path}/edoc/appline","appline","height=500, width=500");
     	}
     </script>
 </body>
