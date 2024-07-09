@@ -53,6 +53,10 @@ public class MailDao {
 	public void enrollUserMailBox(SqlSession session, Map<String, Object> param) {
 		session.selectList("mail.enrollUserMailBox", param);
 	}
+	
+	public int getMyMailBoxSeq(SqlSession session) {
+		return session.selectOne("mail.getMyMailBoxSeq");
+	}
 
 	public List<MyMailBox> getMyMailBox(SqlSession session, long empNo) {
 		return session.selectList("mail.getMyMailBox", empNo);
@@ -77,6 +81,31 @@ public class MailDao {
 	public int cancelAddFavorite(SqlSession session, String mailNo) {
 		return session.update("mail.cancelAddFavotie", mailNo);
 	}
+
+	public int selectSequence(SqlSession session) {
+		return session.selectOne("mail.selectMailSequence");
+	}
+	
+	public int enrollSendMailInfo(SqlSession session, Map<String, Object> param) {
+		return session.insert("mail.enrollSendMailInfo", param);
+	}
+
+	public int enrollReceiverInfo(SqlSession session, Map<String, Object> param) {
+		return session.insert("mail.enrollReceiverInfo", param);
+	}
+
+	public int addMailMyMailBox(SqlSession session, Map<String, Object> param) {
+		return session.insert("mail.addMailMyMailBox", param);
+	}
+
+	public List<Mail> joinMyMailBoxDetail(SqlSession session, int myMailBoxNo) {
+		return session.selectList("mail.joinMyMailBoxDetail", myMailBoxNo);
+	}
+
+	public List<Mail> joinFavoriteMailBox(SqlSession session, String loginMemberEmailDomain) {
+		return session.selectList("mail.joinFavoriteMailBox", loginMemberEmailDomain);
+	}
+
 
 
 }

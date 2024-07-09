@@ -1,10 +1,11 @@
-package com.waait.mypage.model.service;
+package com.waait.service;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.waait.dao.MailDao;
 import com.waait.dto.Mail;
@@ -52,14 +53,18 @@ public class MailService {
 		return dao.getTotalData(session, mailSettings);
 	}
 
-	public void enrollUserMailBox(Map<String, Object> param) {
+	public int enrollUserMailBox(Map<String, Object> param) {
+		int myMailBoxSeq = dao.getMyMailBoxSeq(session);
+		param.put("myMailBoxNo", myMailBoxSeq);
 		dao.enrollUserMailBox(session, param);
+		return myMailBoxSeq;
 	}
 
 	public List<MyMailBox> getMyMailBox(long empNo) {
 		return dao.getMyMailBox(session, empNo);
 	}
-
+	
+	@Transactional
 	public int deleteSpamDomain(Map<String, Object> param) {
 		int result = 0;
 		String[] domainAddressArr = ((String) param.get("domainAddresses")).split(",");
@@ -74,11 +79,13 @@ public class MailService {
 	public Mail getMailDetailByNo(Map<String, Object> param) {
 		return dao.getMailDetailByNo(session, param);
 	}
-
+	
+	@Transactional
 	public void updateReadStatus(int mailNo) {
 		dao.updateReadStatus(session, mailNo);
 	}
-
+	
+	@Transactional
 	public int addFavoriteMail(String mailNo) {
 		int result = 0;
 		if(mailNo.contains(",")) {
@@ -96,6 +103,54 @@ public class MailService {
 
 	public int cancelAddFavorite(String mailNo) {
 		return dao.cancelAddFavorite(session, mailNo);
+	}
+	
+	@Transactional
+	public int sendMail(Map<String, Object> param) {
+		int result = 0;
+		int mailSequence = dao.selectSequence(session);
+		System.out.println("mailSequence : " + mailSequence);
+		param.put("mailNo", mailSequence);
+		
+		dao.enrollSendMailInfo(session, param);
+		
+		String mailReceiverAddress = (String) param.get("mailReceiverAddress");
+		
+		if(mailReceiverAddress.contains(",")) {
+			String[] mailReceiverAddressArr = mailReceiverAddress.split(",");
+			for(int i = 0; i < mailReceiverAddressArr.length; i++) {
+				param.put("mailReceiverAddress", mailReceiverAddressArr[i]);
+				result = dao.enrollReceiverInfo(session, param);
+			}
+		} else {
+			result = dao.enrollReceiverInfo(session, param);
+		}
+		return result;
+	}
+	
+	@Transactional
+	public int addMailMyMailBox(Map<String, Object> param) {
+		int result = 0;
+		String mailNoStr = (String) param.get("mailNoStr");
+		
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				param.put("mailNoStr", mailNoArr[i]);
+				result = dao.addMailMyMailBox(session, param);
+			}
+		} else {
+			result = dao.addMailMyMailBox(session, param);
+		}
+		return result;
+	}
+
+	public List<Mail> joinMyMailBoxDetail(int myMailBoxNo) {
+		return dao.joinMyMailBoxDetail(session, myMailBoxNo);
+	}
+
+	public List<Mail> joinFavoriteMailBox(String loginMemberEmailDomain) {
+		return dao.joinFavoriteMailBox(session, loginMemberEmailDomain);
 	}
 
 }
