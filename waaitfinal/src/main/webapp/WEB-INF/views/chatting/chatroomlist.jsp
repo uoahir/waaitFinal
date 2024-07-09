@@ -314,10 +314,7 @@
         </div>
     </main>
 
-    <script>
-        // jsp에서 for문 돌려서 이벤트 부여해야됨
-        document.querySelectorAll(".chatting_chattingroomlist_printarea")
-    </script>
+    
 
 </body>
 </html>

@@ -3,188 +3,19 @@
     
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath }" />
-    
+
+<!-- 로그인된 사용자 객체 불러옴 -->
+<c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
+
+<link rel="stylesheet" type="text/css" href="${path }/resources/css/chatroom.css">
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 
-<style>
 
-        body{
-            margin: 0;
-            padding: 0;
-        }
-
-        #chatting_chattingroom_top{
-            border: 1px solid red;
-            display: flex;
-            position: fixed;
-            height: 60px;
-            width: 100%;
-            background-color: white;
-        }
-
-        #chatting_chattingroom_content{
-            border: 1px solid red;
-            /* display: flex; */
-            height: 100%;
-            padding: 60px 0 100px 0;
-            /* overflow: hidden; */
-        }
-
-        #chatting_chattingroom_bottom{
-            border: 1px solid red;
-            display: flex;
-            position: fixed;
-            height: 100px;
-            bottom: 0;
-            width: 100%;
-            background-color: white;
-        }
-
-        #chatting_chattingroom_top>div:nth-child(1)>p{
-            /* background-color: red; */
-            margin: 0;
-            
-        }
-
-        #chatting_chattingroom_top>div:nth-child(1){
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px 0 10px 20px;
-        }
-
-
-        #chatting_chattingroom_top>div:nth-child(2){
-            /* background-color: red; */
-            margin-left: auto;
-            align-items: center;
-            display: flex;
-            margin-right: 10px;
-        }
-
-        #chatting_chattingroom_top>div:nth-child(2)>button{
-            cursor: pointer;
-            border: 0;
-            background-color: transparent;
-        }
-
-        #chatting_chattingroom_content>div{
-            display: flex;
-            border: 1px solid red;
-            
-        }
-
-        /* 상대 채팅내역 */
-        .chatting_chattingroom_content_user>div{
-            margin: 10px 0 10px 10px;
-            border: 1px solid red;
-        }
-
-        .chatting_chattingroom_content_user>div:nth-child(1)>img{
-            border-radius: 100%;
-            /* background-color: red; */
-        }
-
-        /* 채팅내역 사용자이름, 채팅메세지 */
-        .chatting_chattingroom_content_user>div:nth-child(2)>p:nth-child(1){
-            margin: 0 0 10px 0;
-        }
-
-        .chatting_chattingroom_content_user>div:nth-child(2)>p:nth-child(2){
-            margin: 0;
-            background-color: #D9D9D9;
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .chatting_chattingroom_content_user>div:nth-child(3){
-            margin-left: 20px;
-            color: #888282;
-            margin-right: 10px;
-            min-width: max-content;
-            margin-top: auto;
-            margin-bottom: 10px;
-           
-        }
-
-        .chatting_chattingroom_content_user>div:nth-child(3)>p{
-            margin: 0;
-        }
-        /* 상대 채팅내역 끝 */
-
-
-
-        /* 나의 채팅내역 */
-        .chatting_chattingroom_content_my>div{
-            border: 1px solid red;
-            /* margin-left: auto; */
-            margin: 10px 10px 10px 0;
-        }
-
-        .chatting_chattingroom_content_my>div:nth-child(1){
-            margin-left: auto;
-            color: #888282;
-            margin-right: 20px;
-            min-width: max-content;
-            margin-top: auto;
-            margin-bottom: 10px;
-        }
-
-        .chatting_chattingroom_content_my>div:nth-child(1)>p{
-            margin: 0;
-        }
-
-        /* .chatting_chattingroom_content_my>div:nth-child(1)>p:nth-child(2){
-            margin: 0;
-        }
-
-        .chatting_chattingroom_content_my>div:nth-child(1)>p:nth-child(1){
-            margin-left: auto;
-            margin: 0 auto 0 0;
-        } */
-
-        .chatting_chattingroom_content_my>div:nth-child(2)>p{
-            margin: 0;
-            background-color: #D9D9D9;
-            border-radius: 10px;
-            padding: 10px;
-        }
-        /* 나의 채팅내역 끝 */
-
-
-        /* 채팅 입력칸 */
-        #chatting_chattingroom_bottom>div:nth-child(1){
-            /* background-color: red; */
-            border: 1px solid red;
-            height: 100%;
-            width: 100%;
-        }
-
-        #chatting_chattingroom_bottom>div:nth-child(2){
-            border: 1px solid red;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px 10px 10px 0;
-        }
-
-        #chatting_chattingroom_bottom>div:nth-child(1)>textarea{
-            height: 80%;
-            width: 90%;
-            margin: 10px 5% 10px 5%;
-        }
-
-        #chatting_chattingroom_bottom>div:nth-child(2)>button{
-            /* overflow: auto; */
-            text-overflow: ellipsis;
-        }
-
-        /* 채팅 입력칸 끝 */
-    </style>
 
 </head>
 <body>
@@ -193,7 +24,6 @@
         <div>
             <!-- 상단바 -->
             <div id="chatting_chattingroom_top">
-                
                 <div>
                     <p>여기저기</p>
                     <p>5</p>
@@ -222,8 +52,6 @@
                     <div>
                         <p>1</p>
                         <p>오후 5:31</p>
-
-                        
                     </div>
                 </div>  <!-- 채팅 내역 한줄 끝 -->
 
@@ -295,7 +123,6 @@
                     <div>
                         <p>오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자</p>
                     </div>
-                    
                 </div>  <!-- 채팅 내역 한줄 끝 -->
 
             </div>
@@ -303,16 +130,27 @@
             <!-- 채팅입력 칸 -->
             <div id="chatting_chattingroom_bottom">
                 <div>
-                    <textarea name="" id=""></textarea>
+                    <textarea name="" id="msg"></textarea>
                 </div>
                 <div>
-                    <button>전송</button>
+                    <button onclick="sendMessage();">전송</button>
                     <button>파일전송</button>
+                    <input type="file" value="파일전송">
                 </div>
             </div>
 
         </div>
     </main>
+
+	<!-- js파일을 따로 뺴서 선언해줘야 사용 가능함. -->
+	<script>
+		const loginId = '${employee.empId}';
+		const path = "${pageContext.request.contextPath }";
+	</script>
+	
+	<script type="text/javascript" src="${path}/resources/js/chatroom.js"></script>
+	
+
 
 </body>
 </html>
