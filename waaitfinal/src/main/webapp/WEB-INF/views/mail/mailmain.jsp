@@ -31,6 +31,7 @@
 	<input type="text" placeholder="차단해제할 도메인" name="domainAddress">
 	<input type="text" placeholder="차단해제할 도메인" name="domainAddress">
 	<button onclick="deleteSpamDomain()">스팸 도메인 삭제</button><br>
+	<button onclick="location.assign('/mail/joinsendingmailbox.do')">보낸 메일함</button><br>
 	<button onclick="joinSpamMailBox()">스팸메일함</button><br>
 	<button onclick="location.assign('${path }/mail/temporarysavemailbox.do')">임시보관함</button><br>
 	<button onclick="deleteMail()">메일 삭제</button>

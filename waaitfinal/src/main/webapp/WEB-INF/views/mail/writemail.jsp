@@ -43,11 +43,11 @@
 					value="${not empty temporaryWriteMail.mailTitle ? temporaryWriteMail.mailTitle : ''}">
 		</div>
 		<div class="toolbar">
-	        <button onclick="execCmd('bold')">굵게</button>
-	        <button onclick="execCmd('italic')">Italic</button>
-	        <button onclick="execCmd('underline')">밑줄</button>
-	        <button onclick="execCmd('insertOrderedList')">Numbered List</button>
-	        <button onclick="execCmd('insertUnorderedList')">Bullet List</button>
+	        <button type = "button" onclick="execCmd('bold')">굵게</button>
+	        <button type = "button" onclick="execCmd('italic')">Italic</button>
+	        <button type = "button" onclick="execCmd('underline')">밑줄</button>
+	        <button type = "button" onclick="execCmd('insertOrderedList')">Numbered List</button>
+	        <button type = "button" onclick="execCmd('insertUnorderedList')">Bullet List</button>
 	        <select onchange="execCmd('fontSize', this.value)">
 	            <option value="1">매우작게</option>
 	            <option value="2">작게</option>
@@ -65,17 +65,22 @@
 	    <input type="hidden" name="mailContent">
 	    <input type="submit" value="전송" name="mailStatus">
 	    <input type="submit" value="임시저장" name="mailStatus">
+	</form>
+    <form action="#" method="POST">
+    	<button onclick="testFunction()">test</button>
     </form>
-    
     <script>
         function execCmd(command, value = null) {
-            document.execCommand(command, false, value);
+        	document.execCommand(command, false, value);
         };
         
         contentInnerTextHidden = () => {
         	document.querySelector("input[name='mailContent']").value = document.getElementById("editor").innerHTML;
-        	console.log(document.querySelector("input[name='mailContent']").value);
         };
+        
+        /* const testFunction =() => {
+        	console.log("이게 왜 넘어가");
+        } */
     </script>
 </body>
 </html>

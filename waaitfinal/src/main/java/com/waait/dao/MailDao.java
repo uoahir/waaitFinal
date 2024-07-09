@@ -134,6 +134,10 @@ public class MailDao {
 		session.delete("mail.perfectlyDeleteMail", mailNo);
 	}
 
+	public List<Mail> joinSendingMailBox(SqlSession session, long empNo) {
+		return session.selectList("mail.joinSendingMailBox", empNo);
+	}
+
 
 
 }

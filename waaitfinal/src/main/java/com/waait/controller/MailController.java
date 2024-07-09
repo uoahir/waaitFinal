@@ -343,6 +343,15 @@ public class MailController {
 		return "redirect:/mail/jointrashmailbox.do";
 	}
 	
+	@GetMapping("/joinsendingmailbox.do")
+	public String joinSendingMailBox(Model model) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		List<Mail> sendingMailList = service.joinSendingMailBox(empNo);
+		System.out.println("sendingMailList : " + sendingMailList);
+		model.addAttribute("mails", sendingMailList);
+		return "mail/sendingmailbox";
+	}
+	
 	private Employee getLoginEmpInfo() {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}

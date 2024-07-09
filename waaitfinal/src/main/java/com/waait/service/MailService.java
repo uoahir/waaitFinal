@@ -205,4 +205,8 @@ public class MailService {
 		}
 	}
 
+	public List<Mail> joinSendingMailBox(long empNo) {
+		return dao.joinSendingMailBox(session, empNo);
+	}
+
 }
