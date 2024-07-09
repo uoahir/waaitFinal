@@ -51,4 +51,12 @@ public class ChattingController {
 	}
 	
 	
+	//채팅방 채팅
+	@GetMapping("/chatroomopen.do")	// /chatroomopen.do/{chatRoomNo}
+	public String chatRoomOpen() {
+		System.out.println("채팅방 열기");
+		return "chatting/chatroom";
+	}
+	
+	
 }
