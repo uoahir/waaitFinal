@@ -28,6 +28,7 @@ public class Employee implements UserDetails{
     private String empId;
     private String empPwd;
     private String deptCode;
+    private Department department;              
     private String levelCode;
     private String empName;
     private Date empStartDate;
@@ -45,6 +46,7 @@ public class Employee implements UserDetails{
 		Set<GrantedAuthority> auth  = new HashSet<>();
 	if(deptCode.equals("L1")) { //사원에 대한처리부분
 		auth.add(new SimpleGrantedAuthority(EmpAuthority.ADMIN.name()));
+		
 	}
 	auth.add(new SimpleGrantedAuthority(EmpAuthority.USER.name()));
 		return auth;

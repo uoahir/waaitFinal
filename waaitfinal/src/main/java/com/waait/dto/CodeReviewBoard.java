@@ -1,5 +1,7 @@
 package com.waait.dto;
 
+import java.sql.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,12 +17,12 @@ public class CodeReviewBoard {
 	private String developmentType;
 	private String codeWrite;
 	private String codeContent;
+	private String codeReviewComment;
 	private CodeReviewBoardFile codeFile;
 	private String codeType;
-	private String writeDate;
-	private Long employeeNo;
+	private Date writeDate;
+	private Long empNo;
 }
 
 
-
-
+ 	
