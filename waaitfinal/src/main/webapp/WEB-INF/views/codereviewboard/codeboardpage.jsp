@@ -2,10 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var = "path" value="${pageContext.request.contextPath}"/>
-<link rel="stylesheet" type="text/css" href="${path }/resources/css/codereviewboard.css">
+<link rel="stylesheet" type="text/css" href="${path }/resources/css/codeboardpage.css">
 <link rel="stylesheet" type="text/css" href="${path }/resources/css/home.css">
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-
 <c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
 <script>
     // path 값을 JavaScript 변수로 설정
@@ -36,25 +34,16 @@
             <div id="left_codeRM_top">
                 <p>Code Review Board</p>
             </div>
-            <div id="left_codeRM_mid">
-                <div id="left_graph">
-                    <div id="code_graph" class="divgraph"></div>
-                    <div id="code_graph" class="divgraph"></div>   
-                </div>
-            </div>
+          
             <div id="left_codeRM_bot">
             	 
-                <div id="board_top">
-                    <button onclick="moreCodeReviewBoard()">더보기</button>
-                    <span>code review board</span>
-                    <button onclick="codeReviewBoardWrite()">Write</button>
-                </div>
-                <div id="code_board">
+
+               <div id="code_board">
  
                 <div class = selectboard>
                  <div>번호</div> <div>제목</div> <div>개발분야</div> <div>코드타입</div> <div>작성자</div> <div>작성날짜</div>
                	</div>
-               	<c:if test="${not empty codeReviewBoards}">
+               	<c:if test="${not empty codeReviewBoards}">	
                		<c:forEach items="${codeReviewBoards }" var="c">
                			<div class = selectboard onclick="location.assign('${contextPath}/codereviewboard/codereview${c.codeBoardNo}');">
                			<div>NO.${c.codeBoardNo}</div>
@@ -63,9 +52,7 @@
               
                			<div>${c.codeType }</div>
                			<div>${c.codeWrite }</div>
-               			<div>
-               				<fmt:formatDate value="${c.writeDate }" pattern="yyyy-MM-dd"/>
-               			</div>
+               			<div>${c.writeDate }</div>
                			</div>
                		</c:forEach>		
                	</c:if>
