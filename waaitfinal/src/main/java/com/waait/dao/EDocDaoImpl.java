@@ -14,7 +14,7 @@ public class EDocDaoImpl implements EDocDao {
 	@Override
 	public int insertDoc(SqlSession session, Document doc) {
 		// TODO Auto-generated method stub
-		return 0;
+		return session.insert("edoc.insertBasicEdoc",doc);
 	}
 
 	@Override

@@ -10,7 +10,12 @@
 </head>
 <body>
 	<h5>전자문서 홈패이지</h5>
-	<a href="${path }/edoc/insertedoc">문서작성</a>
+	<div onclick = "selectDoc();">문서작성</div>
 	
+	<script>
+		const selectDoc = () => {
+			window.open("${path}/edoc/selectdoc", "height= 500, width = 500" )
+		}
+	</script>
 </body>
 </html>

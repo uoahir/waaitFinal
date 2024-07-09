@@ -43,7 +43,7 @@
 	        	<c:if test="${not empty employees }">
 	       			<c:forEach var="i" items="${employees }">
 	       				<div>
-	       					<label><input name="emp" type="checkbox" value="${i.empNo }"> ${i.empName }</label>
+	       					<label><input name="emp" type="checkbox" value="${i.empNo }, ${i.department.deptName}"> ${i.empName }</label>
 	       				</div>
 	       			</c:forEach>
 	        	</c:if>
@@ -67,7 +67,7 @@
 	                        <th>이름</th>
 	                    </tr>
 	                </thead>
-	                <tbody>
+	                <tbody id="here">
 	                    <tr>
 	                        <td>
 	                            <select name="appType" id="appType">
@@ -75,7 +75,7 @@
 	                                <option value="">참조</option>
 	                            </select>
 	                        </td>
-	                        <td>부서명</td>
+	                        <td>${i.kasjf }</td>
 	                        <td>직급</td>
 	                        <td>이름</td>
 	                    </tr>
@@ -91,14 +91,36 @@
 	<script>
 		const inappline = () => {
 			let appArray = document.getElementsByName('emp');
+			const $tr = document.createElement("tr");
 			for(let i = 0; i < appArray.length; i++){
-				const $tr = document.createElement("tr");
 				if(appArray[i].checked == true){
-					
-					console.log(appArray[i].value);
+					const $td = document.createElement("td");
+					$td.innerText=appArray[i].value;
+					const $td2 = document.createElement("td");
+					$td2.innerText=appArray[i].value;
+					const $td3 = document.createElement("td");
+					$td3.innerText=appArray[i].value;
+					const $td4 = document.createElement("td");
+					$td4.innerText=appArray[i].value;
+
+					$tr.appendChild($td);
+					$tr.appendChild($td2);
+					$tr.appendChild($td3);
+					$tr.appendChild($td4); 
 				}
 			}
+			const $tbody = document.querySelector("#here");
+			$tbody.appendChild($tr);
 		}
+	</script>
+	<script>
+/* 		const inappline = () => {
+			const appArray = document.getElementsByName("emp");
+			for(let i = 0; i < appArray.length; i++){
+				if(appArray)
+			}
+			location.assingn()
+		} */
 	</script>
 	
 </body>
