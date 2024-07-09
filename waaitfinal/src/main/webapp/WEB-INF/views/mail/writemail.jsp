@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,13 +22,25 @@
 		margin-right: 5px;
 	}
 </style>
+
+<c:if test="${not empty temporaryWriteMail.receivers}">
+    <c:set var="receiverAddresses">
+    	<c:forEach var="receiverAddress" items="${temporaryWriteMail.receivers }">
+    		${receiverAddress.mailReceiverAddress }
+    		<c:if test="${not status.last }">, </c:if>
+    	</c:forEach>
+    </c:set>
+</c:if>
+
 </head>
 <body>
 	<form action="${path }/mail/sendmail.do" method="post" onsubmit="contentInnerTextHidden()">
 		<div id="titleContainer">
 			<input type="text" name="mailWrtier" value="${writerName } (${writerMailAddress })">
-			<input type="text" name="mailReceiver" placeholder="받는사람">
-			<input type="text" name="mailTitle" placeholder="제목">
+			<input type="text" name="mailReceiver" placeholder="받는사람" 
+           			value="${not empty temporaryWriteMail.receivers ? receiverAddresses : ''}">
+			<input type="text" name="mailTitle" placeholder="제목"
+					value="${not empty temporaryWriteMail.mailTitle ? temporaryWriteMail.mailTitle : ''}">
 		</div>
 		<div class="toolbar">
 	        <button onclick="execCmd('bold')">굵게</button>
@@ -45,20 +58,24 @@
 	        <input type="color" onchange="execCmd('foreColor', this.value)">
 	    </div>
 	    <div id="editor" contenteditable="true">
-	        
+	        <c:if test="${temporaryWriteMail != null}">
+	        	${temporaryWriteMail.mailContent }
+	        </c:if>
 	    </div>
 	    <input type="hidden" name="mailContent">
-	    <input type="submit" value="전송">
+	    <input type="submit" value="전송" name="mailStatus">
+	    <input type="submit" value="임시저장" name="mailStatus">
     </form>
+    
     <script>
         function execCmd(command, value = null) {
             document.execCommand(command, false, value);
-        }
+        };
         
         contentInnerTextHidden = () => {
         	document.querySelector("input[name='mailContent']").value = document.getElementById("editor").innerHTML;
         	console.log(document.querySelector("input[name='mailContent']").value);
-        }
+        };
     </script>
 </body>
 </html>

@@ -32,7 +32,8 @@
 	<input type="text" placeholder="차단해제할 도메인" name="domainAddress">
 	<button onclick="deleteSpamDomain()">스팸 도메인 삭제</button><br>
 	<button onclick="joinSpamMailBox()">스팸메일함</button><br>
-	<button>임시보관함</button>
+	<button onclick="location.assign('${path }/mail/temporarysavemailbox.do')">임시보관함</button><br>
+	<button onclick="deleteMail()">메일 삭제</button>
 	<div id="resultContainer">
 		<c:if test="${not empty mails }">
 			<table>
@@ -56,8 +57,12 @@
 					</tr>
 				</c:forEach>
 			</table>
+			<div id="pageBarContainer">
+				${pageBar }
+			</div>
 		</c:if>
 		<button onclick="addMailToMyMailBox()">선택한 메일 내 메일함으로 이동</button>
+		<button onclick="deleteMyMailBox()">내 메일함 삭제</button>
 		<h1>내 메일함</h1>
 		<ul id="myMailBoxList">
 			<c:if test="${not empty myMailBoxes }">
@@ -70,10 +75,6 @@
 			</c:if>
 		</ul>
 	</div>
-	
-	<div id="pageBarContainer">
-		${pageBar }
-	</div>
 	<button onclick="addFavorite()" id="addFavoriteButton" disabled>즐겨찾기</button>
 	<button onclick="location.assign('${path }/mail/myfavoritemailbox.do')">즐겨찾기 메일함</button>
 	<div id="resultContainer">
@@ -82,6 +83,7 @@
 	<div id="myMailBoxContainer">
 		<input type="text" name="myMailBoxName" placeholder="내 메일함 이름">
 	</div>
+	<button onclick="location.assign('${path }/mail/jointrashmailbox.do')">휴지통</button>
 	<div id="userBox">
 		
 	</div>
@@ -250,9 +252,47 @@
 			})
 		}
 		
-		/* const myFavoriteMailBoxGo = () => {
+		const deleteMail = () => {
+			let checkedCount = 0;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) checkedCount++;
+			});
+
+			let mailNoStr = "";
+			let count = 1;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) {
+					if(count == checkedCount) {
+						mailNoStr += e.id;
+					} else {
+						mailNoStr += e.id + ",";						
+					}
+					count++;
+				}
+			});
 			
-		} */
+			fetch("${path }/mail/deletemail.do", {
+				method : "POST",
+				headers : {
+					"content-type" : "application/x-www-form-urlencoded;charset=utf-8"
+				},
+				body : "mailNoStr=" + mailNoStr
+			})
+		}
+		
+		const deleteMyMailBox = () => {
+			document.querySelectorAll("input[name='checkMyMailBox']").forEach(e => {
+				if(e.checked) {
+					fetch("${path }/mail/deletemymailbox.do", {
+						method : "POST",
+						headers : {
+							"content-type" : "application/x-www-form-urlencoded;charset=utf-8"
+						},
+						body : "myMailBoxNo=" + e.value
+					})
+				}
+			})
+		}
 	</script>
 </body>
 </html>

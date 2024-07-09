@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>내 메일함</title>
+<title>Insert title here</title>
 </head>
 <body>
 	<c:if test="${not empty mails }">
@@ -17,7 +17,7 @@
 				<th>읽음 상태</th>
 			</tr>
 			<c:forEach var="mail" items="${mails }">
-				<tr class="mailListTr" id="${mail.mailNo }">	
+				<tr class="mailListTr" id="${mail.mailNo }">
 					<td>
 						<input type="checkbox" name="checkMail" id="${mail.mailNo }">
 						${mail.senderMailAddress }
@@ -31,14 +31,15 @@
 			</c:forEach>
 		</table>
 	</c:if>
-	<button onclick="deleteMail()">삭제</button>
+	<button onclick="prefectlyDeleteMail()">삭제</button>
+	
 	<script>
-		const deleteMail = () => {
+		const prefectlyDeleteMail = () => {
 			let checkedCount = 0;
 			document.querySelectorAll("input[name='checkMail']").forEach(e => {
 				if(e.checked) checkedCount++;
 			});
-	
+		
 			let mailNoStr = "";
 			let count = 1;
 			document.querySelectorAll("input[name='checkMail']").forEach(e => {
@@ -46,19 +47,19 @@
 					if(count == checkedCount) {
 						mailNoStr += e.id;
 					} else {
-						mailNoStr += e.id + ",";
+						mailNoStr += e.id + ",";						
 					}
 					count++;
 				}
 			});
-			
-			fetch("${path }/mail/deletemail.do", {
+			console.log("mailNoStr : " + mailNoStr);
+			fetch("${path }/mail/perfectlydeletemail.do", {
 				method : "POST",
 				headers : {
 					"content-type" : "application/x-www-form-urlencoded;charset=utf-8"
 				},
 				body : "mailNoStr=" + mailNoStr
-			})
+			});
 		}
 	</script>
 </body>

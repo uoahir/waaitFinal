@@ -153,4 +153,56 @@ public class MailService {
 		return dao.joinFavoriteMailBox(session, loginMemberEmailDomain);
 	}
 
+	public List<Mail> joinTempoSaveMailBox(long empNo) {
+		return dao.joinTempoSaveMailBox(session, empNo);
+	}
+
+	public Mail joinTempoSaveMailByMailNo(int mailNo) {
+		return dao.joinTempoSaveMailByMailNo(session, mailNo);
+	}
+
+	public int deleteMail(String mailNoStr) {
+		int result = 0;
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				result = dao.deleteMail(session, mailNoArr[i]);
+			}
+		} else {
+			result = dao.deleteMail(session, mailNoStr);			
+		}
+		return result;
+	}
+	
+	@Transactional
+	public int moveMailToTrashMailBox(List<Mail> mailInMyMailBox) {
+		int result = 0;
+		for(Mail mail : mailInMyMailBox) {
+			result = dao.moveMailToTrashMailBox(session, mail.getMailNo());
+		}
+		return result;
+		
+	}
+	
+	@Transactional
+	public int deleteMyMailBox(int myMailBoxNo) {
+		return dao.deleteMyMailBox(session, myMailBoxNo);
+	}
+
+	public List<Mail> jointrashmailbox(String receiverMailAddress) {
+		return dao.jointrashmailbox(session, receiverMailAddress);
+	}
+	
+	@Transactional
+	public void perfectlyDeleteMail(String mailNoStr) {
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				dao.perfectlyDeleteMail(session, mailNoArr[i]);
+			}
+		} else {
+			dao.perfectlyDeleteMail(session, mailNoStr);			
+		}
+	}
+
 }

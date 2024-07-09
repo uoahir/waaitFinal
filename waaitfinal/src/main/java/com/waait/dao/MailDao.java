@@ -106,6 +106,34 @@ public class MailDao {
 		return session.selectList("mail.joinFavoriteMailBox", loginMemberEmailDomain);
 	}
 
+	public List<Mail> joinTempoSaveMailBox(SqlSession session, long empNo) {
+		return session.selectList("mail.joinTempoSaveMailBox", empNo);
+	}
+
+	public Mail joinTempoSaveMailByMailNo(SqlSession session, int mailNo) {
+		return session.selectOne("mail.joinTempoSaveMailByMailNo", mailNo);
+	}
+
+	public int deleteMail(SqlSession session, String mailNo) {
+		return session.update("mail.deleteMail", mailNo);
+	}
+
+	public int moveMailToTrashMailBox(SqlSession session, int mailNo) {
+		return session.update("mail.moveMailToTrashMailBox", mailNo);
+	}
+
+	public int deleteMyMailBox(SqlSession session, int myMailBoxNo) {
+		return session.delete("mail.deleteMyMailBox", myMailBoxNo);
+	}
+
+	public List<Mail> jointrashmailbox(SqlSession session, String receiverMailAddress) {
+		return session.selectList("mail.jointrashmailbox", receiverMailAddress);
+	}
+
+	public void perfectlyDeleteMail(SqlSession session, String mailNo) {
+		session.delete("mail.perfectlyDeleteMail", mailNo);
+	}
+
 
 
 }

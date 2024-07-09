@@ -1,6 +1,7 @@
 package com.waait.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +19,11 @@ import com.waait.dto.Employee;
 import com.waait.dto.Mail;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
-import com.waait.dto.MyMailBoxDetail;
 import com.waait.dto.SpamDomain;
 import com.waait.service.MailService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.jsp.jstl.sql.Result;
 import lombok.RequiredArgsConstructor;
 
 
@@ -67,6 +68,7 @@ public class MailController {
 		System.out.println("가져온 mailList : " + mailList);
 		
 		int totalData = service.getTotalData(mailSettings);
+		System.out.println("totalData : " + totalData);
 		int totalPage = (int) Math.ceil((double) totalData/ numPerpage);
 		int pageBarSize = 5;
 		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
@@ -247,21 +249,29 @@ public class MailController {
 	}
 	
 	@GetMapping("/writemail.do")
-	public void changeWriteMailView(Model model) {
+	public void changeWriteMailView(Model model, 
+			@RequestParam(defaultValue = "-1") int mailNo) {
 		String name = getLoginEmpInfo().getEmpName();
 		String writerEmailAddress = getLoginEmpInfo().getEmpEmail();
 		
 		model.addAttribute("writerName", name);
 		model.addAttribute("writerMailAddress", writerEmailAddress);
+		
+		if(mailNo != -1) {
+			Mail temporaryWriteMail = service.joinTempoSaveMailByMailNo(mailNo);
+			model.addAttribute("temporaryWriteMail", temporaryWriteMail);
+			System.out.println("temporaryWriteMail확인 : " + temporaryWriteMail);
+		}
 	}
 	
 	@PostMapping("/sendmail.do")
-	public String sendMail(String mailContent, String mailTitle, String mailReceiver) {
+	public String sendMail(String mailContent, String mailTitle, String mailReceiver, String mailStatus) {
 		long writerNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("mailContent", mailContent);
 		param.put("mailTitle", mailTitle);
 		param.put("mailReceiverAddress", mailReceiver);
+		param.put("mailStatus", mailStatus);
 		param.put("writerNo", writerNo);
 		
 		int result = service.sendMail(param);
@@ -269,7 +279,7 @@ public class MailController {
 	}
 	
 	@PostMapping("/addmailmymailbox.do")
-	public @ResponseBody int addMailMyMailBox(String mailNoStr, int myMailBoxNo) {
+	public @ResponseBody int addMailMyMailBox(String mailNoStr, String myMailBoxNo) {
 		Map<String, Object> param = new HashMap<String, Object>();
 		System.out.println("mailNoStr : " + mailNoStr + " myMailBoxNo : " + myMailBoxNo);
 		param.put("mailNoStr", mailNoStr);
@@ -292,6 +302,45 @@ public class MailController {
 		List<Mail> mailList = service.joinFavoriteMailBox(loginMemberEmailDomain);
 		System.out.println("favoriteList : " + mailList);
 		model.addAttribute("mails", mailList);
+	}
+	
+	@GetMapping("/temporarysavemailbox.do")
+	public void joinTempoSaveMailBox(Model model) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		List<Mail> temporarySaveMailList = service.joinTempoSaveMailBox(empNo);
+		System.out.println("temporarySaveMailList : " + temporarySaveMailList);
+		model.addAttribute("temporarySaveMails", temporarySaveMailList);
+	}
+	
+	@PostMapping("/deletemail.do")
+	public @ResponseBody int deleteMail(String mailNoStr) {
+		int result = service.deleteMail(mailNoStr);
+		return 0;
+	}
+	
+	@PostMapping("/deletemymailbox.do")
+	public @ResponseBody int deleteMyMailBox(int myMailBoxNo) {
+		List<Mail> mailInMyMailBox = service.joinMyMailBoxDetail(myMailBoxNo);
+		
+		service.moveMailToTrashMailBox(mailInMyMailBox);
+		
+		service.deleteMyMailBox(myMailBoxNo);
+		return 0;
+	}
+	
+	@GetMapping("/jointrashmailbox.do")
+	public String jointrashmailbox(Model model) {
+		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
+		List<Mail> trashMailList = service.jointrashmailbox(receiverMailAddress);
+		System.out.println("trashMailList : " + trashMailList);
+		model.addAttribute("mails", trashMailList);
+		return "mail/trashmailbox";
+	}
+	
+	@PostMapping("/perfectlydeletemail.do")
+	public String perfectlyDeleteMail(String mailNoStr) {
+		service.perfectlyDeleteMail(mailNoStr);
+		return "redirect:/mail/jointrashmailbox.do";
 	}
 	
 	private Employee getLoginEmpInfo() {
