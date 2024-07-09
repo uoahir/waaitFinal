@@ -1,9 +1,7 @@
 package com.waait.controller;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -26,6 +24,7 @@ public class HomeController {
 
 		return "login";
 	}
+
 
 	@GetMapping("/user")
 	public String homeForm(HttpSession session) {
@@ -52,12 +51,6 @@ public class HomeController {
 		return "redirect:/user";
 	}
 
-	@GetMapping("/codeboard")
-	public String codePage(HttpSession session) {
-		System.out.println("이거는 내가 가져온 세션값이야!!"+session.getAttribute("employee"));
-		System.out.println("확인 : " + session.getAttribute("SPRING_SECURITY_CONTEXT"));
-		System.out.println("이거는 객체변환확인"+session.getAttribute("SPRING_SECURITY_CONTEXT"));
-		return "codereviewboard/codeboard";
-	}
+	
 
 }

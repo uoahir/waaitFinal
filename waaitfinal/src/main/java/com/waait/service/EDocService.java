@@ -1,5 +1,9 @@
 package com.waait.service;
 
-public interface EDocService {
+import java.util.List;
 
+import com.waait.dto.Employee;
+
+public interface EDocService {
+	List<Employee> employeeList();
 }

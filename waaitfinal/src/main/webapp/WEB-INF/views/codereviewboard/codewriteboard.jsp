@@ -24,7 +24,9 @@
     </header>
     <form action="${path }/codereviewboard/insert" method="post" enctype="multipart/form-data">
     	작성자: <div>${employee.empName }</div>
-    	작성일 :<div id="current_date"><script>
+    	작성일 :<div id="current_date">
+    	
+    <script>
         date = new Date();
         year = date.getFullYear();
         month = date.getMonth() + 1;
@@ -51,11 +53,12 @@
     			<option value="bigdata">빅데이터</option>
     			<option value="etc">기타</option>
     		</select>
-    		내용:<input type="text" name="codeContent">
-    		설명: <input type="text" name="comment">
+    		<!-- 내용:<input type="text" name="codeContent"> -->
+    		내용:<textarea name="codeContent" rows="20" cols="100"></textarea>
+    		설명: <input type="text" name="codeReviewComment">
     			<input type="file" name="upFile">
 			   <input type="submit" value="전송"> 		
-    		
+
     </form>
 </body>
 </html>

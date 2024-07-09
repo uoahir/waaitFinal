@@ -1,5 +1,9 @@
 package com.waait.dao;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -15,8 +19,21 @@ public class CodeReviewDaoImpl implements CodeReviewDao{
 	}
 
 	@Override
-	public int insertCodeReviewFile(SqlSession session, CodeReviewBoardFile codeFile) {
+	public int insertCodeReviewFile(SqlSession session, CodeReviewBoard codeFile) {
 		return session.insert("codeReview.insertCodeReviewFile",codeFile);
+	}
+
+	@Override
+	public List<CodeReviewBoard> selectcodeReviewBoards(SqlSession session, Map<String, Integer> param) {
+		RowBounds rw = new RowBounds(
+		(param.get("cPage")-1)*param.get("numPerpage"),
+		param.get("numPerpage"));
+		return session.selectList("codeReview.selectcodeReviewBoards", null, rw);
+	}
+
+	@Override
+	public CodeReviewBoard selectcodeReviewBoard(SqlSession session, int no) {
+		return session.selectOne("codeReview.selectcodeReviewBoard", no);
 	}
 
 }

@@ -2,19 +2,27 @@ package com.waait.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
+import com.waait.dao.ScheduleDao;
 import com.waait.dto.Schedule;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ScheduleServiceImpl implements ScheduleService {@Override
-	public List<Schedule> selectByempNo() {
-		// TODO Auto-generated method stub
-		return null;
+public class ScheduleServiceImpl implements ScheduleService {
+	
+	private final Schedule s;
+	private final ScheduleDao dao;
+	private final SqlSession session;
+	
+	@Override
+	public List<Schedule> selectByempNo(Schedule s) {
+		return dao.selectByempNo(session,s);
 	}
+	
+	
 
 }
