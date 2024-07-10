@@ -3,6 +3,9 @@
     
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath }" />
+
+<!-- 로그인된 사용자 객체 불러옴 -->
+<c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
     
 <!DOCTYPE html>
 <html>
@@ -83,6 +86,11 @@
     </aside>
 
 <script>
+	
+	//로그인된 객체 저장 중
+	console.log("${employee}");
+
+
 	//채팅방 사용자목록 출력
 	const chatuserlist=()=>{
 		$.ajax({
@@ -103,6 +111,16 @@
 			data : {},
 			success : function(data){
 				document.querySelector("#chatting_main_content").innerHTML = data;
+				
+				const chatrooms = document.querySelectorAll(".chatting_chattingroomlist_printarea");
+
+		        //각 div에 이벤트 부여	//더블클릭 이벤트
+		        chatrooms.forEach((chatroom , i)=>{
+		        	chatroom.addEventListener("dblclick",e=>{
+		        		window.open("${path}/chat/chatroomopen.do","_blank","top=100, left=400, height=700, width=550");
+		        	});
+		        });
+		        
 			}
 		})
 	};

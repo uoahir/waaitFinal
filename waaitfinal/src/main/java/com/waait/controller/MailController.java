@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
+import com.waait.dto.MyMailBoxDetail;
 import com.waait.dto.SpamDomain;
-import com.waait.mypage.model.service.MailService;
+import com.waait.service.MailService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class MailController {
 	
 	private final MailService service;
-	private final ObjectMapper mapper;
+//	private final ObjectMapper mapper;
 	
 	@GetMapping("/mailmain.do")
 	public void changeMailView(Model model,
@@ -49,20 +49,24 @@ public class MailController {
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
 		List<MailSetting> mailSetting = service.getMailSetting(empNo);
+		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
+		
 		if(mailSetting.size() == 0) {
 			service.setMailSetting(empNo);
 			numPerpage = 5;
 		} else {
-			numPerpage = mailSetting.get(0).getMailNumPerpage();		
+			numPerpage = mailSetting.get(0).getMailNumPerpage();
 		}
 		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
 													"spamDomains", spamDomains, "mailReceiverAddress", mailReceiverAddress);
 		
 		List<Mail> mailList = service.getReceiveMail(mailSettings);
+		
+//		List<MyMailBoxDetail> myMailBoxList = service.getMyMailBox(empNo);
+		
 		System.out.println("가져온 mailList : " + mailList);
 		
-		int totalData = mailList.size();
-		System.out.println("list 크기 : " + mailList.size());
+		int totalData = service.getTotalData(mailSettings);
 		int totalPage = (int) Math.ceil((double) totalData/ numPerpage);
 		int pageBarSize = 5;
 		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
@@ -112,6 +116,7 @@ public class MailController {
 		sb.append("</script>");
 		
 		model.addAttribute("mails", mailList);
+		model.addAttribute("myMailBoxes", myMailBoxList);
 		model.addAttribute("pageBar", sb.toString());
 	}
 	
@@ -142,7 +147,7 @@ public class MailController {
 //					}
 //				}
 //			}
-//		} 야발
+//		}
 	}
 	
 	@GetMapping("/joinspammail.do")
@@ -171,18 +176,23 @@ public class MailController {
 	}
 	
 	@GetMapping("/enrollmymailbox.do")
-	public @ResponseBody String enrollUserMailBox(String wantBoxName, HttpServletResponse res) {
+	public @ResponseBody Map<String, Object> enrollUserMailBox(String wantBoxName, HttpServletResponse res) {
 		long empNo = getLoginEmpInfo().getEmpNo();
 		List<MyMailBox> boxList = service.getMyMailBox(empNo);
 		
 		for(MyMailBox mailBox : boxList) {
-			if(mailBox.getMyMailBoxName().equals(wantBoxName)) return null;
+			if(mailBox.getMyMailBoxName().equals(wantBoxName)) {
+				return Map.of("errorMsg", "중복되는 이름은 사용 할 수 없습니다.");
+			}
 		}
 		
-		Map<String, Object> param = Map.of("empNo", empNo, "wantBoxName", wantBoxName);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("empNo", empNo);
+		param.put("wantBoxName", wantBoxName);
 		
-		service.enrollUserMailBox(param);
-		return wantBoxName;
+		int myMailBoxNo = service.enrollUserMailBox(param);
+		Map<String, Object> newMyMailBoxInfo = Map.of("myBoxName", wantBoxName, "myMailBoxNo", myMailBoxNo);
+		return newMyMailBoxInfo;
 	}
 	
 	@PostMapping("/deletespamdomain.do")
@@ -209,8 +219,79 @@ public class MailController {
 	
 	@GetMapping("/addfavorite.do")
 	public @ResponseBody int addFavoriteMail(String mailNo) {
-		System.out.println("controller mailNo : " + mailNo);
 		return service.addFavoriteMail(mailNo);
+
+//		if(mailNo.contains(",")) {
+//			String[] mailNoArr = mailNo.split(",");
+//			List<String> mailNoList = Arrays.asList(mailNoArr);
+//
+//			mails.stream().filter(m -> m.getMailStatus().equals("즐겨찾기")).forEach(m -> {
+//				for(int i = 0; i < mailNoArr.length; i++) {
+//					if(m.getMailNo() == Integer.parseInt(mailNoArr[i])) {
+//						service.cancelAddFavorite(mailNoArr[i]);
+//					}
+//				}
+//			});//addFavoriteMailList = 1, 5, 6 paramMailNo = 1, 2, 3 notAddFavoriteMailList = 2, 3, 4
+//			
+//			mails.stream().filter(m -> m.getMailStatus().equals("없음")).forEach(m -> {
+//				for(int i = 0; i < mailNoArr.length; i++) {
+//					if(m.getMailNo() == Integer.parseInt(mailNoArr[i])) {
+//						service.cancelAddFavorite(mailNoArr[i]);
+//					}
+//				}
+//			});
+//			
+//		} else {
+//			result = service.cancelAddFavorite(mailNo);
+//		}
+	}
+	
+	@GetMapping("/writemail.do")
+	public void changeWriteMailView(Model model) {
+		String name = getLoginEmpInfo().getEmpName();
+		String writerEmailAddress = getLoginEmpInfo().getEmpEmail();
+		
+		model.addAttribute("writerName", name);
+		model.addAttribute("writerMailAddress", writerEmailAddress);
+	}
+	
+	@PostMapping("/sendmail.do")
+	public String sendMail(String mailContent, String mailTitle, String mailReceiver) {
+		long writerNo = getLoginEmpInfo().getEmpNo();
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("mailContent", mailContent);
+		param.put("mailTitle", mailTitle);
+		param.put("mailReceiverAddress", mailReceiver);
+		param.put("writerNo", writerNo);
+		
+		int result = service.sendMail(param);
+		return "redirect:/mail/mailmain.do";
+	}
+	
+	@PostMapping("/addmailmymailbox.do")
+	public @ResponseBody int addMailMyMailBox(String mailNoStr, int myMailBoxNo) {
+		Map<String, Object> param = new HashMap<String, Object>();
+		System.out.println("mailNoStr : " + mailNoStr + " myMailBoxNo : " + myMailBoxNo);
+		param.put("mailNoStr", mailNoStr);
+		param.put("myMailBoxNo", myMailBoxNo);
+		
+		return service.addMailMyMailBox(param);
+	}
+	
+	@GetMapping("/detailmymailbox.do")
+	public void myMailBoxDetailView(int myMailBoxNo, Model model) {
+
+		List<Mail> mailList = service.joinMyMailBoxDetail(myMailBoxNo);
+		System.out.println("myMailBoxMailList : " + mailList);
+		model.addAttribute("mails", mailList);
+	}
+	
+	@GetMapping("/myfavoritemailbox.do")
+	public void joinFavoriteMailBox(Model model) {
+		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
+		List<Mail> mailList = service.joinFavoriteMailBox(loginMemberEmailDomain);
+		System.out.println("favoriteList : " + mailList);
+		model.addAttribute("mails", mailList);
 	}
 	
 	private Employee getLoginEmpInfo() {

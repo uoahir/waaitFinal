@@ -17,10 +17,11 @@ public class Document {
 	private int docId;
 	private String docWriter;
 	private String docType;
-	private int currentApprover;
+	private String docContent;
+	private int approver;
 	private String docTitle;
 	private Date docDate;
-	private String docStatus;
+	private String docStat;
 	private String docOpen;
 	private String docLife;
 	private List<Approval> approvals = new ArrayList<>();

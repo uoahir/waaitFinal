@@ -3,6 +3,8 @@
 
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath }" />
+
+
     
 <!DOCTYPE html>
 <html>

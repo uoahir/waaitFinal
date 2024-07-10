@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChattingServiceImpl implements ChattingService {
 
-	private final SqlSession session;
-	private final ChattingDao dao;
+//	private final SqlSession session;
+//	private final ChattingDao dao;
 	
 }

@@ -12,6 +12,7 @@
 </head>
 <body>
 	<h1>메일 메인</h1>
+	<button onclick="location.assign('${path }/mail/writemail.do')">메일쓰기</button>
 	
 	<c:if test="${not empty mails }">
 		<table>
@@ -30,7 +31,8 @@
 	<input type="text" placeholder="차단해제할 도메인" name="domainAddress">
 	<input type="text" placeholder="차단해제할 도메인" name="domainAddress">
 	<button onclick="deleteSpamDomain()">스팸 도메인 삭제</button><br>
-	<button onclick="joinSpamMailBox()">스팸메일함</button>
+	<button onclick="joinSpamMailBox()">스팸메일함</button><br>
+	<button>임시보관함</button>
 	<div id="resultContainer">
 		<c:if test="${not empty mails }">
 			<table>
@@ -55,11 +57,25 @@
 				</c:forEach>
 			</table>
 		</c:if>
+		<button onclick="addMailToMyMailBox()">선택한 메일 내 메일함으로 이동</button>
+		<h1>내 메일함</h1>
+		<ul id="myMailBoxList">
+			<c:if test="${not empty myMailBoxes }">
+				<c:forEach var="mailBox" items="${myMailBoxes }">
+					<li>
+						<input type="checkbox" name="checkMyMailBox" value="${mailBox.myMailBoxNo }">
+						<a href="${path }/mail/detailmymailbox.do?myMailBoxNo=${mailBox.myMailBoxNo }">${mailBox.myMailBoxName }</a>
+					</li>
+				</c:forEach>
+			</c:if>
+		</ul>
 	</div>
+	
 	<div id="pageBarContainer">
 		${pageBar }
 	</div>
 	<button onclick="addFavorite()" id="addFavoriteButton" disabled>즐겨찾기</button>
+	<button onclick="location.assign('${path }/mail/myfavoritemailbox.do')">즐겨찾기 메일함</button>
 	<div id="resultContainer">
 	
 	</div>
@@ -100,6 +116,7 @@
 			});
 		}
 		
+		//내 메일함 추가
 		document.querySelector("input[name='myMailBoxName']").addEventListener("blur", e => {
 			const wantBoxName = e.target.value;
 			if(e.target.value == "") {
@@ -107,12 +124,16 @@
 			}
 			console.log("wantBoxName : " + wantBoxName);
 			fetch("${path}/mail/enrollmymailbox.do?wantBoxName=" + wantBoxName)
-			.then(response => response.text())
+			.then(response => response.json())
 			.then(data => {
-				if(data == "") {
-					alert("메일함 이름은 중복될 수 없습니다.");
+				console.log(data.errorMsg);
+				if(data.errorMsg === undefined) {
+					const $li = document.createElement("li");
+					$li.innerHTML = "<input type='checkbox' name='checkMyMailBox' value='data.myMailBoxNo'>" +
+											"<a href='${path }/mail/detailmymailbox.do?myMailBoxNo=" + data.myMailBoxNo + "'>" + data.myBoxName + "</a>"
+					document.getElementById("myMailBoxList").appendChild($li);
 				} else {
-					document.getElementById("userBox").innerHTML = "<button onclick='goMyMailBox()'>" + data + "</button>";					
+					alert(data.errorMsg);
 				}
 			});
 		})
@@ -186,8 +207,52 @@
 		}
 		
 		const buttonAble = () => {
-			document.getElementById("addFavoriteButton").disabled = false;
+			let count = 0;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) count++;
+				
+				if(count == 0) document.getElementById("addFavoriteButton").disabled = true;
+				else document.getElementById("addFavoriteButton").disabled = false;
+			})
 		}
+		
+		const addMailToMyMailBox = () => {
+			let checkedCount = 0;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) checkedCount++;
+			});
+
+			let mailNoStr = "";
+			let count = 1;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) {
+					if(count == checkedCount) {
+						mailNoStr += e.id;
+					} else {
+						mailNoStr += e.id + ",";						
+					}
+					count++;
+				}
+			});
+			
+			let myMailBoxNo = "";
+			document.querySelectorAll("input[name='checkMyMailBox']").forEach(e => {
+				if(e.checked) myMailBoxNo = e.value;
+			})
+			
+			console.log("mailNoStr : " + mailNoStr + " myMailBoxNo : " + myMailBoxNo);
+			fetch("${path }/mail/addmailmymailbox.do", {
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/x-www-form-urlencoded;charset=UTF-8'
+				},
+				body : "mailNoStr=" + mailNoStr + "&myMailBoxNo=" + myMailBoxNo
+			})
+		}
+		
+		/* const myFavoriteMailBoxGo = () => {
+			
+		} */
 	</script>
 </body>
 </html>
