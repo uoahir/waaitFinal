@@ -1,5 +1,9 @@
 package com.waait.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,15 +17,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
+import com.waait.dto.MailFile;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
 import com.waait.dto.SpamDomain;
 import com.waait.service.MailService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 
@@ -263,7 +270,7 @@ public class MailController {
 	}
 	
 	@PostMapping("/sendmail.do")
-	public String sendMail(String mailContent, String mailTitle, String mailReceiver, String mailStatus) {
+	public String sendMail(MultipartFile[] upFile, HttpSession session, String mailContent, String mailTitle, String mailReceiver, String mailStatus) {
 		long writerNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("mailContent", mailContent);
@@ -271,8 +278,48 @@ public class MailController {
 		param.put("mailReceiverAddress", mailReceiver);
 		param.put("mailStatus", mailStatus);
 		param.put("writerNo", writerNo);
+		System.out.println("mailConetnt : " + mailContent + " mailTitle : " + mailTitle + " mailReceiverAddress : " + mailReceiver);
+		int mailSequence = service.sendMail(param);
 		
-		int result = service.sendMail(param);
+		String path = session.getServletContext().getRealPath("resources/upload/mail");
+		if (upFile != null) {
+			System.out.println("upFile은 null 이 아님");
+			for (MultipartFile file : upFile) {
+				System.out.println("fileName : " + file.getOriginalFilename());
+				if (!file.isEmpty()) {
+					String oriName = file.getOriginalFilename();
+					String ext = oriName.substring(oriName.lastIndexOf("."));
+					Date today = new Date(System.currentTimeMillis());
+					int randomVal = (int) (Math.random() * 100000) + 1;
+					String rename = "waait" + (new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(today)) + "_"
+							+ randomVal + ext;
+					long fileSize = file.getSize();
+					File dir = new File(path);
+					if (!dir.exists()) dir.mkdirs();
+					
+					MailFile mailFile = MailFile.builder()
+												.mailNo(mailSequence)
+												.mailOriginalFileName(oriName)
+												.mailRenamedFileName(rename)
+												.mailFileSize(fileSize)
+												.build();
+					
+					try {
+						int result = service.updateFile(mailFile);
+						if(result < 0) throw new RuntimeException();
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+					
+					try {
+						file.transferTo(new File(path, rename));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+		}
 		return "redirect:/mail/mailmain.do";
 	}
 	

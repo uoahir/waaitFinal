@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="path" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,13 +35,16 @@
 
 </head>
 <body>
-	<form action="${path }/mail/sendmail.do" method="post" onsubmit="contentInnerTextHidden()">
+	<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="contentInnerTextHidden()">
 		<div id="titleContainer">
 			<input type="text" name="mailWrtier" value="${writerName } (${writerMailAddress })">
 			<input type="text" name="mailReceiver" placeholder="받는사람" 
            			value="${not empty temporaryWriteMail.receivers ? receiverAddresses : ''}">
 			<input type="text" name="mailTitle" placeholder="제목"
 					value="${not empty temporaryWriteMail.mailTitle ? temporaryWriteMail.mailTitle : ''}">
+		</div>
+		<div id="fileUploadContainer">
+			<input type="file" name="upFile">
 		</div>
 		<div class="toolbar">
 	        <button type = "button" onclick="execCmd('bold')">굵게</button>
@@ -66,9 +70,6 @@
 	    <input type="submit" value="전송" name="mailStatus">
 	    <input type="submit" value="임시저장" name="mailStatus">
 	</form>
-    <form action="#" method="POST">
-    	<button onclick="testFunction()">test</button>
-    </form>
     <script>
         function execCmd(command, value = null) {
         	document.execCommand(command, false, value);
@@ -77,10 +78,6 @@
         contentInnerTextHidden = () => {
         	document.querySelector("input[name='mailContent']").value = document.getElementById("editor").innerHTML;
         };
-        
-        /* const testFunction =() => {
-        	console.log("이게 왜 넘어가");
-        } */
     </script>
 </body>
 </html>

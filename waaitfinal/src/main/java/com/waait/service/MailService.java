@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.waait.dao.MailDao;
 import com.waait.dto.Mail;
+import com.waait.dto.MailFile;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
 import com.waait.dto.SpamDomain;
@@ -125,7 +126,7 @@ public class MailService {
 		} else {
 			result = dao.enrollReceiverInfo(session, param);
 		}
-		return result;
+		return mailSequence;
 	}
 	
 	@Transactional
@@ -211,6 +212,11 @@ public class MailService {
 
 	public List<Mail> searchMail(Map<String, String> searchParam) {
 		return dao.searchMail(session, searchParam);
+	}
+	
+	@Transactional
+	public int updateFile(MailFile mailFile) {
+		return dao.updateFile(session, mailFile);
 	}
 
 }

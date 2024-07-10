@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.waait.dto.Mail;
+import com.waait.dto.MailFile;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
 import com.waait.dto.SpamDomain;
@@ -140,6 +141,10 @@ public class MailDao {
 
 	public List<Mail> searchMail(SqlSession session, Map<String, String> searchParam) {
 		return session.selectList("mail.searchMail", searchParam);
+	}
+
+	public int updateFile(SqlSession session, MailFile mailFile) {
+		return session.insert("mail.updateFile", mailFile);
 	}
 
 
