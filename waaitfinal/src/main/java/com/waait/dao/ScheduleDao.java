@@ -13,7 +13,7 @@ public interface ScheduleDao {
 	
 //	List<Schedule> selectList(SqlSession session,Map<String,Integer>page);
 	
-	List<Schedule> scheduleList(SqlSession session,Schedule empNo);
+	List<Schedule> scheduleList(SqlSession session,long empNumber);
 	
-	
+	int insertSchedule(SqlSession session,Schedule schedule);
 }
