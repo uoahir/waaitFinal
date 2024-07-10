@@ -148,7 +148,6 @@
 		const $content = $("<h4>").text(`${msg.sender}님이 ${status}하셨습니다`);
 		$container.append($content);
 		$("#chattingcontent").append($container);
-		
 	}
 
 
