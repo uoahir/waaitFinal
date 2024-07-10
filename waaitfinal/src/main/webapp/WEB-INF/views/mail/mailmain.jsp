@@ -8,12 +8,26 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
+<style>
+	#topLine {
+		display:flex;
+	}
+
+</style>
 <title>Insert title here</title>
 </head>
 <body>
 	<h1>메일 메인</h1>
-	<button onclick="location.assign('${path }/mail/writemail.do')">메일쓰기</button>
-	
+	<div id="topLine">
+		<button onclick="location.assign('${path }/mail/writemail.do')">메일쓰기</button>
+		<input type="text" placeholder="검색" name="search">
+		<select id="searchSelect" hidden="true">
+			<option value="choice">선택</option>
+			<option value="title">[제목]</option>
+			<option value="content">[내용]</option>
+			<option value="senderMailAddress">[메일주소]</option>
+		</select>
+	</div>
 	<c:if test="${not empty mails }">
 		<table>
 			<tr>

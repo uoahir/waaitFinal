@@ -1,7 +1,6 @@
 package com.waait.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
@@ -23,7 +23,6 @@ import com.waait.dto.SpamDomain;
 import com.waait.service.MailService;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.jsp.jstl.sql.Result;
 import lombok.RequiredArgsConstructor;
 
 
