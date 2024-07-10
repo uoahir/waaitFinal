@@ -18,25 +18,18 @@
 </head>
 <body>
 	<h1>메일 메인</h1>
-	<div id="topLine">
-		<button onclick="location.assign('${path }/mail/writemail.do')">메일쓰기</button>
-		<input type="text" placeholder="검색" name="search">
-		<select id="searchSelect" hidden="true">
-			<option value="choice">선택</option>
-			<option value="title">[제목]</option>
-			<option value="content">[내용]</option>
-			<option value="senderMailAddress">[메일주소]</option>
-		</select>
+	<button onclick="location.assign('${path }/mail/writemail.do')">메일쓰기</button><br>
+	<input type="text" placeholder="검색" name="search">
+	<select id="searchSelect">
+		<option value="choice">선택</option>
+		<option value="mailTitle">[제목]</option>
+		<option value="mailContent">[내용]</option>
+		<option value="empEmail">[보낸사람]</option>
+	</select>
+	<button onclick="searchMail()">검색</button>
+	<div id="searchResultContainer">
+	
 	</div>
-	<c:if test="${not empty mails }">
-		<table>
-			<tr>
-				<th>보낸 사람</th>
-				<th>제목<th>
-				<th>받은 날짜<th>
-			</tr>
-		</table>
-	</c:if>
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
 	<input type="text" placeholder="차단할 이메일 주소 입력" name='spamDomain'>
@@ -307,6 +300,40 @@
 					})
 				}
 			})
+		}
+		
+		document.querySelector("input[name='search']").addEventListener("keyup", e => {
+			const searchValue = document.querySelector("input[name='search']").value;
+			const optionNum = document.getElementById("searchSelect").length;
+			const selectTag = document.getElementById("searchSelect");
+			for(let i = 1; i < optionNum; i++) {
+				if(selectTag[i].value == 'mailTitle') {
+					selectTag[i].innerHTML = "[제목] " + searchValue;
+				} else if(selectTag[i].value == 'mailContent'){
+					selectTag[i].innerHTML = "[내용] " + searchValue;
+				} else {
+					selectTag[i].innerHTML = "[보낸사람] " + searchValue;
+				}
+				
+			}
+		});
+		
+		const searchMail = () => {
+			const searchType = document.getElementById("searchSelect").value;
+			const searchValue = document.querySelector("input[name='search']").value;
+			console.log("searchType : " + searchType + " searchValue : " + searchValue);
+			fetch("${path }/mail/searchmail.do", {
+				method : "POST",
+				headers : {
+					"content-type" : "application/x-www-form-urlencoded"
+				},
+				body : "searchType=" + searchType + "&searchValue=" + searchValue
+			})
+			.then(response => response.text())
+			.then(data => {
+				console.log(data);
+				document.getElementById("searchResultContainer").innerHTML = data;
+			});
 		}
 	</script>
 </body>

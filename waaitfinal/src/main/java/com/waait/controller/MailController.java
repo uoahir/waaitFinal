@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
@@ -349,6 +348,17 @@ public class MailController {
 		System.out.println("sendingMailList : " + sendingMailList);
 		model.addAttribute("mails", sendingMailList);
 		return "mail/sendingmailbox";
+	}
+	
+	@PostMapping("/searchmail.do")
+	public String searchMail(String searchType, String searchValue, Model model) {
+		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
+		Map<String, String> searchParam = Map.of("searchType", searchType, "searchValue", searchValue, "receiverMailAddress", receiverMailAddress);
+		List<Mail> searchList = service.searchMail(searchParam);
+		System.out.println("searchList : " + searchList);
+		System.out.println("searchType : " + searchType + " searchValue : " + searchValue);
+		model.addAttribute("searchMail", searchList);
+		return "mail/mailresponse/searchmail";
 	}
 	
 	private Employee getLoginEmpInfo() {

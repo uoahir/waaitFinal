@@ -209,4 +209,8 @@ public class MailService {
 		return dao.joinSendingMailBox(session, empNo);
 	}
 
+	public List<Mail> searchMail(Map<String, String> searchParam) {
+		return dao.searchMail(session, searchParam);
+	}
+
 }

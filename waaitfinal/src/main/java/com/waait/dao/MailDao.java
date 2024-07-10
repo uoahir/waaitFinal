@@ -138,6 +138,10 @@ public class MailDao {
 		return session.selectList("mail.joinSendingMailBox", empNo);
 	}
 
+	public List<Mail> searchMail(SqlSession session, Map<String, String> searchParam) {
+		return session.selectList("mail.searchMail", searchParam);
+	}
+
 
 
 }
