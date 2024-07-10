@@ -8,6 +8,12 @@
 </head>
 <body>
 	<h3>나의 일정</h3>
+	<tr>
+		<th>1</th>
+		<th>2</th>
+		<th>3</th>
+		<th>4</th>
+	</tr>
 	
 </body>
 </html>

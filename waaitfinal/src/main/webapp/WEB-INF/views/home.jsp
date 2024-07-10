@@ -21,7 +21,7 @@
             <div><a href="${path }/edoc/home">워크플로우</a></div>
             <div><a href="#">근무/휴가</a></div>
             <div><a href="#">프로젝트 관리</a></div>
-            <div><a href="#">일정관리</a></div>
+            <div><a href="${path }/mypage/myschedule.do">일정관리</a></div>
             <div><a href="#">게시판</a></div>
         </div>
         <div id="noneDiv"></div>
