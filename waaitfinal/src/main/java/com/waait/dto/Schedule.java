@@ -17,12 +17,12 @@ public class Schedule {
 	private int reserveNo;
 	private int empNo;
 	private int teamNo;
-	private Time scheTime;
+	private Time scheduleTime;
 	private String startNo;
 	private String endNo;
-	private String scheTitle;
-	private String scheContent;
-	private String scheAllDay;
+	private String scheduleTitle;
+	private String scheduleContent;
+	private String scheduleAllDay;
 	private String scheColor;
 	private String scheWriter;
 	private String scheReWriter;

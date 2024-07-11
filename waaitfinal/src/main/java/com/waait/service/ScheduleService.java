@@ -12,6 +12,10 @@ public interface ScheduleService {
 	
 //	List<Schedule> selectList(Map<String,Integer>page);
 	
-	List<Schedule> scheduleList(Schedule empNo);
+	List<Schedule> scheduleList(long empNumber);
+	
+	
+	// 일정 db에 추가하기 
+	int insertSchedule(Schedule schedule);
 	
 }
