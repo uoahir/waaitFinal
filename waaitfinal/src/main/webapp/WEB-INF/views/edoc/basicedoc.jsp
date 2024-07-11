@@ -100,7 +100,7 @@
                	docContent : content
             };
 
-            const jsonData = new Blob([JSON.stringify(obj)], { type: 'application/json' });
+            const jsonData = new Blob([JSON.stringify(obj)], { type: 'multipart/form-data' });
             formData.append('obj', jsonData);
 
             fetch('${path}/edoc/basicedocend', {
