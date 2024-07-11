@@ -17,19 +17,6 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	
 	private final SqlSession session;
 
-
-//	@Override
-//	public List<Schedule> selectByempNo(SqlSession session,Schedule s) {
-//		return session.selectList("schedule.selectByempNo", s);
-//	}
-	
-//	@Override
-//	public List<Schedule> selectList(SqlSession session, Map<String, Integer> page) {
-//		return session.selectList("scheule.selectList", null,
-//				new RowBounds ((page.get("cPage")-1)*page.get("numPerpage"),
-//						page.get("numPerpage")));
-//	}
-	
 	@Override
 	public List<Schedule> scheduleList(SqlSession session, long empNumber) {
 		return session.selectList("schedule.scheduleByempNo",empNumber);
