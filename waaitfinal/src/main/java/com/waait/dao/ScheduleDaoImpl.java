@@ -1,7 +1,9 @@
 package com.waait.dao;
 
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -14,11 +16,26 @@ import lombok.RequiredArgsConstructor;
 public class ScheduleDaoImpl implements ScheduleDao {
 	
 	private final SqlSession session;
+
+
+//	@Override
+//	public List<Schedule> selectByempNo(SqlSession session,Schedule s) {
+//		return session.selectList("schedule.selectByempNo", s);
+//	}
+	
+//	@Override
+//	public List<Schedule> selectList(SqlSession session, Map<String, Integer> page) {
+//		return session.selectList("scheule.selectList", null,
+//				new RowBounds ((page.get("cPage")-1)*page.get("numPerpage"),
+//						page.get("numPerpage")));
+//	}
 	
 	@Override
-	public List<Schedule> selectByempNo(SqlSession session,Schedule s) {
-		return session.selectList("schedule.selectByempNo", s);
+	public List<Schedule> scheduleList(SqlSession session, Schedule empNo) {
+		return session.selectList("schedule.schedulelist",empNo);
 	}
+	
+	
 	
 	
 

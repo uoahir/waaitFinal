@@ -1,7 +1,11 @@
 package com.waait.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,9 +28,11 @@ import com.waait.dto.Mail;
 import com.waait.dto.MailFile;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
+import com.waait.dto.RecentSearch;
 import com.waait.dto.SpamDomain;
 import com.waait.service.MailService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -200,6 +206,7 @@ public class MailController {
 		int myMailBoxNo = service.enrollUserMailBox(param);
 		Map<String, Object> newMyMailBoxInfo = Map.of("myBoxName", wantBoxName, "myMailBoxNo", myMailBoxNo);
 		return newMyMailBoxInfo;
+		
 	}
 	
 	@PostMapping("/deletespamdomain.do")
@@ -360,7 +367,7 @@ public class MailController {
 	@PostMapping("/deletemail.do")
 	public @ResponseBody int deleteMail(String mailNoStr) {
 		int result = service.deleteMail(mailNoStr);
-		return 0;
+		return result;
 	}
 	
 	@PostMapping("/deletemymailbox.do")
@@ -400,12 +407,41 @@ public class MailController {
 	@PostMapping("/searchmail.do")
 	public String searchMail(String searchType, String searchValue, Model model) {
 		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
+		long empNo = getLoginEmpInfo().getEmpNo();
+		
 		Map<String, String> searchParam = Map.of("searchType", searchType, "searchValue", searchValue, "receiverMailAddress", receiverMailAddress);
 		List<Mail> searchList = service.searchMail(searchParam);
-		System.out.println("searchList : " + searchList);
-		System.out.println("searchType : " + searchType + " searchValue : " + searchValue);
 		model.addAttribute("searchMail", searchList);
+		
+		RecentSearch recentSearch = RecentSearch.builder()
+												.empNo(empNo)
+												.searchType(searchType)
+												.searchValue(searchValue)
+												.build();
+		service.enrollRecentSearchKeyword(recentSearch);
+		
 		return "mail/mailresponse/searchmail";
+	}
+	
+	@GetMapping("/filedownload.do")
+	public void fileDownload(HttpServletResponse response, HttpSession session, 
+			String mailRenamedFileName,	OutputStream os, String mailOriginalFileName) {
+		String filePath = session.getServletContext().getRealPath("/resources/upload/mail/");
+		File downloadFile = new File(filePath + mailRenamedFileName);
+		try(FileInputStream fis = new FileInputStream(downloadFile);
+				BufferedInputStream bis = new BufferedInputStream(fis);
+					BufferedOutputStream bos = new BufferedOutputStream(response.getOutputStream())){
+			String encoding = new String(mailOriginalFileName.getBytes("UTF-8"), "ISO-8859-1");
+			System.out.println("encoding : " + encoding);
+			response.setContentType("application/octet-stream;charset=UTF-8");
+			response.setHeader("Content-disposition", "attachment;filename=\"" + encoding + "\"");
+			int data = 1;
+			while((data = bis.read()) != -1) {
+				bos.write(data);
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private Employee getLoginEmpInfo() {

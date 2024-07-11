@@ -12,7 +12,6 @@
 	#topLine {
 		display:flex;
 	}
-
 </style>
 <title>Insert title here</title>
 </head>
@@ -95,7 +94,9 @@
 	<div id="userBox">
 		
 	</div>
+	
 	<script>
+
 		const addSpamDomain = () => {
 			const spamDomain = document.querySelectorAll("input[name='spamDomain']");
 			let spamDomainString = "";

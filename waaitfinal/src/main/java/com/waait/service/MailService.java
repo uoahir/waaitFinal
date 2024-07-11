@@ -12,6 +12,7 @@ import com.waait.dto.Mail;
 import com.waait.dto.MailFile;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
+import com.waait.dto.RecentSearch;
 import com.waait.dto.SpamDomain;
 
 import lombok.RequiredArgsConstructor;
@@ -217,6 +218,11 @@ public class MailService {
 	@Transactional
 	public int updateFile(MailFile mailFile) {
 		return dao.updateFile(session, mailFile);
+	}
+	
+	@Transactional
+	public void enrollRecentSearchKeyword(RecentSearch recentSearch) {
+		dao.enrollRecentSearchKeyword(session, recentSearch);
 	}
 
 }

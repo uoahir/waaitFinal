@@ -11,6 +11,7 @@ import com.waait.dto.Mail;
 import com.waait.dto.MailFile;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
+import com.waait.dto.RecentSearch;
 import com.waait.dto.SpamDomain;
 
 @Repository
@@ -145,6 +146,10 @@ public class MailDao {
 
 	public int updateFile(SqlSession session, MailFile mailFile) {
 		return session.insert("mail.updateFile", mailFile);
+	}
+
+	public void enrollRecentSearchKeyword(SqlSession session, RecentSearch recentSearch) {
+		session.insert("mail.enrollRecentSearchKeyword", recentSearch);
 	}
 
 
