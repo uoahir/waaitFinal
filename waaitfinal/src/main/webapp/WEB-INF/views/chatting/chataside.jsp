@@ -90,18 +90,22 @@
 	//로그인된 객체 저장 중
 	console.log("${employee}");
 
-
+	
 	//채팅방 사용자목록 출력
 	const chatuserlist=()=>{
 		$.ajax({
-			type : "get",
+			type : "GET",
 			url : "${path}/chat/userlist.do",
 			data : {},
+			/* dataType : 'json', 
+			contentType : 'application/json; charset=utf-8', */
 			success : function(data){
 				document.querySelector("#chatting_main_content").innerHTML = data;
 			}
 		})
 	};
+	
+	
 	
 	//채팅방 채팅방목록 출력
 	const chatroomlist=()=>{
