@@ -4,6 +4,10 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath }" />
     
+<!-- 로그인된 사용자 객체 불러옴 -->
+<c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
+    
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -120,6 +124,7 @@
 <body>
     
     <main>
+    
         <!-- 전체 -->
         <div id="chatting_userlist">
             <!-- 상단 검색창 -->
@@ -133,17 +138,35 @@
 
             <div id="chatting_userlist_printarea_all">
                 <!-- 내 사용자 목록 -->
-                <div class="chatting_userlist_printarea">
-                    <p>나</p>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                </div>
+                
+                <c:if test="${not empty employees }">
+                	<c:forEach var="emp" items="${employees}">
+                		<c:if test="${emp.empNo == employee.empNo }">
+                			<div class="chatting_userlist_printarea">
+			                    <p>나</p>
+			                    <div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>사원</p>
+			                        <p>이으이</p>
+			                    </div>
+			                </div>
+                		</c:if>
+                		
+                		<c:if test="${emp.deptCode eq employee.deptCode}">
+                			<c:if test="${emp.empNo ne employee.empNo}">
+                				내 부서 ${emp.empNo}
+                				
+                				
+                			</c:if>
+                		</c:if>
+                		
+                	</c:forEach>
+                </c:if>
+                
+                
                 
                 <!-- 다른 부서 목록 -->
                 <div class="chatting_userlist_printarea">
@@ -156,6 +179,7 @@
                         <p>사원</p>
                         <p>이으이</p>
                     </div>
+                    
                     <div class="chatting_userlist_printarea_profile">
                         <button onclick="asd(event);">
                             <img class="chatting_userlist_printarea_profile_img_green" 
