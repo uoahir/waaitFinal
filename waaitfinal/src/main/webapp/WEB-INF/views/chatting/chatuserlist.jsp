@@ -7,6 +7,8 @@
 <!-- 로그인된 사용자 객체 불러옴 -->
 <c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
     
+<!-- deptcode 순차적으로 출력할 때 사용 // 나중에 업그레이드 시도 -->
+<%-- <c:set var="deptCount" value="D1"/> --%>
     
 <!DOCTYPE html>
 <html>
@@ -136,11 +138,12 @@
                 </div>
             </div>
 
+            <!-- 사용자 목록 -->
             <div id="chatting_userlist_printarea_all">
-                <!-- 내 사용자 목록 -->
-                
+            
                 <c:if test="${not empty employees }">
                 	<c:forEach var="emp" items="${employees}">
+		               	<!-- 나의 사용자 목록 -->
                 		<c:if test="${emp.empNo == employee.empNo }">
                 			<div class="chatting_userlist_printarea">
 			                    <p>나</p>
@@ -149,148 +152,183 @@
 			                            <img class="chatting_userlist_printarea_profile_img_green" 
 			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 			                        </button>
-			                        <p>사원</p>
-			                        <p>이으이</p>
+			                        <p>${emp.jobLevel.levelName}</p>
+			                        <p>${emp.empName}</p>
 			                    </div>
 			                </div>
                 		</c:if>
-                		
-                		<c:if test="${emp.deptCode eq employee.deptCode}">
-                			<c:if test="${emp.empNo ne employee.empNo}">
-                				내 부서 ${emp.empNo}
-                				
-                				
-                			</c:if>
-                		</c:if>
-                		
                 	</c:forEach>
-                </c:if>
+                		
+                		
+               		<!-- 부서 출력 D1 -->
+               		<div class="chatting_userlist_printarea">
+               		<p>대표실 (1/2)</p>
+               		<c:forEach var="emp" items="${employees}">
+	               		<c:if test="${'D1' eq emp.deptCode}">
+	               			<c:if test="${emp.empNo ne employee.empNo }">
+		               			<div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>${emp.jobLevel.levelName}</p>
+		                        	<p>${emp.empName}</p>
+			                    </div>
+	               			</c:if>
+	               		</c:if>
+               		</c:forEach>
+               		</div>
+               		
+               		
+               		
+               		<!-- 부서 출력 D2 -->
+       				<div class="chatting_userlist_printarea">
+               		<p>개발부 (1/2)</p>
+               		<c:forEach var="emp" items="${employees}">
+	               		<c:if test="${'D2' eq emp.deptCode}">
+	               			<c:if test="${emp.empNo ne employee.empNo }">
+		               			<div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>${emp.jobLevel.levelName}</p>
+		                        	<p>${emp.empName}</p>
+			                    </div>
+	               			</c:if>
+	               		</c:if>
+               		</c:forEach>
+               		</div>
+               		
+               		
+               		<!-- 부서 출력 D3 -->
+       				<div class="chatting_userlist_printarea">
+               		<p>개발 1팀 (1/2)</p>
+               		<c:forEach var="emp" items="${employees}">
+	               		<c:if test="${'D3' eq emp.deptCode}">
+	               			<c:if test="${emp.empNo ne employee.empNo }">
+		               			<div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>${emp.jobLevel.levelName}</p>
+		                        	<p>${emp.empName}</p>
+			                    </div>
+	               			</c:if>
+	               		</c:if>
+               		</c:forEach>
+               		</div>
+	               		
+	               		
+               		<!-- 부서 출력 D4 -->
+       				<div class="chatting_userlist_printarea">
+               		<p>개발 2팀 (1/2)</p>
+               		<c:forEach var="emp" items="${employees}">
+	               		<c:if test="${'D4' eq emp.deptCode}">
+	               			<c:if test="${emp.empNo ne employee.empNo }">
+		               			<div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>${emp.jobLevel.levelName}</p>
+		                        	<p>${emp.empName}</p>
+			                    </div>
+	               			</c:if>
+	               		</c:if>
+               		</c:forEach>
+               		</div>
+               		
+               		
+               		<!-- 부서 출력 D5 -->
+       				<div class="chatting_userlist_printarea">
+               		<p>경영관리부 (1/2)</p>
+               		<c:forEach var="emp" items="${employees}">
+	               		<c:if test="${'D5' eq emp.deptCode}">
+	               			<c:if test="${emp.empNo ne employee.empNo }">
+		               			<div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>${emp.jobLevel.levelName}</p>
+		                        	<p>${emp.empName}</p>
+			                    </div>
+	               			</c:if>
+	               		</c:if>
+               		</c:forEach>
+               		</div>
+               		
+               		
+               		
+               		<!-- 부서 출력 D6 -->
+       				<div class="chatting_userlist_printarea">
+               		<p>재정팀 (1/2)</p>
+               		<c:forEach var="emp" items="${employees}">
+	               		<c:if test="${'D6' eq emp.deptCode}">
+	               			<c:if test="${emp.empNo ne employee.empNo }">
+		               			<div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>${emp.jobLevel.levelName}</p>
+		                        	<p>${emp.empName}</p>
+			                    </div>
+	               			</c:if>
+	               		</c:if>
+               		</c:forEach>
+               		</div>
+               		
+               		
+               		
+               		<!-- 부서 출력 D7 -->
+       				<div class="chatting_userlist_printarea">
+               		<p>인사팀 (1/2)</p>
+               		<c:forEach var="emp" items="${employees}">
+	               		<c:if test="${'D7' eq emp.deptCode}">
+	               			<c:if test="${emp.empNo ne employee.empNo }">
+		               			<div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>${emp.jobLevel.levelName}</p>
+		                        	<p>${emp.empName}</p>
+			                    </div>
+	               			</c:if>
+	               		</c:if>
+               		</c:forEach>
+               		</div>
+               		
+               		
+               		
+               		
+               		<!-- 부서 출력 D8 -->
+       				<div class="chatting_userlist_printarea">
+               		<p>영업팀 (1/2)</p>
+               		<c:forEach var="emp" items="${employees}">
+	               		<c:if test="${'D8' eq emp.deptCode}">
+	               			<c:if test="${emp.empNo ne employee.empNo }">
+		               			<div class="chatting_userlist_printarea_profile">
+			                        <button onclick="asd(event);">
+			                            <img class="chatting_userlist_printarea_profile_img_green" 
+			                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+			                        </button>
+			                        <p>${emp.jobLevel.levelName}</p>
+		                        	<p>${emp.empName}</p>
+			                    </div>
+	               			</c:if>
+	               		</c:if>
+               		</c:forEach>
+               		</div>
+               		
+                		
+                		
+                </c:if>	<!-- ${not empty employees } 끝남 -->
                 
                 
-                
-                <!-- 다른 부서 목록 -->
-                <div class="chatting_userlist_printarea">
-                    <p>내 부서 (6/7)</p>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_gray" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-
-                </div>  <!-- 여기서 부서 끝남 -->
-
-                <!-- 다른 부서 목록 -->
-                <div class="chatting_userlist_printarea">
-                    <p>대표실 (1/1)</p>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>대표</p>
-                        <p>김지연</p>
-                    </div>
-
-                </div>  <!-- 여기서 부서 끝남 -->
-
-                <!-- 다른 부서 목록 -->
-                <div class="chatting_userlist_printarea">
-                    <p>개발 1팀 (4/5)</p>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_green" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-                    <div class="chatting_userlist_printarea_profile">
-                        <button onclick="asd(event);">
-                            <img class="chatting_userlist_printarea_profile_img_gray" 
-                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
-                        </button>
-                        <p>사원</p>
-                        <p>이으이</p>
-                    </div>
-
-                </div>  <!-- 여기서 부서 끝남 -->
-
             </div>
         </div>
     </main>

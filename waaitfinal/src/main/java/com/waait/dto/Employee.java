@@ -30,7 +30,7 @@ public class Employee implements UserDetails{
     private String deptCode;
     private Department department;              
     private String levelCode;
-    private JobLevel joblevel;
+    private JobLevel jobLevel;
     private String empName;
     private Date empStartDate;
     private Date empEndDate;

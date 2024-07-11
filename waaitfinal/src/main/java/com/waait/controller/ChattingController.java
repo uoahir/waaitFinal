@@ -36,7 +36,7 @@ public class ChattingController {
 		//로그인된 사원 가져오기
 		Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
 		System.out.println("채팅 유저리스트");
-		System.out.println("controller-chatUserlist : "+loginEmployee);
+		System.out.println("controller-chatUserlist login : "+loginEmployee);
 		
 		List<Employee> employees = service.selectEmployeelist();
 		System.out.println("controller-chatUserlist : "+employees);
@@ -51,6 +51,8 @@ public class ChattingController {
 	@GetMapping("/roomlist.do")
 	public String chatRoomlist() {
 		System.out.println("채팅 채팅방목록");
+		
+		 
 		
 		return "chatting/chatroomlist";
 	}
