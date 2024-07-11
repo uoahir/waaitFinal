@@ -14,22 +14,11 @@
                 {
                 title  : '미국출장', 
                 start  : '2024-07-01' 
-                },
+                }
                 {
-                title  : '외부출장',
-                start  : '2024-07-07',
-                end    : '2024-07-13'  
-                },
-                {
-                title  : '인사팀 회의',  
-                start  : '2024-07-24T11:30:00',
-                allDay : false 
-                },
-                
-                {
-              title : "${schedule.scheduleTitle}",
-              start : "${schedule.startNo}"
-               }  
+             title : ${schedule.scheduleTitle},
+             start : ${schedule.startNo}
+              }   
             ]
 
 
