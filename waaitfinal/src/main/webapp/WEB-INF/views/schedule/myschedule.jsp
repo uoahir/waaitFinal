@@ -39,7 +39,7 @@
 					<td>${s.scheTitle}</td>
 					<td>${s.scheContent}</td>
 				</tr>
-			</c:forEach>
+			 </c:forEach>
 		</thead>
 	</table>
 	
