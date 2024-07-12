@@ -46,7 +46,7 @@ public class MailController {
 //	private final ObjectMapper mapper;
 	
 	@GetMapping("/mailmain.do")
-	public void changeMailView(Model model,
+	public String changeMailView(Model model,
 								@RequestParam(defaultValue = "1") int cPage) {
 		Employee employee = getLoginEmpInfo();
 		String mailReceiverAddress = employee.getEmpEmail();
@@ -125,6 +125,8 @@ public class MailController {
 		model.addAttribute("mails", mailList);
 		model.addAttribute("myMailBoxes", myMailBoxList);
 		model.addAttribute("pageBar", sb.toString());
+		
+		return "mailmain";
 	}
 	
 	@PostMapping("/settingspamdomain.do")
@@ -196,13 +198,15 @@ public class MailController {
 	}
 	
 	@GetMapping("/maildetail.do")
-	public void mailDetailView(Model model, int mailNo) {
+	public String mailDetailView(Model model, int mailNo) {
 		String userMailAddress = getLoginEmpInfo().getEmpEmail();
 		Map<String, Object> param = Map.of("mailNo", mailNo, "userMailAddress", userMailAddress);
 		
 		Mail mail = service.getMailDetailByNo(param);
 		updateReadStatus(mailNo);
 		model.addAttribute("mail", mail);
+		model.addAttribute("empMailAddress", userMailAddress);
+		return "maildetail";
 	}
 	
 	@GetMapping("/addfavorite.do")
