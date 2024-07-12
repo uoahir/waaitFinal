@@ -216,5 +216,9 @@
 	cursor: pointer;
 	outline: none;
 }
+.card .card-body {
+    border-top: 1px solid black;
+    margin-bottom: 340px;
+}
 </style>
 </html>
