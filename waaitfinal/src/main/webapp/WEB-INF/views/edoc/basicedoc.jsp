@@ -23,18 +23,8 @@
 	        </label>
 	    </div>
 	    <div id="writer">
-	    	<c:choose>
-	    		<c:when test="${employee.deptCode eq 'D1' }">
-	    			대표실
-	    		</c:when>
-	    		<c:when test="${employee.deptCode eq 'D2' }">
-	    			개발부
-	    		</c:when>
-	    		<c:when test="${employee.deptCode eq 'D3' }">
-	    			개발1팀
-	    		</c:when>
-	    	</c:choose>
-	    	<input type="text" id="empName" name = "empName" value = ${employee.empName } readOnly>
+	    	<input type="text" id="deptName" id="deptName" value="${employee.department.text }" readOnly/>
+ 	    	<input type="text" id="empName" name = "empName" value = ${employee.empName } readOnly>
 	    	<input type="hidden" id="docWriter" name = "docWriter" value = ${employee.empNo }>
 	    </div> 
 	    <div id="content">
@@ -81,6 +71,7 @@
 	    <div>
 	    	<input type="file" name="docFile" multiple>
 	    </div>
+	    <input type="hidden" name ="docType" value="${type}">
     </form>
     <script>
     	var path = "${path}";
@@ -97,7 +88,8 @@
                 docWriter: formData.get("docWriter"),
                 docLife: formData.get("docLife"),
                 docOpen: formData.get("docOpen"),
-               	docContent : content
+               	docContent : content,
+               	docType : formData.get("docType")
             };
 
             const jsonData = new Blob([JSON.stringify(obj)], { type: 'multipart/form-data' });
@@ -125,7 +117,7 @@
         };
 
         const appline = () => {
-            window.open("${path}/edoc/appline", "appline", "height=500, width=500");
+            window.open("${path}/edoc/appline2", "appline", "height=500, width=500");
         };
     </script>
 

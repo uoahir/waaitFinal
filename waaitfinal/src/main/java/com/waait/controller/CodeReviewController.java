@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.waait.dto.CodeReviewBoard;
+import com.waait.dto.CodeReviewBoardComment;
 import com.waait.dto.CodeReviewBoardFile;
 import com.waait.dto.Employee;
 import com.waait.service.CodeReviewService;
@@ -64,8 +65,8 @@ public class CodeReviewController {
 		}
 		c.setEmpNo(employee.getEmpNo());
 		c.setCodeWrite(employee.getEmpName());
-		System.out.println("코드리뷰객체" + c);
-		System.out.println("코드파일 객체" + c.getCodeFile());
+		//System.out.println("코드리뷰객체" + c); 출력부분 성공~
+		//System.out.println("코드파일 객체" + c.getCodeFile());출력부분 성공~
 
 		int result = codeReviewService.insertCodeR(c);
 		// try문으로 결과값 처리
@@ -90,10 +91,9 @@ public class CodeReviewController {
 		 * System.out.println("이거는 객체변환확인"+session.getAttribute(
 		 * "SPRING_SECURITY_CONTEXT"));
 		 */
-		System.out.println("페이지 요청완료됨");
 		List<CodeReviewBoard> codeReviewBoards = codeReviewService
 				.selectcodeReviewBoards(Map.of("cPage", cPage, "numPerpage", numPerpage));
-		System.out.println(codeReviewBoards);
+		/* System.out.println(codeReviewBoards); 성공 */
 		model.addAttribute("codeReviewBoards", codeReviewBoards);
 		return "codereviewboard/codeboard";
 	}
@@ -109,9 +109,28 @@ public class CodeReviewController {
 	@GetMapping("/codereviewboard/codereview{no}")
 	public String selectBoardNo(@PathVariable int no,Model model) {
 		CodeReviewBoard codeReviewBoard = codeReviewService.selectcodeReviewBoard(no);
-		System.out.println(codeReviewBoard);
-		model.addAttribute("codeReviewBoard",codeReviewBoard);
+		List<CodeReviewBoardComment> reviewComments = codeReviewService.selectCodeReviewBoardsComment(no);
+		//System.out.println("댓글 수 출력부분:"+reviewComment.size()); 출력부분 성공~
+		//System.out.println(codeReviewBoard); 출력부분 성공~
+		model.addAttribute("reviewComments",reviewComments); //댓글 형태 LIST
+		model.addAttribute("codeReviewBoard",codeReviewBoard);// 게시글 : 객체 
 		return "codereviewboard/codereviewdetail";
+	}
+	@PostMapping("/codereview/comment/insert")
+	public String codeReviewCommentInsert(int no,Model model,String codeReviewContent) {
+		CodeReviewBoardComment codeReviewC = CodeReviewBoardComment.builder().codeReviewName(getEmployeeH().getEmpName()).codeReviewContent(codeReviewContent).empNo(getEmployeeH().getEmpNo()).codeBoardNo(no).build();
+		System.out.println("내용 체크 테스트"+codeReviewC);
+		int result = codeReviewService.insertCodeReviewR(codeReviewC);
+		if(result != 1 ) {
+			/* model.addAttribute(codeReviewC); 댓글 실패부분 아직 미구현*/
+		}else {
+			return "redirect:/codereviewboard/codereview"+no;
+		}
+		
+		return "redirect:/codereviewboard/codereview"+no;
+	}
+	public Employee getEmployeeH() {
+		return (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 
 }

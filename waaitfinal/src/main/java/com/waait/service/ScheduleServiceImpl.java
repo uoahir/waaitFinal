@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 	
+	//private final Schedule s;
 	private final ScheduleDao dao;
 	private final SqlSession session;
 			

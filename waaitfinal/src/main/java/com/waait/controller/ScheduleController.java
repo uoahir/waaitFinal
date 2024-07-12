@@ -28,7 +28,7 @@ public class ScheduleController {
 	private final ScheduleService service;	
 	
 	@GetMapping("/myschedule")
-	public void myschedule(Schedule empNo, Model model) {
+	public String myschedule(Schedule empNo, Model model) {
 		
 		Schedule schedule = new Schedule();
 		
@@ -43,15 +43,16 @@ public class ScheduleController {
 		model.addAttribute("total", total);		
 //		System.out.println("스케줄"+schedule.getScheNo());
 		total.forEach(e -> {
-			System.out.println("scheNo : " + e.getScheNo());
+			System.out.println(e);
 		});
 		
-		
+		return "schedule/schedulemain";
 	}
 	
 	private Employee getLoginEmpInfo() {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
+
 	
 //	//teamware 참고
 //	@RequestMapping("/myschedule")

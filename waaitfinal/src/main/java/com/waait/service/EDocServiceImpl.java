@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.waait.dao.EDocDao;
+import com.waait.dto.Department;
 import com.waait.dto.Document;
 import com.waait.dto.Employee;
 
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EDocServiceImpl implements EDocService {
 	
+
 	private final EDocDao dao;
 	private final SqlSession session;
 	
@@ -25,9 +27,24 @@ public class EDocServiceImpl implements EDocService {
 		return dao.employeeList(session);
 	}
 
+	@Transactional
 	@Override
 	public int insertBasicEdoc(Document document) {
-		// TODO Auto-generated method stub
-		return dao.insertDoc(session, document);
+//		내부보고서 insert 로직 ( 트랜잭셔널 ~ )
+		
+		int successCount = 0;
+		
+		try {
+			
+			dao.insertDoc(session, document);
+			successCount++;
+			dao.insertEdocContent(session, document);
+			successCount++;
+			
+		} catch(Exception e) {
+			throw new RuntimeException("One of the tasks failed", e);
+		}
+		return successCount;
 	}
+	
 }
