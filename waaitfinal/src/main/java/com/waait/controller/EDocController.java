@@ -1,6 +1,11 @@
 package com.waait.controller;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +21,7 @@ import com.waait.dto.Document;
 import com.waait.dto.Employee;
 import com.waait.service.EDocService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,10 +39,11 @@ public class EDocController {
 	}
 	
 	@PostMapping("/basicedocend")
-	public String insertBasic(@RequestPart(value="obj") String obj, @RequestPart(value="file", required=false) List<MultipartFile> uploadFiles) {
+	public String insertBasic(@RequestPart(value="obj") String obj, @RequestPart(value="file", required=false) List<MultipartFile> uploadFiles, HttpSession session) {
 	// required = false : 파일 첨부가 필수가 아닌 선택, value = "file" : MultipartFile 요청에서 input[name='file'] 추출
 		System.out.println("안녕");
 		Document doc;
+
 		try {
 			// json 형태의 문자열로 받아온 obj를 객체화
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -46,14 +53,26 @@ public class EDocController {
 			System.out.println(doc.getDocType());			
 			
 			int result = service.insertBasicEdoc(doc);
+			
 			System.out.println(result);
-			log.debug("안녕");
 			
 			// 파일 업로드 처리
+			
 	        if (uploadFiles != null && !uploadFiles.isEmpty()) {
+	        	String uploadDir = session.getServletContext().getRealPath("resouces/upload/edoc");
 	            for (MultipartFile file : uploadFiles) {
 	                // 파일 저장 로직 추가 (예: file.transferTo(new File("/path/to/save")))
-	                log.info("파일 업로드: " + file.getOriginalFilename());
+	            	if(!file.isEmpty()) {
+	            		String oriFileName = file.getOriginalFilename();
+						String ext = oriFileName.substring(oriFileName.lastIndexOf("."));
+	            		String renamedFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename()+ext;
+	            		
+	            		String filePath = uploadDir + File.separator + renamedFileName;
+	            		
+	            		// 파일 저장
+	            		Path path = Paths.get(filePath);
+	            		Files.write(path, file.getBytes());
+	            	}
 	            }
 	        }
 	    } catch (RuntimeException e) {

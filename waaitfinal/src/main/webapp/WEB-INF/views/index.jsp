@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
@@ -587,14 +587,11 @@
             
             <li class="sidebar-title">Pages</li>
             
-            <li
-                class="sidebar-item  ">
-                <a href="application-email.html" class='sidebar-link'>
+            <li class="sidebar-item  ">
+                <a href="${path }/mail/mailmain.do" class='sidebar-link'>
                     <i class="bi bi-envelope-fill"></i>
-                    <span>Email Application</span>
+                    <span>mail</span>
                 </a>
-                
-
             </li>
             
             <li class="sidebar-item  ">
