@@ -46,5 +46,12 @@ public class EDocServiceImpl implements EDocService {
 		}
 		return successCount;
 	}
+
+	@Override
+	public List<Department> deptList() {
+		// TODO Auto-generated method stub
+		return dao.deptList(session);
+	}
+	
 	
 }

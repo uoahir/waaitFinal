@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.waait.dto.Department;
 import com.waait.dto.Document;
 import com.waait.dto.Employee;
 import com.waait.service.EDocService;
@@ -89,6 +90,9 @@ public class EDocController {
 	public void appline(Model m) {
 		List<Employee> employees = service.employeeList();
 		m.addAttribute("employees", employees);
+		List<Department> departments = service.deptList();
+		System.out.println(departments.size());
+		m.addAttribute("departments", departments);
 	}
 	
 	@GetMapping("/appline2")

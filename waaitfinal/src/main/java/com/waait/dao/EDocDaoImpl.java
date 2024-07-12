@@ -28,6 +28,13 @@ public class EDocDaoImpl implements EDocDao {
 	public int insertEdocContent(SqlSession session, Document doc) {
 		// TODO Auto-generated method stub
 		return session.insert("edoc.insertBasicContent", doc);
+	}
+
+	@Override
+	public List<Department> deptList(SqlSession session) {
+		// TODO Auto-generated method stub
+		return session.selectList("edoc.deptlist");
 	}	
+	
 	
 }

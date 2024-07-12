@@ -12,5 +12,6 @@ public interface EDocDao {
 	int insertDoc(SqlSession session, Document doc);
 	List<Employee> employeeList(SqlSession session);
 	int insertEdocContent(SqlSession session, Document doc);
+	List<Department> deptList(SqlSession session);
 	
 }

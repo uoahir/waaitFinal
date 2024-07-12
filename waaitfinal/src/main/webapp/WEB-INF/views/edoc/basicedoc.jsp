@@ -119,6 +119,10 @@
         const appline = () => {
             window.open("${path}/edoc/appline", "appline", "height=500, width=500");
         };
+        
+        function setApprovalLine(employees) {
+        	console.log(employees);
+        }
     </script>
 
 
