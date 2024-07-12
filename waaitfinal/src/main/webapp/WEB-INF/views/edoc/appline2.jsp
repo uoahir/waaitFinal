@@ -29,7 +29,6 @@ $(function () {
 		success: function(data){
 			// jstree 에 데이터 추가
 			$('#jstree').jstree({
-				'plugins':['checkbox'],
 				'core':{
 					'data':data
 				}

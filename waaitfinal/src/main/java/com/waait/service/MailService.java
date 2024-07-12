@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.waait.dao.MailDao;
 import com.waait.dto.Mail;
+import com.waait.dto.MailFile;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
+import com.waait.dto.RecentSearch;
 import com.waait.dto.SpamDomain;
 
 import lombok.RequiredArgsConstructor;
@@ -125,7 +127,7 @@ public class MailService {
 		} else {
 			result = dao.enrollReceiverInfo(session, param);
 		}
-		return result;
+		return mailSequence;
 	}
 	
 	@Transactional
@@ -151,6 +153,76 @@ public class MailService {
 
 	public List<Mail> joinFavoriteMailBox(String loginMemberEmailDomain) {
 		return dao.joinFavoriteMailBox(session, loginMemberEmailDomain);
+	}
+
+	public List<Mail> joinTempoSaveMailBox(long empNo) {
+		return dao.joinTempoSaveMailBox(session, empNo);
+	}
+
+	public Mail joinTempoSaveMailByMailNo(int mailNo) {
+		return dao.joinTempoSaveMailByMailNo(session, mailNo);
+	}
+
+	public int deleteMail(String mailNoStr) {
+		int result = 0;
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				result = dao.deleteMail(session, mailNoArr[i]);
+			}
+		} else {
+			result = dao.deleteMail(session, mailNoStr);			
+		}
+		return result;
+	}
+	
+	@Transactional
+	public int moveMailToTrashMailBox(List<Mail> mailInMyMailBox) {
+		int result = 0;
+		for(Mail mail : mailInMyMailBox) {
+			result = dao.moveMailToTrashMailBox(session, mail.getMailNo());
+		}
+		return result;
+		
+	}
+	
+	@Transactional
+	public int deleteMyMailBox(int myMailBoxNo) {
+		return dao.deleteMyMailBox(session, myMailBoxNo);
+	}
+
+	public List<Mail> jointrashmailbox(String receiverMailAddress) {
+		return dao.jointrashmailbox(session, receiverMailAddress);
+	}
+	
+	@Transactional
+	public void perfectlyDeleteMail(String mailNoStr) {
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				dao.perfectlyDeleteMail(session, mailNoArr[i]);
+			}
+		} else {
+			dao.perfectlyDeleteMail(session, mailNoStr);			
+		}
+	}
+
+	public List<Mail> joinSendingMailBox(long empNo) {
+		return dao.joinSendingMailBox(session, empNo);
+	}
+
+	public List<Mail> searchMail(Map<String, String> searchParam) {
+		return dao.searchMail(session, searchParam);
+	}
+	
+	@Transactional
+	public int updateFile(MailFile mailFile) {
+		return dao.updateFile(session, mailFile);
+	}
+	
+	@Transactional
+	public void enrollRecentSearchKeyword(RecentSearch recentSearch) {
+		dao.enrollRecentSearchKeyword(session, recentSearch);
 	}
 
 }
