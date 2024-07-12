@@ -21,13 +21,13 @@ public class SecurityConfig {
 			throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-						.requestMatchers("/logininfo","/login", "/WEB-INF/views/**", "/resources/**").permitAll()
-						.requestMatchers("/admin").hasAnyAuthority(EmpAuthority.ADMIN.name())
+						  .requestMatchers("/logininfo","/login", "/WEB-INF/views/**","/resources/**").permitAll()
+						 .requestMatchers("/admin").hasAnyAuthority(EmpAuthority.ADMIN.name())
 						.anyRequest().authenticated()
 						)
 				.formLogin(formLogin -> formLogin.loginPage("/login")
 						.loginProcessingUrl("/logininfo") //PostMapping("login")
-						.defaultSuccessUrl("/user") //로그인 성공할때 들어가지는 요청주소
+						.defaultSuccessUrl("/") //로그인 성공할때 들어가지는 요청주소
 						.usernameParameter("user")
 						.passwordParameter("password"))
 				.authenticationProvider(provider)
