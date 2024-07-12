@@ -30,7 +30,7 @@ public class EDocController {
 	public void basicEdoc() {}
 	
 	@PostMapping("/basicedocend")
-	public String insertBasic(@RequestPart(value="") String obj, @RequestPart(value="file", required=false) List<MultipartFile> uploadFiles) {
+	public String insertBasic(@RequestPart(value="obj") String obj, @RequestPart(value="file", required=false) List<MultipartFile> uploadFiles) {
 		
 	// required = false : 파일 첨부가 필수가 아닌 선택, value = "file" : MultipartFile 요청에서 input[name='file'] 추출
 		System.out.println("안녕");

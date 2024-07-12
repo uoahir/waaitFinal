@@ -1,6 +1,7 @@
 package com.waait.dto;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +16,9 @@ public class Schedule {
 
 	private int scheNo;
 	private int reserveNo;
-	private int empNo;
-	private int teamNo;
-	private Time scheTime;
+	private long empNo;
+	private String deptCode;
+	private Timestamp scheTime;
 	private String startNo;
 	private String endNo;
 	private String scheTitle;

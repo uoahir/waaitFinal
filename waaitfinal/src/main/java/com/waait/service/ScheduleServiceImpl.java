@@ -1,6 +1,7 @@
 package com.waait.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
@@ -14,14 +15,26 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 	
+<<<<<<< HEAD
 	//private final Schedule s;
+=======
+>>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
 	private final ScheduleDao dao;
 	private final SqlSession session;
-	
+			
 	@Override
-	public List<Schedule> selectByempNo(Schedule s) {
-		return dao.selectByempNo(session,s);
+	public List<Schedule> scheduleList(long empNumber) {
+		return dao.scheduleList(session,empNumber);
 	}
+
+	@Override
+	public int insertSchedule(Schedule schedule) {
+		return dao.insertSchedule(session,schedule);
+	}
+	
+	
+	
+	
 	
 	
 
