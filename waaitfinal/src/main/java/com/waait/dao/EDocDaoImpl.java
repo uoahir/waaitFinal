@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.waait.dto.Department;
 import com.waait.dto.Document;
 import com.waait.dto.Employee;
 
@@ -23,5 +24,10 @@ public class EDocDaoImpl implements EDocDao {
 		return session.selectList("edoc.employeelist");
 	}
 
+	@Override
+	public int insertEdocContent(SqlSession session, Document doc) {
+		// TODO Auto-generated method stub
+		return session.insert("edoc.insertBasicContent", doc);
+	}	
 	
 }
