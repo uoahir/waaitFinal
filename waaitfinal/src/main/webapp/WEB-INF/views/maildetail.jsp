@@ -47,26 +47,26 @@
 								</div>
 								<div class="information d-sm-flex d-none align-items-center">
 									<small class="text-muted me-3">${mail.mailWriteDate }</small> 
-									<span id="colorDecisionSpan" class=
-										<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
-                                        	"favorite text-warning"
-                                        </c:if>
-										<c:if test="${mail.mailStatus != '즐겨찾기' }" >
-                                        	"favorite"
-                                        </c:if>
-	                                > 
 										<button class="icon-button" onclick="addFavorite()">
-											<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
-	                                            <use xlink:href=<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
-			                                                    	"${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill"
-			                                                    </c:if>
-																<c:if test="${mail.mailStatus != '즐겨찾기' }" >
-			                                                    	"${path }/resources/assets/static/images/bootstrap-icons.svg#star"
-			                                                 	</c:if> id="iconPath" 
-			                                    />
-	                                        </svg>
+											<span id="colorDecisionSpan" class=
+												<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
+		                                        	"favorite text-warning"
+		                                        </c:if>
+												<c:if test="${mail.mailStatus != '즐겨찾기' }" >
+		                                        	"favorite"
+		                                        </c:if>
+		                                	>
+												<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+		                                            <use xlink:href=<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
+				                                                    	"${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill"
+				                                                    </c:if>
+																	<c:if test="${mail.mailStatus != '즐겨찾기' }" >
+				                                                    	"${path }/resources/assets/static/images/bootstrap-icons.svg#star"
+				                                                 	</c:if> id="iconPath" 
+				                                    />
+		                                        </svg>
+		                                    </span>
                                         </button>
-									</span>
 									<div class="dropdown">
 										<a href="#" class="dropdown-toggle" id="third-open-menu"
 											data-toggle="dropdown" aria-haspopup="true"
@@ -166,29 +166,55 @@
 		location.assign("${path }/mail/filedownload.do?mailOriginalFileName=" + oriName + "&mailRenamedFileName=" + renamed);
 	}
 	
-	const addFavorite = () => {
-		const mailNo = ${mail.mailNo};
-		fetch("${path}/mail/addfavorite.do?mailNo=" + mailNo)
-		.then(response => response.text())
-		.then(data => {
-			console.log(data);
-			if(data == 1) {
-				alert("즐겨찾기 추가"); 
+	const addFavorite = (function() {
+		let applicationBoolean = ${mail.mailStatus eq '즐겨찾기' ? true : false}
+		const addFavorite = () => {
+			const mailNo = ${mail.mailNo};
+			console.log("mailNo : " + mailNo);
+			console.dir(document.getElementById("colorDecisionSpan"))
+			console.log("applicationBoolean : " + applicationBoolean)
+			if(applicationBoolean == false) {
+				fetch("${path}/mail/addfavorite.do?mailNo=" + mailNo)
+				.then(response => response.text())
+				.then(data => {
+					console.log(data);
+					if(data == 1) {
+						alert("즐겨찾기 추가");
+						applicationBoolean = true;
+						document.getElementById("iconPath").setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill");
+						document.getElementById("colorDecisionSpan").className = "favorite text-warning";
+					} else {
+						alert("실패");
+					}
+				});
 			} else {
-				alert("실패");
+				fetch("${path}/mail/canceladdfavorite.do?mailNo=" + mailNo)
+				.then(response => response.text())
+				.then(data => {
+					console.log(data);
+					if(data == 1) {
+						alert("즐겨찾기 해제");
+						applicationBoolean = false;
+						document.getElementById("iconPath").setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star");
+						document.getElementById("colorDecisionSpan").className = "favorite";
+					} else {
+						alert("실패");
+					}
+				});
 			}
-		});
-	}
+		}
+		return addFavorite;
+	})();
 	
-	document.getElementById("iconPath").setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star");
+	//document.getElementById("iconPath").setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star");
 </script>
 <style>
 .icon-button {
-            background: none;
-            border: none;
-            padding: 0;
-            cursor: pointer;
-            outline: none;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	outline: none;
 }
 </style>
 </html>

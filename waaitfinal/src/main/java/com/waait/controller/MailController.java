@@ -214,6 +214,11 @@ public class MailController {
 		return service.addFavoriteMail(mailNo);
 	}
 	
+	@GetMapping("/canceladdfavorite.do")
+	public @ResponseBody int cancelAddFavorite(String mailNo) {
+		return service.cancelAddFavorite(mailNo);
+	}
+	
 	@GetMapping("/writemail.do")
 	public void changeWriteMailView(Model model, 
 			@RequestParam(defaultValue = "-1") int mailNo) {
