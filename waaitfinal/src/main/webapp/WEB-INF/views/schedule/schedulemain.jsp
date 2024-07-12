@@ -20,7 +20,7 @@
             			start:'${fn:replace(event.scheTime," ","T")}'
             		},
             	</c:forEach>
-                {
+               /*  {
                 title  : '미국출장', 
                 start  : '2024-07-01' 
                 },
@@ -33,7 +33,7 @@
                 title  : '인사팀 회의',  
                 start  : '2024-07-24T11:30:00',
                 allDay : false 
-                }
+                } */
                 
             ]
 
