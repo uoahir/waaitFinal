@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 	
-	//private final Schedule s;
 	private final ScheduleDao dao;
 	private final SqlSession session;
 			
@@ -29,10 +28,4 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return dao.insertSchedule(session,schedule);
 	}
 	
-	
-	
-	
-	
-	
-
 }
