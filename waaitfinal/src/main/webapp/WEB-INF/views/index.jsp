@@ -17,11 +17,17 @@
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/app.css">
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/app-dark.css">
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/iconly.css">
+  <link rel="stylesheet" href="${path}/resources/css/ju/headerju.css">
   
 </head>
 
 <body>
     <script src="${path }/resources/assets/static/js/initTheme.js"></script>
+    
+    <!-- script문 JU -->
+    <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
+    
+    
     <div id="app">
         <div id="sidebar">
             <div class="sidebar-wrapper active">
@@ -591,12 +597,12 @@
 
             </li>
             
-            <li
-                class="sidebar-item  ">
-                <a href="application-chat.html" class='sidebar-link'>
+            <li class="sidebar-item  ">
+                <div onclick="chattingOpen();" class='sidebar-link' id="chattingOpen">
                     <i class="bi bi-chat-dots-fill"></i>
                     <span>Chat Application</span>
-                </a>
+                </div>
+                
                 
 
             </li>
