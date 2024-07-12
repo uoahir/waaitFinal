@@ -19,8 +19,7 @@ public class Schedule {
 	private long empNo;
 	private String deptCode;
 	private Timestamp scheTime;
-	private String startNo;
-	private String endNo;
+	private Timestamp scheEnd;	
 	private String scheTitle;
 	private String scheContent;
 	private String scheAllDay;
