@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Department {
+public class JsTree {
 	private String id;
 	private String parent;
 	private String text;

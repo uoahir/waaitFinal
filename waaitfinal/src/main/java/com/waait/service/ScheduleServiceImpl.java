@@ -28,10 +28,4 @@ public class ScheduleServiceImpl implements ScheduleService {
 		return dao.insertSchedule(session,schedule);
 	}
 	
-	
-	
-	
-	
-	
-
 }
