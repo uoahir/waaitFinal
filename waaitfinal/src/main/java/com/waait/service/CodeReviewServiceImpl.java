@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.waait.dao.CodeReviewDao;
 import com.waait.dto.CodeReviewBoard;
+import com.waait.dto.CodeReviewBoardComment;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,11 +33,23 @@ public class CodeReviewServiceImpl implements CodeReviewService {
 		List<CodeReviewBoard> codeReviewBoards = codeReviewDao.selectcodeReviewBoards(session, param);
 		return codeReviewBoards;
 	}
-
+   
 	@Override
 	public CodeReviewBoard selectcodeReviewBoard(int no) {
 		CodeReviewBoard codeReviewBoard = codeReviewDao.selectcodeReviewBoard(session, no);
 		return codeReviewBoard;
+	}
+
+	@Override
+	public int insertCodeReviewR(CodeReviewBoardComment codeReviewC) {
+		int result = codeReviewDao.insertCodeReviewR(session,codeReviewC);
+		return result;
+	}
+
+	@Override
+	public List<CodeReviewBoardComment> selectCodeReviewBoardsComment(int no) {
+		List<CodeReviewBoardComment> c = codeReviewDao.selectCodeReviewBoardsComment(session,no);
+		return c;
 	}
 	
 	/*

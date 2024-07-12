@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.waait.dto.CodeReviewBoard;
+import com.waait.dto.CodeReviewBoardComment;
 import com.waait.dto.CodeReviewBoardFile;
 
 @Repository
@@ -34,6 +35,16 @@ public class CodeReviewDaoImpl implements CodeReviewDao{
 	@Override
 	public CodeReviewBoard selectcodeReviewBoard(SqlSession session, int no) {
 		return session.selectOne("codeReview.selectcodeReviewBoard", no);
+	}
+
+	@Override
+	public int insertCodeReviewR(SqlSession session, CodeReviewBoardComment codeReviewC) {
+		return session.insert("codeReview.insertCodeReviewR",codeReviewC);
+	}
+
+	@Override
+	public List<CodeReviewBoardComment> selectCodeReviewBoardsComment(SqlSession session,int no) {
+		return session.selectList("codeReview.selectCodeReviewBoardsComment",no);
 	}
 
 }
