@@ -23,7 +23,7 @@
 	        </label>
 	    </div>
 	    <div id="writer">
-	    	<input type="text" id="deptName" id="deptName" value="${employee.department.text }" readOnly/>
+	    	<input type="text" id="deptName" id="deptName" value="${employee.department.deptName }" readOnly/>
  	    	<input type="text" id="empName" name = "empName" value = ${employee.empName } readOnly>
 	    	<input type="hidden" id="docWriter" name = "docWriter" value = ${employee.empNo }>
 	    </div> 
@@ -117,7 +117,7 @@
         };
 
         const appline = () => {
-            window.open("${path}/edoc/appline2", "appline", "height=500, width=500");
+            window.open("${path}/edoc/appline", "appline", "height=500, width=500");
         };
     </script>
 

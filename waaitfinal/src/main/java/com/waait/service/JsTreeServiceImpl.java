@@ -26,11 +26,11 @@ public class JsTreeServiceImpl implements JsTreeService {
 		
 		List<Department> dept = jsTreeDao.getTreeDeptData(session);
 		for(Department d : dept) {
-			jstree.add(JsTree.builder().id(d.getId()).parent(d.getParent()).text(d.getText()).build());
+			jstree.add(JsTree.builder().id(d.getDeptCode()).parent(d.getParentCode()).text(d.getDeptName()).build());
 		}
 		List<Employee> emp = jsTreeDao.getTreeEmpData(session);
 		for(Employee e : emp) {
-			jstree.add(JsTree.builder().id(e.getEmpNo()+"").parent(e.getDepartment().getId()).text(e.getEmpName()).build());
+			jstree.add(JsTree.builder().id(e.getEmpNo()+"").parent(e.getDepartment().getDeptCode()).text(e.getEmpName()).build());
 		}
 		return jstree;
 	}
