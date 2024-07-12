@@ -22,8 +22,17 @@ public class ChattingController {
 	
 	
 	@GetMapping("/open.do")
-	public String chatOpen() {
+	public String chatOpen(Model model) {
 		System.out.println("채팅 오픈");
+		//로그인된 사원 가져오기
+		Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+		System.out.println("controller-chatUserlist login회원 : "+loginEmployee);
+		
+		
+		List<Employee> employees = service.selectEmployeelist();
+		System.out.println("controller-chatUserlist : "+employees);
+		model.addAttribute("employees",employees);
+		
 		
 		return "chatting/chatopen";
 	}
@@ -31,20 +40,20 @@ public class ChattingController {
 	
 	
 	//채팅방 유저리스트 페이지 
-	@GetMapping("/userlist.do")
-	public String chatUserlist(Model model) {
-		//로그인된 사원 가져오기
-		Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
-		System.out.println("채팅 유저리스트");
-		System.out.println("controller-chatUserlist login : "+loginEmployee);
-		
-		List<Employee> employees = service.selectEmployeelist();
-		System.out.println("controller-chatUserlist : "+employees);
-		
-		model.addAttribute("employees",employees);
-		
-		return "chatting/chatuserlist";
-	}
+	/*
+	 * @GetMapping("/userlist.do") public String chatUserlist(Model model) { //로그인된
+	 * 사원 가져오기 Employee loginEmployee =
+	 * (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal
+	 * (); System.out.println("채팅 유저리스트");
+	 * System.out.println("controller-chatUserlist login : "+loginEmployee);
+	 * 
+	 * List<Employee> employees = service.selectEmployeelist();
+	 * System.out.println("controller-chatUserlist : "+employees);
+	 * 
+	 * model.addAttribute("employees",employees);
+	 * 
+	 * return "chatting/chatuserlist"; }
+	 */
 	
 	
 	//채팅방 채팅방목록 페이지
