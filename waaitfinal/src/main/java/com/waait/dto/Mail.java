@@ -1,6 +1,7 @@
 package com.waait.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +21,7 @@ public class Mail {
 	private String mailTitle;
 	private String mailContent;
 	private String mailStatus;
-	private Date mailWriteDate;
+	private String mailWriteDate;
 	private String mailReadStatus;
 	private Date receiverReadDate;
 	private List<MailReceiver> receivers;

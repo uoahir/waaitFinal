@@ -3,6 +3,7 @@ package com.waait.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -26,6 +27,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 		//jackson 라이브러리의 클래스 JSON데이터를 java객체로 변환, java객체를 JSON데이터로 변환 하는데 사용함. 
 		
 		private final ObjectMapper mapper;
+		
 		
 		//들어왔을때 메소드 실행
 		@Override
@@ -67,7 +69,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 				}
 			}
 			clients.remove(id);	//관리하는 세션에서 해당하는 id 삭제
-			sendMessage(Message.builder().type("close").sender(id).build());	//메세지를 전송 type을 close, 해당하는 id
+			sendMessage(Message.builder().type("close").empName(id).build());	//메세지를 전송 type을 close, 해당하는 id
 			attendMessage();	//접속자 최신화
 			
 		}
@@ -75,17 +77,19 @@ public class ChattingServerController extends TextWebSocketHandler{
 		
 		private void addClient(WebSocketSession session, Message msg) {
 			// 같은 session이 들어오면 덮어쓰기가 되어 하나만 접속되서 관리됨..? // msg.getSender를 이용해서 접속한 아이디면 접속 안시키고 등 여러방법으로 관리 가능
-			clients.put(msg.getSender(), session);	
+			clients.put(msg.getEmpName(), session);	
 			sendMessage(msg);
 			attendMessage();
 			
 		}
+		
+		
 		//참석한 멤버
 		private void attendMessage() {
 			try {
 				Message msg = Message.builder()
 						.type("attend")
-						.msg(mapper.writeValueAsString(clients.keySet()))	//java객체 -> JSON
+						.chatContent(mapper.writeValueAsString(clients.keySet()))	//java객체 -> JSON
 						.build();
 				sendMessage(msg);
 				

@@ -25,25 +25,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScheduleController {
 	
-	private final ScheduleService service;
-	
+	private final ScheduleService service;	
 	
 	@GetMapping("/myschedule")
-	public void myschedule(Schedule empNo) {
+	public String myschedule(Schedule empNo, Model model) {
+		
+		Schedule schedule = new Schedule();
 		
 		Employee employee = getLoginEmpInfo();		
-		long empNumber = employee.getEmpNo();
-		
+		long empNumber = employee.getEmpNo();				
 		/* Schedule emoNo=empNumber */
 		
 		List<Schedule> total=service.scheduleList(empNumber);
 		System.out.println(total);
+		schedule.setEmpNo(empNumber);
 		
+		model.addAttribute("total", total);		
+//		System.out.println("스케줄"+schedule.getScheNo());
+		total.forEach(e -> {
+			System.out.println(e);
+		});
+		
+		return "schedule/schedulemain";
 	}
 	
 	private Employee getLoginEmpInfo() {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
+
 	
 //	//teamware 참고
 //	@RequestMapping("/myschedule")

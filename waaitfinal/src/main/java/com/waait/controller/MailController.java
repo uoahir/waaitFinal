@@ -32,7 +32,6 @@ import com.waait.dto.RecentSearch;
 import com.waait.dto.SpamDomain;
 import com.waait.service.MailService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -49,11 +48,6 @@ public class MailController {
 	@GetMapping("/mailmain.do")
 	public void changeMailView(Model model,
 								@RequestParam(defaultValue = "1") int cPage) {
-//		SecurityContextImpl security = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
-//		System.out.println("권한 : " + security.getAuthentication().getAuthorities());
-//		Employee employee = (Employee) security.getAuthentication().getPrincipal();
-//		System.out.println("employee security : " + employee);
-		
 		Employee employee = getLoginEmpInfo();
 		String mailReceiverAddress = employee.getEmpEmail();
 		long empNo = employee.getEmpNo();
@@ -139,7 +133,6 @@ public class MailController {
 		System.out.println("spamDomain : " + spamDomain);
 		Map<String, Object> param = new HashMap<String, Object>();
 		long empNo = getLoginEmpInfo().getEmpNo();
-//		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
 		
 		String[] domainArr = spamDomain.split(",");
 		for(String domain : domainArr) {
@@ -150,17 +143,6 @@ public class MailController {
 		
 		if(result > 0) return "성공적으로 등록되었습니다.";
 		else return "등록에 실패했습니다.";
-//		List<Mail> mailList = service.getAllMail(loginMemberEmailDomain);
-//		if(mailList != null && mailList.size() > 0 && !mailList.isEmpty()) {
-//			for(Mail m : mailList) {
-//				String senderMailAddress = m.getSenderMailAddress();
-//				for(String spamEmailAddress : domainArr) {
-//					if(senderMailAddress.equals(spamEmailAddress)) {
-//						service.insertSpamMailBox();
-//					}
-//				}
-//			}
-//		}
 	}
 	
 	@GetMapping("/joinspammail.do")
@@ -171,18 +153,10 @@ public class MailController {
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
 		
-//		StringBuffer sb = new StringBuffer();
 		Map<String, Object> param = Map.of("loginMemberEmailDomain", loginMemberEmailDomain, "spamDomains", spamDomains);
 		if(spamDomains != null && spamDomains.size() > 0 && !spamDomains.isEmpty()) {
-//			for(SpamDomain domain : spamDomains) {
-//				sb.append(domain.getSpamDomainAddress() + ",");
-//			}
 			spamMailList = service.getSpamMail(param);
 		}
-//		String[] spamDomainArr = sb.toString().split(",");
-//		Arrays.stream(spamDomainArr).forEach(e -> {
-//			System.out.println("spamDomain : " + e);
-//		});
 		
 		model.addAttribute("spamMail", spamMailList);
 		return "mail/mailresponse/spammail";
@@ -234,30 +208,6 @@ public class MailController {
 	@GetMapping("/addfavorite.do")
 	public @ResponseBody int addFavoriteMail(String mailNo) {
 		return service.addFavoriteMail(mailNo);
-
-//		if(mailNo.contains(",")) {
-//			String[] mailNoArr = mailNo.split(",");
-//			List<String> mailNoList = Arrays.asList(mailNoArr);
-//
-//			mails.stream().filter(m -> m.getMailStatus().equals("즐겨찾기")).forEach(m -> {
-//				for(int i = 0; i < mailNoArr.length; i++) {
-//					if(m.getMailNo() == Integer.parseInt(mailNoArr[i])) {
-//						service.cancelAddFavorite(mailNoArr[i]);
-//					}
-//				}
-//			});//addFavoriteMailList = 1, 5, 6 paramMailNo = 1, 2, 3 notAddFavoriteMailList = 2, 3, 4
-//			
-//			mails.stream().filter(m -> m.getMailStatus().equals("없음")).forEach(m -> {
-//				for(int i = 0; i < mailNoArr.length; i++) {
-//					if(m.getMailNo() == Integer.parseInt(mailNoArr[i])) {
-//						service.cancelAddFavorite(mailNoArr[i]);
-//					}
-//				}
-//			});
-//			
-//		} else {
-//			result = service.cancelAddFavorite(mailNo);
-//		}
 	}
 	
 	@GetMapping("/writemail.do")
@@ -425,7 +375,7 @@ public class MailController {
 	
 	@GetMapping("/filedownload.do")
 	public void fileDownload(HttpServletResponse response, HttpSession session, 
-			String mailRenamedFileName,	OutputStream os, String mailOriginalFileName) {
+			String mailRenamedFileName,	String mailOriginalFileName) {
 		String filePath = session.getServletContext().getRealPath("/resources/upload/mail/");
 		File downloadFile = new File(filePath + mailRenamedFileName);
 		try(FileInputStream fis = new FileInputStream(downloadFile);

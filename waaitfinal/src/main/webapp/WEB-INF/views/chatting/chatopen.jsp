@@ -49,11 +49,27 @@
 		</div>
 		
 		<div id="chatting_main_content">
-			<jsp:include page="/WEB-INF/views/chatting/chatuserlist.jsp"/>
+			
 		</div>
 		
 	</div>
 	
+	
+	<script>
+		//창 열자마자 실행
+		window.onload = function(){
+			$.ajax({
+				type : "GET",
+				url : "${path}/chat/userlist.do",
+				data : {},
+				/* dataType : 'json', 
+				contentType : 'application/json; charset=utf-8', */
+				success : function(data){
+					document.querySelector("#chatting_main_content").innerHTML = data;
+				}
+			})
+		};
+	</script>
 	
 </body>
 </html>
