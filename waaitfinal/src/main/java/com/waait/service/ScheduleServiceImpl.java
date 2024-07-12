@@ -15,6 +15,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 	
+<<<<<<< HEAD
+	//private final Schedule s;
+=======
+>>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
 	private final ScheduleDao dao;
 	private final SqlSession session;
 			
