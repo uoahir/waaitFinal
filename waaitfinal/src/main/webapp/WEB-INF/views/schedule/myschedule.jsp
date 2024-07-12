@@ -6,7 +6,7 @@
 <html lang='ko'>
   <head>
     <title>document</title>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>    
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
     <script>
 
       document.addEventListener('DOMContentLoaded', function() {
@@ -16,14 +16,11 @@
             events: [
             	<c:forEach var='event' items='${total}'>
             		{
-            			title:'${event.scheTitle}',            			
-            			start:'${fn:replace(event.scheTime," ","T")}',
-            			end:'${fn:replace(event.scheEnd," ","T")}',
-            			allDay:${event.scheAllDay},
-            			editable: true
+            			title:'${event.scheTitle}',
+            			start:'${fn:replace(event.scheTime," ","T")}'
             		},
             	</c:forEach>
-               /*  {
+                {
                 title  : '미국출장', 
                 start  : '2024-07-01' 
                 },
@@ -31,13 +28,13 @@
                 title  : '외부출장',
                 start  : '2024-07-07',
                 end    : '2024-07-13'  
-                }, */
+                },
                 {
                 title  : '인사팀 회의',  
-                start  : '2024-07-24T11:30:00',           
-                allDay : true,
-                editable: true
-                }                 
+                start  : '2024-07-24T11:30:00',
+                allDay : false 
+                }
+                
             ]
 
 
@@ -56,5 +53,3 @@
 <!-- 	var events =list.map(schedule=>{
 	
 	}) -->
-
-
