@@ -59,7 +59,7 @@
 	const messagePrint=(msg)=>{
 		console.log("messagePrint : "+msg);
 		console.log(msg);
-		if(msg.sender == loginId){
+		if(msg.empName == loginId){
 			//로그인된 사람 메세지 출력
 			const $div = document.createElement("div");
 			const $div1 = document.createElement("div");
@@ -71,7 +71,7 @@
 			33
 			$p1.innerText = "안읽은 숫자";
 			$p2.innerText = "보낸 시간";
-			$p3.innerText = msg.msg;
+			$p3.innerText = msg.chatContent;
 			
 			$div1.appendChild($p1);
 			$div1.appendChild($p2);
@@ -102,8 +102,8 @@
 			const $p3 = document.createElement("p");
 			const $p4 = document.createElement("p");
 			
-			$p1.innerText = msg.sender;
-			$p2.innerText = msg.msg;
+			$p1.innerText = msg.empName;
+			$p2.innerText = msg.chatContent;
 			$p3.innerText = "안읽은 숫자";
 			$p4.innerText = "보낸 시간";
 			
@@ -132,9 +132,10 @@
 		const inputData = document.querySelector("#msg").value;
 		console.log("sendMessage : "+inputData);
 		if(inputData.length > 0){
-			const msgObj = new Message("msg",loginId,"","",inputData).convert();
+			const msgObj = new Message("msg",loginId,"",inputData,"","").convert();
 			server.send(msgObj);
 			console.log("server.send : "+msgObj);
+			document.querySelector("#msg").value = "";
 		}else{
 			alert("메세지를 입력하세요!");
 			document.querySelector("#msg").focus();
@@ -148,19 +149,19 @@
 		const $content = $("<h4>").text(`${msg.sender}님이 ${status}하셨습니다`);
 		$container.append($content);
 		$("#chattingcontent").append($container);
-		
 	}
 
 
 
 	//type="" 디폴트 공란 값이 들어오면 그값으로	//자바스크립트 객체
 	class Message{
-		constructor(type="",sender="",receiver="",room="",msg=""){
+		constructor(type="",empName="",chatroomNo="",chatContent="",chatCreationDate="",chatReadCount=""){
 			this.type=type;
-			this.sender=sender;
-			this.receiver=receiver;
-			this.room=room;
-			this.msg=msg;
+			this.empName=empName;
+			this.chatroomNo=chatroomNo;
+			this.chatContent=chatContent;
+			this.chatCreationDate=chatCreationDate;
+			this.chatReadCount=chatReadCount;
 		}
 		//자바스크립트 객체 -> JSON (문자열)	//JSON.stringify
 		convert(){

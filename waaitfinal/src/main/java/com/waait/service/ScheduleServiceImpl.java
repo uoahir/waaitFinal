@@ -15,15 +15,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 	
-//	private final Schedule s;
+	//private final Schedule s;
 	private final ScheduleDao dao;
 	private final SqlSession session;
-	
-//	@Override
-//	public List<Schedule> selectByempNo(Schedule s) {
-//		return dao.selectByempNo(session,s);
-//	}
-		
+			
 	@Override
 	public List<Schedule> scheduleList(long empNumber) {
 		return dao.scheduleList(session,empNumber);

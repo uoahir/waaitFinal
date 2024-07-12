@@ -8,12 +8,9 @@ import org.apache.ibatis.session.SqlSession;
 import com.waait.dto.Schedule;
 
 public interface ScheduleDao {
-
-//	List<Schedule>selectByempNo(SqlSession session,Schedule s);
 	
-//	List<Schedule> selectList(SqlSession session,Map<String,Integer>page);
-	
-	List<Schedule> scheduleList(SqlSession session,long empNumber);
-	
+	//내 일정 리스트로 출력
+	List<Schedule> scheduleList(SqlSession session,long empNumber);	
 	int insertSchedule(SqlSession session,Schedule schedule);
+	
 }
