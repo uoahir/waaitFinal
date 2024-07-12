@@ -11,9 +11,10 @@
 <body>
 	<div>
 		<div>문서종류</div>
-		<div onclick="window.open('${path}/edoc/basicedoc')">내부보고서</div>
-		<div>출장신청서</div>
-		<div>휴가신청서</div>
+		<div onclick="window.open('${path}/edoc/basicedoc?type=T01')">내부보고서</div>
+		<div onclick="window.open('${path}/edoc/basicedoc?type=T02')">지출요청서</div>
+		<div onclick="window.open('${path}/edoc/basicedoc?type=T03')">출장신청서</div>
+		<div onclick="window.open('${path}/edoc/basicedoc?type=T04')">휴가신청서</div>
 	</div>
 </body>
 </html>
