@@ -173,7 +173,7 @@
 		.then(data => {
 			console.log(data);
 			if(data == 1) {
-				alert("즐겨찾기 추가");
+				alert("즐겨찾기 추가"); 
 			} else {
 				alert("실패");
 			}
