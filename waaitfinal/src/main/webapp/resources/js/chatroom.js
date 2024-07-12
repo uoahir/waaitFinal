@@ -162,6 +162,7 @@
 			this.chatContent=chatContent;
 			this.chatCreationDate=chatCreationDate;
 			this.chatReadCount=chatReadCount;
+			
 		}
 		//자바스크립트 객체 -> JSON (문자열)	//JSON.stringify
 		convert(){
