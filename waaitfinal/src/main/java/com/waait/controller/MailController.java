@@ -63,6 +63,8 @@ public class MailController {
 		} else {
 			numPerpage = mailSetting.get(0).getMailNumPerpage();
 		}
+		
+//		numPerpage = 10; //지워야 됨
 		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
 													"spamDomains", spamDomains, "mailReceiverAddress", mailReceiverAddress);
 		
@@ -81,7 +83,7 @@ public class MailController {
 		String url = "mailmain.do";
 		
 		StringBuffer sb = new StringBuffer();
-		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
+		sb.append("<ul class='pagination justify-content-center pagination-sm' style='margin-top : 50px;'>");
 		if(pageNo == 1) {
 			sb.append("<li class='page-item disabled'>");
 			sb.append("<a class='page-link' href='#'>이전</a>");
@@ -126,7 +128,7 @@ public class MailController {
 		model.addAttribute("myMailBoxes", myMailBoxList);
 		model.addAttribute("pageBar", sb.toString());
 		
-		return "mailmain";
+		return "mail/mailmain";
 	}
 	
 	@PostMapping("/settingspamdomain.do")
@@ -206,7 +208,7 @@ public class MailController {
 		updateReadStatus(mailNo);
 		model.addAttribute("mail", mail);
 		model.addAttribute("empMailAddress", userMailAddress);
-		return "maildetail";
+		return "mail/maildetail";
 	}
 	
 	@GetMapping("/addfavorite.do")
@@ -233,6 +235,7 @@ public class MailController {
 			model.addAttribute("temporaryWriteMail", temporaryWriteMail);
 			System.out.println("temporaryWriteMail확인 : " + temporaryWriteMail);
 		}
+
 	}
 	
 	@PostMapping("/sendmail.do")
@@ -316,11 +319,13 @@ public class MailController {
 	}
 	
 	@GetMapping("/temporarysavemailbox.do")
-	public void joinTempoSaveMailBox(Model model) {
+	public String joinTempoSaveMailBox(Model model) {
 		long empNo = getLoginEmpInfo().getEmpNo();
 		List<Mail> temporarySaveMailList = service.joinTempoSaveMailBox(empNo);
 		System.out.println("temporarySaveMailList : " + temporarySaveMailList);
-		model.addAttribute("temporarySaveMails", temporarySaveMailList);
+		model.addAttribute("mails", temporarySaveMailList);
+		
+		return "mail/mailresponse/mail_list_response";
 	}
 	
 	@PostMapping("/deletemail.do")
@@ -422,6 +427,21 @@ public class MailController {
 			}
 		} catch(IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	//test
+	@GetMapping("/testuploadfile.do")
+	public String testUploadFileView() {
+		return "mail/fileuploadtest";
+	}
+	
+	@PostMapping("/testmultipartfile.do")
+	public void testUploadFile(MultipartFile[] upFile) {
+		if(upFile != null) {
+			for(MultipartFile file : upFile) {
+				System.out.println("oriName : " + file.getOriginalFilename());
+			}
 		}
 	}
 	

@@ -22,7 +22,7 @@
 <body>
     <script src="${path }/resources/assets/static/js/initTheme.js"></script>
 	<div id="app">
-		<div id="main">
+		<div id="main" style="margin-left: 0px;">
 			<header class="mb-3">
 				<a href="#" class="burger-btn d-block d-xl-none"> 
 					<i class="bi bi-justify fs-3"></i>
@@ -60,10 +60,8 @@
 								<div class="email-app-menu">
 									<div class="form-group form-group-compose">
 										<!-- compose button  -->
-										<button type="button"
-											class="btn btn-primary btn-block my-4 compose-btn">
-											<i class="bi bi-plus"></i> Compose
-										</button>
+										<button type="button" class="btn btn-primary btn-block my-4 compose-btn" 
+												onclick="location.assign('${path }/mail/writemail.do')">메일작성</button>
 									</div>
 									<div class="sidebar-menu-list ps">
 										<!-- sidebar menu  -->
@@ -83,16 +81,14 @@
                                         			</svg>
 												</div> 보낸 메일함
 											</a> 
-											<a href="#" class="list-group-item">
+											<a href="javascript:temporarySaveMailBoxView()" class="list-group-item">
 												<div class="fonticon-wrap d-inline me-3">
-
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#pencil" />
-                                        </svg>
-												</div> Draft
-											</a> <a href="#" class="list-group-item">
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#pencil" />
+                                        			</svg>
+												</div> 임시저장함
+											</a> 
+											<a href="#" class="list-group-item">
 												<div class="fonticon-wrap d-inline me-3">
 
 													<svg class="bi" width="1.5em" height="1.5em"
@@ -527,6 +523,8 @@
 	const addFavorite = (e) => {
 		const mailNo = e.currentTarget.parentElement.parentElement.id;
 		const mailFavoriteStatus = e.currentTarget.firstElementChild.className == "favorite text-warning"; //mail의 즐겨찾기 여부를 확인합니다.
+		const decisionFavoriteSpan = e.currentTarget.firstElementChild; //span태그의 속성을 변경하기위해 변수로 초기화해줍니다.
+		const svgTagForFillYellow = decisionFavoriteSpan.querySelector("use"); //span자식태그의 use태그의 xlink:href 속성을 변경하기위해 use태그 element를 변수로 초기과해줍니다.
 		
 		//메일의 즐겨찾기 여부를 mailFavoriteStatus의 boolean값으로 확인해 true일 경우에는 즐겨찾기 해제를 하고 false일 경우에는 즐겨찾기를 해줍니다.
 		if(mailFavoriteStatus == true) {
@@ -537,8 +535,8 @@
 				if(data == 1) {
 					alert("즐겨찾기 해제");
 					applicationBoolean = false;
-					document.getElementById("iconPath").setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star");
-					document.getElementById("colorDecisionSpan").className = "favorite";
+					svgTagForFillYellow.setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star");
+					decisionFavoriteSpan.className = "favorite";
 				} else {
 					alert("실패");
 				}
@@ -551,8 +549,8 @@
 				if(data == 1) {
 					alert("즐겨찾기 추가");
 					applicationBoolean = true;
-					document.getElementById("iconPath").setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill");
-					document.getElementById("colorDecisionSpan").className = "favorite text-warning";
+					svgTagForFillYellow.setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill");
+					decisionFavoriteSpan.className = "favorite text-warning";
 				} else {
 					alert("실패");
 				}
@@ -604,6 +602,14 @@
 		.then(data => {
 			document.getElementById("mailListUlTag").innerHTML = data;
 		});
+	}
+	
+	const temporarySaveMailBoxView = () => {
+		fetch("${path }/mail/temporarysavemailbox.do")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListUlTag").innerHTML = data;
+		})
 	}
 </script>
 											<!-- email user list start -->
@@ -677,7 +683,7 @@
 														</c:forEach>
 													</c:if>
 
-													<li class="media mail-read">
+													<%-- <li class="media mail-read">
 														<div class="user-action">
 															<div class="checkbox-con me-3">
 																<div class="checkbox checkbox-shadow checkbox-sm">
@@ -723,8 +729,17 @@
 																</div>
 															</div>
 														</div>
-													</li>
+													</li> --%>
 												</ul>
+												${pageBar }
+												<!-- <ul class="pagination pagination-sm justify-content-center" id="pageBar" style="margin-top : 50px;">
+													<li class="page-item">
+														<a class="page-link" href="#">이전</a>
+													</li>
+													<li class="page-item">
+														<a class="page-link" href="#">1</a>
+													</li>
+												</ul> -->
 												<!-- email user list end -->
 
 												<!-- no result when nothing to show on list -->
@@ -791,13 +806,16 @@
 																	class="fas fa-folder"></i>
 																</span>
 															</button>
-															<div class="dropdown-menu dropdown-menu-right"
-																aria-labelledby="open-mail-menu">
-																<a class="dropdown-item" href="#"><i
-																	class="bi bi-edit"></i> Draft</a> <a class="dropdown-item"
-																	href="#"><i class="bi bi-info-circle"></i> Spam</a> <a
-																	class="dropdown-item" href="#"><i
-																	class="bi bi-trash"></i> Trash</a>
+															<div class="dropdown-menu dropdown-menu-right" aria-labelledby="open-mail-menu">
+																<a class="dropdown-item" href="javascript:temporarySaveMailBoxView()">
+																	<i class="bi bi-edit"></i> 임시저장
+																</a>
+																<a class="dropdown-item" href="#">
+																	<i class="bi bi-info-circle"></i> Spam
+																</a> 
+																<a class="dropdown-item" href="#">
+																	<i class="bi bi-trash"></i> Trash
+																</a>
 															</div>
 														</div>
 													</li>
@@ -1277,11 +1295,15 @@
 </body>
 <style>
 	.icon-button {
-	background: none;
-	border: none;
-	padding: 0;
-	cursor: pointer;
-	outline: none;
-}
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		outline: none;
+	}
+	#mailListUlTag {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
 </style>
 </html>

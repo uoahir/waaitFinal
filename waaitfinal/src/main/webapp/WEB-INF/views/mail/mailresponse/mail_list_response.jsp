@@ -15,25 +15,26 @@
 					<input type="checkbox" name="checkMail" class='form-check-input' onclick="checkMail()" id="${mail.mailNo }"> 
 				</div>
 			</div>
-			<span
-				class=<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
-		                                     			"favorite text-warning"
-		                                             </c:if>
-				<c:if test="${mail.mailStatus != '즐겨찾기' }" >
-		                                             	"favorite"
-		                                             </c:if>>
-		                                             
-				<svg class="bi" width="1.5em" height="1.5em"
-					fill="currentColor">
-		        	<use
-						xlink:href= <c:if test="${mail.mailStatus eq '즐겨찾기' }" >
-		                				"${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill"
-		                            </c:if>
-									<c:if test="${mail.mailStatus != '즐겨찾기' }" >
-		                   				"${path }/resources/assets/static/images/bootstrap-icons.svg#star"
-		                            </c:if> />
-		       </svg>
-			</span>
+			<button class="icon-button" onclick="addFavorite(event)">
+				<span id="colorDecisionSpan" class=
+													<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
+												        "favorite text-warning"
+													</c:if>
+													<c:if test="${mail.mailStatus != '즐겨찾기' }" >
+														"favorite"
+													</c:if>
+				>
+					<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+				    	<use xlink:href=<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
+											"${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill"
+										</c:if>
+										<c:if test="${mail.mailStatus != '즐겨찾기' }" >
+											"${path }/resources/assets/static/images/bootstrap-icons.svg#star"
+										</c:if> id="iconPath" 
+				  		/>
+				    </svg>
+				</span>
+   			</button>
 		</div>
 		<div class="pr-50">
 			<div class="avatar">
