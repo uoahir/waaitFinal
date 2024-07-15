@@ -5,8 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,11 +38,12 @@ public class EDocController {
 	
 	@GetMapping("/basicedoc")
 	public void basicEdoc(@RequestParam String type,Model m) {
+		System.out.println(type);
 		m.addAttribute("type", type);
 	}
 	
 	@PostMapping("/basicedocend")
-	public String insertBasic(@RequestPart(value="obj") String obj, @RequestPart(value="file", required=false) List<MultipartFile> uploadFiles, HttpSession session) {
+	public String insertBasic(@RequestParam("empNo") int[] empNo, @RequestPart(value="obj") String obj, @RequestPart(value="file", required=false) List<MultipartFile> uploadFiles, HttpSession session) {
 	// required = false : 파일 첨부가 필수가 아닌 선택, value = "file" : MultipartFile 요청에서 input[name='file'] 추출
 		System.out.println("안녕");
 		Document doc;
@@ -50,10 +53,9 @@ public class EDocController {
 			ObjectMapper objectMapper = new ObjectMapper();
 			doc = objectMapper.readValue(obj, Document.class); 
 
-			System.out.println(doc);
-			System.out.println(doc.getDocType());			
+			System.out.println("요거" + doc);
 			
-			int result = service.insertBasicEdoc(doc);
+			int result = service.insertBasicEdoc(doc, empNo);
 			
 			System.out.println(result);
 			
@@ -101,11 +103,21 @@ public class EDocController {
 		m.addAttribute("employees", employees);
 	}
 	
-	@RequestMapping("/home")
-	public void home() {}
+	@GetMapping("/home")
+	public void home(Model m, @RequestParam(defaultValue = "1") int cPage,
+	         @RequestParam(defaultValue = "10") int numPerpage) {
+		Long no = getEmployeeH().getEmpNo();
+		
+//		승인 대기 중인 문서 출력
+		List<Document> documents = service.awaitingApproval(no, Map.of("cPage", cPage, "numPerpage", numPerpage));
+		m.addAttribute("documents", documents);
+	}
 	
 	@GetMapping("/selectdoc")
 	public void selectDoc() {}
 	
+	public Employee getEmployeeH() {
+		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
 	
 }
