@@ -170,9 +170,6 @@
 		let applicationBoolean = ${mail.mailStatus eq '즐겨찾기' ? true : false}
 		const addFavorite = () => {
 			const mailNo = ${mail.mailNo};
-			console.log("mailNo : " + mailNo);
-			console.dir(document.getElementById("colorDecisionSpan"))
-			console.log("applicationBoolean : " + applicationBoolean)
 			if(applicationBoolean == false) {
 				fetch("${path}/mail/addfavorite.do?mailNo=" + mailNo)
 				.then(response => response.text())

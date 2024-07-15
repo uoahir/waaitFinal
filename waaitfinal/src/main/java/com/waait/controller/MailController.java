@@ -324,9 +324,31 @@ public class MailController {
 	}
 	
 	@PostMapping("/deletemail.do")
-	public @ResponseBody int deleteMail(String mailNoStr) {
+	public String deleteMail(String mailNoStr, Model model) {
 		int result = service.deleteMail(mailNoStr);
-		return result;
+		Employee employee = getLoginEmpInfo();
+		String mailReceiverAddress = employee.getEmpEmail();
+		long empNo = employee.getEmpNo();
+		int numPerpage = 0;
+		
+		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
+		List<MailSetting> mailSetting = service.getMailSetting(empNo);
+		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
+		
+		if(mailSetting.size() == 0) {
+			service.setMailSetting(empNo);
+			numPerpage = 5;
+		} else {
+			numPerpage = mailSetting.get(0).getMailNumPerpage();
+		}
+		
+		int cPage = 1;
+		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
+													"spamDomains", spamDomains, "mailReceiverAddress", mailReceiverAddress);
+		
+		List<Mail> mailList = service.getReceiveMail(mailSettings);
+		model.addAttribute("mails", mailList);
+		return "mail/mailresponse/mail_list_response";
 	}
 	
 	@PostMapping("/deletemymailbox.do")
@@ -360,7 +382,7 @@ public class MailController {
 		List<Mail> sendingMailList = service.joinSendingMailBox(empNo);
 		System.out.println("sendingMailList : " + sendingMailList);
 		model.addAttribute("mails", sendingMailList);
-		return "mail/sendingmailbox";
+		return "mail/mailresponse/mail_list_response";
 	}
 	
 	@PostMapping("/searchmail.do")
