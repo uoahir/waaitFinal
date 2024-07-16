@@ -45,6 +45,75 @@ public class MailController {
 	private final MailService service;
 //	private final ObjectMapper mapper;
 	
+	//totalData : 총 데이터수 totalPage
+	//cPage : 현재 페이지
+	//numPerpage : 페이지당 데이터 수
+	//url : 페이징처리된 페이지바의 숫자를 눌렀을때 요청을 보낼 주소
+	public static String paging(int totalData, int cPage, int numPerpage, int pageBarSize, String url) {
+		int totalPage = (int) Math.ceil((double) totalData/ numPerpage);
+		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
+		int pageEnd = pageNo + pageBarSize - 1;
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<ul class='pagination justify-content-center pagination-sm' style='margin-top : 50px;'>");
+		if(pageNo == 1) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>이전</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + (pageNo - 1) + ")'>이전</a>");
+			sb.append("</li>");
+		}
+		
+		while(!(pageNo > pageEnd || pageNo > totalPage)) {
+			if(pageNo == cPage) {
+				sb.append("<li class='page-item disabled'>");
+				sb.append("<a class='page-link' href='#'>" + pageNo + "</a>");
+				sb.append("</li>");
+			} else {
+				sb.append("<li class='page-item'>");
+				sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>" + pageNo + "</a>");
+				sb.append("</li>");
+			}
+			pageNo++;
+		}
+		
+		if(pageNo > totalPage) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>다음</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>다음</a>");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+		
+		sb.append("<script>");
+		sb.append("function fn_paging(pageNo) {");
+		sb.append("location.assign('${path }" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage + "')");
+		sb.append("}");
+		sb.append("</script>");
+		
+		return sb.toString();
+	}
+	
+	public int getUserSettingNumPerpage(long empNo) {
+		MailSetting mailSetting = service.getMailSetting(empNo);
+		int numPerpage = 0;
+		
+		if(mailSetting == null) {
+			service.setMailSetting(empNo);
+			numPerpage = 5;
+		} else {
+			numPerpage = mailSetting.getMailNumPerpage();
+		}
+		
+		return numPerpage;
+	}
+	
+	
 	@GetMapping("/mailmain.do")
 	public String changeMailView(Model model,
 								@RequestParam(defaultValue = "1") int cPage) {
@@ -54,15 +123,9 @@ public class MailController {
 		int numPerpage = 0;
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
-		List<MailSetting> mailSetting = service.getMailSetting(empNo);
 		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
 		
-		if(mailSetting.size() == 0) {
-			service.setMailSetting(empNo);
-			numPerpage = 5;
-		} else {
-			numPerpage = mailSetting.get(0).getMailNumPerpage();
-		}
+		numPerpage = getUserSettingNumPerpage(empNo);
 		
 //		numPerpage = 10; //지워야 됨
 		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
@@ -337,15 +400,9 @@ public class MailController {
 		int numPerpage = 0;
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
-		List<MailSetting> mailSetting = service.getMailSetting(empNo);
-		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
+		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo); //??
 		
-		if(mailSetting.size() == 0) {
-			service.setMailSetting(empNo);
-			numPerpage = 5;
-		} else {
-			numPerpage = mailSetting.get(0).getMailNumPerpage();
-		}
+		numPerpage = getUserSettingNumPerpage(empNo);
 		
 		int cPage = 1;
 		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
@@ -367,11 +424,20 @@ public class MailController {
 	}
 	
 	@GetMapping("/jointrashmailbox.do")
-	public String jointrashmailbox(Model model) {
+	public String jointrashmailbox(Model model, @RequestParam(defaultValue = "1") int cPage) {
+		long empNo = getLoginEmpInfo().getEmpNo();
 		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
-		List<Mail> trashMailList = service.jointrashmailbox(receiverMailAddress);
+		int totalData = service.trashMailBoxTotalData(receiverMailAddress);
+		int numPerpage = getUserSettingNumPerpage(empNo);
+		String url = "/jointrashmailbox.do";
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		String pageBar = paging(totalData, cPage, numPerpage, cPage, url);
+		
+		List<Mail> trashMailList = service.jointrashmailbox(receiverMailAddress, pagingParam);
+		
 		System.out.println("trashMailList : " + trashMailList);
 		model.addAttribute("mails", trashMailList);
+		model.addAttribute("pageBar", pageBar);
 		return "mail/trashmailbox";
 	}
 	
@@ -382,11 +448,22 @@ public class MailController {
 	}
 	
 	@GetMapping("/joinsendingmailbox.do")
-	public String joinSendingMailBox(Model model) {
+	public String joinSendingMailBox(Model model, @RequestParam(defaultValue = "1") int cPage) {
 		long empNo = getLoginEmpInfo().getEmpNo();
-		List<Mail> sendingMailList = service.joinSendingMailBox(empNo);
+		int numPerpage = 0;
+		int totalData = service.joinSendingMailBoxTotalData(empNo);
+		int pageBarSize = 5;
+		String url = "/joinsendingmailbox.do";
+		numPerpage = getUserSettingNumPerpage(empNo);
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
+		
+		List<Mail> sendingMailList = service.joinSendingMailBox(empNo, pagingParam);
+		
 		System.out.println("sendingMailList : " + sendingMailList);
 		model.addAttribute("mails", sendingMailList);
+		model.addAttribute("pageBar", pageBar);
 		return "mail/mailresponse/mail_list_response";
 	}
 	

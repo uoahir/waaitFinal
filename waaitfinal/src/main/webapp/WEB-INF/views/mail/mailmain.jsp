@@ -614,8 +614,8 @@
 </script>
 											<!-- email user list start -->
 											<div class="email-user-list list-group ps ps--active-y">
-												<ul class="users-list-wrapper media-list" id="mailListUlTag">
-													<c:if test="${not empty mails }">
+												<c:if test="${not empty mails }">
+													<ul class="users-list-wrapper media-list" id="mailListUlTag">
 														<c:forEach var="mail" items="${mails }" >
 															<%-- <c:set var="favoriteIconUrl" value="${mail.mailStatus eq '즐겨찾기' ? path + '/resources/assets/static/images/bootstrap-icons.svg#star-fill' : path + '/resources/assets/static/images/bootstrap-icons.svg#star'}"/> --%>
 															<li
@@ -681,7 +681,8 @@
 																</div>
 															</li>
 														</c:forEach>
-													</c:if>
+													</ul>
+												</c:if>
 
 													<%-- <li class="media mail-read">
 														<div class="user-action">
@@ -730,8 +731,9 @@
 															</div>
 														</div>
 													</li> --%>
-												</ul>
-												${pageBar }
+												<div id="bageParContainer">
+													${pageBar }										
+												</div>
 												<!-- <ul class="pagination pagination-sm justify-content-center" id="pageBar" style="margin-top : 50px;">
 													<li class="page-item">
 														<a class="page-link" href="#">이전</a>
@@ -759,6 +761,7 @@
 													</div>
 												</c:if>
 											</div>
+											
 										</div>
 									</div>
 									<!--/ Email list Area -->
@@ -812,7 +815,7 @@
 																</a>
 																<a class="dropdown-item" href="#">
 																	<i class="bi bi-info-circle"></i> Spam
-																</a> 
+																</a>
 																<a class="dropdown-item" href="#">
 																	<i class="bi bi-trash"></i> Trash
 																</a>
