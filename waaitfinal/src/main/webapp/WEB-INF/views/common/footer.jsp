@@ -16,9 +16,6 @@
     
     
     <script src="${path }/resources/assets/compiled/js/app.js"></script>
-    
-
-    
 </body>
 
 </html>

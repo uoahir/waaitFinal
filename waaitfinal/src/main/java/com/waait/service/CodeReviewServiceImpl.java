@@ -51,6 +51,11 @@ public class CodeReviewServiceImpl implements CodeReviewService {
 		List<CodeReviewBoardComment> c = codeReviewDao.selectCodeReviewBoardsComment(session,no);
 		return c;
 	}
+
+	@Override
+	public int selectAllCodeReviewBoard() {
+		return codeReviewDao.selectAllCodeReviewBoard(session);
+	}
 	
 	/*
 	public CodeReview getCodeReviewById(int id) {

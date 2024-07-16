@@ -1,5 +1,7 @@
 package com.waait.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,12 @@ public class EmployeeDaoImpl implements EmployeeDao{
 	@Override
 	public Employee selectEmployee(SqlSession session, String empId) {
 		return session.selectOne("employee.selectEmployee",empId);
+	}
+
+	@Override
+	public List<Employee> selectAllEmployees(SqlSession session) {
+		
+		return session.selectList("employee.selectAllEmployees");
 	}
 
 }
