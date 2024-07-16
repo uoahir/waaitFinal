@@ -62,7 +62,8 @@ public class MailController {
 			sb.append("</li>");
 		} else {
 			sb.append("<li class='page-item'>");
-			sb.append("<a class='page-link' href='javascript:fn_paging(" + (pageNo - 1) + ")'>이전</a>");
+//			sb.append("<a class='page-link' href='javascript:fn_paging(" + (pageNo - 1) + ")'>이전</a>");
+			sb.append("<a class='page-link' href='javascript:ajaxPaging(" + (pageNo - 1) + ")'>이전</a>");
 			sb.append("</li>");
 		}
 		
@@ -73,7 +74,8 @@ public class MailController {
 				sb.append("</li>");
 			} else {
 				sb.append("<li class='page-item'>");
-				sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>" + pageNo + "</a>");
+//				sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>" + pageNo + "</a>");
+				sb.append("<a class='page-link' href='javascript:ajaxPaging(" + pageNo + ")'>" + pageNo + "</a>");
 				sb.append("</li>");
 			}
 			pageNo++;
@@ -85,16 +87,37 @@ public class MailController {
 			sb.append("</li>");
 		} else {
 			sb.append("<li class='page-item'>");
-			sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>다음</a>");
+//			sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>다음</a>");
+			sb.append("<a class='page-link' href='javascript:ajaxPaging(" + pageNo + ")'>다음</a>");
 			sb.append("</li>");
 		}
 		sb.append("</ul>");
 		
 		sb.append("<script>");
-		sb.append("function fn_paging(pageNo) {");
-		sb.append("location.assign('${path }" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage + "')");
+		sb.append("function ajaxPaging(pageNo) {");
+		sb.append("console.log('pageNo : ' + pageNo);");
+		sb.append("fetch('${path }" + url + "?cPage=' + pageNo + '&numPerpage=" + numPerpage + "')");
+		sb.append(".then(response => response.text())");
+		sb.append(".then(data => {");
+		sb.append("document.getElementById('mailListContainer').innerHTML = data;");
+		sb.append("});");
 		sb.append("}");
 		sb.append("</script>");
+		
+//		function ajaxPaging(pageNo) {
+//			console.log("왜 너가 실행 돼?");
+//			fetch("${path }/mail/joinsendingmailbox.do?cPage=1&numPerpage=5")
+//			.then(response => response.text())
+//			.then(data => {
+//				document.getElementById("mailListContainer").innerHTML = data;
+//			});	
+//		}
+		
+//		sb.append("<script>");
+//		sb.append("function fn_paging(pageNo) {");
+//		sb.append("location.assign('" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage + "')");
+//		sb.append("}");
+//		sb.append("</script>");
 		
 		return sb.toString();
 	}
@@ -183,6 +206,7 @@ public class MailController {
 		
 		sb.append("<script>");
 		sb.append("function fn_paging(pageNo) {");
+		sb.append("console.log('너는 되냐?');");
 		sb.append("location.assign('" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage + "')");
 		sb.append("}");
 		sb.append("</script>");
@@ -453,7 +477,7 @@ public class MailController {
 		int numPerpage = 0;
 		int totalData = service.joinSendingMailBoxTotalData(empNo);
 		int pageBarSize = 5;
-		String url = "/joinsendingmailbox.do";
+		String url = "/mail/joinsendingmailbox.do";
 		numPerpage = getUserSettingNumPerpage(empNo);
 		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
 		

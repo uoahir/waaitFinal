@@ -515,7 +515,7 @@
 		})
 		.then(response => response.text())
 		.then(data => {
-			document.getElementById("mailListUlTag").innerHTML = data;
+			document.getElementById("mailListContainer").innerHTML = data;
 		})
 	}
 	
@@ -600,20 +600,29 @@
 		fetch("${path }/mail/joinsendingmailbox.do")
 		.then(response => response.text())
 		.then(data => {
-			document.getElementById("mailListUlTag").innerHTML = data;
+			document.getElementById("mailListContainer").innerHTML = data;
 		});
 	}
 	
+	/* function ajaxPaging(pageNo) {
+		console.log("왜 너가 실행 돼?");
+		fetch("${path }/mail/joinsendingmailbox.do?cPage=1&numPerpage=5")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		});	
+	} */
+		
 	const temporarySaveMailBoxView = () => {
 		fetch("${path }/mail/temporarysavemailbox.do")
 		.then(response => response.text())
 		.then(data => {
-			document.getElementById("mailListUlTag").innerHTML = data;
+			document.getElementById("mailListContainer").innerHTML = data;
 		})
 	}
 </script>
 											<!-- email user list start -->
-											<div class="email-user-list list-group ps ps--active-y">
+											<div class="email-user-list list-group ps ps--active-y" id="mailListContainer">
 												<c:if test="${not empty mails }">
 													<ul class="users-list-wrapper media-list" id="mailListUlTag">
 														<c:forEach var="mail" items="${mails }" >
@@ -761,7 +770,7 @@
 													</div>
 												</c:if>
 											</div>
-											
+											<!-- mailListContainer div end -->
 										</div>
 									</div>
 									<!--/ Email list Area -->
@@ -1271,6 +1280,7 @@
 			</footer>
 		</div>
 	</div>
+
 	<script src="${path }/resources/assets/static/js/components/dark.js"></script>
 	<script
 		src="${path }/resources/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
@@ -1281,20 +1291,30 @@
 
 
 	<script>
-    document.querySelector('.sidebar-toggle').addEventListener('click', () => {
-        document.querySelector('.email-app-sidebar').classList.toggle('show')
-    })
-    document.querySelector('.sidebar-close-icon').addEventListener('click', () => {
-        document.querySelector('.email-app-sidebar').classList.remove('show')
-    })
-    document.querySelector('.compose-btn').addEventListener('click', () => {
-        document.querySelector('.compose-new-mail-sidebar').classList.add('show')
-    })
-    document.querySelector('.email-compose-new-close-btn').addEventListener('click', () => {
-        document.querySelector('.compose-new-mail-sidebar').classList.remove('show')
-    })
-    
-</script>
+	    document.querySelector('.sidebar-toggle').addEventListener('click', () => {
+	        document.querySelector('.email-app-sidebar').classList.toggle('show')
+	    })
+	    document.querySelector('.sidebar-close-icon').addEventListener('click', () => {
+	        document.querySelector('.email-app-sidebar').classList.remove('show')
+	    })
+	    document.querySelector('.compose-btn').addEventListener('click', () => {
+	        document.querySelector('.compose-new-mail-sidebar').classList.add('show')
+	    })
+	    document.querySelector('.email-compose-new-close-btn').addEventListener('click', () => {
+	        document.querySelector('.compose-new-mail-sidebar').classList.remove('show')
+	    })
+	    
+	    function ajaxPaging(pageNo) {
+	    	console.log('pageNo : ' + pageNo);
+	    	fetch('/mail/joinsendingmailbox.do?cPage=' + pageNo + '&numPerpage=5')
+	    	.then(response => response.text())
+	    	.then(data => {
+	    		document.getElementById('mailListContainer').innerHTML = data;
+	    	});
+	    }
+	    
+	</script>
+	<button onclick="ajaxPaging(1)">테스트</button>
 </body>
 <style>
 	.icon-button {
