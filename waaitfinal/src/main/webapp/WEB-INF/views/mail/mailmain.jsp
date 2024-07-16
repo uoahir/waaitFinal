@@ -66,48 +66,43 @@
 									<div class="sidebar-menu-list ps">
 										<!-- sidebar menu  -->
 										<div class="list-group list-group-messages">
-											<a href="#" class="list-group-item pt-0 active" id="-menu">
+											<a href="javascript:receiveMailList()" class="list-group-item pt-0 active" name="menu" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
                                             			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
                                         			</svg>
 												</div> 받은메일함
-												<span class="badge bg-light-primary badge-pill badge-round float-right mt-50">5</span>
+												<span class="badge bg-light-primary badge-pill badge-round float-right mt-50">${notReadCount }</span>
 											</a> 
-											<a href="javascript:sendingMailList()" class="list-group-item">
+											<a href="javascript:sendingMailList()" class="list-group-item" name="menu" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
                                             			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#archive" />
                                         			</svg>
 												</div> 보낸 메일함
 											</a> 
-											<a href="javascript:temporarySaveMailBoxView()" class="list-group-item">
+											<a href="javascript:changeView('/mail/temporarysavemailbox.do')" class="list-group-item" name="menu" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
                                             			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#pencil" />
                                         			</svg>
 												</div> 임시저장함
 											</a> 
+											<a href="javascript:changeView('/mail/myfavoritemailbox.do')" class="list-group-item" name="menu" onclick="selectMenu(event)">
+												<div class="fonticon-wrap d-inline me-3">
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#star" />
+                                        			</svg>
+												</div> 즐겨찾기
+											</a> 
+											<a href="javascript:changeView('/mail/joinspammail.do')" class="list-group-item" name="menu" onclick="selectMenu(event)">
+												<div class="fonticon-wrap d-inline me-3">
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#info-circle" />
+                                        			</svg>
+												</div> 스팸메일함 <span class="badge bg-light-danger badge-pill badge-round float-right mt-50">${spamMailCount }</span>
+											</a> 
 											<a href="#" class="list-group-item">
-												<div class="fonticon-wrap d-inline me-3">
-
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#star" />
-                                        </svg>
-												</div> Starred
-											</a> <a href="#" class="list-group-item">
-												<div class="fonticon-wrap d-inline me-3">
-
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#info-circle" />
-                                        </svg>
-												</div> Spam <span
-												class="badge bg-light-danger badge-pill badge-round float-right mt-50">3</span>
-											</a> <a href="#" class="list-group-item">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em"
 														fill="currentColor">
@@ -612,13 +607,44 @@
 			document.getElementById("mailListContainer").innerHTML = data;
 		});	
 	} */
-		
+	const changeView = (url) => {
+		fetch("${path }" + url)
+		.then(response => response.text())
+		.then(jspCode => {
+			document.getElementById("mailListContainer").innerHTML = jspCode;
+		});
+	}
+	
 	const temporarySaveMailBoxView = () => {
 		fetch("${path }/mail/temporarysavemailbox.do")
 		.then(response => response.text())
 		.then(data => {
 			document.getElementById("mailListContainer").innerHTML = data;
 		})
+	}
+	
+	const receiveMailList = () => {
+		fetch("${path }/mail/receivingmail.do")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		});
+	}
+	
+	const favoriteMailBoxView = () => {
+		fetch("${path }/mail/myfavoritemailbox.do")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		});
+	}
+	
+	const selectMenu = (event) => {
+		document.querySelectorAll("a[name='menu']").forEach(e => {
+			e.setAttribute("class", "list-group-item");
+		});
+		
+		event.currentTarget.setAttribute("class", "list-group-item active");
 	}
 </script>
 											<!-- email user list start -->
@@ -1304,9 +1330,9 @@
 	        document.querySelector('.compose-new-mail-sidebar').classList.remove('show')
 	    })
 	    
-	    function ajaxPaging(pageNo) {
+	    function ajaxPaging(pageNo, url) {
 	    	console.log('pageNo : ' + pageNo);
-	    	fetch('/mail/joinsendingmailbox.do?cPage=' + pageNo + '&numPerpage=5')
+	    	fetch("${path }" + url + "?cPage=" + pageNo + "&numPerpage=5")
 	    	.then(response => response.text())
 	    	.then(data => {
 	    		document.getElementById('mailListContainer').innerHTML = data;

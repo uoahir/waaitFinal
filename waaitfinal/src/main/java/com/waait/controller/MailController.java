@@ -63,7 +63,7 @@ public class MailController {
 		} else {
 			sb.append("<li class='page-item'>");
 //			sb.append("<a class='page-link' href='javascript:fn_paging(" + (pageNo - 1) + ")'>이전</a>");
-			sb.append("<a class='page-link' href='javascript:ajaxPaging(" + (pageNo - 1) + ")'>이전</a>");
+			sb.append("<a class='page-link' href='javascript:ajaxPaging(" + (pageNo - 1) + ",\"" + url + "\")'>이전</a>");
 			sb.append("</li>");
 		}
 		
@@ -75,7 +75,7 @@ public class MailController {
 			} else {
 				sb.append("<li class='page-item'>");
 //				sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>" + pageNo + "</a>");
-				sb.append("<a class='page-link' href='javascript:ajaxPaging(" + pageNo + ")'>" + pageNo + "</a>");
+				sb.append("<a class='page-link' href='javascript:ajaxPaging(" + pageNo + ",\"" + url + "\")'>" + pageNo + "</a>");
 				sb.append("</li>");
 			}
 			pageNo++;
@@ -88,21 +88,21 @@ public class MailController {
 		} else {
 			sb.append("<li class='page-item'>");
 //			sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>다음</a>");
-			sb.append("<a class='page-link' href='javascript:ajaxPaging(" + pageNo + ")'>다음</a>");
+			sb.append("<a class='page-link' href='javascript:ajaxPaging(" + pageNo + ",\"" + url + "\")'>다음</a>");
 			sb.append("</li>");
 		}
 		sb.append("</ul>");
 		
-		sb.append("<script>");
-		sb.append("function ajaxPaging(pageNo) {");
-		sb.append("console.log('pageNo : ' + pageNo);");
-		sb.append("fetch('${path }" + url + "?cPage=' + pageNo + '&numPerpage=" + numPerpage + "')");
-		sb.append(".then(response => response.text())");
-		sb.append(".then(data => {");
-		sb.append("document.getElementById('mailListContainer').innerHTML = data;");
-		sb.append("});");
-		sb.append("}");
-		sb.append("</script>");
+//		sb.append("<script>");
+//		sb.append("function ajaxPaging(pageNo) {");
+//		sb.append("console.log('pageNo : ' + pageNo);");
+//		sb.append("fetch('${path }" + url + "?cPage=' + pageNo + '&numPerpage=" + numPerpage + "')");
+//		sb.append(".then(response => response.text())");
+//		sb.append(".then(data => {");
+//		sb.append("document.getElementById('mailListContainer').innerHTML = data;");
+//		sb.append("});");
+//		sb.append("}");
+//		sb.append("</script>");
 		
 //		function ajaxPaging(pageNo) {
 //			console.log("왜 너가 실행 돼?");
@@ -143,10 +143,16 @@ public class MailController {
 		Employee employee = getLoginEmpInfo();
 		String mailReceiverAddress = employee.getEmpEmail();
 		long empNo = employee.getEmpNo();
+		int spamMailCount = 0;
 		int numPerpage = 0;
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
 		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
+		
+		Map<String, Object> spamMailParam = Map.of("loginMemberEmailDomain", mailReceiverAddress, "spamDomains", spamDomains);
+		if(spamDomains != null && spamDomains.size() > 0 && !spamDomains.isEmpty()) {
+			spamMailCount = service.getSpamMailCount(spamMailParam);
+		}
 		
 		numPerpage = getUserSettingNumPerpage(empNo);
 		
@@ -156,6 +162,7 @@ public class MailController {
 		
 		List<Mail> mailList = service.getReceiveMail(mailSettings);
 		
+		int notReadCount = service.notReadDataCount(mailSettings);
 //		List<MyMailBoxDetail> myMailBoxList = service.getMyMailBox(empNo);
 		
 		System.out.println("가져온 mailList : " + mailList);
@@ -211,11 +218,38 @@ public class MailController {
 		sb.append("}");
 		sb.append("</script>");
 		
+		
 		model.addAttribute("mails", mailList);
 		model.addAttribute("myMailBoxes", myMailBoxList);
 		model.addAttribute("pageBar", sb.toString());
+		model.addAttribute("notReadCount", notReadCount);
+		model.addAttribute("spamMailCount", spamMailCount);
 		
 		return "mail/mailmain";
+	}
+	
+	@GetMapping("/receivingmail.do")
+	public String receivingMail(Model model, @RequestParam(defaultValue = "1") int cPage) {
+		String mailReceiverAddress = getLoginEmpInfo().getEmpEmail();
+		long empNo = getLoginEmpInfo().getEmpNo();
+		int numPerpage = 0;
+		numPerpage = getUserSettingNumPerpage(empNo);
+		
+		
+		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
+		
+		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
+				"spamDomains", spamDomains, "mailReceiverAddress", mailReceiverAddress);
+		int totalData = service.getTotalData(mailSettings);
+		int pageBarSize = 5;
+		String url = "/mail/receivingmail.do";
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
+		
+		List<Mail> mailList = service.getReceiveMail(mailSettings);
+		
+		model.addAttribute("mails", mailList);
+		model.addAttribute("pageBar", pageBar);
+		return "mail/mailresponse/receiving_mail_list";
 	}
 	
 	@PostMapping("/settingspamdomain.do")
@@ -241,12 +275,14 @@ public class MailController {
 		List<Mail> spamMailList = new ArrayList<Mail>();
 		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
 		long empNo = getLoginEmpInfo().getEmpNo();
+		int spamMailCount = 0;
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
 		
 		Map<String, Object> param = Map.of("loginMemberEmailDomain", loginMemberEmailDomain, "spamDomains", spamDomains);
 		if(spamDomains != null && spamDomains.size() > 0 && !spamDomains.isEmpty()) {
 			spamMailList = service.getSpamMail(param);
+			spamMailCount = service.getSpamMailCount(param);
 		}
 		
 		model.addAttribute("spamMail", spamMailList);
@@ -289,12 +325,18 @@ public class MailController {
 	@GetMapping("/maildetail.do")
 	public String mailDetailView(Model model, int mailNo) {
 		String userMailAddress = getLoginEmpInfo().getEmpEmail();
+		long empNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> param = Map.of("mailNo", mailNo, "userMailAddress", userMailAddress);
 		
 		Mail mail = service.getMailDetailByNo(param);
+		
+		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
+		
 		updateReadStatus(mailNo);
+		
 		model.addAttribute("mail", mail);
 		model.addAttribute("empMailAddress", userMailAddress);
+		model.addAttribute("myMailBoxes", myMailBoxList);
 		return "mail/maildetail";
 	}
 	
@@ -398,11 +440,12 @@ public class MailController {
 	}
 	
 	@GetMapping("/myfavoritemailbox.do")
-	public void joinFavoriteMailBox(Model model) {
+	public String joinFavoriteMailBox(Model model) {
 		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
 		List<Mail> mailList = service.joinFavoriteMailBox(loginMemberEmailDomain);
 		System.out.println("favoriteList : " + mailList);
 		model.addAttribute("mails", mailList);
+		return "mail/mailresponse/favorite_mail_list";
 	}
 	
 	@GetMapping("/temporarysavemailbox.do")
@@ -488,7 +531,7 @@ public class MailController {
 		System.out.println("sendingMailList : " + sendingMailList);
 		model.addAttribute("mails", sendingMailList);
 		model.addAttribute("pageBar", pageBar);
-		return "mail/mailresponse/mail_list_response";
+		return "mail/mailresponse/sending_mail_list";
 	}
 	
 	@PostMapping("/searchmail.do")

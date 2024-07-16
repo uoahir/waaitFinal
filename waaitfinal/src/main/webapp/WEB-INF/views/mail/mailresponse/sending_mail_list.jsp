@@ -7,8 +7,7 @@
 		<c:forEach var="mail" items="${mails }" >
 			<%-- <c:set var="favoriteIconUrl" value="${mail.mailStatus eq '즐겨찾기' ? path + '/resources/assets/static/images/bootstrap-icons.svg#star-fill' : path + '/resources/assets/static/images/bootstrap-icons.svg#star'}"/> --%>
 			<li
-				class= <c:if test="${mail.mailReadStatus eq 'Y' }">"media mail-read"</c:if>
-					   <c:if test="${mail.mailReadStatus ne 'Y' }">"media"</c:if>
+				class="media"
 				id="${mail.mailNo }" name="mailList">
 				<div class="user-action">
 					<div class="checkbox-con me-3">

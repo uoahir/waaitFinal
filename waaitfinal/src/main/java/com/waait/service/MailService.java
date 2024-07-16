@@ -233,4 +233,12 @@ public class MailService {
 		return dao.trashMailBoxTotalData(session, receiverMailAddress);
 	}
 
+	public int notReadDataCount(Map<String, Object> mailSettings) {
+		return dao.notReadDataCount(session, mailSettings);
+	}
+
+	public int getSpamMailCount(Map<String, Object> param) {
+		return dao.getSpamMailCount(session, param);
+	}
+
 }
