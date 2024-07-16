@@ -25,10 +25,10 @@
 					Write
 					</button>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style>
-						<a class="dropdown-item" href="${path}/edoc/basicedoc?type=T01">내부보고서</a>
-						<a class="dropdown-item" href="${path}/edoc/basicedoc?type=T02">지출결의서</a>
-						<a class="dropdown-item" href="${path}/edoc/basicedoc?type=T03">출장신청서</a>
-						<a class="dropdown-item" href="${path}/edoc/basicedoc?type=T04">휴가신청서</a>
+						<div class="dropdown-item" onclick="window.open('${path}/edoc/basicedoc?type=T01','_blank','width=1200, height=1000')">내부보고서</div>
+						<div class="dropdown-item" onclick="window.open('${path}/edoc/basicedoc?type=T02','_blank','width=1200, height=1000')">지출결의서</div>
+						<div class="dropdown-item" onclick="window.open('${path}/edoc/basicedoc?type=T03','_blank','width=1200, height=1000')">출장신청서</div>
+						<div class="dropdown-item" onclick="window.open('${path}/edoc/basicedoc?type=T04','_blank','width=1200, height=1000')">휴가신청서</div>
 					</div>
 				</div>
 			</div>
@@ -37,6 +37,7 @@
 					<thead>
 						<tr>
 							<th>No</th>
+							<th>Type</th>
 							<th>Title</th>
 							<th>Writer</th>
 							<th>Submission Date</th>
@@ -46,8 +47,9 @@
 					<tbody>
 						<c:if test="${not empty documents }">
 							<c:forEach items="${documents }" var="d">
-								<tr>
+								<tr onclick = "isFirstOpened('${d.docId}','${d.docType.docType }');">
 									<td>1</td>
+									<td>${d.docType.type }</td>
 									<td>${d.docTitle }</td>
 									<td>${d.docWriter }</td>
 									<td>${d.docDate }</td>
@@ -64,6 +66,12 @@
 			</div>
 		</div> 
 	</div>    
+	<script type="text/javascript">
+		const isFirstOpened = (docId,docType) => {
+			window.open("${path}/edoc/openedoc"+docId+"/"+docType,"_blank" ,"width=1200, height=1000");
+			// 새 창 열기로 오픈하면 , 여러 문서를 동시에 작업할 수 있음 ~ 
+		}
+	</script>
 	
 </section>
 <jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />

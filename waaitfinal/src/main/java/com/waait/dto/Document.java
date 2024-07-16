@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Document {
 	private int docId;
 	private String docWriter;
-	private String docType;
+	private DocType docType;
 	private String docContent;
 	private int approver;
 	private String docTitle;
@@ -24,6 +24,7 @@ public class Document {
 	private String docStat;
 	private String docOpen;
 	private String docLife;
+	private int isFirstOpened;
 	private List<Approval> approvals = new ArrayList<>();
 	// list는 작성자 기준으로 결재자 확인용
 	private Approval approvalOne; 

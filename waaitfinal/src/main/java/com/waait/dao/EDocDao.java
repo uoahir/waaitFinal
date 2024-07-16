@@ -21,8 +21,19 @@ public interface EDocDao {
 	int insertEdocContent(SqlSession session, Document doc);
 	int insertApproval(SqlSession session, Approval approval);
 	
+//	결재라인, 최초 문서 상신 시 현재결재자 update
+	int updateFirstApprover(SqlSession session, int docId);
+	
 //	승인대기문서 select
 	List<Document> awaitingApproval(SqlSession session, Long empNo, Map<String,Integer> page);
 	
+//	문서선택 ~ 
+	Document selectDocumentById(SqlSession session, int docId);
+	
+	int updateFirstOpened(SqlSession session, int docId);
+	
+	Document selectDocumentDetail(SqlSession session, Map<String,Object> param);
+	
+	List<Approval> selectApprovalByDocId(SqlSession session, int docId);
 	
 }

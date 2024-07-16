@@ -61,6 +61,11 @@ public class EDocServiceImpl implements EDocService {
 					edocDao.insertApproval(session, app);
 				}	
 			}
+			
+			// approval line 데이터가 생성됨. -> 결재라인에 결재자들이 순서대로 들어가있음
+			// Document에 있는 현재결재자 컬럼값을 바로 업데이트 해줘야 함. 
+			
+			edocDao.updateFirstApprover(session, appId);
 				
 			
 		} catch(Exception e) {
@@ -75,6 +80,33 @@ public class EDocServiceImpl implements EDocService {
 	public List<Document> awaitingApproval(Long empNo, Map<String, Integer> page) {
 		return edocDao.awaitingApproval(session, empNo, page); 
 	}
+
+	@Override
+	public Document selectDocumentById(int docId) {
+		// TODO Auto-generated method stub
+		return edocDao.selectDocumentById(session, docId);
+	}
+
+	@Override
+	public Document selectDocumentDetail(Map<String,Object> param) {
+		// TODO Auto-generated method stub
+		return edocDao.selectDocumentDetail(session, param);
+	}
+
+	@Override
+	public int updateFirstOpened(int docId) {
+		// TODO Auto-generated method stub
+		return edocDao.updateFirstOpened(session, docId);
+	}
+
+	@Override
+	public List<Approval> selectApprovalByDocId(int docId) {
+		// TODO Auto-generated method stub
+		return edocDao.selectApprovalByDocId(session, docId);
+	}
+	
+	
+	
 
 
 	
