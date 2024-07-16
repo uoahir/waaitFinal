@@ -5,8 +5,8 @@
 
 <jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
 
-<section>
-    
+<section class="section">
+     
 
 </section>
 <jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />

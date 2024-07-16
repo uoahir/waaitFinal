@@ -1,5 +1,7 @@
 package com.waait.service;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public Employee selectEmployee(String empId) {
 	 Employee employee = employeeDao.selectEmployee(session, empId);
 		return employee;
+	}
+	@Override
+	public List<Employee> selectAllEmployees() {
+		List<Employee> employees = employeeDao.selectAllEmployees(session); 
+		return employees;
 	}
 
 	

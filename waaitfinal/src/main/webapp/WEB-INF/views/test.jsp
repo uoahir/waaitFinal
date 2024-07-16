@@ -761,8 +761,8 @@
 
     
 <!-- Need: Apexcharts -->
-<%-- <script src="${path }/resources/assets/extensions/apexcharts/apexcharts.min.js"></script> --%>
-<%-- <script src="${path }/resources/assets/static/js/pages/dashboard.js"></script> --%>
+<script src="${path }/resources/assets/extensions/apexcharts/apexcharts.min.js"></script>
+<script src="${path }/resources/assets/static/js/pages/dashboard.js"></script>
 
 </body>
 
