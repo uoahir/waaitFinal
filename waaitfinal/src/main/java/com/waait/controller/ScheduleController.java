@@ -46,7 +46,7 @@ public class ScheduleController {
 			System.out.println(e);
 		});
 		
-		return "schedule/schedulemain";
+		return "schedule/schedulemain2";
 	}
 	
 	private Employee getLoginEmpInfo() {
