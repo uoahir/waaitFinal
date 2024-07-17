@@ -7,8 +7,7 @@
 		<c:forEach var="mail" items="${mails }" >
 			<%-- <c:set var="favoriteIconUrl" value="${mail.mailStatus eq '즐겨찾기' ? path + '/resources/assets/static/images/bootstrap-icons.svg#star-fill' : path + '/resources/assets/static/images/bootstrap-icons.svg#star'}"/> --%>
 			<li
-				class= <c:if test="${mail.mailReadStatus eq 'Y' }">"media mail-read"</c:if>
-					   <c:if test="${mail.mailReadStatus ne 'Y' }">"media"</c:if>
+				class="media"
 				id="${mail.mailNo }" name="mailList">
 				<div class="user-action">
 					<div class="checkbox-con me-3">
@@ -48,24 +47,17 @@
 				<div class="media-body" onclick="goMailDetail(event)">
 					<div class="user-details">
 						<div class="mail-items">
-							<span class="list-group-item-text text-truncate">${mail.senderMailAddress } &lt;${mail.senderName }&gt;</span>
+							<span class="list-group-item-text text-truncate">${mail.senderMailAddress } 받은사람 : ${mail.senderName }</span>
 						</div>
 						<div class="mail-meta-item">
 							<span class="float-right"> 
-								<span class="mail-date">
-									<c:if test="${mail.receiverReadDate != null }">
-										${mail.mailWriteDate }
-									</c:if>
-									<c:if test="${mail.receiverReadDate == null }">
-										안 읽음
-									</c:if>
-								</span>
+								<%-- <span class="mail-date">${mail.mailWriteDate }</span> --%>
 							</span>
 						</div>
 					</div>
 					<div class="mail-message">
 						<p class="list-group-item-text truncate mb-0">
-							mailTitle : ${mail.mailTitle }</p>
+							${mail.mailTitle }</p>
 						<div class="mail-meta-item">
 							<span class="float-right"> <span
 								class="bullet bullet-success bullet-sm"></span>

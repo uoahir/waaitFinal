@@ -89,6 +89,27 @@
 							<div id="collapse7" role="tabpanel"
 								aria-labelledby="headingCollapse7" class="collapse show">
 								<div class="card-content">
+									<div class="topLineContainer" style="padding-left:25px; font-size:30px; display:flex;">
+										<div id="titleContainer">
+											제목 : ${mail.mailTitle }										
+										</div>
+										<div id="deleteButtonContainer">
+											<button onclick="deleteMail()">삭제버튼</button>
+										</div>
+										<div id="moveMyMailBoxButtonContainer">
+											<button onclick="moveMyMailBox()">메일함 이동</button>
+										</div>
+										<div id="myMailBoxOptionContainer">
+											<c:if test="${not empty myMailBoxes }">
+												<select id="myMailBoxSelect">
+													<option value="default" disabled>메일함을 선택하세요</option>
+													<c:forEach var="myMailBox" items="${myMailBoxes }">
+														<option value="${myMailBox.myMailBoxNo }">메일함 이름 : ${myMailBox.myMailBoxName }</option>
+													</c:forEach>
+												</select>
+											</c:if>
+										</div>
+									</div>
 									<div class="card-body py-1">
 										${mail.mailContent }
 										<!-- <p class="text-bold-500">Greetings!</p>
@@ -138,7 +159,7 @@
 		</div>
 	</div>
 	<!--/ Detailed Email View -->
-	
+	<%-- <input type="text" id="${mail.mailNo }" name="mailNo" hidden="true"> --%>
 </body>
 <footer>
 	<div class="footer clearfix mb-0 text-muted">
@@ -204,6 +225,37 @@
 	})();
 	
 	//document.getElementById("iconPath").setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star");
+	const deleteMail = () => {
+		/* const mailNo = document.querySelector("input[name='mailNo']").value; */
+		const mailNo = ${mail.mailNo };
+		fetch('${path }/mail/deletemail.do', {
+			method : "POST",
+			headers : {
+				"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+			},
+			body : "mailNoStr=" + mailNo
+		})
+		.then(response => response.text())
+		.then(data => {
+			location.assign('${path }/mail/mailmain.do');
+		})
+	}
+	
+	const moveMyMailBox = () => {
+		const mailNo = ${mail.mailNo };
+		const mailBoxNo = document.getElementById("myMailBoxSelect").value;
+		fetch('${path }/mail/addmailmymailbox.do', {
+			method : "POST",
+			headers : {
+				"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+			},
+			body : "mailNoStr=" + mailNo + "&myMailBoxNo=" + mailBoxNo
+		})
+		.then(response => response.text())
+		.then(data => {
+			location.assign("${path }/mail/mailmain.do");
+		});
+	}
 </script>
 <style>
 .icon-button {
