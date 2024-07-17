@@ -149,8 +149,9 @@ public class MailDao {
 		return session.selectList("mail.joinSendingMailBox", empNo, rb);
 	}
 
-	public List<Mail> searchMail(SqlSession session, Map<String, String> searchParam) {
-		return session.selectList("mail.searchMail", searchParam);
+	public List<Mail> searchMail(SqlSession session, Map<String, Object> searchParam, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("mail.searchMail", searchParam, rb);
 	}
 
 	public int updateFile(SqlSession session, MailFile mailFile) {
@@ -175,6 +176,10 @@ public class MailDao {
 
 	public int getSpamMailCount(SqlSession session, Map<String, Object> param) {
 		return session.selectOne("mail.getSpamMailCount", param);
+	}
+
+	public int getSearchMailTotalData(SqlSession session, Map<String, Object> searchParam) {
+		return session.selectOne("mail.getSearchMailTotalData", searchParam);
 	}
 
 

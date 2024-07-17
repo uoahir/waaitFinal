@@ -288,13 +288,14 @@ public class MailController {
 	}
 	
 	@GetMapping("/enrollmymailbox.do")
-	public @ResponseBody Map<String, Object> enrollUserMailBox(String wantBoxName, HttpServletResponse res) {
+	public String enrollUserMailBox(String wantBoxName, Model model) {
 		long empNo = getLoginEmpInfo().getEmpNo();
+		Map<String, Object> newMyMailBoxInfo = new HashMap<String, Object>();
 		List<MyMailBox> boxList = service.getMyMailBox(empNo);
 		
 		for(MyMailBox mailBox : boxList) {
 			if(mailBox.getMyMailBoxName().equals(wantBoxName)) {
-				return Map.of("errorMsg", "중복되는 이름은 사용 할 수 없습니다.");
+				newMyMailBoxInfo.put("errorMsg", "메일함 이름은 중복될 수 없습니다");
 			}
 		}
 		
@@ -303,8 +304,10 @@ public class MailController {
 		param.put("wantBoxName", wantBoxName);
 		
 		int myMailBoxNo = service.enrollUserMailBox(param);
-		Map<String, Object> newMyMailBoxInfo = Map.of("myBoxName", wantBoxName, "myMailBoxNo", myMailBoxNo);
-		return newMyMailBoxInfo;
+		newMyMailBoxInfo.put("myBoxName", wantBoxName);
+		newMyMailBoxInfo.put("myMailBoxNo", myMailBoxNo);
+		model.addAttribute("mailBoxInfo", newMyMailBoxInfo);
+		return "mail/mailresponse/add_mymailbox";
 		
 	}
 	
@@ -534,13 +537,32 @@ public class MailController {
 	}
 	
 	@PostMapping("/searchmail.do")
-	public String searchMail(String searchType, String searchValue, Model model) {
+	public String searchMail(String searchType, String searchValue, Model model,
+								@RequestParam(defaultValue = "1") int cPage) {
 		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
 		long empNo = getLoginEmpInfo().getEmpNo();
 		
-		Map<String, String> searchParam = Map.of("searchType", searchType, "searchValue", searchValue, "receiverMailAddress", receiverMailAddress);
-		List<Mail> searchList = service.searchMail(searchParam);
-		model.addAttribute("searchMail", searchList);
+		String modifySearchType = searchType.substring(1, searchType.length() - 1);
+		
+		switch(modifySearchType) {
+			case "내용" : searchType = "M.MAILCONTENT"; break;
+			case "타이틀" : searchType = "M.MAILTITLE"; break;
+			case "보낸사람" : searchType = "M.SENDERMAILADDRESS"; break;
+		}
+		
+		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
+		Map<String, Object> searchParam = Map.of("searchType", searchType, "searchValue", searchValue, "receiverMailAddress", receiverMailAddress, "spamDomains", spamDomains);
+		
+		int numPerpage = 0;
+		numPerpage = getUserSettingNumPerpage(empNo);
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		int totalData = service.getSearchMailTotalData(searchParam);
+		
+		String pageBar = paging(totalData, cPage, numPerpage, cPage, receiverMailAddress);
+		
+		List<Mail> searchList = service.searchMail(searchParam, pagingParam);
+		model.addAttribute("mails", searchList);
+		model.addAttribute("pageBar", pageBar);
 		
 		RecentSearch recentSearch = RecentSearch.builder()
 												.empNo(empNo)

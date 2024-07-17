@@ -63,7 +63,9 @@
 										<button type="button" class="btn btn-primary btn-block my-4 compose-btn" 
 												onclick="location.assign('${path }/mail/writemail.do')">메일작성</button>
 									</div>
-									<div class="sidebar-menu-list ps">
+									
+									<!-- 사이드바 메뉴 시작 -->
+									<div class="sidebar-menu-list" id="sideBarMenu">
 										<!-- sidebar menu  -->
 										<div class="list-group list-group-messages">
 											<a href="javascript:receiveMailList()" class="list-group-item pt-0 active" name="menu" id="받은메일함" onclick="selectMenu(event)">
@@ -113,25 +115,79 @@
 										<!-- sidebar menu  end-->
 
 										<!-- sidebar label start -->
-										<label class="sidebar-label">Labels</label>
-										<div class="list-group list-group-labels">
+										<div class="myMailBoxContainer">
+											<div class="myMailBoxContainerTopRow">
+												<label class="sidebar-label">MyMailBox</label>
+												<button class="addMyMailBoxButton" onclick="addMyMailBox(event)" hidden="true">+</button>
+											</div>
+											<input type="text" class="mailBoxNameInput" name="myMailBoxName" placeholder="내 메일함 이름 입력" hidden="true">
+										</div>
+										<script>
+											document.querySelector(".myMailBoxContainerTopRow").addEventListener("mouseenter", e => {
+												console.log(e.target.lastElementChild);
+												e.target.lastElementChild.hidden = false;
+											});
+											
+											document.querySelector(".myMailBoxContainerTopRow").addEventListener("mouseleave", e => {
+												e.target.lastElementChild.hidden = true;
+											});
+											
+											const addMyMailBox = (e) => {
+												document.querySelector("input[name='myMailBoxName']").hidden = false;
+											}
+											
+											document.querySelector("input[name='myMailBoxName']").addEventListener("blur", e => {
+												const mailBoxName = e.target.value;
+												if(mailBoxName.length > 0) {
+													let userChoice = confirm(mailBoxName + "를 추가하시겠습니까?");
+													console.log("result : " + userChoice);
+													if(userChoice == true) {
+														fetch("${path }/mail/enrollmymailbox.do?wantBoxName=" + mailBoxName)
+														.then(response => response.text())
+														.then(data => {
+															document.getElementById("myMailBoxListContainer").innerHTML += data;
+														});
+													} else {
+														e.target.hidden = true;
+													}
+												} else {
+													e.target.hidden = true;
+												}
+											})
+										</script>
+										<c:if test="${not empty myMailBoxes }">
+											<div class="list-group list-group-labels" id="myMailBoxListContainer">
+											<c:forEach var="myBox" items="${myMailBoxes }">
+												<div style="display:flex">
+													<a href="" class="list-group-item" name="myMailBox" id="${myBox.myMailBoxNo }" onclick="selectMenu(event)">
+														<div class="fonticon-wrap d-inline me-3">
+															<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+		                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
+		                                        			</svg>
+														</div> ${myBox.myMailBoxName }
+													</a>
+													<button class="deleteMyMailBoxButton" id="${myBox.myMailBoxNo }" onclick="deleteMyMailBox(event)">삭제</button>
+												</div>
+											<!-- <a href="#"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												Work <span class="" style="color:red;">삭제</span>
+											</a> 
 											<a href="#"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												Product <span class="bullet bullet-success bullet-sm"></span>
-											</a> <a href="#"
+												Misc <span class="bullet bullet-warning bullet-sm">misc</span>
+											</a> 
+											<a href="#"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												Work <span class="bullet bullet-primary bullet-sm"></span>
-											</a> <a href="#"
+												Family <span class="bullet bullet-danger bullet-sm">family</span>
+											</a> 
+											<a href="#"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												Misc <span class="bullet bullet-warning bullet-sm"></span>
-											</a> <a href="#"
-												class="list-group-item d-flex justify-content-between align-items-center">
-												Family <span class="bullet bullet-danger bullet-sm"></span>
-											</a> <a href="#"
-												class="list-group-item d-flex justify-content-between align-items-center">
-												Design <span class="bullet bullet-info bullet-sm"></span>
-											</a>
-										</div>
+												Design <span class="bullet bullet-info bullet-sm">design</span>
+s											</a> -->
+										 	</c:forEach>
+											</div>
+										</c:if>
+										
 										<!-- sidebar label end -->
 										<div class="ps__rail-x" style="left: 0px; bottom: 0px;">
 											<div class="ps__thumb-x" tabindex="0"
@@ -691,7 +747,7 @@
 			const searchValue = e.currentTarget.lastElementChild.innerText;
 			console.log("searchType : " + searchType);
 			console.log("searchValue : " + searchValue);
-			if(searchValue.size > 0) {
+			if(searchValue.length > 0) {
 				fetch("${path }/mail/searchmail.do", {
 					method : "POST",
 					headers : {
@@ -707,6 +763,23 @@
 				alert("입력값이 없습니다.");
 			}
 		}
+		
+		const deleteMyMailBox = (e) => {
+			const myMailBoxNo = e.currentTarget.id;
+			fetch("${path }/mail/deletemymailbox.do", {
+				method : "POST",
+				headers : {
+					"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+				},
+				body : "myMailBoxNo=" + myMailBoxNo
+			})
+			.then(response => response.text())
+			.then(data => {
+				
+			})
+		}
+		
+		
 </script>
 											<!-- email user list start -->
 											<div class="email-user-list list-group ps ps--active-y" id="mailListContainer">
@@ -1431,7 +1504,13 @@
 		
 		.searchType {
 			font-size:15px;
-			
+		}
+		
+		.deleteMyMailBoxButton {
+			background-color:white;
+			border:none;
+			color:red;
+			margin-left:35px;
 		}
 	</style>
 	<script>
@@ -1486,6 +1565,26 @@
 	#mailListUlTag {
 		overflow-y: auto;
 		overflow-x: hidden;
+	}
+	
+	#sideBarMenu {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+	.myMailBoxContainer {
+		display:grid; /* grid */
+	}
+	.myMailBoxContainerTopRow {
+		display:flex; /* flex */
+	}
+	.addMyMailBoxButton {
+		background:none;
+		border:none;
+		padding-top:22px;
+		padding-left:30px;
+	}
+	.mailBoxNameInput {
+		
 	}
 </style>
 </html>
