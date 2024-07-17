@@ -66,7 +66,7 @@
 									<div class="sidebar-menu-list ps">
 										<!-- sidebar menu  -->
 										<div class="list-group list-group-messages">
-											<a href="javascript:receiveMailList()" class="list-group-item pt-0 active" name="menu" onclick="selectMenu(event)">
+											<a href="javascript:receiveMailList()" class="list-group-item pt-0 active" name="menu" id="받은메일함" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
                                             			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
@@ -74,42 +74,40 @@
 												</div> 받은메일함
 												<span class="badge bg-light-primary badge-pill badge-round float-right mt-50">${notReadCount }</span>
 											</a> 
-											<a href="javascript:sendingMailList()" class="list-group-item" name="menu" onclick="selectMenu(event)">
+											<a href="javascript:sendingMailList()" class="list-group-item" name="menu" id="보낸메일함" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
                                             			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#archive" />
                                         			</svg>
 												</div> 보낸 메일함
 											</a> 
-											<a href="javascript:changeView('/mail/temporarysavemailbox.do')" class="list-group-item" name="menu" onclick="selectMenu(event)">
+											<a href="javascript:changeView('/mail/temporarysavemailbox.do')" class="list-group-item" name="menu" id="임시저장함" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
                                             			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#pencil" />
                                         			</svg>
 												</div> 임시저장함
 											</a> 
-											<a href="javascript:changeView('/mail/myfavoritemailbox.do')" class="list-group-item" name="menu" onclick="selectMenu(event)">
+											<a href="javascript:changeView('/mail/myfavoritemailbox.do')" class="list-group-item" name="menu" id="즐겨찾기" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
                                             			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#star" />
                                         			</svg>
 												</div> 즐겨찾기
 											</a> 
-											<a href="javascript:changeView('/mail/joinspammail.do')" class="list-group-item" name="menu" onclick="selectMenu(event)">
+											<a href="javascript:changeView('/mail/joinspammail.do')" class="list-group-item" name="menu" id="스팸메일함" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
 													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
                                             			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#info-circle" />
                                         			</svg>
 												</div> 스팸메일함 <span class="badge bg-light-danger badge-pill badge-round float-right mt-50">${spamMailCount }</span>
 											</a> 
-											<a href="#" class="list-group-item">
+											<a href="javascript:changeView('/mail/jointrashmailbox.do')" class="list-group-item" name="menu" id="휴지통" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#trash" />
-                                        </svg>
-												</div> Trash
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#trash" />
+                                        			</svg>
+												</div> 휴지통
 											</a>
 										</div>
 										<!-- sidebar menu  end-->
@@ -341,14 +339,8 @@
 															</button>
 														</li>
 														<li class="list-inline-item mail-unread">
-															<button type="button" class="btn btn-icon action-icon">
-																<span class="fonticon-wrap d-inline"> <svg
-																		class="bi" width="1.5em" height="1.5em"
-																		fill="currentColor">
-                                                            <use
-																			xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
-                                                        </svg>
-																</span>
+															<button type="button" class="btn btn-icon action-icon" onclick="modalTest()">
+																모달테스트
 															</button>
 														</li>
 														<li class="list-inline-item">
@@ -376,16 +368,9 @@
 														</li>
 														<li class="list-inline-item">
 															<div class="dropdown">
-																<button type="button"
-																	class="btn btn-icon dropdown-toggle action-icon"
-																	id="tag" data-toggle="dropdown" aria-haspopup="true"
-																	aria-expanded="false">
-																	<span class="fonticon-wrap"> <svg class="bi"
-																			width="1.5em" height="1.5em" fill="currentColor">
-                                                                <use
-																				xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#tag" />
-                                                            </svg>
-																	</span>
+																<button type="button" class="btn btn-icon dropdown-toggle action-icon"
+																	id="deleteCompletelyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																	<span class="fonticon-wrap">완전삭제</span>
 																</button>
 																<div class="dropdown-menu dropdown-menu-right"
 																	aria-labelledby="tag">
@@ -421,17 +406,12 @@
 													</div>
 													<!-- search bar  -->
 													<div class="email-fixed-search flex-grow-1">
-
-														<div
-															class="form-group position-relative  mb-0 has-icon-left">
-															<input type="text" class="form-control"
-																placeholder="Search email..">
+														<div class="form-group position-relative  mb-0 has-icon-left">
+															<input type="text" class="form-control" name="searchInput" placeholder="Search email..">
 															<div class="form-control-icon">
-																<svg class="bi" width="1.5em" height="1.5em"
-																	fill="currentColor">
-                                                        <use
-																		xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#search" />
-                                                    </svg>
+																<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                                        			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#search" />
+                                                    			</svg>
 															</div>
 														</div>
 													</div>
@@ -555,7 +535,7 @@
 	//checkbox로 한번에 즐겨찾기
 	const addFavorites = () => {
 		console.log("addFavoriteFunction()")
-		const mailCheckBox = document.querySelectorAll("input[name='mailCheck']");
+		const mailCheckBox = document.querySelectorAll("input[name='checkMail']");
 		let checkedCount = 0;
 		let mailNoStr = "";
 		
@@ -639,13 +619,94 @@
 		});
 	}
 	
-	const selectMenu = (event) => {
-		document.querySelectorAll("a[name='menu']").forEach(e => {
-			e.setAttribute("class", "list-group-item");
+	const selectMenu = (function() {
+		let selectMenuName = "";
+		const selectMenu = (event) => {
+			document.querySelectorAll("a[name='menu']").forEach(e => {
+				e.setAttribute("class", "list-group-item");
+			});
+			
+			event.currentTarget.setAttribute("class", "list-group-item active");
+			selectMenuName = event.currentTarget.id;
+		}
+		
+		document.getElementById("deleteCompletelyButton").addEventListener("click", e => {
+			const mailCheckBox = document.querySelectorAll("input[name='checkMail']");
+			let checkedCount = 0;
+			let mailNoStr = "";
+			
+			mailCheckBox.forEach(e => {
+				if(e.checked) {
+					checkedCount++;
+				}
+			});
+			
+			let count = 1;
+			mailCheckBox.forEach(e => {
+				if(e.checked) {
+					if(count == checkedCount) {
+						mailNoStr += e.id;
+					} else {
+						mailNoStr += e.id + ",";						
+					}
+					count++;
+				}
+			});
+			
+			console.log("mailNoStr : " + mailNoStr);
+
+			if(selectMenuName != "휴지통") {
+				alert("완전삭제는 휴지통메뉴에서만 가능합니다");
+			} else {
+				fetch("${path }/mail/perfectlydeletemail.do", {
+					method : "POST",
+					headers : {
+						"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+					},
+					body : "mailNoStr=" + mailNoStr
+				})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("mailListContainer").innerHTML = data;
+				})
+			}
+		});
+		return selectMenu;
+	})();
+	
+	document.querySelector("input[name='searchInput']").addEventListener("keyup", e => {
+			const modal = document.querySelector(".modal");
+			if(e.target.value.length > 0) {
+				modal.style.display = "grid";
+				document.querySelectorAll(".contentSpan").forEach(span => {
+					span.innerText = e.target.value;
+				});
+			} else {
+				modal.style.display = "none";
+			}
 		});
 		
-		event.currentTarget.setAttribute("class", "list-group-item active");
-	}
+		const searchMail = (e) => {
+			const searchType = e.currentTarget.firstElementChild.innerText;
+			const searchValue = e.currentTarget.lastElementChild.innerText;
+			console.log("searchType : " + searchType);
+			console.log("searchValue : " + searchValue);
+			if(searchValue.size > 0) {
+				fetch("${path }/mail/searchmail.do", {
+					method : "POST",
+					headers : {
+						"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+					},
+					body : "searchType=" + searchType + "&searchValue=" + searchValue
+				})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("mailListContainer").innerHTML = data;
+				})
+			} else {
+				alert("입력값이 없습니다.");
+			}
+		}
 </script>
 											<!-- email user list start -->
 											<div class="email-user-list list-group ps ps--active-y" id="mailListContainer">
@@ -1306,7 +1367,79 @@
 			</footer>
 		</div>
 	</div>
-
+	
+	<!-- modal -->
+	<div class="modal">
+		<div class="button" id="searchTitleContainer">
+			<button id="searchTtitleButton" onclick="searchMail(event)">
+				<span class="searchType">[타이틀]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+		<div class="button" id="searchContentContainer">
+			<button id="searchContentButton" onclick="searchMail(event)">
+				<span class="searchType">[내용]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+		<div class="button" id="searchSenderContainer">
+			<button id="searchSenderButton" onclick="searchMail(event)">
+				<span class="searchType">[보낸사람]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+	</div>
+	<!-- <select id="searchSelect">
+		<option value="choice">선택</option>
+		<option value="mailTitle">[제목]</option>
+		<option value="mailContent">[내용]</option>
+		<option value="empEmail">[보낸사람]</option>
+	</select> -->
+	<script>
+		
+	</script>
+	<style>
+		.modal {
+			position:absolute;
+			display:none;
+			
+			/* justify-content:center; */
+			/* border:1px solid red; */
+			
+			left:698px;
+			top:185px;
+			
+			width:40%;
+			height:30%;
+			
+			background-color:white;
+		}
+		
+		.button {
+			width:100%;
+			height:100%;
+			border-bottom:1px solid black;
+		}
+		
+		.button button{
+			width:100%;
+			height:100%;
+			background-color:rgba(145, 145, 145, 0.1);
+			border:none;
+			text-align:left;
+		}
+		
+		.searchType {
+			font-size:15px;
+			
+		}
+	</style>
+	<script>
+		const modal = document.querySelector(".modal");
+		const modalTest = () => {
+			modal.style.display = "grid";
+		}
+	</script>
 	<script src="${path }/resources/assets/static/js/components/dark.js"></script>
 	<script
 		src="${path }/resources/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>

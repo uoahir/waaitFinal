@@ -275,18 +275,16 @@ public class MailController {
 		List<Mail> spamMailList = new ArrayList<Mail>();
 		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
 		long empNo = getLoginEmpInfo().getEmpNo();
-		int spamMailCount = 0;
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
 		
 		Map<String, Object> param = Map.of("loginMemberEmailDomain", loginMemberEmailDomain, "spamDomains", spamDomains);
 		if(spamDomains != null && spamDomains.size() > 0 && !spamDomains.isEmpty()) {
 			spamMailList = service.getSpamMail(param);
-			spamMailCount = service.getSpamMailCount(param);
 		}
 		
 		model.addAttribute("spamMail", spamMailList);
-		return "mail/mailresponse/spammail";
+		return "mail/mailresponse/spam_mail_list";
 	}
 	
 	@GetMapping("/enrollmymailbox.do")
@@ -505,11 +503,12 @@ public class MailController {
 		System.out.println("trashMailList : " + trashMailList);
 		model.addAttribute("mails", trashMailList);
 		model.addAttribute("pageBar", pageBar);
-		return "mail/trashmailbox";
+		return "mail/mailresponse/trash_mail_list";
 	}
 	
 	@PostMapping("/perfectlydeletemail.do")
 	public String perfectlyDeleteMail(String mailNoStr) {
+		System.out.println("메일완전삭제 mailNoStr : " + mailNoStr);
 		service.perfectlyDeleteMail(mailNoStr);
 		return "redirect:/mail/jointrashmailbox.do";
 	}
@@ -550,7 +549,7 @@ public class MailController {
 												.build();
 		service.enrollRecentSearchKeyword(recentSearch);
 		
-		return "mail/mailresponse/searchmail";
+		return "mail/mailresponse/search_mail_list";
 	}
 	
 	@GetMapping("/filedownload.do")
@@ -580,6 +579,7 @@ public class MailController {
 		return "mail/fileuploadtest";
 	}
 	
+	//test
 	@PostMapping("/testmultipartfile.do")
 	public void testUploadFile(MultipartFile[] upFile) {
 		if(upFile != null) {
@@ -587,6 +587,12 @@ public class MailController {
 				System.out.println("oriName : " + file.getOriginalFilename());
 			}
 		}
+	}
+	
+	//test
+	@GetMapping("/modaltestview.do")
+	public String modalTestView() {
+		return "mail/modaltest";
 	}
 	
 	private Employee getLoginEmpInfo() {
