@@ -47,9 +47,9 @@
 					<tbody>
 						<c:if test="${not empty documents }">
 							<c:forEach items="${documents }" var="d">
-								<tr onclick = "isFirstOpened('${d.docId}','${d.docType.docType }');">
+								<tr onclick = "isFirstOpened('${d.docId}','${d.type.docType }');">
 									<td>1</td>
-									<td>${d.docType.type }</td>
+									<td>${d.type.type }</td>
 									<td>${d.docTitle }</td>
 									<td>${d.docWriter }</td>
 									<td>${d.docDate }</td>

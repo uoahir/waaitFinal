@@ -51,7 +51,7 @@
 							value="${employee.department.deptName }" readOnly /> <input
 							type="text" id="empName" name="empName" value=${employee.empName }
 							readOnly> <input type="hidden" id="docWriter"
-							name="docWriter" value=${employee.empName }>
+							name="docWriter" value=${employee.empNo }>
 					</div>
 				</div>
 				<div id="content">
@@ -128,18 +128,11 @@
        	
        	const $wDivSign = document.createElement("div");
         $wDivSign.setAttribute('style','width:90px; height: 50px;')
-
-       	
-       	const $wInputNo = document.createElement("input");
-       	$wInputNo.setAttribute('type','hidden');
-       	$wInputNo.setAttribute('value',employee.empNo);
-       	$wInputNo.setAttribute('name', 'empNo');
        	
        	$wDiv.appendChild($wStatDiv);
        	$wDiv.appendChild($wDivTeam);
        	$wDiv.appendChild($wDivSign);
        	$wDiv.appendChild($wDivEmp);
-       	$wDiv.appendChild($wInputNo);
        	
        	$divFlex.appendChild($wDiv);
        	$lineDiv.appendChild($divFlex);
@@ -228,7 +221,7 @@
 	const appline = () => {
 		window.open("${path}/edoc/appline", "appline", "height=500, width=500");
 	};
- 
+
     </script>
 <script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
 <script src="/assets/static/js/pages/ckeditor.js"></script>

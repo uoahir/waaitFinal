@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class Document {
 	private int docId;
 	private String docWriter;
-	private DocType docType;
+	private String docType;
+	private Type type;
 	private String docContent;
 	private int approver;
 	private String docTitle;

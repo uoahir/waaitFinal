@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <html lang="en">
 
@@ -37,15 +38,53 @@
         	<button onclick="return();">반려</button>
         </div>
         <div class="card-body">
+        	<div id="line" class="d-flex">
+        		<div id = "approval">
+        			<div>기안</div>
+        			<div>개발부</div>
+        			<div>이효리 부장</div>
+        		</div>	
+        		<div id="approval">
+        			<div>결재</div>
+        			<div>개발1팀</div>
+        			<div>이효리 사원</div>
+        		</div>
+        	</div>
             ${document } 
         </div>
     </div>
 </div>
 
 <script>
+	window.onload = function(){
+		// 문서열리자마자 해당문서 approvals 가지구 와서 ! 
+		// table 형식으로 결재란 만들어주기 ! ! !
+		console.log('${document.docId}');
+		console.log('${document.docWriter}')
+		
+		const $line = document.querySelector("#line");
+		
+		fetch('/api/docWriter')
+		// appendChild(approvalDiv)
+		// 작성자 만들어주기 어쨌든 결재란을 만들어주려면 ,employee table 이랑 join을 해야함 ! !! ! ! 
+		const $wApproval = document.createElement("div");
+		$wApproval.id= 'approval';
+		
+		const $wAppType = document.createElement("div");
+		$wAppType.innerText="기안";
+		
+		// 작성자를 만들어주려면 ,, 
+		
+		
+		
+		
+		
+		
+	}
+	
 	const approval = (id, endNo) => {
 		// size == 최종결재자의 appOrder를 back에 전달
-		// 
+		// size 와, 자기 자신의 appOrder 를 비교해서, 일치하지 않으면 중간결재자, 일치하면 최종결재자임 !!! 
 		// 중간결재자 or 최종결재자 임.
 		// 구분 : 
 		// 승인버튼 클릭 -> 로그인된 아이디와 appEmp 가 같은 row 를 update : 승인전 -> 승인 

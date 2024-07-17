@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waait.dto.Approval;
 import com.waait.dto.Department;
+import com.waait.dto.Type;
 import com.waait.dto.Document;
 import com.waait.dto.Employee;
 import com.waait.service.EDocService;
@@ -57,11 +58,10 @@ public class EDocController {
 			// json 형태의 문자열로 받아온 obj를 객체화
 			ObjectMapper objectMapper = new ObjectMapper();
 			doc = objectMapper.readValue(obj, Document.class); 
-
-			System.out.println("요거" + doc);
+			
 			
 			int result = service.insertBasicEdoc(doc, empNo);
-			
+			System.out.println(empNo.length);
 			System.out.println(result);
 			
 			// 파일 업로드 처리
@@ -164,9 +164,9 @@ public class EDocController {
 	}
 	
 	
-//	@PostMapping("/approval")
-//	public ResponseEntity approval() {
-//		return ResponseEntity.ok
-//	}
+	@PostMapping("/approval")
+	public ResponseEntity<List<Approval>> approval(int docId) {
+		return ResponseEntity.ok(service.selectApprovalByDocId(docId));
+	}
 	
 }
