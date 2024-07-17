@@ -1,25 +1,22 @@
 package com.waait.controller;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Schedule;
 import com.waait.service.ScheduleService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequestMapping("/schedule")
 @Controller
 @RequiredArgsConstructor
@@ -52,6 +49,46 @@ public class ScheduleController {
 	private Employee getLoginEmpInfo() {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
+	
+//	@RequestMapping("/schedule.do")
+//	public void getSchedule(HttpServletRequest request,
+//				HttpServletResponse response) {
+//		System.out.println(request);
+//		System.out.println(response);
+//		
+//		//클라이언트가 보낸 데이터 받아오기
+//		String scheTitle=request.getParameter("scheTitle");
+//		String scheContent=request.getParameter("scheContent");
+//		Timestamp scheTime=request.getParameter("scheTime");
+//		Timestamp scheEnd=request.getParameter("scheEnd");
+//		String scheColor=request.getParameter("scheColor");
+//		
+//		Schedule s=Schedule.builder()
+//				.scheTitle(scheTitle)
+//				.scheContent(scheContent)
+//				.scheTime(scheTime)
+//				.scheEnd(scheEnd)
+//				.scheColor(scheColor)
+//				.build();
+//		System.out.println(s);
+//		
+//		request.setAttribute("schedule", s);
+//		request.getRequestDispatcher("/WEB-INF/views/shcedule/schedulemain2.jsp")
+//		.forward(request, response);
+//	}
+	
+	@RequestMapping("/insertSchedule.do")
+	public String insertSchedule(Schedule s) {
+		log.debug("{}",s);
+		int result=service.insertSchedule(s);
+		return "redirect:/schedule/myschedule";
+		
+		
+	}
+	
+	
+	
+	
 
 	
 //	//teamware 참고
