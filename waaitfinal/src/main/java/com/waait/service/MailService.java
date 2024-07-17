@@ -211,8 +211,8 @@ public class MailService {
 		return dao.joinSendingMailBox(session, empNo, pagingParam);
 	}
 
-	public List<Mail> searchMail(Map<String, String> searchParam) {
-		return dao.searchMail(session, searchParam);
+	public List<Mail> searchMail(Map<String, Object> searchParam, Map<String, Integer> pagingParam) {
+		return dao.searchMail(session, searchParam, pagingParam);
 	}
 	
 	@Transactional
@@ -231,6 +231,18 @@ public class MailService {
 
 	public int trashMailBoxTotalData(String receiverMailAddress) {
 		return dao.trashMailBoxTotalData(session, receiverMailAddress);
+	}
+
+	public int notReadDataCount(Map<String, Object> mailSettings) {
+		return dao.notReadDataCount(session, mailSettings);
+	}
+
+	public int getSpamMailCount(Map<String, Object> param) {
+		return dao.getSpamMailCount(session, param);
+	}
+
+	public int getSearchMailTotalData(Map<String, Object> searchParam) {
+		return dao.getSearchMailTotalData(session, searchParam);
 	}
 
 }

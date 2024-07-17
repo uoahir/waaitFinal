@@ -20,7 +20,7 @@ public class MailDao {
 	public RowBounds getRowBounds(Map<String, Integer> pagingParam) {
 		int cPage = pagingParam.get("cPage");
 		int numPerpage = pagingParam.get("numPerpage");
-		RowBounds rb = new RowBounds((cPage - 1) / numPerpage, numPerpage);
+		RowBounds rb = new RowBounds((cPage - 1) * numPerpage, numPerpage);
 		return rb;
 	}
 	
@@ -149,8 +149,9 @@ public class MailDao {
 		return session.selectList("mail.joinSendingMailBox", empNo, rb);
 	}
 
-	public List<Mail> searchMail(SqlSession session, Map<String, String> searchParam) {
-		return session.selectList("mail.searchMail", searchParam);
+	public List<Mail> searchMail(SqlSession session, Map<String, Object> searchParam, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("mail.searchMail", searchParam, rb);
 	}
 
 	public int updateFile(SqlSession session, MailFile mailFile) {
@@ -167,6 +168,18 @@ public class MailDao {
 
 	public int trashMailBoxTotalData(SqlSession session, String receiverMailAddress) {
 		return session.selectOne("mail.trashMailBoxTotalData", receiverMailAddress);
+	}
+
+	public int notReadDataCount(SqlSession session, Map<String, Object> mailSettings) {
+		return session.selectOne("mail.notReadDataCount", mailSettings);
+	}
+
+	public int getSpamMailCount(SqlSession session, Map<String, Object> param) {
+		return session.selectOne("mail.getSpamMailCount", param);
+	}
+
+	public int getSearchMailTotalData(SqlSession session, Map<String, Object> searchParam) {
+		return session.selectOne("mail.getSearchMailTotalData", searchParam);
 	}
 
 
