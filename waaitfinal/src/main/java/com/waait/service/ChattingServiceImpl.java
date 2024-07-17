@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
 import com.waait.dao.ChattingDao;
+import com.waait.dto.ChatRoom;
 import com.waait.dto.CodeReviewBoard;
 import com.waait.dto.Employee;
 
@@ -24,6 +25,15 @@ public class ChattingServiceImpl implements ChattingService {
 		List<Employee> employees = dao.selectEmployeelist(session);
 		return employees;
 	}
+
+
+	@Override
+	public List<ChatRoom> selectChatRoomlist(long loginEmpNo) {
+		List<ChatRoom> chatRooms = dao.selectChatRoomlist(session, loginEmpNo);
+		return chatRooms;
+	}
+	
+	
 	
 	
 	

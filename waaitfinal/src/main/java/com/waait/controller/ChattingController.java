@@ -57,31 +57,31 @@ public class ChattingController {
 	
 	
 	//채팅방 채팅방목록 페이지
-	@GetMapping("/roomlist.do")
-	public String chatRoomlist() {
-		System.out.println("채팅 채팅방목록");
-		
-		 
-		
-		return "chatting/chatroomlist";
-	}
-	
-	
-	//채팅방 오픈채팅방목록 페이지
-	@GetMapping("/openroomlist.do")
-	public String chatOpenRoomlist() {
-		System.out.println("채팅 오픈채팅방목록");
-		
-		return "chatting/chatopenroomlist";
-	}
-	
-	
-	//채팅방 채팅
-	@GetMapping("/chatroomopen.do")	// /chatroomopen.do/{chatRoomNo}
-	public String chatRoomOpen() {
-		System.out.println("채팅방 열기");
-		return "chatting/chatroom";
-	}
+//	@GetMapping("/roomlist.do")
+//	public String chatRoomlist() {
+//		System.out.println("채팅 채팅방목록");
+//		
+//		 
+//		
+//		return "chatting/chatroomlist";
+//	}
+//	
+//	
+//	//채팅방 오픈채팅방목록 페이지
+//	@GetMapping("/openroomlist.do")
+//	public String chatOpenRoomlist() {
+//		System.out.println("채팅 오픈채팅방목록");
+//		
+//		return "chatting/chatopenroomlist";
+//	}
+//	
+//	
+//	//채팅방 채팅
+//	@GetMapping("/chatroomopen.do")	// /chatroomopen.do/{chatRoomNo}
+//	public String chatRoomOpen() {
+//		System.out.println("채팅방 열기");
+//		return "chatting/chatroom";
+//	}
 	
 	
 }

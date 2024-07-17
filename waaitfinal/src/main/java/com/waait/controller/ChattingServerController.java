@@ -1,18 +1,20 @@
 package com.waait.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.catalina.mapper.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.waait.dto.ChatRoom;
 import com.waait.dto.Message;
+import com.waait.service.ChattingService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,11 +30,16 @@ public class ChattingServerController extends TextWebSocketHandler{
 		
 		private final ObjectMapper mapper;
 		
+		//service
+		private final ChattingService service;
+		
 		
 		//들어왔을때 메소드 실행
 		@Override
 		public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 			System.out.println("손님들어왔다!");
+			
+			
 			
 			
 		}
@@ -51,6 +58,9 @@ public class ChattingServerController extends TextWebSocketHandler{
 				case "open" : addClient(session,msg);break;
 				case "msg" : sendMessage(msg);break;
 				case "close" : break;
+				
+				case "채팅목록" : chatRoomlist(msg);break;
+				
 			}
 			
 		}
@@ -113,6 +123,8 @@ public class ChattingServerController extends TextWebSocketHandler{
 					//String으로 만든걸 웹소켓이 받을 수 있는 형태로 만들어서 웹소켓세션이 가지고 있는 메소드를 이용해서 해당하는(모든 세션)한테 전달함?
 					cSession.sendMessage(new TextMessage(message));	//이걸로 다시 보내는 듯?? 세션을 살려봐야할꺼같은데 -> js server.onmessage로 가는듯?
 					
+					
+					
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -120,6 +132,40 @@ public class ChattingServerController extends TextWebSocketHandler{
 		}
 		
 		
+		
+		private void chatRoomlist(Message msg) {
+			System.out.println("chatRoomlist 실행");
+//			Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+//			long loginEmpNo = loginEmployee.getEmpNo();
+			
+			long loginEmpNo = msg.getEmpNo();
+			List<ChatRoom> chatRoomlist = service.selectChatRoomlist(loginEmpNo);
+			System.out.println("chatRoomlist : "+chatRoomlist);
+			
+			Map<String, Object> chatRoomtotal = new HashMap<>();
+			chatRoomtotal.put("type", msg.getType());
+			chatRoomtotal.put("chatRoomlist", chatRoomlist);
+			System.out.println("chatRoomlist - chatRoomtotal : "+chatRoomtotal);
+			
+			for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {
+//				System.out.println("이거머야 : "+client.getValue());
+				WebSocketSession cSession = client.getValue();
+				
+				try {
+					//객체를 String 형태로 만들고 
+					String chatRooms = mapper.writeValueAsString(chatRoomtotal);
+					
+					 System.out.println("sendMessage 메소드 : "+chatRooms); //String으로 만든걸 웹소켓이 받을 수 있는
+					 //형태로 만들어서 웹소켓세션이 가지고 있는 메소드를 이용해서 해당하는(모든 세션)한테 전달함? 
+					 cSession.sendMessage(new TextMessage(chatRooms)); //이걸로 다시 보내는 듯?? 세션을 살려봐야할꺼같은데 -> js server.onmessage로 가는듯?
+					 
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+				
+				
+			}
+		}
 		
 		
 		
