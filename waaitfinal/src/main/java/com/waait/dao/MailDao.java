@@ -16,7 +16,14 @@ import com.waait.dto.SpamDomain;
 
 @Repository
 public class MailDao {
-
+	
+	public RowBounds getRowBounds(Map<String, Integer> pagingParam) {
+		int cPage = pagingParam.get("cPage");
+		int numPerpage = pagingParam.get("numPerpage");
+		RowBounds rb = new RowBounds((cPage - 1) / numPerpage, numPerpage);
+		return rb;
+	}
+	
 	public List<Mail> getReceiveMail(SqlSession session, Map<String, Object> mailSettings) {
 		int cPage = (int) mailSettings.get("cPage");
 		int numPerpage = (int) mailSettings.get("numPerpage");
@@ -28,8 +35,8 @@ public class MailDao {
 		return session.selectList("mail.selectSpamDomainAddress", empNo);
 	}
 
-	public List<MailSetting> getMailSetting(SqlSession session, long empNo) {
-		return session.selectList("mail.selectMailSetting", empNo);
+	public MailSetting getMailSetting(SqlSession session, long empNo) {
+		return session.selectOne("mail.selectMailSetting", empNo);
 	}
 
 	public void setMailSetting(SqlSession session, long empNo) {
@@ -128,16 +135,18 @@ public class MailDao {
 		return session.delete("mail.deleteMyMailBox", myMailBoxNo);
 	}
 
-	public List<Mail> jointrashmailbox(SqlSession session, String receiverMailAddress) {
-		return session.selectList("mail.jointrashmailbox", receiverMailAddress);
+	public List<Mail> jointrashmailbox(SqlSession session, String receiverMailAddress, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("mail.jointrashmailbox", receiverMailAddress, rb);
 	}
 
 	public void perfectlyDeleteMail(SqlSession session, String mailNo) {
 		session.delete("mail.perfectlyDeleteMail", mailNo);
 	}
 
-	public List<Mail> joinSendingMailBox(SqlSession session, long empNo) {
-		return session.selectList("mail.joinSendingMailBox", empNo);
+	public List<Mail> joinSendingMailBox(SqlSession session, long empNo, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("mail.joinSendingMailBox", empNo, rb);
 	}
 
 	public List<Mail> searchMail(SqlSession session, Map<String, String> searchParam) {
@@ -150,6 +159,14 @@ public class MailDao {
 
 	public void enrollRecentSearchKeyword(SqlSession session, RecentSearch recentSearch) {
 		session.insert("mail.enrollRecentSearchKeyword", recentSearch);
+	}
+
+	public int joinSendingMailBoxData(SqlSession session, long empNo) {
+		return session.selectOne("mail.joinSendingMailBoxTotalData", empNo);
+	}
+
+	public int trashMailBoxTotalData(SqlSession session, String receiverMailAddress) {
+		return session.selectOne("mail.trashMailBoxTotalData", receiverMailAddress);
 	}
 
 

@@ -575,6 +575,54 @@
                 
 
             </li>
+            <li
+                class="sidebar-item  has-sub">
+                <a href="#" class='sidebar-link'>
+                    <i class="bi bi-three-dots"></i>
+                    <span>워크플로우</span>
+                </a>
+                
+                <ul class="submenu ">
+                    
+                    <li class="submenu-item  has-sub">
+                        <a href="${path }/edoc/home" class="submenu-link">내문서함</a>
+                        
+                        <ul class="submenu submenu-level-2 ">
+                            
+                            <li class="submenu-item">
+                                <a href="${path }/edoc/home" class="submenu-link">진행중인문서함</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="ui-multi-level-menu.html" class="submenu-link">완료문서함</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="ui-multi-level-menu.html" class="submenu-link">임시저장함</a>
+                            </li>
+                            
+
+                        </ul>
+                        
+                    </li>
+                    
+                    <li class="submenu-item">
+                        <a href="#" class="submenu-link">전체 문서함</a>
+                        
+                        <ul class="submenu submenu-level-2 ">
+
+                            
+                            <li class="submenu-item ">
+                                <a href="ui-multi-level-menu.html" class="submenu-link">Second Level Menu</a>
+                            </li>
+                            
+
+                        </ul>
+                        
+                    </li>
+                    
+                </ul>
+                
+
+            </li>
             
             <li class="sidebar-title">Pages</li>
             
@@ -736,6 +784,34 @@
     </div>
 </div>
         </div>
+<script>
+	const $sidebarItems = document.querySelectorAll(".sidebar-item");
+	console.log($sidebarItems);	
+	
+
+	$sidebarItems.forEach((sidebarItem) => {
+		sidebarItem.addEventListener('click', () => {
+			// 모든 사이드바 아이템과 submenu-item 클래스 요소에서 active 클래스를 제거
+			$sidebarItems.forEach(item => {
+				item.classList.remove('active');
+				const submenuItems = item.querySelectorAll('.submenu-item');
+				submenuItems.forEach(submenuItem => submenuItem.classList.remove('active'));
+			});
+			
+			// 클릭된 사이드바 아이템에 active 클래스 추가
+			sidebarItem.classList.add('active');
+
+			// 클릭된 사이드바 아이템이 .has-sub 클래스를 가지고 있는 경우,
+			// 그 하위의 첫 번째 submenu-item 클래스 요소에만 active 클래스 추가
+			if (sidebarItem.classList.contains('has-sub')) {
+				const firstSubmenuItem = sidebarItem.querySelector('.submenu-item');
+				if (firstSubmenuItem) {
+					firstSubmenuItem.classList.add('active');
+				}
+			}
+		});
+	});
+</script>
         <div id="main">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">

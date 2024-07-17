@@ -25,6 +25,9 @@ public class Document {
 	private String docOpen;
 	private String docLife;
 	private List<Approval> approvals = new ArrayList<>();
+	// list는 작성자 기준으로 결재자 확인용
+	private Approval approvalOne; 
+	// approval 객체는 결재자 기준 화면출력용
 	private String oriFilename;
 	private String renamedFilename;
 	// before after ? ? 
