@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -13,6 +12,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waait.dto.ChatRoom;
+import com.waait.dto.Employee;
 import com.waait.dto.Message;
 import com.waait.service.ChattingService;
 
@@ -57,9 +57,10 @@ public class ChattingServerController extends TextWebSocketHandler{
 			switch(msg.getType()) {
 				case "open" : addClient(session,msg);break;
 				case "msg" : sendMessage(msg);break;
-				case "close" : break;
+				//case "close" : break;
 				
 				case "채팅목록" : chatRoomlist(msg);break;
+				case "사원목록" : chatUserlist(msg);break;
 				
 			}
 			
@@ -132,25 +133,23 @@ public class ChattingServerController extends TextWebSocketHandler{
 		}
 		
 		
-		
+		//채팅목록 출력
 		private void chatRoomlist(Message msg) {
 			System.out.println("chatRoomlist 실행");
+			//이거왜 안뒈...
 //			Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
 //			long loginEmpNo = loginEmployee.getEmpNo();
 			
 			long loginEmpNo = msg.getEmpNo();
 			List<ChatRoom> chatRoomlist = service.selectChatRoomlist(loginEmpNo);
-			System.out.println("chatRoomlist : "+chatRoomlist);
-			
+//			System.out.println("chatRoomlist : "+chatRoomlist);
 			Map<String, Object> chatRoomtotal = new HashMap<>();
 			chatRoomtotal.put("type", msg.getType());
 			chatRoomtotal.put("chatRoomlist", chatRoomlist);
 			System.out.println("chatRoomlist - chatRoomtotal : "+chatRoomtotal);
 			
 			for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {
-//				System.out.println("이거머야 : "+client.getValue());
 				WebSocketSession cSession = client.getValue();
-				
 				try {
 					//객체를 String 형태로 만들고 
 					String chatRooms = mapper.writeValueAsString(chatRoomtotal);
@@ -158,12 +157,34 @@ public class ChattingServerController extends TextWebSocketHandler{
 					 System.out.println("sendMessage 메소드 : "+chatRooms); //String으로 만든걸 웹소켓이 받을 수 있는
 					 //형태로 만들어서 웹소켓세션이 가지고 있는 메소드를 이용해서 해당하는(모든 세션)한테 전달함? 
 					 cSession.sendMessage(new TextMessage(chatRooms)); //이걸로 다시 보내는 듯?? 세션을 살려봐야할꺼같은데 -> js server.onmessage로 가는듯?
-					 
 				}catch(Exception e) {
 					e.printStackTrace();
 				}
-				
-				
+			}
+		}
+		
+		
+		
+		
+		private void chatUserlist(Message msg) {
+			System.out.println("chatUserlist 실행");
+			long loginEmpNo = msg.getEmpNo();
+			
+			List<Employee> chatUserlist = service.selectEmployeelist();
+			Map<String, Object> chatUsertotal = new HashMap<>();
+			chatUsertotal.put("type", msg.getType());
+			chatUsertotal.put("chatUserlist", chatUserlist);
+			System.out.println("chatUserlist - chatUsertotal : "+chatUsertotal);
+			
+			for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {
+				WebSocketSession cSession = client.getValue();
+				try {
+					String chatUsers = mapper.writeValueAsString(chatUsertotal);
+					System.out.println("sendMessage 메소드 : "+chatUsers); 
+					cSession.sendMessage(new TextMessage(chatUsers));
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
