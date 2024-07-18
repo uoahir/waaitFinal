@@ -36,9 +36,21 @@
 		console.log("채팅방목록 클릭");
 		const msg = new Message("채팅목록",loginEmpNo);
 		server.send(msg.convert());
-		
 	}
 	
+	
+	//채팅방목록에서 채팅방을 클릭했을 때
+	//채팅방을 눌렀을때 해당하는 채팅방의 번호를 보내서 채팅내역을 출력해야함.
+	const chatroomopen=(e)=>{
+		console.log("채팅방 클릭");
+		const chatroomNo = e.currentTarget.dataset.chatroomNo;
+		console.log("채팅방 번호 : "+chatroomNo);
+		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatroomNo,"_blank","top=100, left=400, height=700, width=550");
+		
+		chatserver.onload = function(){
+			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
+		}
+	}
 	
 
 
@@ -212,7 +224,7 @@
 			$userprofileimg.setAttribute("alt","프로필");
 			$userprofileimg.setAttribute("width","50px");
 			$userprofileimg.setAttribute("height","50px");
-			$userprofilebutton.setAttribute("onclick", "profile(event);");
+			$userprofilebutton.setAttribute("dblclick", "profile(event);");
 			
 			$userprofilediv.classList.add("chatting_userlist_printarea_profile");
 			$userprofileimg.classList.add("chatting_userlist_printarea_profile_img_green");
@@ -357,6 +369,10 @@
 			$div.classList.add("chatting_chattingroomlist_printarea");
 			
 			
+			//채팅방번호 각자 부여
+			$div.setAttribute("data-chatroom-no",chatroom.chatRoomNo);
+			
+			
 			//합치기
 			$button.appendChild($img);
 			
@@ -387,7 +403,11 @@
 		
 		document.querySelector("#chatting_main_content").innerHTML=$chatroomlistdiv.innerHTML;
 		
-		
+		//채팅방한테 더블 클릭이벤트 부여
+		const chatroomarea = document.querySelectorAll(".chatting_chattingroomlist_printarea");
+		chatroomarea.forEach(chatroom=>{
+			chatroom.addEventListener("dblclick", chatroomopen);
+		});
 	};
 	//채팅목록 출력하기 끝
 

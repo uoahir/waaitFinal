@@ -280,10 +280,10 @@
 		const loginId = "${employee.empId}";
 		const loginEmpNo = "${employee.empNo}";
 		const path = "${pageContext.request.contextPath }";
-		 /* console.log("사원번호 : "+loginEmpNo); */ 
+		 /* console.log("사원번호 : "+loginEmpNo); */
 	</script>
 	
-	<!-- script문 -->
+ 	<!-- script문 -->
 	<script type="text/javascript" src="${path}/resources/js/chatopen.js"></script>
 	
 </body>

@@ -37,10 +37,11 @@ public class ChattingServerController extends TextWebSocketHandler{
 		//들어왔을때 메소드 실행
 		@Override
 		public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-			System.out.println("손님들어왔다!");
-			
-			
-			
+//			System.out.println("손님들어왔다!");
+			//WebSocket Session을 따로 저장해서 관리해줘야함 안그러면 하나의 session으로 덮어쓰기 되어버림
+			String sessionId = session.getId();
+			clients.put(sessionId, session);
+			System.out.println("클라이언트 세션 연결 afterConnection : "+sessionId);
 			
 		}
 
@@ -57,15 +58,15 @@ public class ChattingServerController extends TextWebSocketHandler{
 			switch(msg.getType()) {
 				case "open" : addClient(session,msg);break;
 				case "msg" : sendMessage(msg);break;
-				//case "close" : break;
-				
-				case "채팅목록" : chatRoomlist(msg);break;
+				//case "close" : break;				
 				case "사원목록" : chatUserlist(msg);break;
+				case "채팅목록" : chatRoomlist(msg);break;
 				
 			}
 			
 		}
 
+		
 		
 		//웹소켓 close했을때, 닫았을 때
 		@Override
@@ -113,20 +114,24 @@ public class ChattingServerController extends TextWebSocketHandler{
 		
 		//sender를 이용해 String으로 비교해서 같은 값이면 같은 객체라 판단해서 분기처리 해야함.
 		private void sendMessage(Message msg) {
+			
 			System.out.println("sendMessage msg : "+msg);
 			for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {
-
 				WebSocketSession cSession = client.getValue();
 				try {
-					//객체를 String 형태로 만들고  
-					String message = mapper.writeValueAsString(msg);	
-					System.out.println("sendMessage 메소드 : "+message);
-					//String으로 만든걸 웹소켓이 받을 수 있는 형태로 만들어서 웹소켓세션이 가지고 있는 메소드를 이용해서 해당하는(모든 세션)한테 전달함?
-					cSession.sendMessage(new TextMessage(message));	//이걸로 다시 보내는 듯?? 세션을 살려봐야할꺼같은데 -> js server.onmessage로 가는듯?
-					
-					
-					
+					if(cSession.isOpen()) {
+						//객체를 String 형태로 만들고  
+						String message = mapper.writeValueAsString(msg);	
+						System.out.println("sendMessage 메소드 : "+message);
+						//String으로 만든걸 웹소켓이 받을 수 있는 형태로 만들어서 웹소켓세션이 가지고 있는 메소드를 이용해서 해당하는(모든 세션)한테 전달함?
+						cSession.sendMessage(new TextMessage(message));	//이걸로 다시 보내는 듯?? 세션을 살려봐야할꺼같은데 -> js server.onmessage로 가는듯?						
+					}else {
+						System.out.println("세션이 닫혀있음 : "+client.getKey());
+						clients.remove(client.getKey());
+					}
 				}catch(Exception e) {
+					System.out.println("메세지 전송 중 예외 발생 : "+e.getMessage());
+					clients.remove(client.getKey());
 					e.printStackTrace();
 				}
 			}
