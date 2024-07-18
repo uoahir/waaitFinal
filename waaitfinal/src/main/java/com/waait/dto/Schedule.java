@@ -1,7 +1,9 @@
 package com.waait.dto;
 
-import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,8 +20,10 @@ public class Schedule {
 	private int reserveNo;
 	private long empNo;
 	private String deptCode;
-	private Timestamp scheTime;
-	private Timestamp scheEnd;	
+//	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+	private LocalDateTime scheTime;
+//	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+	private LocalDateTime scheEnd;	
 	private String scheTitle;
 	private String scheContent;
 	private String scheAllDay;

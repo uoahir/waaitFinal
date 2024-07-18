@@ -11,6 +11,7 @@ public interface ScheduleService {
 	List<Schedule> scheduleList(long empNumber);	
 	
 	// 일정 db에 추가하기 
-	int insertSchedule(Schedule schedule);
+	int insertSchedule(Schedule s);
+
 	
 }

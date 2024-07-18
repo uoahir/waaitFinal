@@ -7,42 +7,56 @@
 <html lang='ko'>
   <head>
   <title>캘린더2</title>
-  <!-- jquery CDN -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- fullcalendar CDN -->
-  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
-  <!-- fullcalendar 언어 CDN -->
-  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
+ 	<!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- FullCalendar CDN -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
+    <!-- FullCalendar 언어 CDN -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
   </head>
-  <body>
+  
+  <body style="padding:100px;">
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/schedule/schedule-color-holiday.css">
-  <c:import url="${pageContext.request.contextPath}/WEB-INF/views/schedule/addeventmodal.html" />
-  		 
-
-	<style>
-	  /* body 스타일 */
-	  html, body {
-	    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-	    font-size: 14px;
-	  }
-	  /* 캘린더 위의 해더 스타일(날짜가 있는 부분) */
-	  .fc-header-toolbar {
-	    padding-top: 1em;
-	    padding-left: 1em;
-	    padding-right: 1em;
-	  }
-	</style>
-</head>
-
-
-<body style="padding:100px;">
+  
+	<!-- 모달 자리 -->
+	<%@include file="/WEB-INF/views/schedule/addeventmodal.jsp" %>
+  
   <!-- calendar 태그 -->
   <div id='calendar-container'>
-    <div id='calendar'></div>
-  </div>
+		<div id='calendar'></div>
+	</div>
+	
+
   <script>  
   
+  /*  */
+	function loadEvents(info, successCallback, failureCallback){
+	  var events = [
+		  //DB에서 가져온 이벤트들
+		  <c:forEach var="event" items='${total}'>
+		  	{
+		  		title: '${event.scheTitle}',
+		  		start: '${fn:replace(event.scheTime," ","T")}',
+		  		end: '${fn:replace(event.scheEnd, " ", "T")}',
+		  		allDay: ${event.scheAllDay},
+		  		editable:true		  		
+		  	},
+		  </c:forEach>
+			{
+			    title: '1시 개발팀 코드리뷰',
+	            url: '${path}/codereviewboard/page', // 클릭시 해당 url로 이동
+	            start: '2024-07-28',
+	            editable: true
+			}  
+	  ];
+	  successCallback(events); 	  
+  }
+  
+  
+  /*  */
   var calendar;
   (function(){	 
 	  
@@ -53,11 +67,35 @@
       calendar = new FullCalendar.Calendar(calendarEl, {
         height: '550px', // calendar 높이 설정
         expandRows: true, // 화면에 맞게 높이 재설정
-        slotMinTime: '08:00', // Day 캘린더에서 시작 시간
-        slotMaxTime: '20:00', // Day 캘린더에서 종료 시간
+        slotMinTime: '09:00', // Day 캘린더에서 시작 시간
+        slotMaxTime: '18:00', // Day 캘린더에서 종료 시간
+        customButtons:{
+        	myCustomButton:{
+        		text:"일정 추가하기",
+        		click: function(){
+        			//부트스트랩 모달 열기
+        			$('#addEventModal').modal('show');
+        		}
+        	},
+        	mySaveButton:{
+        		text:"저장하기",
+        		click: async function(){
+        			if(confirm("저장하시겠습니까?")){
+        				//지금까지 생성된 모든 이벤트 저장하기
+        				var allEvent =calendar.getEvents();
+        				//이벤트 저장하기
+        				const saveEvent = await axios({
+        					method: "POST",
+        					url: "/calendar",
+        					data: allEvent,
+        				});
+        			}
+        		}
+        	}
+        },
         // 해더에 표시할 툴바
         headerToolbar: {
-          left: 'prev,next today',
+          left: 'prev,next today,myCustomButton,mySaveButton',
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
         },
@@ -81,47 +119,11 @@
          select: function(info){
         	$('#addEventModal').modal('show'); 
             $('#start').val(info.startStr); 
-            $('#end').val(info.endStr);        	
+            $('#end').val(info.endStr);               
         },
-        event: loadEvents, // 일정 불러오기(loadEvents 함수 참조)  
+        events: loadEvents, // 일정 불러오기(loadEvents 함수 참조)  
         
-        
-        
-        
-        //팝업창 띄워서 간단하게 일정추가 
-/*          select: function(arg) { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
-          var title = prompt('일정추가');
-          if (title) {
-            calendar.addEvent({
-              title: title,
-              start: arg.start,
-              end: arg.end,
-              allDay: arg.allDay
-            })
-          }
-          calendar.unselect()
-        },  */
-        // 이벤트 
-        events: [
-        	//DB에서 내정보 가져와서 띄워주는 것
-        	<c:forEach var='event' items='${total}'>
-	    		{
-	    			title:'${event.scheTitle}',            			
-	    			start:'${fn:replace(event.scheTime," ","T")}',
-	    			end:'${fn:replace(event.scheEnd," ","T")}',
-	    			allDay:${event.scheAllDay},
-	    			editable: true
-	    		},
-	    	</c:forEach>
-          {
-            title: '1시 개발팀 코드리뷰',
-            url: "${path }/codereviewboard/page", // 클릭시 해당 url로 이동
-            start: '2024-07-28',
-            editable: true
-          }
-        ],
-        
-        //그냥 클릭해서 파란거 추가되는 것 - ㄱ 
+        //그냥 클릭해서 파란거 추가되는 것 -> ㄱ 
         dateClick: function(info){ 
         	console.log("Clicked event occurs : date = " + info.dateStr); 
         	//info.dateStr이거는 클릭한 날짜를 string값으로 넣어주는거         	
@@ -132,15 +134,36 @@
       });
       // 캘린더 랜더링
       calendar.render();
-    });
-    
-    
+      
+      // 폼 제출 처리
+      $('#saveEventButton').click(function(){
+    	  var eventData={
+                  title: $('#scheTitle').val(),
+                  start: $('#scheTime').val(),
+                  end: $('#scheEnd').val()	  
+    	  };
+    	  
+    	  $.ajax({
+    	  type: "POST",
+          url: "saveEvent",
+          data: eventData,
+          success: function(response) {
+              $('#addEventModal').modal('hide');
+              // 서버로부터 이벤트를 다시 로드하는 등의 작업 수행
+              calendar.refetchEvents();
+          }
+          });
+      });
+  });   
     // ㄱ에 대한 이벤트
 	function addEventToCalendar(event){
 		calendar.addEvent(event);
 	}
  
   })();
+  
+  
+  
 </script>  
 	
 	
