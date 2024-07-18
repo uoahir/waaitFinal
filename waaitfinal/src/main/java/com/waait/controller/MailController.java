@@ -288,7 +288,7 @@ public class MailController {
 	}
 	
 	@GetMapping("/enrollmymailbox.do")
-	public String enrollUserMailBox(String wantBoxName, Model model) {
+	public @ResponseBody Map<String, Object> enrollUserMailBox(String wantBoxName) {
 		long empNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> newMyMailBoxInfo = new HashMap<String, Object>();
 		List<MyMailBox> boxList = service.getMyMailBox(empNo);
@@ -296,18 +296,20 @@ public class MailController {
 		for(MyMailBox mailBox : boxList) {
 			if(mailBox.getMyMailBoxName().equals(wantBoxName)) {
 				newMyMailBoxInfo.put("errorMsg", "메일함 이름은 중복될 수 없습니다");
+				return newMyMailBoxInfo;
 			}
 		}
-		
+		System.out.println("박스 리스트 가져오는 건 지나감");
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("empNo", empNo);
 		param.put("wantBoxName", wantBoxName);
 		
+		System.out.println("wantBoxName : " + wantBoxName);
 		int myMailBoxNo = service.enrollUserMailBox(param);
 		newMyMailBoxInfo.put("myBoxName", wantBoxName);
 		newMyMailBoxInfo.put("myMailBoxNo", myMailBoxNo);
-		model.addAttribute("mailBoxInfo", newMyMailBoxInfo);
-		return "mail/mailresponse/add_mymailbox";
+		
+		return newMyMailBoxInfo;
 		
 	}
 	
@@ -432,12 +434,26 @@ public class MailController {
 		return service.addMailMyMailBox(param);
 	}
 	
-	@GetMapping("/detailmymailbox.do")
-	public void myMailBoxDetailView(int myMailBoxNo, Model model) {
-
-		List<Mail> mailList = service.joinMyMailBoxDetail(myMailBoxNo);
+	//내 메일함 메일조회
+	@GetMapping("/joinmymailbox.do")
+	public String myMailBoxDetailView(int myMailBoxNo, Model model,
+			@RequestParam(defaultValue = "1") int cPage) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		int numPerpage = 0;
+		int pageBarSize = 5;
+		String url = "/mail/joinmymailbox.do";
+		numPerpage = getUserSettingNumPerpage(numPerpage);
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		int myMailBoxTotalData = service.getMyMailBoxTotalData(myMailBoxNo);
+		String pageBar = paging(myMailBoxTotalData, cPage, numPerpage, pageBarSize, url);
+		
+		List<Mail> mailList = service.joinMyMailBoxDetail(myMailBoxNo, pagingParam);
 		System.out.println("myMailBoxMailList : " + mailList);
+		
 		model.addAttribute("mails", mailList);
+		model.addAttribute("pageBar", pageBar);
+		
+		return "mail/mailresponse/mymailbox_mail_list";
 	}
 	
 	@GetMapping("/myfavoritemailbox.do")
@@ -482,13 +498,17 @@ public class MailController {
 	}
 	
 	@PostMapping("/deletemymailbox.do")
-	public @ResponseBody int deleteMyMailBox(int myMailBoxNo) {
-		List<Mail> mailInMyMailBox = service.joinMyMailBoxDetail(myMailBoxNo);
+	public String deleteMyMailBox(int myMailBoxNo, Model model) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		List<Mail> mailInMyMailBox = service.joinMyMailBoxDetail(myMailBoxNo, null);
 		
 		service.moveMailToTrashMailBox(mailInMyMailBox);
 		
 		service.deleteMyMailBox(myMailBoxNo);
-		return 0;
+		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
+		model.addAttribute("mailBoxes", myMailBoxList);
+		
+		return "mail/mailresponse/mymailbox_list";
 	}
 	
 	@GetMapping("/jointrashmailbox.do")

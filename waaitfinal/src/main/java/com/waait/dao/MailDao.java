@@ -106,8 +106,13 @@ public class MailDao {
 	public int addMailMyMailBox(SqlSession session, Map<String, Object> param) {
 		return session.insert("mail.addMailMyMailBox", param);
 	}
+	
+	public int getMyMailBoxTotalData(SqlSession session, int myMailBoxNo) {
+		return session.selectOne("mail.getMyMailBoxTotalData", myMailBoxNo);
+	}
 
-	public List<Mail> joinMyMailBoxDetail(SqlSession session, int myMailBoxNo) {
+	public List<Mail> joinMyMailBoxDetail(SqlSession session, int myMailBoxNo, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
 		return session.selectList("mail.joinMyMailBoxDetail", myMailBoxNo);
 	}
 
@@ -181,6 +186,8 @@ public class MailDao {
 	public int getSearchMailTotalData(SqlSession session, Map<String, Object> searchParam) {
 		return session.selectOne("mail.getSearchMailTotalData", searchParam);
 	}
+
+	
 
 
 

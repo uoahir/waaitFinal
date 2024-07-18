@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -49,7 +48,8 @@ public class ChattingServerController extends TextWebSocketHandler{
 		@Override
 		protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 			//json으로 넘어와 관리하기 쉽게 DTO 객체를 만들어서 파싱해서 사용함. JSON -> java객체
-			Message msg = mapper.readValue(message.getPayload(), Message.class);	
+			Message msg = null; 
+					//mapper.readValue(message.getPayload(), Message.class);
 			//페이로드 개발자도구로 볼때 있는 데이터를 자바DTO객체로 만든다.
 			
 			System.out.println("전송메세지 : "+msg);

@@ -147,8 +147,12 @@ public class MailService {
 		return result;
 	}
 
-	public List<Mail> joinMyMailBoxDetail(int myMailBoxNo) {
-		return dao.joinMyMailBoxDetail(session, myMailBoxNo);
+	public List<Mail> joinMyMailBoxDetail(int myMailBoxNo, Map<String, Integer> pagingParam) {
+		return dao.joinMyMailBoxDetail(session, myMailBoxNo, pagingParam);
+	}
+	
+	public int getMyMailBoxTotalData(int myMailBoxNo) {
+		return dao.getMyMailBoxTotalData(session, myMailBoxNo);
 	}
 
 	public List<Mail> joinFavoriteMailBox(String loginMemberEmailDomain) {
@@ -244,5 +248,7 @@ public class MailService {
 	public int getSearchMailTotalData(Map<String, Object> searchParam) {
 		return dao.getSearchMailTotalData(session, searchParam);
 	}
+
+	
 
 }
