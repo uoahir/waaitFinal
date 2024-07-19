@@ -1,6 +1,8 @@
 package com.waait.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -40,9 +42,17 @@ public class ChattingController {
 	
 	//채팅방 채팅
 	@GetMapping("/chatroomopen.do")	// /chatroomopen.do/{chatRoomNo}
-	public String chatRoomOpen(@RequestParam int chatroomNo) {
-		System.out.println("채팅방 번호 : "+chatroomNo);
-		System.out.println("채팅방 열기");
+	public String chatRoomOpen(
+			@RequestParam int chatroomNo,
+			@RequestParam int loginEmpNo) {
+		Map<String, Integer> param = Map.of(
+			"chatroomNo", chatroomNo,
+			"loginEmpNo", loginEmpNo
+		);
+				
+		
+		System.out.println("채팅방 번호 : "+param.get("chatroomNo"));
+		System.out.println("로그인된 사원 번호 : "+loginEmpNo);
 		
 		
 		return "chatting/chatroom";

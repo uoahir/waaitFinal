@@ -41,11 +41,13 @@
 	
 	//채팅방목록에서 채팅방을 클릭했을 때
 	//채팅방을 눌렀을때 해당하는 채팅방의 번호를 보내서 채팅내역을 출력해야함.
+	//해당 채팅방번호, 로그인된 사원번호 전달
 	const chatroomopen=(e)=>{
 		console.log("채팅방 클릭");
 		const chatroomNo = e.currentTarget.dataset.chatroomNo;
 		console.log("채팅방 번호 : "+chatroomNo);
-		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatroomNo,"_blank","top=100, left=400, height=700, width=550");
+		console.log("로그인된 사원 번호 : "+loginEmpNo);
+		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatroomNo+"&loginEmpNo="+loginEmpNo,"_blank","top=100, left=400, height=700, width=550");
 		
 		chatserver.onload = function(){
 			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
