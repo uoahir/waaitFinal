@@ -14,4 +14,7 @@ public interface ScheduleDao {
 	
 	int insertSchedule(SqlSession session,Schedule s);
 	
+	//일정 수정하기
+	int updateSchedule(SqlSession session,Schedule s);
+	
 }

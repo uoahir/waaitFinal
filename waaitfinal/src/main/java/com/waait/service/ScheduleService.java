@@ -12,6 +12,9 @@ public interface ScheduleService {
 	
 	// 일정 db에 추가하기 
 	int insertSchedule(Schedule s);
+	
+	//일정 수정하기
+	int updateSchedule(Schedule s);
 
 	
 }

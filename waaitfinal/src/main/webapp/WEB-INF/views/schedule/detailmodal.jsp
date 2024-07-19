@@ -1,44 +1,49 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body>
 
-	<div id='calendar-container'>
-		<div id='calendar'></div>
-	</div>
+<style>
+
+	h6{
+		color:blue;
+	}
 	
-	<!-- 모달 -->
-	<div class="modal fade" id="addEventModal" tabindex="-1" aria-labelledby="addEventModalLabel" aria-hidden="true">
+</style>
+
+<body>	
+	<!-- 일정 상세화면 모달 -->
+	<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addEventModalLabel">일정 추가</h5>
+                <h5 class="modal-title" id="addEventModalLabel"><strong>일정 상세</strong></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="eventForm" action="${pageContext.request.contextPath }/schedule/insertSchedule.do" method='POST'>
-                   
+                <form id="eventForm" action="${pageContext.request.contextPath }/schedule/insertSchedule.do" method='POST'>                   
                     <div class="mb-3">
                         <label for="scheTitle" class="form-label">일정명</label>
-                        <input type="text" class="form-control" id="subject" name="scheTitle" required>
+                        <h6 id="modalScheTitle" ></h6>                       
                     </div>
                     <div class="mb-3">
                         <label for="scheContent" class="form-label">일정내용</label>
-                        <input type="text" class="form-control" id="title" name="scheContent" required>
+                        <h6 id="modalScheContent"> </h6>
                     </div>
                     <div class="mb-3">
                         <label for="scheTime" class="form-label">시작 일자</label>
-                        <input type="datetime-local" class="form-control" id="start" name="scheTimeData" required>
+                        <h6 id="modalScheTime"> </h6>
                     </div>
                     <div class="mb-3">
                         <label for="scheEnd" class="form-label">종료 일자</label>
-                        <input type="datetime-local" class="form-control" id="end" name="scheEndData" required>
+                        <h6 id="modalScheEnd"> </h6>
                     </div>
                     <div class="mb-12">
                     	<label for="scheColor" class="form-label"> 캘린더 색상</label>
@@ -64,7 +69,7 @@
 		            >
 		              취소
 		            </button>
-                    <button type="submit" class="btn btn-primary">추가</button>
+                    <button type="submit" class="btn btn-primary">수정</button>
                 </form>
             </div>
         </div>
