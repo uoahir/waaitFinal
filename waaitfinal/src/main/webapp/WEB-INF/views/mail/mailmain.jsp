@@ -22,10 +22,10 @@
 <body>
     <script src="${path }/resources/assets/static/js/initTheme.js"></script>
 	<div id="app">
-		<div id="main">
+		<div id="main" style="margin-left: 0px;">
 			<header class="mb-3">
-				<a href="#" class="burger-btn d-block d-xl-none"> <i
-					class="bi bi-justify fs-3"></i>
+				<a href="#" class="burger-btn d-block d-xl-none"> 
+					<i class="bi bi-justify fs-3"></i>
 				</a>
 			</header>
 
@@ -60,94 +60,134 @@
 								<div class="email-app-menu">
 									<div class="form-group form-group-compose">
 										<!-- compose button  -->
-										<button type="button"
-											class="btn btn-primary btn-block my-4 compose-btn">
-											<i class="bi bi-plus"></i> Compose
-										</button>
+										<button type="button" class="btn btn-primary btn-block my-4 compose-btn" 
+												onclick="location.assign('${path }/mail/writemail.do')">메일작성</button>
 									</div>
-									<div class="sidebar-menu-list ps">
+									
+									<!-- 사이드바 메뉴 시작 -->
+									<div class="sidebar-menu-list" id="sideBarMenu">
 										<!-- sidebar menu  -->
 										<div class="list-group list-group-messages">
-											<a href="#" class="list-group-item pt-0 active"
-												id="-menu">
+											<a href="javascript:receiveMailList()" class="list-group-item pt-0 active" name="menu" id="받은메일함" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
-
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
-                                        </svg>
-												</div>  <span
-												class="badge bg-light-primary badge-pill badge-round float-right mt-50">5</span>
-											</a> <a href="#" class="list-group-item">
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
+                                        			</svg>
+												</div> 받은메일함
+												<span class="badge bg-light-primary badge-pill badge-round float-right mt-50">${notReadCount }</span>
+											</a> 
+											<a href="javascript:sendingMailList()" class="list-group-item" name="menu" id="보낸메일함" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
-
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#archive" />
-                                        </svg>
-												</div> Sent
-											</a> <a href="#" class="list-group-item">
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#archive" />
+                                        			</svg>
+												</div> 보낸 메일함
+											</a> 
+											<a href="javascript:changeView('/mail/temporarysavemailbox.do')" class="list-group-item" name="menu" id="임시저장함" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
-
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#pencil" />
-                                        </svg>
-												</div> Draft
-											</a> <a href="#" class="list-group-item">
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#pencil" />
+                                        			</svg>
+												</div> 임시저장함
+											</a> 
+											<a href="javascript:changeView('/mail/myfavoritemailbox.do')" class="list-group-item" name="menu" id="즐겨찾기" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
-
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#star" />
-                                        </svg>
-												</div> Starred
-											</a> <a href="#" class="list-group-item">
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#star" />
+                                        			</svg>
+												</div> 즐겨찾기
+											</a> 
+											<a href="javascript:changeView('/mail/joinspammail.do')" class="list-group-item" name="menu" id="스팸메일함" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
-
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#info-circle" />
-                                        </svg>
-												</div> Spam <span
-												class="badge bg-light-danger badge-pill badge-round float-right mt-50">3</span>
-											</a> <a href="#" class="list-group-item">
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#info-circle" />
+                                        			</svg>
+												</div> 스팸메일함 <span class="badge bg-light-danger badge-pill badge-round float-right mt-50">${spamMailCount }</span>
+											</a> 
+											<a href="javascript:changeView('/mail/jointrashmailbox.do')" class="list-group-item" name="menu" id="휴지통" onclick="selectMenu(event)">
 												<div class="fonticon-wrap d-inline me-3">
-													<svg class="bi" width="1.5em" height="1.5em"
-														fill="currentColor">
-                                            <use
-															xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#trash" />
-                                        </svg>
-												</div> Trash
+													<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#trash" />
+                                        			</svg>
+												</div> 휴지통
 											</a>
 										</div>
 										<!-- sidebar menu  end-->
 
 										<!-- sidebar label start -->
-										<label class="sidebar-label">Labels</label>
-										<div class="list-group list-group-labels">
+										<div class="myMailBoxContainer">
+											<div class="myMailBoxContainerTopRow">
+												<label class="sidebar-label">MyMailBox</label>
+												<button class="addMyMailBoxButton" onclick="addMyMailBox(event)" hidden="true">+</button>
+											</div>
+											<input type="text" class="mailBoxNameInput" name="myMailBoxName" placeholder="내 메일함 이름 입력" hidden="true">
+										</div>
+										<script>
+											document.querySelector(".myMailBoxContainerTopRow").addEventListener("mouseenter", e => {
+												console.log(e.target.lastElementChild);
+												e.target.lastElementChild.hidden = false;
+											});
+											
+											document.querySelector(".myMailBoxContainerTopRow").addEventListener("mouseleave", e => {
+												e.target.lastElementChild.hidden = true;
+											});
+											
+											const addMyMailBox = (e) => {
+												document.querySelector("input[name='myMailBoxName']").hidden = false;
+											}
+											
+											document.querySelector("input[name='myMailBoxName']").addEventListener("blur", e => {
+												const mailBoxName = e.target.value;
+												if(mailBoxName.length > 0) {
+													let userChoice = confirm(mailBoxName + "를 추가하시겠습니까?");
+													console.log("result : " + userChoice);
+													if(userChoice == true) {
+														fetch("${path }/mail/enrollmymailbox.do?wantBoxName=" + mailBoxName)
+														.then(response => response.text())
+														.then(data => {
+															document.getElementById("myMailBoxListContainer").innerHTML += data;
+														});
+													} else {
+														e.target.hidden = true;
+													}
+												} else {
+													e.target.hidden = true;
+												}
+											})
+										</script>
+										<c:if test="${not empty myMailBoxes }">
+											<div class="list-group list-group-labels" id="myMailBoxListContainer">
+											<c:forEach var="myBox" items="${myMailBoxes }">
+												<div style="display:flex">
+													<a href="" class="list-group-item" name="myMailBox" id="${myBox.myMailBoxNo }" onclick="selectMenu(event)">
+														<div class="fonticon-wrap d-inline me-3">
+															<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+		                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
+		                                        			</svg>
+														</div> ${myBox.myMailBoxName }
+													</a>
+													<button class="deleteMyMailBoxButton" id="${myBox.myMailBoxNo }" onclick="deleteMyMailBox(event)">삭제</button>
+												</div>
+											<!-- <a href="#"
+												class="list-group-item d-flex justify-content-between align-items-center">
+												Work <span class="" style="color:red;">삭제</span>
+											</a> 
 											<a href="#"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												Product <span class="bullet bullet-success bullet-sm"></span>
-											</a> <a href="#"
+												Misc <span class="bullet bullet-warning bullet-sm">misc</span>
+											</a> 
+											<a href="#"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												Work <span class="bullet bullet-primary bullet-sm"></span>
-											</a> <a href="#"
+												Family <span class="bullet bullet-danger bullet-sm">family</span>
+											</a> 
+											<a href="#"
 												class="list-group-item d-flex justify-content-between align-items-center">
-												Misc <span class="bullet bullet-warning bullet-sm"></span>
-											</a> <a href="#"
-												class="list-group-item d-flex justify-content-between align-items-center">
-												Family <span class="bullet bullet-danger bullet-sm"></span>
-											</a> <a href="#"
-												class="list-group-item d-flex justify-content-between align-items-center">
-												Design <span class="bullet bullet-info bullet-sm"></span>
-											</a>
-										</div>
+												Design <span class="bullet bullet-info bullet-sm">design</span>
+s											</a> -->
+										 	</c:forEach>
+											</div>
+										</c:if>
+										
 										<!-- sidebar label end -->
 										<div class="ps__rail-x" style="left: 0px; bottom: 0px;">
 											<div class="ps__thumb-x" tabindex="0"
@@ -337,15 +377,15 @@
 													<!-- select All checkbox -->
 													<div
 														class="checkbox checkbox-shadow checkbox-sm selectAll me-3">
-														<input type="checkbox" id="checkboxsmall"
-															class='form-check-input'> <label
-															for="checkboxsmall"></label>
+														<!-- 전체 체크하는 체크박스 -->
+														<input type="checkbox" name="checkAllMail" class='form-check-input' onclick="checkAllMail()"> 
+														<label for="checkboxsmall"></label>
 													</div>
 													<!-- delete unread dropdown -->
 													<ul class="list-inline m-0 d-flex">
 														<li class="list-inline-item mail-delete">
-															<button type="button" class="btn btn-icon action-icon"
-																data-toggle="tooltip">
+															<!-- 삭제버튼 -->
+															<button type="button" class="btn btn-icon action-icon" data-toggle="tooltip" onclick="deleteMail()">
 																<span class="fonticon-wrap"> <svg class="bi"
 																		width="1.5em" height="1.5em" fill="currentColor">
                                                             <use
@@ -355,14 +395,8 @@
 															</button>
 														</li>
 														<li class="list-inline-item mail-unread">
-															<button type="button" class="btn btn-icon action-icon">
-																<span class="fonticon-wrap d-inline"> <svg
-																		class="bi" width="1.5em" height="1.5em"
-																		fill="currentColor">
-                                                            <use
-																			xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
-                                                        </svg>
-																</span>
+															<button type="button" class="btn btn-icon action-icon" onclick="modalTest()">
+																모달테스트
 															</button>
 														</li>
 														<li class="list-inline-item">
@@ -390,16 +424,9 @@
 														</li>
 														<li class="list-inline-item">
 															<div class="dropdown">
-																<button type="button"
-																	class="btn btn-icon dropdown-toggle action-icon"
-																	id="tag" data-toggle="dropdown" aria-haspopup="true"
-																	aria-expanded="false">
-																	<span class="fonticon-wrap"> <svg class="bi"
-																			width="1.5em" height="1.5em" fill="currentColor">
-                                                                <use
-																				xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#tag" />
-                                                            </svg>
-																	</span>
+																<button type="button" class="btn btn-icon dropdown-toggle action-icon"
+																	id="deleteCompletelyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																	<span class="fonticon-wrap">완전삭제</span>
 																</button>
 																<div class="dropdown-menu dropdown-menu-right"
 																	aria-labelledby="tag">
@@ -435,17 +462,12 @@
 													</div>
 													<!-- search bar  -->
 													<div class="email-fixed-search flex-grow-1">
-
-														<div
-															class="form-group position-relative  mb-0 has-icon-left">
-															<input type="text" class="form-control"
-																placeholder="Search email..">
+														<div class="form-group position-relative  mb-0 has-icon-left">
+															<input type="text" class="form-control" name="searchInput" placeholder="Search email..">
 															<div class="form-control-icon">
-																<svg class="bi" width="1.5em" height="1.5em"
-																	fill="currentColor">
-                                                        <use
-																		xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#search" />
-                                                    </svg>
+																<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+                                                        			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#search" />
+                                                    			</svg>
 															</div>
 														</div>
 													</div>
@@ -455,47 +477,347 @@
 											<!-- / action right -->
 <script>
 	const goMailDetail = (e) => {
-		const mailNo = e.currentTarget.id;
+		console.log("parentElemet : " + e.currentTarget.parentElement.id)
+		const mailNo = e.currentTarget.parentElement.id;
 		location.assign("${path }/mail/maildetail.do?mailNo=" + mailNo);
 	}
+	
+	const checkAllMail = (function() {
+		const checkAllMail = () => {
+			let booleanResult = true;
+			let checkedCount = 0;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) checkedCount++;
+			});
+			
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(checkedCount == 0) e.checked = true;
+				else {
+					e.checked = false;
+					document.querySelector("input[name='checkAllMail']").checked = false;
+				}
+			});
+		}
+		return checkAllMail;
+	})();
+	
+	const checkMail = () => {
+		let checkedCount = 0;
+		document.querySelectorAll("input[name='checkMail']").forEach(e => {
+			if(e.checked) checkedCount++;
+		})
+		
+		if(checkedCount == 0) document.querySelector("input[name='checkAllMail']").checked = false;
+	}
+	
+	document.addEventListener("DOMContentLoaded", e => {
+		document.querySelectorAll("li[name='mailList']").forEach(e => {
+			console.log("mailId : " + e.id);
+		})
+	})
+	
+	//메일 삭제
+	const deleteMail = () => {
+		console.log("deleteMail onclick");
+		let checkedCount = 0;
+		document.querySelectorAll("input[name='checkMail']").forEach(e => {
+			if(e.checked) checkedCount++;
+		});
+
+		let mailNoStr = "";
+		let count = 1;
+		document.querySelectorAll("input[name='checkMail']").forEach(e => {
+			if(e.checked) {
+				if(count == checkedCount) {
+					mailNoStr += e.id;
+				} else {
+					mailNoStr += e.id + ",";						
+				}
+				count++;
+			}
+		});
+		
+		fetch("${path }/mail/deletemail.do", {
+			method : "POST",
+			headers : {
+				"content-type" : "application/x-www-form-urlencoded;charset=utf-8"
+			},
+			body : "mailNoStr=" + mailNoStr
+		})
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		})
+	}
+	
+	//별 아이콘을 눌러 즐겨찾기
+	const addFavorite = (e) => {
+		const mailNo = e.currentTarget.parentElement.parentElement.id;
+		const mailFavoriteStatus = e.currentTarget.firstElementChild.className == "favorite text-warning"; //mail의 즐겨찾기 여부를 확인합니다.
+		const decisionFavoriteSpan = e.currentTarget.firstElementChild; //span태그의 속성을 변경하기위해 변수로 초기화해줍니다.
+		const svgTagForFillYellow = decisionFavoriteSpan.querySelector("use"); //span자식태그의 use태그의 xlink:href 속성을 변경하기위해 use태그 element를 변수로 초기과해줍니다.
+		
+		//메일의 즐겨찾기 여부를 mailFavoriteStatus의 boolean값으로 확인해 true일 경우에는 즐겨찾기 해제를 하고 false일 경우에는 즐겨찾기를 해줍니다.
+		if(mailFavoriteStatus == true) {
+			fetch("${path}/mail/canceladdfavorite.do?mailNo=" + mailNo)
+			.then(response => response.text())
+			.then(data => {
+				console.log(data);
+				if(data == 1) {
+					alert("즐겨찾기 해제");
+					applicationBoolean = false;
+					svgTagForFillYellow.setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star");
+					decisionFavoriteSpan.className = "favorite";
+				} else {
+					alert("실패");
+				}
+			});
+		} else {
+			fetch("${path}/mail/addfavorite.do?mailNo=" + mailNo)
+			.then(response => response.text())
+			.then(data => {
+				console.log(data);
+				if(data == 1) {
+					alert("즐겨찾기 추가");
+					applicationBoolean = true;
+					svgTagForFillYellow.setAttribute("xlink:href","${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill");
+					decisionFavoriteSpan.className = "favorite text-warning";
+				} else {
+					alert("실패");
+				}
+			});
+		}
+	}
+	//checkbox로 한번에 즐겨찾기
+	const addFavorites = () => {
+		console.log("addFavoriteFunction()")
+		const mailCheckBox = document.querySelectorAll("input[name='checkMail']");
+		let checkedCount = 0;
+		let mailNoStr = "";
+		
+		mailCheckBox.forEach(e => {
+			if(e.checked) {
+				checkedCount++;
+			}
+		})
+		
+		let count = 1;
+		mailCheckBox.forEach(e => {
+			if(e.checked) {
+				if(count == checkedCount) {
+					mailNoStr += e.id;
+				} else {
+					mailNoStr += e.id + ",";						
+				}
+				count++;
+			}
+		})
+		
+		console.log(mailNoStr);
+		
+		fetch("${path}/mail/addfavorite.do?mailNo=" + mailNoStr)
+		.then(response => response.text())
+		.then(data => {
+			if(data == 1) {
+				alert("즐겨찾기 추가");
+			} else {
+				alert("실패");
+			}
+		});
+	}
+	
+	const sendingMailList = () => {
+		console.log("sendingMailList");
+		fetch("${path }/mail/joinsendingmailbox.do")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		});
+	}
+	
+	/* function ajaxPaging(pageNo) {
+		console.log("왜 너가 실행 돼?");
+		fetch("${path }/mail/joinsendingmailbox.do?cPage=1&numPerpage=5")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		});	
+	} */
+	const changeView = (url) => {
+		fetch("${path }" + url)
+		.then(response => response.text())
+		.then(jspCode => {
+			document.getElementById("mailListContainer").innerHTML = jspCode;
+		});
+	}
+	
+	const temporarySaveMailBoxView = () => {
+		fetch("${path }/mail/temporarysavemailbox.do")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		})
+	}
+	
+	const receiveMailList = () => {
+		fetch("${path }/mail/receivingmail.do")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		});
+	}
+	
+	const favoriteMailBoxView = () => {
+		fetch("${path }/mail/myfavoritemailbox.do")
+		.then(response => response.text())
+		.then(data => {
+			document.getElementById("mailListContainer").innerHTML = data;
+		});
+	}
+	
+	const selectMenu = (function() {
+		let selectMenuName = "";
+		const selectMenu = (event) => {
+			document.querySelectorAll("a[name='menu']").forEach(e => {
+				e.setAttribute("class", "list-group-item");
+			});
+			
+			event.currentTarget.setAttribute("class", "list-group-item active");
+			selectMenuName = event.currentTarget.id;
+		}
+		
+		document.getElementById("deleteCompletelyButton").addEventListener("click", e => {
+			const mailCheckBox = document.querySelectorAll("input[name='checkMail']");
+			let checkedCount = 0;
+			let mailNoStr = "";
+			
+			mailCheckBox.forEach(e => {
+				if(e.checked) {
+					checkedCount++;
+				}
+			});
+			
+			let count = 1;
+			mailCheckBox.forEach(e => {
+				if(e.checked) {
+					if(count == checkedCount) {
+						mailNoStr += e.id;
+					} else {
+						mailNoStr += e.id + ",";						
+					}
+					count++;
+				}
+			});
+			
+			console.log("mailNoStr : " + mailNoStr);
+
+			if(selectMenuName != "휴지통") {
+				alert("완전삭제는 휴지통메뉴에서만 가능합니다");
+			} else {
+				fetch("${path }/mail/perfectlydeletemail.do", {
+					method : "POST",
+					headers : {
+						"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+					},
+					body : "mailNoStr=" + mailNoStr
+				})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("mailListContainer").innerHTML = data;
+				})
+			}
+		});
+		return selectMenu;
+	})();
+	
+	document.querySelector("input[name='searchInput']").addEventListener("keyup", e => {
+			const modal = document.querySelector(".modal");
+			if(e.target.value.length > 0) {
+				modal.style.display = "grid";
+				document.querySelectorAll(".contentSpan").forEach(span => {
+					span.innerText = e.target.value;
+				});
+			} else {
+				modal.style.display = "none";
+			}
+		});
+		
+		const searchMail = (e) => {
+			const searchType = e.currentTarget.firstElementChild.innerText;
+			const searchValue = e.currentTarget.lastElementChild.innerText;
+			console.log("searchType : " + searchType);
+			console.log("searchValue : " + searchValue);
+			if(searchValue.length > 0) {
+				fetch("${path }/mail/searchmail.do", {
+					method : "POST",
+					headers : {
+						"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+					},
+					body : "searchType=" + searchType + "&searchValue=" + searchValue
+				})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("mailListContainer").innerHTML = data;
+				})
+			} else {
+				alert("입력값이 없습니다.");
+			}
+		}
+		
+		const deleteMyMailBox = (e) => {
+			const myMailBoxNo = e.currentTarget.id;
+			fetch("${path }/mail/deletemymailbox.do", {
+				method : "POST",
+				headers : {
+					"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+				},
+				body : "myMailBoxNo=" + myMailBoxNo
+			})
+			.then(response => response.text())
+			.then(data => {
+				
+			})
+		}
+		
+		
 </script>
 											<!-- email user list start -->
-											<div class="email-user-list list-group ps ps--active-y">
-												<ul class="users-list-wrapper media-list">
-													<c:if test="${not empty mails }">
+											<div class="email-user-list list-group ps ps--active-y" id="mailListContainer">
+												<c:if test="${not empty mails }">
+													<ul class="users-list-wrapper media-list" id="mailListUlTag">
 														<c:forEach var="mail" items="${mails }" >
 															<%-- <c:set var="favoriteIconUrl" value="${mail.mailStatus eq '즐겨찾기' ? path + '/resources/assets/static/images/bootstrap-icons.svg#star-fill' : path + '/resources/assets/static/images/bootstrap-icons.svg#star'}"/> --%>
 															<li
-																class=<c:if test="${mail.mailReadStatus eq 'Y' }">"media mail-read"</c:if>
-																<c:if test="${mail.mailReadStatus ne 'Y' }">"media"</c:if>
-																id="${mail.mailNo }" onclick="goMailDetail(event)">
+																class= <c:if test="${mail.mailReadStatus eq 'Y' }">"media mail-read"</c:if>
+																	   <c:if test="${mail.mailReadStatus ne 'Y' }">"media"</c:if>
+																id="${mail.mailNo }" name="mailList">
 																<div class="user-action">
 																	<div class="checkbox-con me-3">
 																		<div class="checkbox checkbox-shadow checkbox-sm">
-																			<input type="checkbox" id="checkboxsmall1"
-																				class='form-check-input'> <label
-																				for="checkboxsmall1"></label>
+																			<!-- 메일 하나하나에 있는 체크박스 -->
+																			<input type="checkbox" name="checkMail" class='form-check-input' onclick="checkMail()" id="${mail.mailNo }"> 
 																		</div>
 																	</div>
-																	<span
-																		class=<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
-	                                                    			"favorite text-warning"
-	                                                            </c:if>
+																	<button class="icon-button" onclick="addFavorite(event)">
+																	<span id="colorDecisionSpan" class=
+																		<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
+								                                        	"favorite text-warning"
+								                                        </c:if>
 																		<c:if test="${mail.mailStatus != '즐겨찾기' }" >
-	                                                            	"favorite"
-	                                                            </c:if>>
-	                                                            
-																		<svg class="bi" width="1.5em" height="1.5em"
-																			fill="currentColor">
-	                                                        <use
-																				xlink:href=<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
-	                                                            				"${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill"
-	                                                            			</c:if>
-																				<c:if test="${mail.mailStatus != '즐겨찾기' }" >
-	                                                            				"${path }/resources/assets/static/images/bootstrap-icons.svg#star"
-	                                                            			</c:if> />
-	                                                    </svg>
-																	</span>
+								                                        	"favorite"
+								                                        </c:if>
+								                                	>
+																		<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+								                                            <use xlink:href=<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
+										                                                    	"${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill"
+										                                                    </c:if>
+																							<c:if test="${mail.mailStatus != '즐겨찾기' }" >
+										                                                    	"${path }/resources/assets/static/images/bootstrap-icons.svg#star"
+										                                                 	</c:if> id="iconPath" 
+										                                    />
+								                                        </svg>
+								                                    </span>
+							                                        </button>
 																</div>
 																<div class="pr-50">
 																	<div class="avatar">
@@ -504,7 +826,7 @@
 																			alt="avtar img holder">
 																	</div>
 																</div>
-																<div class="media-body">
+																<div class="media-body" onclick="goMailDetail(event)">
 																	<div class="user-details">
 																		<div class="mail-items">
 																			<span class="list-group-item-text text-truncate">${mail.senderMailAddress }
@@ -528,9 +850,10 @@
 																</div>
 															</li>
 														</c:forEach>
-													</c:if>
+													</ul>
+												</c:if>
 
-													<li class="media mail-read">
+													<%-- <li class="media mail-read">
 														<div class="user-action">
 															<div class="checkbox-con me-3">
 																<div class="checkbox checkbox-shadow checkbox-sm">
@@ -576,8 +899,18 @@
 																</div>
 															</div>
 														</div>
+													</li> --%>
+												<div id="bageParContainer">
+													${pageBar }										
+												</div>
+												<!-- <ul class="pagination pagination-sm justify-content-center" id="pageBar" style="margin-top : 50px;">
+													<li class="page-item">
+														<a class="page-link" href="#">이전</a>
 													</li>
-												</ul>
+													<li class="page-item">
+														<a class="page-link" href="#">1</a>
+													</li>
+												</ul> -->
 												<!-- email user list end -->
 
 												<!-- no result when nothing to show on list -->
@@ -597,6 +930,7 @@
 													</div>
 												</c:if>
 											</div>
+											<!-- mailListContainer div end -->
 										</div>
 									</div>
 									<!--/ Email list Area -->
@@ -644,13 +978,16 @@
 																	class="fas fa-folder"></i>
 																</span>
 															</button>
-															<div class="dropdown-menu dropdown-menu-right"
-																aria-labelledby="open-mail-menu">
-																<a class="dropdown-item" href="#"><i
-																	class="bi bi-edit"></i> Draft</a> <a class="dropdown-item"
-																	href="#"><i class="bi bi-info-circle"></i> Spam</a> <a
-																	class="dropdown-item" href="#"><i
-																	class="bi bi-trash"></i> Trash</a>
+															<div class="dropdown-menu dropdown-menu-right" aria-labelledby="open-mail-menu">
+																<a class="dropdown-item" href="javascript:temporarySaveMailBoxView()">
+																	<i class="bi bi-edit"></i> 임시저장
+																</a>
+																<a class="dropdown-item" href="#">
+																	<i class="bi bi-info-circle"></i> Spam
+																</a>
+																<a class="dropdown-item" href="#">
+																	<i class="bi bi-trash"></i> Trash
+																</a>
 															</div>
 														</div>
 													</li>
@@ -1103,6 +1440,85 @@
 			</footer>
 		</div>
 	</div>
+	
+	<!-- modal -->
+	<div class="modal">
+		<div class="button" id="searchTitleContainer">
+			<button id="searchTtitleButton" onclick="searchMail(event)">
+				<span class="searchType">[타이틀]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+		<div class="button" id="searchContentContainer">
+			<button id="searchContentButton" onclick="searchMail(event)">
+				<span class="searchType">[내용]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+		<div class="button" id="searchSenderContainer">
+			<button id="searchSenderButton" onclick="searchMail(event)">
+				<span class="searchType">[보낸사람]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+	</div>
+	<!-- <select id="searchSelect">
+		<option value="choice">선택</option>
+		<option value="mailTitle">[제목]</option>
+		<option value="mailContent">[내용]</option>
+		<option value="empEmail">[보낸사람]</option>
+	</select> -->
+	<script>
+		
+	</script>
+	<style>
+		.modal {
+			position:absolute;
+			display:none;
+			
+			/* justify-content:center; */
+			/* border:1px solid red; */
+			
+			left:698px;
+			top:185px;
+			
+			width:40%;
+			height:30%;
+			
+			background-color:white;
+		}
+		
+		.button {
+			width:100%;
+			height:100%;
+			border-bottom:1px solid black;
+		}
+		
+		.button button{
+			width:100%;
+			height:100%;
+			background-color:rgba(145, 145, 145, 0.1);
+			border:none;
+			text-align:left;
+		}
+		
+		.searchType {
+			font-size:15px;
+		}
+		
+		.deleteMyMailBoxButton {
+			background-color:white;
+			border:none;
+			color:red;
+			margin-left:35px;
+		}
+	</style>
+	<script>
+		const modal = document.querySelector(".modal");
+		const modalTest = () => {
+			modal.style.display = "grid";
+		}
+	</script>
 	<script src="${path }/resources/assets/static/js/components/dark.js"></script>
 	<script
 		src="${path }/resources/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
@@ -1113,20 +1529,62 @@
 
 
 	<script>
-    document.querySelector('.sidebar-toggle').addEventListener('click', () => {
-        document.querySelector('.email-app-sidebar').classList.toggle('show')
-    })
-    document.querySelector('.sidebar-close-icon').addEventListener('click', () => {
-        document.querySelector('.email-app-sidebar').classList.remove('show')
-    })
-    document.querySelector('.compose-btn').addEventListener('click', () => {
-        document.querySelector('.compose-new-mail-sidebar').classList.add('show')
-    })
-    document.querySelector('.email-compose-new-close-btn').addEventListener('click', () => {
-        document.querySelector('.compose-new-mail-sidebar').classList.remove('show')
-    })
-    
-</script>
+	    document.querySelector('.sidebar-toggle').addEventListener('click', () => {
+	        document.querySelector('.email-app-sidebar').classList.toggle('show')
+	    })
+	    document.querySelector('.sidebar-close-icon').addEventListener('click', () => {
+	        document.querySelector('.email-app-sidebar').classList.remove('show')
+	    })
+	    document.querySelector('.compose-btn').addEventListener('click', () => {
+	        document.querySelector('.compose-new-mail-sidebar').classList.add('show')
+	    })
+	    document.querySelector('.email-compose-new-close-btn').addEventListener('click', () => {
+	        document.querySelector('.compose-new-mail-sidebar').classList.remove('show')
+	    })
+	    
+	    function ajaxPaging(pageNo, url) {
+	    	console.log('pageNo : ' + pageNo);
+	    	fetch("${path }" + url + "?cPage=" + pageNo + "&numPerpage=5")
+	    	.then(response => response.text())
+	    	.then(data => {
+	    		document.getElementById('mailListContainer').innerHTML = data;
+	    	});
+	    }
+	    
+	</script>
+	<button onclick="ajaxPaging(1)">테스트</button>
 </body>
-
+<style>
+	.icon-button {
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		outline: none;
+	}
+	#mailListUlTag {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+	
+	#sideBarMenu {
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+	.myMailBoxContainer {
+		display:grid; /* grid */
+	}
+	.myMailBoxContainerTopRow {
+		display:flex; /* flex */
+	}
+	.addMyMailBoxButton {
+		background:none;
+		border:none;
+		padding-top:22px;
+		padding-left:30px;
+	}
+	.mailBoxNameInput {
+		
+	}
+</style>
 </html>

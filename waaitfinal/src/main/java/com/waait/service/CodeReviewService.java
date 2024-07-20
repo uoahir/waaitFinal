@@ -16,6 +16,8 @@ public interface CodeReviewService {
 	int insertCodeReviewR(CodeReviewBoardComment codeReviewC); //댓글작성한부분
 
 	List<CodeReviewBoardComment> selectCodeReviewBoardsComment(int no);
+
+	int selectAllCodeReviewBoard();
 	
 
 }

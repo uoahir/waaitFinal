@@ -20,8 +20,7 @@
 <!-- jquery -->
 <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
 
-<!-- script문 -->
-<script type="text/javascript" src="${path}/resources/js/chatopen.js"></script>
+
 
 
 </head>
@@ -277,7 +276,15 @@
 	</div>
 	
 	
+	<script>
+		const loginId = "${employee.empId}";
+		const loginEmpNo = "${employee.empNo}";
+		const path = "${pageContext.request.contextPath }";
+		 /* console.log("사원번호 : "+loginEmpNo); */
+	</script>
 	
+ 	<!-- script문 -->
+	<script type="text/javascript" src="${path}/resources/js/chatopen.js"></script>
 	
 </body>
 </html>

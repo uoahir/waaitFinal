@@ -47,5 +47,10 @@ public class CodeReviewDaoImpl implements CodeReviewDao{
 		return session.selectList("codeReview.selectCodeReviewBoardsComment",no);
 	}
 
+	@Override
+	public int selectAllCodeReviewBoard(SqlSession session) {
+		return session.selectList("codeReview.selectAllCodeReviewBoard").size();
+	}
+
 }
 

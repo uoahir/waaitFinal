@@ -15,10 +15,13 @@ import lombok.RequiredArgsConstructor;
 public class WebSockertConfig implements WebSocketConfigurer{
 
 	private final ChattingServerController chatServer;
-
+	
+	
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		registry.addHandler(chatServer, "/chat");
+		
+		
 		
 	}
 	

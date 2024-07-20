@@ -31,7 +31,7 @@ public class MailService {
 		return dao.getSpamDomain(session, empNo);
 	}
 
-	public List<MailSetting> getMailSetting(Long empNo) {
+	public MailSetting getMailSetting(Long empNo) {
 		return dao.getMailSetting(session, empNo);
 	}
 
@@ -191,8 +191,8 @@ public class MailService {
 		return dao.deleteMyMailBox(session, myMailBoxNo);
 	}
 
-	public List<Mail> jointrashmailbox(String receiverMailAddress) {
-		return dao.jointrashmailbox(session, receiverMailAddress);
+	public List<Mail> jointrashmailbox(String receiverMailAddress, Map<String, Integer> pagingParam) {
+		return dao.jointrashmailbox(session, receiverMailAddress, pagingParam);
 	}
 	
 	@Transactional
@@ -207,12 +207,12 @@ public class MailService {
 		}
 	}
 
-	public List<Mail> joinSendingMailBox(long empNo) {
-		return dao.joinSendingMailBox(session, empNo);
+	public List<Mail> joinSendingMailBox(long empNo, Map<String, Integer> pagingParam) {
+		return dao.joinSendingMailBox(session, empNo, pagingParam);
 	}
 
-	public List<Mail> searchMail(Map<String, String> searchParam) {
-		return dao.searchMail(session, searchParam);
+	public List<Mail> searchMail(Map<String, Object> searchParam, Map<String, Integer> pagingParam) {
+		return dao.searchMail(session, searchParam, pagingParam);
 	}
 	
 	@Transactional
@@ -223,6 +223,26 @@ public class MailService {
 	@Transactional
 	public void enrollRecentSearchKeyword(RecentSearch recentSearch) {
 		dao.enrollRecentSearchKeyword(session, recentSearch);
+	}
+
+	public int joinSendingMailBoxTotalData(long empNo) {
+		return dao.joinSendingMailBoxData(session, empNo);
+	}
+
+	public int trashMailBoxTotalData(String receiverMailAddress) {
+		return dao.trashMailBoxTotalData(session, receiverMailAddress);
+	}
+
+	public int notReadDataCount(Map<String, Object> mailSettings) {
+		return dao.notReadDataCount(session, mailSettings);
+	}
+
+	public int getSpamMailCount(Map<String, Object> param) {
+		return dao.getSpamMailCount(session, param);
+	}
+
+	public int getSearchMailTotalData(Map<String, Object> searchParam) {
+		return dao.getSearchMailTotalData(session, searchParam);
 	}
 
 }

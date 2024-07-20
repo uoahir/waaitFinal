@@ -24,8 +24,14 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
 
 	@Override
-	public int insertSchedule(SqlSession session, Schedule schedule) {
-		return session.insert("schedule.insertschedule", schedule);
+	public int insertSchedule(SqlSession session, Schedule s) {
+		return session.insert("schedule.insertschedule", s);
+	}
+
+
+	@Override
+	public int updateSchedule(SqlSession session, Schedule s) {
+		return session.update("schedule.updateSchedule",s);
 	}
 	
 	

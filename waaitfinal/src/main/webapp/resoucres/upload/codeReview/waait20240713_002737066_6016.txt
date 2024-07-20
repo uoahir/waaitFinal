@@ -1,0 +1,31 @@
+AOP(Apct Orientied Programing) -> 관점 지향 프로그래밍
+-> 공통관심사, 핵심 관심사를 구분해서 코드를 작성하는 것
+    횡단관사    종단 오랜만 
+
+1.공통의 관심사를 관리하는 클래스를 생성 -> aspect 클래스 
+  -pointcut: : 대상이 되는 메서드지정 -> aspectj표현식을 이용해서 설정 
+  - advisor : aspect에 있는 메서드의 실행할 시점 
+Befofe ,After,Around,AfterReturning,AfterThrowing
+
+2.AOP적용하기
+ -xml 설정파일로 적용하기
+	1)aop namespace 등록 하기
+	2)<aop:config>
+		<aop:aspect bean 등록>
+ 			<aop:pointcut>
+			<aop:before||after||afterReturning..>
+ -어노테이션으로 적용하기
+1) xml이나 @Configuration에 어노테이션을 검색할 수 있도록 설정 
+	<aop:aspectj-autoproxy/> 설정 
+	@EnalbeAspectAutoProxy 설정
+2) Aspect클래스에 어노테이션 설정
+	클래스 선언부 : @Component, @Aspect 설정 
+	메서드 : @PointCut("표현식"),@Before(Pointcout참조), @After @AfterReturnning @AfterThrowing
+
+	3.@aspectjweaver 모듈을 추가해야줘야 함.
+
+	인증 보안 관련 서비스,로그관리
+
+
+
+셀 병합:  alt o m a
