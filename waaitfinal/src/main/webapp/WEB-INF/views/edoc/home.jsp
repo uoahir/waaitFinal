@@ -48,10 +48,10 @@
 						<c:if test="${not empty documents }">
 							<c:forEach items="${documents }" var="d">
 								<tr onclick = "isFirstOpened('${d.docId}','${d.type.docType }');">
-									<td>1</td>
+									<td>${d.rnum }</td>
 									<td>${d.type.type }</td>
 									<td>${d.docTitle }</td>
-									<td>${d.docWriter }</td>
+									<td>${d.employee.empName }</td>
 									<td>${d.docDate }</td>
 									<td>
 										<span class="badge bg-light-primary">${d.approvalOne.appStat }</span>

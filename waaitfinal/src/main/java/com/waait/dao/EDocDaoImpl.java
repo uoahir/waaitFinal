@@ -56,7 +56,7 @@ public class EDocDaoImpl implements EDocDao {
 		// TODO Auto-generated method stub
 		
 		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
-		return session.selectList("edoc.awaitingApproval", empNo, rb);
+		return session.selectList("edoc.awaitingApproval", empNo, rb); // empNo : 로그인된 ID
 	}
 
 	@Override
@@ -87,7 +87,34 @@ public class EDocDaoImpl implements EDocDao {
 	public List<Approval> selectApprovalByDocId(SqlSession session, int docId) {
 		// TODO Auto-generated method stub
 		return session.selectList("edoc.selectApprovalByDocId", docId);
+	}
+
+	@Override
+	public Approval selectApprovalByDocIdAndEmpNo(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.selectApprovalByDocIdAndEmpNo", param);
+	}
+
+	@Override
+	public int updateAppStat(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateAppStat", param);
+	}
+
+	@Override
+	public int updateDocCurrentApprover(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateDocCurrentApprover", param);
+	}
+
+	@Override
+	public int updateDocStatToApproval(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateDocStatToApproval", param);
 	}	
+	
+	
+
 	
 	
 	

@@ -585,7 +585,7 @@
                 <ul class="submenu ">
                     
                     <li class="submenu-item  has-sub">
-                        <a href="${path }/edoc/home" class="submenu-link">내문서함</a>
+                        <a href="#" class="submenu-link">내문서함</a>
                         
                         <ul class="submenu submenu-level-2 ">
                             

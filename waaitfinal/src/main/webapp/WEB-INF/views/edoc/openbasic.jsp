@@ -39,16 +39,6 @@
         </div>
         <div class="card-body">
         	<div id="line" class="d-flex">
-        		<div id = "approval">
-        			<div>기안</div>
-        			<div>개발부</div>
-        			<div>이효리 부장</div>
-        		</div>	
-        		<div id="approval">
-        			<div>결재</div>
-        			<div>개발1팀</div>
-        			<div>이효리 사원</div>
-        		</div>
         	</div>
             ${document } 
         </div>
@@ -57,28 +47,72 @@
 
 <script>
 	window.onload = function(){
-		// 문서열리자마자 해당문서 approvals 가지구 와서 ! 
-		// table 형식으로 결재란 만들어주기 ! ! !
-		console.log('${document.docId}');
-		console.log('${document.docWriter}')
-		
+		// 문서열리자마자 해당문서 docWriter 정보랑 approvals 가지구 와서 ! 결재란 만들어주기 ! ! !
 		const $line = document.querySelector("#line");
 		
-		fetch('/api/docWriter')
-		// appendChild(approvalDiv)
-		// 작성자 만들어주기 어쨌든 결재란을 만들어주려면 ,employee table 이랑 join을 해야함 ! !! ! ! 
-		const $wApproval = document.createElement("div");
-		$wApproval.id= 'approval';
+		console.log("${document.employee.empName}");
+		console.log("${document.employee.department.deptName}");
+		console.log("${document.employee.jobLevel.levelName}");
 		
-		const $wAppType = document.createElement("div");
-		$wAppType.innerText="기안";
+		const writer = {
+			empName : '${document.employee.empName}',
+			deptName : '${document.employee.department.deptName}',
+			levelName : '${document.employee.jobLevel.levelName}'
+		}
 		
-		// 작성자를 만들어주려면 ,, 
+		const $writerDiv = document.createElement("div");
+		$writerDiv.id='approval';
 		
+		const $writerType = document.createElement("div");
+		$writerType.innerText = "기안";
 		
+		const $writerTeam = document.createElement("div");
+		$writerTeam.innerText = writer.deptName;
 		
+		const $writerEmp = document.createElement("div");
+		$writerEmp.innerText = writer.empName;
+		$writerEmp.innerText += " ";
+		$writerEmp.innerText += writer.levelName;
 		
+		$writerDiv.appendChild($writerType);
+		$writerDiv.appendChild($writerTeam);
+		$writerDiv.appendChild($writerEmp);
 		
+		$line.appendChild($writerDiv);
+		
+		fetch('/api/approvals'+${document.docId})
+		.then(response => response.json())
+		.then(data=>{
+			// data 가 ,, 머냐면, 
+			for(let app of data){
+				console.log(app);
+				const $appDiv = document.createElement("div");
+				$appDiv.id='approval';
+				
+				const $appType = document.createElement("div");
+				if(app.appOrder == ${document.approvals.size()}){
+					$appType.innerText = '결재'
+					console.log('최종결재자임');
+				} else {
+					$appType.innerText = '검토';
+					console.log('최종결재자아님!!!');
+				}
+				
+				const $appTeam = document.createElement('div');
+				$appTeam.innerText= app.employee.department.deptName;
+				
+				const $appEmp = document.createElement('div');
+				$appEmp.innerText = app.employee.empName;
+				$appEmp.innerText += " ";
+				$appEmp.innerText += app.employee.jobLevel.levelName;
+				
+				$appDiv.appendChild($appType);
+				$appDiv.appendChild($appTeam);
+				$appDiv.appendChild($appEmp);
+				
+				$line.appendChild($appDiv);
+			}
+		})
 		
 	}
 	
@@ -96,14 +130,19 @@
 				
 		fetch("/edoc/approval",{
 			method : 'POST',
+			headers: {
+				'Content-Type': 'application/json; charset=UTF-8;',
+			},
 			body : JSON.stringify({
 				docId : id,
-				approver : endNo
-			}),
+				rnum : endNo
+			})
 		})
 		.then(res => {
 			if(res.status === 200){
 				alert("승인완료");
+				opener.document.location.reload();
+				self.close();
 			} else {
 				alert("승인실패");
 			}

@@ -207,11 +207,11 @@
            .then((res) => {
                if (!res.ok) {
                    throw new Error('네트워크 응답이 좋지 않습니다.');
+               } else {
+					alert("상신완료");
+   					opener.document.location.reload();
+   					self.close();
                }
-               return res.text();
-           })
-           .then((data) => {
-               console.log(data);
            })
            .catch((error) => {
                console.error('오류 발생:', error);

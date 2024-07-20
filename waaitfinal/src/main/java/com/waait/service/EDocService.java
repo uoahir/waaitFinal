@@ -24,8 +24,15 @@ public interface EDocService {
 	
 //	해당문서 결재라인 가져오기
 	List<Approval> selectApprovalByDocId(int docId);
-//	내가 올린 문서는 어떻게 확인 ? 
 	
+//	문서아이디, 로그인한 아이디로 approval 정보 가져오기 ! 
+	Approval selectApprovalByDocIdAndEmpNo(Map<String, Object> param);
+	
+//	기본문서 : 중간 결재자 - 승인버튼 클릭 시 approval table appStat update ~ ! document table approver update ~ !
+	int updateApproval(Map<String,Object> param);
+	
+//	기본문서 : 최종 결재자 - 승인버튼 클릭 시 approval table appStat update ~ ! document table docStat update ~ ! 
+	int updateFinalApproval(Map<String,Object> param);
 	
 	
 }

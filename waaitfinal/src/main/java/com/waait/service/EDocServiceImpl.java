@@ -53,20 +53,20 @@ public class EDocServiceImpl implements EDocService {
 		
 			int appId = document.getDocId();
 			
-			if (result1>0) {
-				for(int i = 0; i < approval.length; i++) {
+
+			for(int i = 0; i < approval.length; i++) {
 					
-					Approval app = Approval.builder().appEmp(approval[i]).docId(appId).appOrder(i+1).build();
-					System.out.println(app);
-					edocDao.insertApproval(session, app);
-				}	
-			}
+				Approval app = Approval.builder().appEmp(approval[i]).docId(appId).appOrder(i+1).build();
+				System.out.println(app);
+				edocDao.insertApproval(session, app);
+			}	
 			
+			successCount++;
 			// approval line 데이터가 생성됨. -> 결재라인에 결재자들이 순서대로 들어가있음
 			// Document에 있는 현재결재자 컬럼값을 바로 업데이트 해줘야 함. 
 			
 			edocDao.updateFirstApprover(session, appId);
-				
+			successCount++;
 			
 		} catch(Exception e) {
 			throw new RuntimeException("One of the tasks failed", e);
@@ -78,7 +78,7 @@ public class EDocServiceImpl implements EDocService {
 //	승인대기문서 출력
 	@Override
 	public List<Document> awaitingApproval(Long empNo, Map<String, Integer> page) {
-		return edocDao.awaitingApproval(session, empNo, page); 
+		return edocDao.awaitingApproval(session, empNo, page);  // empNo : 로그인된 아이디임 !!!! 
 	}
 
 	@Override
@@ -104,6 +104,49 @@ public class EDocServiceImpl implements EDocService {
 		// TODO Auto-generated method stub
 		return edocDao.selectApprovalByDocId(session, docId);
 	}
+
+	@Override
+	public Approval selectApprovalByDocIdAndEmpNo(Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return edocDao.selectApprovalByDocIdAndEmpNo(session, param);
+	}
+
+	@Transactional
+	@Override
+	public int updateApproval(Map<String, Object> param) {
+		int updateCount = 0;
+		try {
+			edocDao.updateAppStat(session, param);
+			updateCount ++;
+			edocDao.updateDocCurrentApprover(session, param);
+			updateCount++;
+			
+		} catch(Exception e) {
+			throw new RuntimeException("One of the task failed", e);
+		}
+		return updateCount;
+	}
+
+	@Transactional
+	@Override
+	public int updateFinalApproval(Map<String, Object> param) {
+		int updateCount = 0;
+		try {
+			
+			edocDao.updateAppStat(session, param);
+			updateCount++;
+			edocDao.updateDocStatToApproval(session, param);
+			updateCount++;
+			
+		} catch(Exception e) {
+			throw new RuntimeException("One of the task failed", e);
+		}
+		return 0;
+	}
+	
+	
+	
+	
 	
 	
 	
