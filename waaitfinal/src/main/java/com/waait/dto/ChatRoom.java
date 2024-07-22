@@ -29,5 +29,7 @@ public class ChatRoom {
 	//채팅기록 
 	private ChatHistory chatHistory;
 	
+	//채팅조인 카운트 자기포함한 카운트 -1 해서 사용해야됨.
+	private int chatJoinCount;
 	
 }
