@@ -1,5 +1,6 @@
 package com.waait.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -178,6 +179,50 @@ public class MailService {
 			result = dao.deleteMail(session, mailNoStr);			
 		}
 		return result;
+	} //안쓸지도?
+	
+	@Transactional
+	public int deleteReceiveMail(Map<String, String> sqlParam) {
+		int result = 0;
+		String mailNoStr = sqlParam.get("mailNoStr");
+		
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				sqlParam.put("mailNoStr", mailNoArr[i]);
+				result = dao.deleteReceiveMail(session, sqlParam);
+			}
+		} else {
+			result = dao.deleteReceiveMail(session, sqlParam);			
+		}
+		return result;
+	}
+	
+	@Transactional
+	public int deleteSendingMail(String mailNoStr) {
+		int result = 0;
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				result = dao.deleteSendingMail(session, mailNoArr[i]);
+			}
+		} else {
+			result = dao.deleteSendingMail(session, mailNoStr);			
+		}
+		return result;
+	}
+	
+	public List<Mail> getTrashMailByMailNoForRestore(String mailNoStr) {
+		List<Mail> trashMailListByMailNo = new ArrayList<Mail>();
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				trashMailListByMailNo.add(dao.getTrashMailByMailNoForRestore(session, mailNoArr[i]));
+			}
+		} else {
+			trashMailListByMailNo.add(dao.getTrashMailByMailNoForRestore(session, mailNoStr));	
+		}
+		return trashMailListByMailNo;
 	}
 	
 	@Transactional
@@ -195,20 +240,36 @@ public class MailService {
 		return dao.deleteMyMailBox(session, myMailBoxNo);
 	}
 
-	public List<Mail> jointrashmailbox(String receiverMailAddress, Map<String, Integer> pagingParam) {
-		return dao.jointrashmailbox(session, receiverMailAddress, pagingParam);
+	public List<Mail> jointrashmailbox(String mailAddress, Map<String, Integer> pagingParam) {
+		return dao.jointrashmailbox(session, mailAddress, pagingParam);
 	}
 	
 	@Transactional
-	public void perfectlyDeleteMail(String mailNoStr) {
+	public void senderPerfectlyDeleteMail(int mailNo) {
+		dao.senderPerfectlyDeleteMail(session, mailNo);
+	}
+	
+//	@Transactional
+//	public void deleteAllMailInfo(int mailNo) {
+//		dao.deleteAllMailInfo(session, mailNo);
+//	}보류
+	
+	public void receiverPerfectlyDeleteMail(int mailReceiverNo) {
+		dao.receiverPerfectlyDeleteMail(session, mailReceiverNo);
+	}
+	
+	
+	public List<Mail> getMailForDelete(Map<String, String> sqlParam) {
+		String mailNoStr = sqlParam.get("mailNoStr");
+		List<Mail> getMailForDelete = new ArrayList<Mail>();
 		if(mailNoStr.contains(",")) {
 			String[] mailNoArr = mailNoStr.split(",");
 			for(int i = 0; i < mailNoArr.length; i++) {
-				dao.perfectlyDeleteMail(session, mailNoArr[i]);
+				sqlParam.put("mailNoStr", mailNoArr[i]);
+				getMailForDelete.add(dao.getMailForDelete(session, sqlParam));
 			}
-		} else {
-			dao.perfectlyDeleteMail(session, mailNoStr);			
 		}
+		return getMailForDelete;
 	}
 
 	public List<Mail> joinSendingMailBox(long empNo, Map<String, Integer> pagingParam) {
@@ -248,6 +309,8 @@ public class MailService {
 	public int getSearchMailTotalData(Map<String, Object> searchParam) {
 		return dao.getSearchMailTotalData(session, searchParam);
 	}
+
+	
 
 	
 

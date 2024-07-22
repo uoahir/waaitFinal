@@ -14,4 +14,5 @@ public class MailReceiver {
 	private int mailNo;
 	private String mailReceiverAddress;
 	private String receiverReadStatus;
+	private String receiverDeleteStatus;
 }

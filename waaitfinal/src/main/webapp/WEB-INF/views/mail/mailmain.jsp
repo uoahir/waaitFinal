@@ -203,10 +203,12 @@
 												
 												if(checkedMailCount > 0) {
 													mailCheckBox.forEach(e => {
-														if(checkedMailCount == count) {
-															mailNoStr += e.id;
-														} else {
-															mailNoStr += e.id + ",";
+														if(e.checked) {
+															if(checkedMailCount == count) {
+																mailNoStr += e.id;
+															} else {
+																mailNoStr += e.id + ",";
+															}
 														}
 														count++;
 													});
@@ -223,7 +225,7 @@
 													});
 													
 													alert(event.currentTarget.innerText + "로 이동시켰습니다");
-													
+													document.querySelector(".outer-mymailbox-modal").style.display = "none";
 												} else {
 													alert("이동시킬 메일이 없습니다. 메일을 먼저 체크해주세요");
 												}
@@ -233,7 +235,7 @@
 											<c:if test="${not empty myMailBoxes }">
 												<c:forEach var="myBox" items="${myMailBoxes }">
 													<div style="display:flex">
-														<a href="javascript:changeView('/mail/joinmymailbox.do?myMailBoxNo=${myBox.myMailBoxNo }')" class="list-group-item" name="myMailBox" id="${myBox.myMailBoxNo }" onclick="selectMenu(event)">
+														<a href="javascript:changeView('/mail/joinmymailbox.do?myMailBoxNo=${myBox.myMailBoxNo }')" class="list-group-item" name="menu" id="myMailBox" onclick="selectMenu(event)">
 															<div class="fonticon-wrap d-inline me-3">
 																<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
 			                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
@@ -459,7 +461,7 @@
 													<ul class="list-inline m-0 d-flex">
 														<li class="list-inline-item mail-delete">
 															<!-- 삭제버튼 -->
-															<button type="button" class="btn btn-icon action-icon" data-toggle="tooltip" onclick="deleteMail()">
+															<button type="button" class="btn btn-icon action-icon" data-toggle="tooltip" id="deleteMailButton">
 																<span class="fonticon-wrap"> <svg class="bi"
 																		width="1.5em" height="1.5em" fill="currentColor">
                                                             <use
@@ -487,6 +489,14 @@
 																<button type="button" class="btn btn-icon dropdown-toggle action-icon"
 																	id="deleteCompletelyButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 																	<span class="fonticon-wrap">완전삭제</span>
+																</button>
+															</div>
+														</li>
+														<li class="list-inline-item" id="restoreMailOption" style="display:none">
+															<div class="dropdown">
+																<button type="button" class="btn btn-icon dropdown-toggle action-icon"
+																	id="restoreMailButton" onclick="restoreMail()" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																	<span class="fonticon-wrap">메일복구</span>
 																</button>
 															</div>
 														</li>
@@ -723,7 +733,7 @@
 	}
 	
 	const selectMenu = (function() {
-		let selectMenuName = "";
+		let selectMenuName = "받은메일함";
 		const selectMenu = (event) => {
 			document.querySelectorAll("a[name='menu']").forEach(e => {
 				e.setAttribute("class", "list-group-item");
@@ -731,9 +741,17 @@
 			
 			event.currentTarget.setAttribute("class", "list-group-item active");
 			selectMenuName = event.currentTarget.id;
-			
-			if(selectMenuName = "myMailBox") {
+			console.log("selectMenuName : " + selectMenuName);
+			if(selectMenuName == "myMailBox") {
 				document.querySelector(".deleteMyMailBoxMail").style.display = "";
+			} else {
+				document.querySelector(".deleteMyMailBoxMail").style.display = "none";
+			}
+			
+			if(selectMenuName == "휴지통") {
+				document.getElementById("restoreMailOption").style.display = "";
+			} else {
+				document.getElementById("restoreMailOption").style.display = "none";
 			}
 		}
 		
@@ -778,6 +796,57 @@
 				})
 			}
 		});
+		
+		document.getElementById("deleteMailButton").addEventListener("click", e => {
+			console.log("deleteMail onclick");
+			let checkedCount = 0;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) checkedCount++;
+			});
+
+			let mailNoStr = "";
+			let count = 1;
+			document.querySelectorAll("input[name='checkMail']").forEach(e => {
+				if(e.checked) {
+					if(count == checkedCount) {
+						mailNoStr += e.id;
+					} else {
+						mailNoStr += e.id + ",";						
+					}
+					count++;
+				}
+			});
+			
+			if(checkedCount == 0) return;//수정해야함
+			
+			if(selectMenuName == "보낸메일함") {
+				console.log("보낸메일함 삭제");
+				fetch("${path }/mail/deletsendmail.do", {
+					method : "POST",
+					headers : {
+						"content-type" : "application/x-www-form-urlencoded;charset=utf-8"
+					},
+					body : "mailNoStr=" + mailNoStr
+				})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("mailListContainer").innerHTML = data;
+				});
+			} else if(selectMenuName == "받은메일함") {
+				console.log("받은메일함 삭제");
+				fetch("${path }/mail/deletreceivemail.do", {
+					method : "POST",
+					headers : {
+						"content-type" : "application/x-www-form-urlencoded;charset=utf-8"
+					},
+					body : "mailNoStr=" + mailNoStr
+				})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("mailListContainer").innerHTML = data;
+				});
+			}
+		})
 		return selectMenu;
 	})();
 	
@@ -834,7 +903,37 @@
 			})
 		}
 		
-		
+		const restoreMail = () => {
+			const checkMail = document.querySelectorAll("input[name='checkMail']");
+			let checkedMailCount = 0;
+			let count = 1;
+			let mailNoStr = "";
+			
+			checkMail.forEach(e => {
+				if(e.checked) checkedMailCount++;
+			});
+			
+			if(checkedMailCount > 0) {
+				checkMail.forEach(e => {
+					if(e.checked) {
+						if(checkedMailCount == count) {
+							mailNoStr += e.id;
+						} else {
+							mailNoStr += e.id + ","
+						}
+					}
+					count++;
+				});
+				
+				fetch("${path }/mail/restoremail.do?mailNoStr=" + mailNoStr)
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("myMailBoxListContainer").innerHTML = data;
+				})
+			} else {
+				alert("메일을 먼저 체크해주세요");
+			}
+		}
 </script>
 											<!-- email user list start -->
 											<div class="email-user-list list-group ps ps--active-y" id="mailListContainer">
@@ -1598,7 +1697,7 @@
             display: hidden;
             position: absolute;
             top:190px;
-            left:553px;
+            left:442px;
             box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
             /* z-index:1000; */
             background-color:none;

@@ -112,8 +112,12 @@ public class MailDao {
 	}
 
 	public List<Mail> joinMyMailBoxDetail(SqlSession session, int myMailBoxNo, Map<String, Integer> pagingParam) {
-		RowBounds rb = getRowBounds(pagingParam);
-		return session.selectList("mail.joinMyMailBoxDetail", myMailBoxNo);
+		if(pagingParam != null) {
+			RowBounds rb = getRowBounds(pagingParam);
+			return session.selectList("mail.joinMyMailBoxDetail", myMailBoxNo, rb);			
+		} else {
+			return session.selectList("mail.getAllMyMailBoxDetail", myMailBoxNo);
+		}
 	}
 
 	public List<Mail> joinFavoriteMailBox(SqlSession session, String loginMemberEmailDomain) {
@@ -131,6 +135,18 @@ public class MailDao {
 	public int deleteMail(SqlSession session, String mailNo) {
 		return session.update("mail.deleteMail", mailNo);
 	}
+	
+	public int deleteReceiveMail(SqlSession session, Map<String, String> sqlParam) {
+		return session.update("mail.deleteReceiveMail", sqlParam);
+	}
+	
+	public int deleteSendingMail(SqlSession session, String mailNo) {
+		return session.update("mail.deleteSendingMail", mailNo);
+	}
+	
+	public Mail getTrashMailByMailNoForRestore(SqlSession session, String mailNo) {
+		return session.selectOne("mail.getTrashMailForRestore", mailNo);
+	}
 
 	public int moveMailToTrashMailBox(SqlSession session, int mailNo) {
 		return session.update("mail.moveMailToTrashMailBox", mailNo);
@@ -140,13 +156,25 @@ public class MailDao {
 		return session.delete("mail.deleteMyMailBox", myMailBoxNo);
 	}
 
-	public List<Mail> jointrashmailbox(SqlSession session, String receiverMailAddress, Map<String, Integer> pagingParam) {
+	public List<Mail> jointrashmailbox(SqlSession session, String mailAddress, Map<String, Integer> pagingParam) {
 		RowBounds rb = getRowBounds(pagingParam);
-		return session.selectList("mail.jointrashmailbox", receiverMailAddress, rb);
+		return session.selectList("mail.jointrashmailbox", mailAddress, rb);
 	}
 
-	public void perfectlyDeleteMail(SqlSession session, String mailNo) {
-		session.delete("mail.perfectlyDeleteMail", mailNo);
+	public void senderPerfectlyDeleteMail(SqlSession session, int mailNo) {
+		session.update("mail.senderPerfectlyDeleteMail", mailNo);
+	}
+	
+	public void deleteAllMailInfo(SqlSession session, int mailNo) {
+		session.delete("mail.deleteAllMailInfo", mailNo);
+	}
+	
+	public void receiverPerfectlyDeleteMail(SqlSession session, int mailReceiverNo) {
+		session.delete("mail.receiverPerfectlyDeleteMail", mailReceiverNo);
+	}
+	
+	public Mail getMailForDelete(SqlSession session, Map<String, String> sqlParam) {
+		return session.selectOne("mail.getMailForDelete", sqlParam);
 	}
 
 	public List<Mail> joinSendingMailBox(SqlSession session, long empNo, Map<String, Integer> pagingParam) {
@@ -186,6 +214,12 @@ public class MailDao {
 	public int getSearchMailTotalData(SqlSession session, Map<String, Object> searchParam) {
 		return session.selectOne("mail.getSearchMailTotalData", searchParam);
 	}
+
+
+	
+
+
+	
 
 	
 
