@@ -33,6 +33,15 @@ public class ScheduleDaoImpl implements ScheduleDao {
 	public int updateSchedule(SqlSession session, Schedule s) {
 		return session.update("schedule.updateSchedule",s);
 	}
+
+
+	@Override
+	public int deleteSchedule(SqlSession session, int num) {
+		return session.delete("schedule.deleteSchedule", num);
+	}
+	
+	
+	
 	
 	
 	

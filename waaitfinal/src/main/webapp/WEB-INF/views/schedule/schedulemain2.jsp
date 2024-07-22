@@ -25,7 +25,7 @@
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/schedule/schedule.css">
 	
 	<!-- editEvent.js -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/schedule/editEvent.js"></script>
+	<%-- <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/schedule/editEvent.js"></script> --%>
 	
   
 	<!-- 모달 자리 -->
@@ -174,14 +174,23 @@
     		const startDate=formatDateTime(start);
     		const endDate=formatDateTime(end);    		
     		
+    		document.getElementById('modalScheNo').value=scheNo;
     		document.getElementById('modalScheTitle').innerHTML=title;
     		document.getElementById('modalScheContent').innerHTML=content;  
     		document.getElementById('modalScheTime').innerHTML=startDate;
     		document.getElementById('modalScheEnd').innerHTML=endDate;
-    		       		
+    		       		 
     		$("#detailModal").modal("show");
-        });    		        		
-
+        });    		
+        //위에서 일정을 클릭함으로써, 클릭한 해당 일정의 정보가 form에 담겨서 들어옴
+		$("#deleteEvent").click(e=>{
+ 			$(e.target).parents("form").attr("action","${path}/schedule/deleteSchedule.do");
+ 			$(e.target).parents("form").submit();
+		});
+		$("#updateEvent").click(e=>{
+			$(e.target).parents("form").attr("action","${path}/schedule/updateSchedule.do");
+			$(e.target).parents("form").submit();
+		});
   })  
     
       //날짜 포맷팅 함수 (모달창에서 날짜 가져오는거 yyyy/mm/dd 이런식으로 써주는 함수)

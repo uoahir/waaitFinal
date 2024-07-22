@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.waait.dto.Employee;
@@ -83,7 +84,20 @@ public class ScheduleController {
 	@RequestMapping("/updateSchedule.do")
 	public String updateSchdule() {
 		
+	return "redirect:/schedule/myschedule";
+	}
+	
+	//삭제하기
+	@PostMapping("/deleteSchedule.do")
+	public String deleteSchedule(int scheNo) {
 		
+		int result=service.deleteSchedule(scheNo);	
+		if(result>0) {
+			//msg=""; 이거 해주기
+		}
+		else {
+			//msg=""  이거 해주기
+		}
 		
 		return "redirect:/schedule/myschedule";
 	}
