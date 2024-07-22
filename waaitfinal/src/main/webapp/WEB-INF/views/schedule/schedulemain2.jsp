@@ -23,6 +23,10 @@
 	
 	<body style="padding:100px;">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/schedule/schedule.css">
+	
+	<!-- editEvent.js -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/schedule/editEvent.js"></script>
+	
   
 	<!-- 모달 자리 -->
 	<%@include file="/WEB-INF/views/schedule/addeventmodal.jsp" %>
@@ -127,21 +131,12 @@
           	$('#addEventModal').modal('show'); //일정 추가하는 모달창 띄움
             $('#start').val(info.startStr); 
             $('#end').val(info.endStr);               
-          }
-        
-        //그냥 클릭해서 파란거 추가되는 것 -> ㄱ 
-/*         dateClick: function(info){ 
-        	console.log("Clicked event occurs : date = " + info.dateStr); 
-        	//info.dateStr이거는 클릭한 날짜를 string값으로 넣어주는거         	
-        	//calendar.addEvent({start: info.dateStr});  -> 이거 밑에 함수로 뺏음             	
-        	addEventToCalendar({start: info.dateStr});
-        } */
+          }       
                 
       });
       // 캘린더 랜더링
       calendar.render();
-      
-      
+            
       
       // 폼 제출 처리 (상단에 저장하기 버튼)
       $('#saveEventButton').click(function(){
@@ -163,10 +158,6 @@
           });
       });
   });   
-    // ㄱ에 대한 이벤트
-/* 	function addEventToCalendar(event){
-		calendar.addEvent(event);
-	} */
  
   })();
   
@@ -190,9 +181,7 @@
     		       		
     		$("#detailModal").modal("show");
         });    		        		
-  	/* $(document).on("mouseleave",'.fc-daygrid-day-events',(e)=>{
-	 // alert('나갔다');
-  	}); */
+
   })  
     
       //날짜 포맷팅 함수 (모달창에서 날짜 가져오는거 yyyy/mm/dd 이런식으로 써주는 함수)
@@ -209,6 +198,7 @@
 			} 
 			return "없음";			
 		}
+  
   
 </script>  
 	

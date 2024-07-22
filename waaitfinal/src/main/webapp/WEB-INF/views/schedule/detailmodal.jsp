@@ -69,7 +69,8 @@
 		            >
 		              취소
 		            </button>
-                    <button type="submit" class="btn btn-primary">수정</button>
+                    <button type="submit" class="btn btn-primary" id="deleteEvent">수정</button>
+                    <button type="submit" class="btn btn-danger" id="updateEvent">삭제</button>
                 </form>
             </div>
         </div>
