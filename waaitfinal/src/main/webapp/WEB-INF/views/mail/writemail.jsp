@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
+<c:set var ="emp" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,42 +24,95 @@
 </head>
 <body>
 	<h1>헤더</h1>
-	<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="mailContentInputHidden()">
-		<section class="section">
-			<div class="sectionHeaderContainer">
-				<div class="senderContainer">
-					<span>작성자 : </span><input type="text" name="senderMailAddress" value="waait@waait.com" disabled>
+	<c:if test="${not empty mails }">
+		<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="mailContentInputHidden()">
+			<section class="section">
+				<div class="sectionHeaderContainer">
+					<div class="senderContainer">
+						<span>작성자 : </span><input type="text" name="senderMailAddress" value="${emp.empEmail }" disabled>
+					</div>
+					<div class="receiverContainer">
+						<span>받는사람 : </span>
+						<c:if test="${mails.receivers.size() > 0 }">
+							<c:forEach var="receiver" items="${mails.receivers }">
+								<input type="text" name="mailReceiverAddress" value="${receiver.mailReceiverAddress }">
+							</c:forEach>
+						</c:if>
+						<c:if test="${mails.receivers.size() == 0 }">
+							<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
+							<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
+						</c:if>
+					</div>
+					<div class="matilTitleContainer">
+						<c:if test="${not empty mails.mailTitle }">
+							<span>제목 : </span><input type="text" name="mailTitle" value="${mails.mailTitle }">
+						</c:if>
+						<c:if test="${empty mails.mailTitle }">
+							<span>제목 : </span><input type="text" name="mailTitle" placeholder="제목입력">
+						</c:if>
+					</div>
+					<p>파일 업로드 : </p>
+					<div class="fileContainer">
+						<input type="file" class="multiple-files-filepond" name="upFile" multiple>
+					</div>
 				</div>
-				<div class="receiverContainer">
-					<span>받는사람 : </span><input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
+		        <div class="row">
+		            <div class="col-12">
+		                <div class="card">
+		                    <div class="card-body">
+		                        <div id="summernote"></div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </section>
+			<button class="btn btn-primary" type="button" onclick="mailContentInputHidden()">테스트버튼</button>
+		    <input type="text" name="mailContent" hidden="true">
+		    <input type="text" name="mailReceiver" hidden="true">
+		    <input type="submit" name="mailStatus" value="전송">
+		    <input type="submit" name="mailStatus" value="임시저장">
+	    </form>
+    </c:if>
+    <c:if test="${empty mails }">
+    	<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="mailContentInputHidden()">
+			<section class="section">
+				<div class="sectionHeaderContainer">
+					<div class="senderContainer">
+						<span>작성자 : </span><input type="text" name="senderMailAddress" value="${emp.empEmail }" disabled>
+					</div>
+					<div class="receiverContainer">
+						<span>받는사람 : </span>
+						<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
+						<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
+					</div>
+					<div class="matilTitleContainer">
+						<span>제목 : </span><input type="text" name="mailTitle" placeholder="제목입력">
+					</div>
+					<p>파일 업로드 : </p>
+					<div class="fileContainer">
+						<input type="file" class="multiple-files-filepond" name="upFile" multiple>
+					</div>
 				</div>
-				<div class="matilTitleContainer">
-					<span>제목 : </span><input type="text" name="mailTitle" placeholder="제목입력">
-				</div>
-				<p>파일 업로드 : </p>
-				<div class="fileContainer">
-					<input type="file" class="multiple-files-filepond" name="upFile" multiple>
-				</div>
-			</div>
-	        <div class="row">
-	            <div class="col-12">
-	                <div class="card">
-	                    <!-- <div class="card-header">
-	                        <h4 class="card-title">Default Editor</h4>
-	                    </div> -->
-	                    <div class="card-body">
-	                        <div id="summernote"></div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	    </section>
-		<button class="btn btn-primary" type="button" onclick="mailContentInputHidden()">테스트버튼</button>
-	    <input type="text" name="mailContent" hidden="true">
-	    <input type="text" name="mailReceiver" hidden="true">
-	    <input type="submit" name="mailStatus" value="전송">
-	    <input type="submit" name="mailStatus" value="임시저장">
-    </form>
+		        <div class="row">
+		            <div class="col-12">
+		                <div class="card">
+		                    <!-- <div class="card-header">
+		                        <h4 class="card-title">Default Editor</h4>
+		                    </div> -->
+		                    <div class="card-body">
+		                        <div id="summernote"></div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </section>
+			<button class="btn btn-primary" type="button" onclick="mailContentInputHidden()">테스트버튼</button>
+		    <input type="text" name="mailContent" hidden="true">
+		    <input type="text" name="mailReceiver" hidden="true">
+		    <input type="submit" name="mailStatus" value="전송">
+		    <input type="submit" name="mailStatus" value="임시저장">
+	    </form>
+    </c:if>
     
     <button onclick="fileUploadTest()">파일업로드테스트</button>
     <script>
@@ -75,7 +129,12 @@
     	const fileUploadTest = () => {
     		location.assign("${path }/mail/testuploadfile.do");
     	}
-    	
+    	<c:if test="${not empty mails.mailTitle }">
+    		document.addEventListener("DOMContentLoaded", e => {
+    			const tempSaveMailContent = "${mails.mailContent}";
+        		document.querySelector("div[class='note-editable']").innerHTML = tempSaveMailContent;	
+    		});
+    	</c:if>
     </script>
 	<script src="${path }/assets/static/js/components/dark.js"></script>
 	<script src="${path }/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>

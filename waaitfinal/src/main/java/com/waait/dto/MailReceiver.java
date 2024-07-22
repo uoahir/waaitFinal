@@ -15,4 +15,6 @@ public class MailReceiver {
 	private String mailReceiverAddress;
 	private String receiverReadStatus;
 	private String receiverDeleteStatus;
+	private String receiverFinalDeleteStatus;
+	private String mailReceiverReadDate;
 }

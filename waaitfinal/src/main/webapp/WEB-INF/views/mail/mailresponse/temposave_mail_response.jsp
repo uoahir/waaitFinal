@@ -2,9 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath }" />
-<c:if test="${not empty spamMails }">
+<c:if test="${not empty mails }">
 	<ul class="users-list-wrapper media-list" id="mailListUlTag">
-		<c:forEach var="mail" items="${spamMails }" >
+		<c:forEach var="mail" items="${mails }" >
 			<%-- <c:set var="favoriteIconUrl" value="${mail.mailStatus eq '즐겨찾기' ? path + '/resources/assets/static/images/bootstrap-icons.svg#star-fill' : path + '/resources/assets/static/images/bootstrap-icons.svg#star'}"/> --%>
 			<li class="media" id="${mail.mailNo }" name="mailList">
 				<div class="user-action">
@@ -14,6 +14,26 @@
 							<input type="checkbox" name="checkMail" class='form-check-input' onclick="checkMail()" id="${mail.mailNo }"> 
 						</div>
 					</div>
+					<%-- <button class="icon-button">
+						<span id="colorDecisionSpan" class=
+							<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
+	                                    	"favorite text-warning"
+	                                    </c:if>
+							<c:if test="${mail.mailStatus != '즐겨찾기' }" >
+	                                    	"favorite"
+	                                    </c:if>
+	                            	>
+							<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
+	                        	<use xlink:href=<c:if test="${mail.mailStatus eq '즐겨찾기' }" >
+	                                            	"${path }/resources/assets/static/images/bootstrap-icons.svg#star-fill"
+	                                            </c:if>
+												<c:if test="${mail.mailStatus != '즐겨찾기' }" >
+	                                            	"${path }/resources/assets/static/images/bootstrap-icons.svg#star"
+	                                            </c:if> id="iconPath" 
+	                            />
+	                       </svg>
+	                    </span>
+                	</button> --%>
 				</div>
 				<div class="pr-50">
 					<div class="avatar">
@@ -22,7 +42,7 @@
 							alt="avtar img holder">
 					</div>
 				</div>
-				<div class="media-body" onclick="goMailDetail(event)">
+				<div class="media-body" onclick="continueMailWrite(event)">
 					<div class="user-details">
 						<div class="mail-items">
 							<span class="list-group-item-text text-truncate">${mail.senderMailAddress } &lt;${mail.senderName }&gt;</span>
@@ -30,7 +50,7 @@
 						<div class="mail-meta-item">
 							<span class="float-right"> 
 								<span class="mail-date">
-									스팸메일 ${mail.mailWriteDate }
+									임시저장
 								</span>
 							</span>
 						</div>

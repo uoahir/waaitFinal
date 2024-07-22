@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
+<c:set var ="emp" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
 <html lang="ko">
 
 <head>
@@ -539,6 +540,12 @@
 		location.assign("${path }/mail/maildetail.do?mailNo=" + mailNo);
 	}
 	
+	const continueMailWrite = (e) => {
+		console.log(e.currentTarget.parentElement.id);
+		const mailNo = e.currentTarget.parentElement.id;
+		location.assign("${path }/mail/continuewritemail.do?mailNo=" + mailNo);
+	}
+	
 	const checkAllMail = (function() {
 		const checkAllMail = () => {
 			let booleanResult = true;
@@ -779,21 +786,24 @@
 			});
 			
 			console.log("mailNoStr : " + mailNoStr);
-
-			if(selectMenuName != "휴지통") {
-				alert("완전삭제는 휴지통메뉴에서만 가능합니다");
+			if(checkedCount > 0) {
+				if(selectMenuName != "휴지통") {
+					alert("완전삭제는 휴지통메뉴에서만 가능합니다");
+				} else {
+					fetch("${path }/mail/perfectlydeletemail.do", {
+						method : "POST",
+						headers : {
+							"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+						},
+						body : "mailNoStr=" + mailNoStr
+					})
+					.then(response => response.text())
+					.then(data => {
+						document.getElementById("mailListContainer").innerHTML = data;
+					});
+				}
 			} else {
-				fetch("${path }/mail/perfectlydeletemail.do", {
-					method : "POST",
-					headers : {
-						"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
-					},
-					body : "mailNoStr=" + mailNoStr
-				})
-				.then(response => response.text())
-				.then(data => {
-					document.getElementById("mailListContainer").innerHTML = data;
-				})
+				alert("체크박스를 먼저 체크해주세요");
 			}
 		});
 		
@@ -941,9 +951,11 @@
 													<ul class="users-list-wrapper media-list" id="mailListUlTag">
 														<c:forEach var="mail" items="${mails }" >
 															<%-- <c:set var="favoriteIconUrl" value="${mail.mailStatus eq '즐겨찾기' ? path + '/resources/assets/static/images/bootstrap-icons.svg#star-fill' : path + '/resources/assets/static/images/bootstrap-icons.svg#star'}"/> --%>
-															<li
-																class= <c:if test="${mail.mailReadStatus eq 'Y' }">"media mail-read"</c:if>
-																	   <c:if test="${mail.mailReadStatus ne 'Y' }">"media"</c:if>
+															<li class=
+																<c:forEach var="receiver" items="${mail.receivers }" >
+															 	   <c:if test="${receiver.mailReceiverAddress eq emp.empEmail and receiver.receiverReadStatus eq 'Y' }">"media mail-read"</c:if>
+																   <c:if test="${receiver.mailReceiverAddress eq emp.empEmail and receiver.receiverReadStatus ne 'Y' }">"media"</c:if>
+																</c:forEach >
 																id="${mail.mailNo }" name="mailList">
 																<div class="user-action">
 																	<div class="checkbox-con me-3">
@@ -1774,8 +1786,35 @@
 	    	});
 	    }
 	    
+	    const mailSettingView = () => {
+	    	fetch("${path }/mail/mailsettingview.do", {
+	    		method : "GET"
+	    	})
+	    	.then(response => response.text())
+	    	.then(data => {
+	    		document.getElementById("mailListContainer").innerHTML = data;
+	    	});
+	    }
+	    
+	    const deleteSpamMailAddress = (spamMailAddress) => {
+	    	fetch("${path }/mail/deletespamdomain.do", {
+	    		method : "POST",
+	    		headers : {
+	    			"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+	    		},
+	    		body : "domainAddresses=" + spamMailAddress
+	    	})
+	    	.then(response => response.text())
+	    	.then(data => {
+	    		if(data == 0) {
+	    			alert("삭제에 실패했습니다.");
+	    		} else {
+	    			alert("삭제에 성공했습니다.");
+	    		}
+	    	});
+	    }
 	</script>
-	<button onclick="ajaxPaging(1)">테스트</button>
+	<button onclick="mailSettingView()">환경설정</button>
 </body>
 <style>
 	.icon-button {
