@@ -162,7 +162,7 @@
   })();
   
   // 일정 클릭하면 상세 일정 보여주는 모달창 띄움
-   $(()=>{    	 
+    $(()=>{    	 
         $(document).on("click", '.fc-daygrid-day-events', function(e) {
         	const eventTitle=$(e.currentTarget).find(".fc-event-title").text();
         	const choiceEvent=calendar.getEvents().filter(e=>e["title"]===eventTitle)[0];
@@ -181,17 +181,32 @@
     		document.getElementById('modalScheEnd').innerHTML=endDate;
     		       		 
     		$("#detailModal").modal("show");
-        });    		
+        });               
+
+        
         //위에서 일정을 클릭함으로써, 클릭한 해당 일정의 정보가 form에 담겨서 들어옴
+        //일정삭제 이벤트
 		$("#deleteEvent").click(e=>{
  			$(e.target).parents("form").attr("action","${path}/schedule/deleteSchedule.do");
  			$(e.target).parents("form").submit();
-		});
+		});       
+        //일정수정 이벤트
 		$("#updateEvent").click(e=>{
 			$(e.target).parents("form").attr("action","${path}/schedule/updateSchedule.do");
 			$(e.target).parents("form").submit();
 		});
-  })  
+  }) 
+  //일정삭제 성공여부 alert창 띄우기
+  document.addEventListener("DOMContentLoaded",function(){
+  	var msg='${msg}';
+  	var loc="${loc}";        	
+  	if(msg && msg!=='null'){
+  		alert(msg);
+  		if(loc && loc !== 'null'){
+  			window.location.href=loc;
+  		}
+  	}
+  }); 
     
       //날짜 포맷팅 함수 (모달창에서 날짜 가져오는거 yyyy/mm/dd 이런식으로 써주는 함수)
 		function formatDateTime(d){
@@ -207,6 +222,8 @@
 			} 
 			return "없음";			
 		}
+      
+      
   
   
 </script>  
