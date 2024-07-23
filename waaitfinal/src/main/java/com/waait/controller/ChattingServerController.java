@@ -159,7 +159,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 			});
 			
 			if(messages.size() >= 5) {
-				//insert할때 벌크 인서트 
+				//서버닫힐때 DB에 저장해야됨
 				int result = service.insertChatHistory(messages);	
 				//한번 저장시키고 list안에 내용물 비우기
 				messages.clear();
@@ -168,9 +168,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 				}else {
 					System.out.println("채팅내역 저장안됨?");
 				}
-				
 			}
-		
 		}
 	
 	}
