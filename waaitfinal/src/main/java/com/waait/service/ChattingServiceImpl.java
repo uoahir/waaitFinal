@@ -10,6 +10,7 @@ import com.waait.dao.ChattingDao;
 import com.waait.dto.ChatHistory;
 import com.waait.dto.ChatRoom;
 import com.waait.dto.Employee;
+import com.waait.dto.Message;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,6 +47,17 @@ public class ChattingServiceImpl implements ChattingService {
 	public List<ChatHistory> selectChatRoomHistory(Map<String, Integer> param) {
 		List<ChatHistory> chatHistorys = dao.selectChatRoomHistory(session, param);
 		return chatHistorys;
+	}
+
+
+	@Override
+	public int insertChatHistory(List<Message> messages) {
+//		int result = dao.insertChatHistory(session, messages);
+		int result = 0;
+		for(Message message : messages) {
+			result = dao.insertChatHistory(session, message);
+		}
+		return result;
 	}
 	
 	

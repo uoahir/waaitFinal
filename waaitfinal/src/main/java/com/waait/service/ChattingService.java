@@ -6,6 +6,7 @@ import java.util.Map;
 import com.waait.dto.ChatHistory;
 import com.waait.dto.ChatRoom;
 import com.waait.dto.Employee;
+import com.waait.dto.Message;
 
 public interface ChattingService {
 
@@ -17,4 +18,5 @@ public interface ChattingService {
 	
 	List<ChatHistory> selectChatRoomHistory(Map<String, Integer> param);
 	
+	int insertChatHistory(List<Message> messages);
 }

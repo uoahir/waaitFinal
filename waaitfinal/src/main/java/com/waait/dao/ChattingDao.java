@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import com.waait.dto.ChatHistory;
 import com.waait.dto.ChatRoom;
 import com.waait.dto.Employee;
+import com.waait.dto.Message;
 
 public interface ChattingDao {
 	List<Employee> selectEmployeelist(SqlSession session);
@@ -17,4 +18,6 @@ public interface ChattingDao {
 	ChatRoom selectChatRoomName(SqlSession session, Map<String, Integer> param);
 	
 	List<ChatHistory> selectChatRoomHistory(SqlSession session, Map<String, Integer> param);
+	
+	int insertChatHistory(SqlSession session, Message message);
 }

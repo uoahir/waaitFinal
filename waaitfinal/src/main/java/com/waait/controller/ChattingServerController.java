@@ -160,16 +160,20 @@ public class ChattingServerController extends TextWebSocketHandler{
 			
 			if(messages.size() >= 5) {
 				//insert할때 벌크 인서트 
-	//			service.insertChatHistory(messages);	
+				int result = service.insertChatHistory(messages);	
 				//한번 저장시키고 list안에 내용물 비우기
 				messages.clear();
+				if(result > 0) {
+					System.out.println("채팅내역 저장됨?");
+				}else {
+					System.out.println("채팅내역 저장안됨?");
+				}
+				
 			}
 		
 		}
-		
+	
 	}
-	
-	
 	
 	
 	
