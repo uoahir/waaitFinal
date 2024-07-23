@@ -1,6 +1,5 @@
 package com.waait.controller;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.waait.dto.ChatHistory;
+import com.waait.dto.ChatRoom;
 import com.waait.dto.Employee;
 import com.waait.service.ChattingService;
 
@@ -43,17 +44,25 @@ public class ChattingController {
 	//채팅방 채팅
 	@GetMapping("/chatroomopen.do")	// /chatroomopen.do/{chatRoomNo}
 	public String chatRoomOpen(
+			Model model,
 			@RequestParam int chatroomNo,
-			@RequestParam int loginEmpNo) {
+			@RequestParam int loginEmpNo
+			) {
 		Map<String, Integer> param = Map.of(
 			"chatroomNo", chatroomNo,
 			"loginEmpNo", loginEmpNo
 		);
-				
+		System.out.println("컨트롤러 - chatRoomOpen - 채팅방 번호 : "+param.get("chatroomNo"));
+		System.out.println("컨트롤러 - chatRoomOpen - 로그인된 사원 번호 : "+param.get("loginEmpNo"));
 		
-		System.out.println("채팅방 번호 : "+param.get("chatroomNo"));
-		System.out.println("로그인된 사원 번호 : "+loginEmpNo);
+		ChatRoom chatName = service.selectChatRoomName(param);
+		List<ChatHistory> chatHistorys = service.selectChatRoomHistory(param);
 		
+		System.out.println("컨트롤러 - chatRoomOpen - chatName : "+chatName);
+		System.out.println("컨트롤러 - chatRoomOpen - chatHistory : "+chatHistorys);
+		
+		model.addAttribute("chatName",chatName);
+		model.addAttribute("chatHistorys",chatHistorys);
 		
 		return "chatting/chatroom";
 	}

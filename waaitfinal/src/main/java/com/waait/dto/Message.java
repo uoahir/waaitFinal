@@ -1,6 +1,6 @@
 package com.waait.dto;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +20,7 @@ public class Message {
 
 	private int chatRoomNo;	// 채팅방 번호
 	private String chatContent;		// 전송한 메세지
-	private Date chatCreationDate;	//채팅작성 시간
+	private String chatCreationDate;	//채팅작성 시간	String으로 변경함
 	private int chatReadCount;	//채팅 읽, 안읽 숫자표시
 	
 	
