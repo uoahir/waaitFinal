@@ -1,12 +1,15 @@
 package com.waait.controller;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.waait.dto.Employee;
@@ -24,6 +27,7 @@ public class ScheduleController {
 	
 	private final ScheduleService service;	
 	
+	// DB에 저장되어 있는 일정 사용자 정보 통해서 가져오기
 	@GetMapping("/myschedule")
 	public String myschedule(Schedule empNo, Model model) {
 		
@@ -46,91 +50,62 @@ public class ScheduleController {
 		return "schedule/schedulemain2";
 	}
 	
+	// 사용자 로그인 시큐리티로 데이터 가져오기
 	private Employee getLoginEmpInfo() {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	}
-	
-//	@RequestMapping("/schedule.do")
-//	public void getSchedule(HttpServletRequest request,
-//				HttpServletResponse response) {
-//		System.out.println(request);
-//		System.out.println(response);
-//		
-//		//클라이언트가 보낸 데이터 받아오기
-//		String scheTitle=request.getParameter("scheTitle");
-//		String scheContent=request.getParameter("scheContent");
-//		Timestamp scheTime=request.getParameter("scheTime");
-//		Timestamp scheEnd=request.getParameter("scheEnd");
-//		String scheColor=request.getParameter("scheColor");
-//		
-//		Schedule s=Schedule.builder()
-//				.scheTitle(scheTitle)
-//				.scheContent(scheContent)
-//				.scheTime(scheTime)
-//				.scheEnd(scheEnd)
-//				.scheColor(scheColor)
-//				.build();
-//		System.out.println(s);
-//		
-//		request.setAttribute("schedule", s);
-//		request.getRequestDispatcher("/WEB-INF/views/shcedule/schedulemain2.jsp")
-//		.forward(request, response);
-//	}
-	
+	}	
+		
+	// 
 	@RequestMapping("/insertSchedule.do")
-	public String insertSchedule(Schedule s) {
-		log.debug("{}",s);
+	public String insertSchedule(Schedule s,String scheTimeData, String scheEndData) {
+		try {
+			//사용자가 입력한 날짜 및 시간 데이터를 Timestamp 객체로 변환하여 Schedule 객체의 scheTime 필드에 설정하는 역할
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"); //Timestamp로 들어가서 파싱해주기
+			s.setScheTime(new Timestamp(sdf.parse(scheTimeData).getTime())); // sdf.parse(scheTimeData): scheTimeData 문자열을 SimpleDateFormat을 사용하여 Date 객체로 변환
+			s.setScheEnd(new Timestamp(sdf.parse(scheEndData).getTime()));
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		Employee loginEmp=(Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		s.setEmpNo(loginEmp.getEmpNo());
+		s.setScheWriter(loginEmp.getEmpName());
+//		if(s.getScheAllDay()==null) {
+//			s.setScheAllDay("false");
+//		}
+//		if(s.getSchePrivate()==null) {
+//			s.setSchePrivate("N");
+//		}
+		
 		int result=service.insertSchedule(s);
 		return "redirect:/schedule/myschedule";
 		
+	}
+	
+	@RequestMapping("/updateSchedule.do")
+	public String updateSchdule() {
 		
+	return "redirect:/schedule/myschedule";
+	}
+	
+	//삭제하기
+	@PostMapping("/deleteSchedule.do")
+	public String deleteSchedule(int scheNo) {
+		
+		int result=service.deleteSchedule(scheNo);	
+		if(result>0) {
+			//msg=""; 이거 해주기
+		}
+		else {
+			//msg=""  이거 해주기
+		}
+		
+		return "redirect:/schedule/myschedule";
 	}
 	
 	
 	
 	
-
-	
-//	//teamware 참고
-//	@RequestMapping("/myschedule")
-//	public void myschedule(Principal principal, Schedule schedule,Model model) {
-//		String empId=principal.getName();
-//		List<Schedule> scheduleList=service.scheduleList(empNo);
-//		model.addAttribute("scheduleList", scheduleList);		
-//		
-//	}
-//			
-//	
-//	@GetMapping("/myschedule.do")
-//	public void mySchedule(
-//			@RequestParam(defaultValue="1") int cPage,
-//			@RequestParam(defaultValue="5") int numPerpage,
-//			Model model) {
-//		
-//		List<Schedule> result=service.selectList(
-//				Map.of("cPage",cPage,"numPerpage",numPerpage));
-//		model.addAttribute("schedule", result);
-//		int totalData=service.selectScheduleCount();		
-//		
-//	}
-//	
-//	// 일정 db에 추가하기 
-//	@GetMapping("/insertschedule.do")
-//	public void insertSchedule(@ModelAttribute("schedule") @Validated Schedule schedule,
-//			BindingResult isResult,Model m) {
-//		if(isResult.hasErrors()) {
-//			m.add
-//		}
-//		
-//		
-//	}
-	
-//	@GetMapping("/myschedule.do")
-//	public void myschedule() {			
-//		
-//		
-//	}
 	
 	
-
 }
+

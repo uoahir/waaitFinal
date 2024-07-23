@@ -48,6 +48,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 	}
 
 		
+
 	//웹소켓 객체가 send 했을때, 전송 했을때	//TextMessage 값 타입을 JSON으로 받음 
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -59,7 +60,6 @@ public class ChattingServerController extends TextWebSocketHandler{
 		//Message 타입의 msg안에 있는 필드값 type을 이용해서 switch문 어느 메소드를 작동할지 정할 수 있다.
 		switch(msg.getType()) {
 			case "open" : addClient(session,msg);break;
-			
 			case "메세지" : sendMessage(msg);break;
 			//case "close" : break;				
 			case "사원목록" : chatUserlist(msg);break;

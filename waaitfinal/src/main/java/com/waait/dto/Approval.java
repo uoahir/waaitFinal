@@ -19,4 +19,5 @@ public class Approval {
 	private String appStat;
 	private Date appDate;
 	private String reason;
+	private Employee employee;
 }

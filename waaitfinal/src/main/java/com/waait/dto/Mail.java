@@ -24,6 +24,8 @@ public class Mail {
 	private String mailWriteDate;
 	private String mailReadStatus;
 	private Date receiverReadDate;
+	private String writerDeleteStatus;
+	private String writerFinalDeleteStatus;
 	private List<MailReceiver> receivers;
 	private List<MailFile> files;
 }

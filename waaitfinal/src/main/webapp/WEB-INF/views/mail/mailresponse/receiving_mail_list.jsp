@@ -48,7 +48,7 @@
 				<div class="media-body" onclick="goMailDetail(event)">
 					<div class="user-details">
 						<div class="mail-items">
-							<span class="list-group-item-text text-truncate">${mail.senderMailAddress } 받은사람 : ${mail.senderName }</span>
+							<span class="list-group-item-text text-truncate">${mail.senderMailAddress } 받은사람 : ${mailReceiverAddress }</span>
 						</div>
 						<div class="mail-meta-item">
 							<span class="float-right"> 
