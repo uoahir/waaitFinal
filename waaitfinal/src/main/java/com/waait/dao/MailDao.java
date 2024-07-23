@@ -148,12 +148,16 @@ public class MailDao {
 		return session.update("mail.deleteMail", mailNo);
 	}
 	
-	public int deleteReceiveMail(SqlSession session, Map<String, String> sqlParam) {
+	public int deleteReceiveMail(SqlSession session, Map<String, Object> sqlParam) {
 		return session.update("mail.deleteReceiveMail", sqlParam);
 	}
 	
-	public int deleteSendingMail(SqlSession session, String mailNo) {
+	public int deleteSendingMail(SqlSession session, int mailNo) {
 		return session.update("mail.deleteSendingMail", mailNo);
+	}
+	
+	public int deleteMailSendToMe(SqlSession session, int mailNo) {
+		return session.update("mail.deleteMailSendToMe", mailNo);
 	}
 	
 	public Mail getTrashMailByMailNoForRestore(SqlSession session, String mailNo) {
@@ -185,8 +189,16 @@ public class MailDao {
 		session.delete("mail.receiverPerfectlyDeleteMail", deleteSqlParam);
 	}
 	
-	public Mail getMailForDelete(SqlSession session, Map<String, String> sqlParam) {
-		return session.selectOne("mail.getMailForDelete", sqlParam);
+	public int senderRestoreMail(SqlSession session, int mailNo) {
+		return session.update("mail.senderRestoreMail", mailNo);
+	}
+	
+	public int receiverRestoreMail(SqlSession session, Map<String, Object> restoreSqlParam) {
+		return session.update("mail.receiverRestoreMail", restoreSqlParam);
+	}
+	
+	public Mail getMailForDelete(SqlSession session, String mailNoStr) {
+		return session.selectOne("mail.getMailForDelete", mailNoStr);
 	}
 
 	public List<Mail> joinSendingMailBox(SqlSession session, long empNo, Map<String, Integer> pagingParam) {
