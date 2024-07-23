@@ -59,8 +59,9 @@ public class EDocController {
 		try {
 			// json 형태의 문자열로 받아온 obj를 객체화
 			ObjectMapper objectMapper = new ObjectMapper();
-			doc = objectMapper.readValue(obj, Document.class); 
-			
+			doc = objectMapper.readValue(obj, Document.class);
+
+			System.out.println("요거" + doc);
 			
 			int result = service.insertBasicEdoc(doc, empNo);
 			System.out.println(empNo.length);

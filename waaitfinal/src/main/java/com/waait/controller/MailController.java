@@ -5,10 +5,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
 import com.waait.dto.MailFile;
+import com.waait.dto.MailReceiver;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
 import com.waait.dto.RecentSearch;
@@ -249,6 +250,7 @@ public class MailController {
 		
 		model.addAttribute("mails", mailList);
 		model.addAttribute("pageBar", pageBar);
+		model.addAttribute("mailReceiverAddress", mailReceiverAddress);
 		return "mail/mailresponse/receiving_mail_list";
 	}
 	
@@ -282,13 +284,14 @@ public class MailController {
 		if(spamDomains != null && spamDomains.size() > 0 && !spamDomains.isEmpty()) {
 			spamMailList = service.getSpamMail(param);
 		}
+		System.out.println("spamMailList : " + spamMailList);
 		
-		model.addAttribute("spamMail", spamMailList);
+		model.addAttribute("spamMails", spamMailList);
 		return "mail/mailresponse/spam_mail_list";
 	}
 	
 	@GetMapping("/enrollmymailbox.do")
-	public String enrollUserMailBox(String wantBoxName, Model model) {
+	public @ResponseBody Map<String, Object> enrollUserMailBox(String wantBoxName) {
 		long empNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> newMyMailBoxInfo = new HashMap<String, Object>();
 		List<MyMailBox> boxList = service.getMyMailBox(empNo);
@@ -296,31 +299,34 @@ public class MailController {
 		for(MyMailBox mailBox : boxList) {
 			if(mailBox.getMyMailBoxName().equals(wantBoxName)) {
 				newMyMailBoxInfo.put("errorMsg", "메일함 이름은 중복될 수 없습니다");
+				return newMyMailBoxInfo;
 			}
 		}
-		
+		System.out.println("박스 리스트 가져오는 건 지나감");
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("empNo", empNo);
 		param.put("wantBoxName", wantBoxName);
 		
+		System.out.println("wantBoxName : " + wantBoxName);
 		int myMailBoxNo = service.enrollUserMailBox(param);
 		newMyMailBoxInfo.put("myBoxName", wantBoxName);
 		newMyMailBoxInfo.put("myMailBoxNo", myMailBoxNo);
-		model.addAttribute("mailBoxInfo", newMyMailBoxInfo);
-		return "mail/mailresponse/add_mymailbox";
+		
+		return newMyMailBoxInfo;
 		
 	}
 	
 	@PostMapping("/deletespamdomain.do")
 	public @ResponseBody int deleteSpamDomain(String domainAddresses) {
+		int result = 0;
 		System.out.println("domainAddress : " + domainAddresses);
 		long empNo = getLoginEmpInfo().getEmpNo();
 		
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("empNo", empNo);
 		param.put("domainAddresses", domainAddresses);
-		service.deleteSpamDomain(param);
-		return 0;
+		result = service.deleteSpamDomain(param);
+		return result;
 	}
 	
 	@GetMapping("/maildetail.do")
@@ -333,7 +339,8 @@ public class MailController {
 		
 		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
 		
-		updateReadStatus(mailNo);
+		service.updateReceiverReadStatus(param);
+		updateRecentReadStatus(mail.getMailNo());
 		
 		model.addAttribute("mail", mail);
 		model.addAttribute("empMailAddress", userMailAddress);
@@ -369,15 +376,18 @@ public class MailController {
 	}
 	
 	@PostMapping("/sendmail.do")
-	public String sendMail(MultipartFile[] upFile, HttpSession session, String mailContent, String mailTitle, String mailReceiver, String mailStatus) {
+	public String sendMail(MultipartFile[] upFile, HttpSession session, String mailContent, String mailTitle, String[] mailReceiverAddress, String mailStatus) {
 		long writerNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("mailContent", mailContent);
 		param.put("mailTitle", mailTitle);
-		param.put("mailReceiverAddress", mailReceiver);
+		param.put("mailReceiverAddress", mailReceiverAddress);
 		param.put("mailStatus", mailStatus);
 		param.put("writerNo", writerNo);
-		System.out.println("mailConetnt : " + mailContent + " mailTitle : " + mailTitle + " mailReceiverAddress : " + mailReceiver);
+		System.out.println("mailConetnt : " + mailContent + " mailTitle : " + mailTitle);
+		Arrays.stream(mailReceiverAddress).forEach(m -> {
+			System.out.println("mailReceiverAddress : " + m);
+		});
 		int mailSequence = service.sendMail(param);
 		
 		String path = session.getServletContext().getRealPath("resources/upload/mail");
@@ -432,69 +442,144 @@ public class MailController {
 		return service.addMailMyMailBox(param);
 	}
 	
-	@GetMapping("/detailmymailbox.do")
-	public void myMailBoxDetailView(int myMailBoxNo, Model model) {
-
-		List<Mail> mailList = service.joinMyMailBoxDetail(myMailBoxNo);
+	//내 메일함 메일조회
+	@GetMapping("/joinmymailbox.do")
+	public String myMailBoxDetailView(int myMailBoxNo, Model model,
+			@RequestParam(defaultValue = "1") int cPage) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		int numPerpage = 0;
+		int pageBarSize = 5;
+		String url = "/mail/joinmymailbox.do";
+		numPerpage = getUserSettingNumPerpage(numPerpage);
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		int myMailBoxTotalData = service.getMyMailBoxTotalData(myMailBoxNo);
+		String pageBar = paging(myMailBoxTotalData, cPage, numPerpage, pageBarSize, url);
+		
+		List<Mail> mailList = service.joinMyMailBoxDetail(myMailBoxNo, pagingParam);
 		System.out.println("myMailBoxMailList : " + mailList);
+		
 		model.addAttribute("mails", mailList);
+		model.addAttribute("pageBar", pageBar);
+		
+		return "mail/mailresponse/mymailbox_mail_list";
 	}
 	
 	@GetMapping("/myfavoritemailbox.do")
-	public String joinFavoriteMailBox(Model model) {
+	public String joinFavoriteMailBox(Model model, @RequestParam(defaultValue = "1") int cPage) {
+		long empNo = getLoginEmpInfo().getEmpNo();
 		String loginMemberEmailDomain = getLoginEmpInfo().getEmpEmail();
+		int numPerpage = getUserSettingNumPerpage(empNo);
+		int totalData = service.getFavoriteMailTotalData(loginMemberEmailDomain);
+		int pageBarSize = 5;
+		String url = "/mail/myfavoritemailbox.do";
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
+		
 		List<Mail> mailList = service.joinFavoriteMailBox(loginMemberEmailDomain);
 		System.out.println("favoriteList : " + mailList);
+		
 		model.addAttribute("mails", mailList);
+		model.addAttribute("pageBar", pageBar);
+		
 		return "mail/mailresponse/favorite_mail_list";
 	}
 	
 	@GetMapping("/temporarysavemailbox.do")
-	public String joinTempoSaveMailBox(Model model) {
+	public String joinTempoSaveMailBox(Model model, @RequestParam(defaultValue = "1") int cPage) {
 		long empNo = getLoginEmpInfo().getEmpNo();
+		int totalData = service.getTempoSaveMailTotalData(empNo);
+		int numPerpage = getUserSettingNumPerpage(empNo);
+		int pageBarSize = 5;
+		String url = "/mail/temporarysavemailbox.do";
+		
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
+		
 		List<Mail> temporarySaveMailList = service.joinTempoSaveMailBox(empNo);
 		System.out.println("temporarySaveMailList : " + temporarySaveMailList);
-		model.addAttribute("mails", temporarySaveMailList);
 		
-		return "mail/mailresponse/mail_list_response";
+		model.addAttribute("mails", temporarySaveMailList);
+		model.addAttribute("pageBar", pageBar);
+		
+		return "mail/mailresponse/temposave_mail_response";
 	}
 	
-	@PostMapping("/deletemail.do")
-	public String deleteMail(String mailNoStr, Model model) {
-		int result = service.deleteMail(mailNoStr);
-		Employee employee = getLoginEmpInfo();
-		String mailReceiverAddress = employee.getEmpEmail();
-		long empNo = employee.getEmpNo();
-		int numPerpage = 0;
+	@GetMapping("/continuewritemail.do")
+	public String continueWriteMail(int mailNo, Model model) {
+		Mail temporarySaveMail = service.joinTempoSaveMailByMailNo(mailNo);
+		System.out.println("tempSaveMailContinue : " + temporarySaveMail);
+		model.addAttribute("mails", temporarySaveMail);
 		
-		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
-		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo); //??
+		return "mail/writemail";
+	}
+	
+//	@PostMapping("/deletemail.do")
+//	public String deleteMail(String mailNoStr, Model model) {
+//		int result = service.deleteMail(mailNoStr);
+//		Employee employee = getLoginEmpInfo();
+//		String mailReceiverAddress = employee.getEmpEmail();
+//		long empNo = employee.getEmpNo();
+//		int numPerpage = 0;
+//		
+//		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
+//		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo); //??
+//		
+//		numPerpage = getUserSettingNumPerpage(empNo);
+//		
+//		int cPage = 1;
+//		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
+//													"spamDomains", spamDomains, "mailReceiverAddress", mailReceiverAddress);
+//		
+//		List<Mail> mailList = service.getReceiveMail(mailSettings);
+//		model.addAttribute("mails", mailList);
+//		return "mail/mailresponse/mail_list_response";
+//	} 안쓸지도?
+	
+	@PostMapping("/deletreceivemail.do")
+	public String deleteReceiveMail(String mailNoStr, Model model) {
+		String receiverAddress = getLoginEmpInfo().getEmpEmail();
+		System.out.println("mailNoStr : " + mailNoStr);
+		Map<String, String> sqlParam = new HashMap<String, String>();
+		sqlParam.put("mailNoStr", mailNoStr);
+		sqlParam.put("receiverAddress", receiverAddress);
 		
-		numPerpage = getUserSettingNumPerpage(empNo);
+		service.deleteReceiveMail(sqlParam);
 		
-		int cPage = 1;
-		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
-													"spamDomains", spamDomains, "mailReceiverAddress", mailReceiverAddress);
-		
-		List<Mail> mailList = service.getReceiveMail(mailSettings);
-		model.addAttribute("mails", mailList);
-		return "mail/mailresponse/mail_list_response";
+		return receivingMail(model, 1);
+	}
+	
+	@PostMapping("/deletsendmail.do")
+	public String deleteSendMail(String mailNoStr, Model model) {
+		System.out.println("mailNoStr : " + mailNoStr);
+		service.deleteSendingMail(mailNoStr);
+		return joinSendingMailBox(model, 1);
 	}
 	
 	@PostMapping("/deletemymailbox.do")
-	public @ResponseBody int deleteMyMailBox(int myMailBoxNo) {
-		List<Mail> mailInMyMailBox = service.joinMyMailBoxDetail(myMailBoxNo);
+	public String deleteMyMailBox(int myMailBoxNo, Model model) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		List<Mail> mailInMyMailBox = service.joinMyMailBoxDetail(myMailBoxNo, null);
 		
 		service.moveMailToTrashMailBox(mailInMyMailBox);
 		
 		service.deleteMyMailBox(myMailBoxNo);
-		return 0;
+		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
+		model.addAttribute("mailBoxes", myMailBoxList);
+		
+		return "mail/mailresponse/mymailbox_list";
+	}
+	
+	@GetMapping("/restoremail.do")
+	public String restoreMail(String mailNoStr, Model model) {
+		List<Mail> trashMailList = service.getTrashMailByMailNoForRestore(mailNoStr);
+		System.out.println("trashMailListByMailNo : " + trashMailList);
+		//service.restoreMail(mailNoStr);
+		return jointrashmailbox(model, 1);
 	}
 	
 	@GetMapping("/jointrashmailbox.do")
 	public String jointrashmailbox(Model model, @RequestParam(defaultValue = "1") int cPage) {
 		long empNo = getLoginEmpInfo().getEmpNo();
 		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
+		
 		int totalData = service.trashMailBoxTotalData(receiverMailAddress);
 		int numPerpage = getUserSettingNumPerpage(empNo);
 		String url = "/jointrashmailbox.do";
@@ -506,13 +591,86 @@ public class MailController {
 		System.out.println("trashMailList : " + trashMailList);
 		model.addAttribute("mails", trashMailList);
 		model.addAttribute("pageBar", pageBar);
-		return "mail/mailresponse/trash_mail_list";
+		model.addAttribute("receiverMailAddress", receiverMailAddress); //변경해야함
+		return "mail/mailresponse/trash_mail_list"; //여기도 jsp도
 	}
 	
+//	@PostMapping("/senderperfectlydeletemail.do")
+//	public String senderPerfectlyDeleteMail(String mailNoStr) {
+//		System.out.println("메일완전삭제 mailNoStr : " + mailNoStr);
+//		service.senderPerfectlyDeleteMail(mailNoStr);
+//		return "redirect:/mail/jointrashmailbox.do";
+//	} // jsp에서 요청주소 변경해야함
+//	
+//	@PostMapping("/receiverperfectlydeletemail.do")
+//	public String receiverPerfectlyDeleteMail(String mailNoStr) {
+//		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
+//		System.out.println("수신자 완전삭제 메일번호 : " + mailNoStr);
+//		Map<String, String> sqlParam = new HashMap<String, String>();
+//		sqlParam.put("receiverMailAddress", receiverMailAddress);
+//		sqlParam.put("mailNoStr", mailNoStr);
+//		service.receiverPerfectlyDeleteMail(sqlParam);
+//		return "redirect:/mail/jointrashmailbox.do";
+//	}
+	
 	@PostMapping("/perfectlydeletemail.do")
-	public String perfectlyDeleteMail(String mailNoStr) {
-		System.out.println("메일완전삭제 mailNoStr : " + mailNoStr);
-		service.perfectlyDeleteMail(mailNoStr);
+	public String perfectlyDeleteMail(String mailNoStr, HttpSession session) {
+		Map<String, String> deleteSqlParam = new HashMap<String, String>();
+		String loginMemberMailAddress = getLoginEmpInfo().getEmpEmail();
+		System.out.println("완전삭제 메소드 mailNoStr : " + mailNoStr);
+		
+		Map<String, String> sqlParam = new HashMap<String, String>();
+		sqlParam.put("loginMemberMailAddress", loginMemberMailAddress);
+		sqlParam.put("mailNoStr", mailNoStr);
+		
+		//쓰레기통에있는 메일을 선택한 mailNo로 조회
+		List<Mail> getMailForDelete = service.getMailForDelete(sqlParam);
+		System.out.println("완전삭제를 위한 trashMailList : " + getMailForDelete);
+		
+		getMailForDelete.forEach(mail -> {
+			if(mail.getSenderMailAddress().equals(loginMemberMailAddress)) {
+				System.out.println("발신자 완전삭제 조건문");
+				service.senderPerfectlyDeleteMail(mail.getMailNo());
+			} else {
+				System.out.println("수신자 완전삭제 조건문");
+				deleteSqlParam.put("mailNo", String.valueOf(mail.getMailNo()));
+				deleteSqlParam.put("loginMemberMailAddress", loginMemberMailAddress);
+				service.receiverPerfectlyDeleteMail(deleteSqlParam);
+			}
+		});
+		//String filePath = session.getServletContext().getRealPath("/resources/upload/mail/");
+		
+		
+		/*
+		 * 메일을 완전삭제할때 쓰레기통에 있는 메일을 체크박스로 클라이언트가 완전삭제 하고자하는 mailNo를 requestParam으로 받게됩니다
+		 * getMailForDelete는 완전삭제 하고자하는 메일을 받은 List입니다. 받아온 list의 작성자메일주소와 현재로그인한 사원의
+		 * 메일주소가 같으면 보낸사람이 삭제하는 것으로 간주하고 list의 발신인 메일주소와 로그인한 사원의 메일주소와 같다면 받은사람이 삭제하는
+		 * 것으로 간주합니다.
+		 */ 
+		
+		
+		
+//		getMailForDelete.forEach(mail -> {
+//			int receiverDeleteStatusCount = 0;
+//			if(mail.getSenderMailAddress().equals(loginMemberMailAddress)) {
+//				int mailNo = mail.getMailNo();
+//				service.senderPerfectlyDeleteMail(mailNo);
+//			}
+//			
+//			for(MailReceiver receiver : mail.getReceivers()) {
+//				if(receiver.getReceiverDeleteStatus().equals("Y")) receiverDeleteStatusCount++;
+//			}
+//					
+//			mail.getReceivers().forEach(receiver -> {
+//				if(receiver.getMailReceiverAddress().equals(loginMemberMailAddress)) {
+//					int mailReceiverNo = receiver.getMailReceiverNo();
+//					service.receiverPerfectlyDeleteMail(mailReceiverNo);
+//				}
+//			});
+//		});
+		
+		
+		
 		return "redirect:/mail/jointrashmailbox.do";
 	}
 	
@@ -530,6 +688,7 @@ public class MailController {
 		
 		List<Mail> sendingMailList = service.joinSendingMailBox(empNo, pagingParam);
 		
+		
 		System.out.println("sendingMailList : " + sendingMailList);
 		model.addAttribute("mails", sendingMailList);
 		model.addAttribute("pageBar", pageBar);
@@ -537,7 +696,7 @@ public class MailController {
 	}
 	
 	@PostMapping("/searchmail.do")
-	public String searchMail(String searchType, String searchValue, Model model,
+	public String searchReceiveMail(String searchType, String searchValue, Model model,
 								@RequestParam(defaultValue = "1") int cPage) {
 		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
 		long empNo = getLoginEmpInfo().getEmpNo();
@@ -560,7 +719,7 @@ public class MailController {
 		
 		String pageBar = paging(totalData, cPage, numPerpage, cPage, receiverMailAddress);
 		
-		List<Mail> searchList = service.searchMail(searchParam, pagingParam);
+		List<Mail> searchList = service.searchReceiveMail(searchParam, pagingParam);
 		model.addAttribute("mails", searchList);
 		model.addAttribute("pageBar", pageBar);
 		
@@ -595,6 +754,43 @@ public class MailController {
 		}
 	}
 	
+	@GetMapping("/mailsettingview.do")
+	public void mailSettingView(Model model) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		
+		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
+		System.out.println("spamDomainList : " + spamDomains);
+		
+		model.addAttribute("spamDomains", spamDomains);
+	}
+	
+	@PostMapping("applymailsetting.do")
+	public String applyMailSetting(int numPerpage, String[] spamMailAddress, Model model) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		
+		Map<String, Object> mailSettingParam = new HashMap<String, Object>();
+		System.out.println("settingNumPerpage : " + numPerpage);
+		Arrays.stream(spamMailAddress).forEach(e -> {
+			System.out.println("spamMailAddressSetting : " + e);
+		});
+		
+		mailSettingParam.put("numPerpage", numPerpage);
+		mailSettingParam.put("empNo", empNo);
+		
+		int spamAddressExistCount = 0;
+		for(String address : spamMailAddress) {
+			if(address.length() > 0) spamAddressExistCount++;
+		}
+		
+		if(spamAddressExistCount > 0) {
+			mailSettingParam.put("spamMailAddressArr", spamMailAddress);			
+		}
+		
+		int result = service.applyMailSetting(mailSettingParam);
+		
+		return changeMailView(model, 1);
+	}
+	
 	//test
 	@GetMapping("/testuploadfile.do")
 	public String testUploadFileView() {
@@ -621,7 +817,7 @@ public class MailController {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 	
-	private void updateReadStatus(int mailNo) {
-		service.updateReadStatus(mailNo);
+	private void updateRecentReadStatus(int mailNo) {
+		service.updateRecentReadStatus(mailNo);
 	}
 }

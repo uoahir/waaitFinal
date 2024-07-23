@@ -6,7 +6,12 @@
 
 <!-- 로그인된 사용자 객체 불러오기 -->
 <c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
-   
+
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,18 +27,39 @@
 <body>
 
 <main>
+	
         <div>
             <!-- 상단바 -->
             <div id="chatting_chattingroom_top">
                 <div>
-                    <p>여기저기</p>
-                    <p>5</p>
+                <!-- 
+                	chatRoomName -> empName -> chatEmpName
+					채팅방이름 -> (그룹)개설자이름 -> (개인)상대방이름
+				 -->
+                	<c:choose>
+                		<c:when test="${chatName.chatRoomName != null}">
+                			<p>${chatName.chatRoomName}</p>
+                		</c:when>
+                		<c:when test="${chatName.chatHistory.empName != null}">
+                			<p>${chatName.chatHistory.empName}</p>
+                		</c:when>
+                		<c:otherwise>
+                			<p>${chatName.chatHistory.chatEmpName}</p>
+                		</c:otherwise>
+                	</c:choose>
+                    
+                    <!-- 개인톡방 참여자 수 안띄움 -->
+                    <c:if test="${chatName.chatRoomType ne 'C1'}">
+	                    <p>${chatName.chatJoinCount}</p>                    
+                    </c:if>
+                    
+                    
                 </div>
                 <div>
-                    <button>
+                    <button onclick="search();">
                         <img src="https://i.pinimg.com/564x/95/ee/40/95ee408c19f2c9d10629b70c4cea3e51.jpg" alt="검색" width="40" height="40">
                     </button>
-                    <button>
+                    <button onclick="setting();">
                         <img src="https://i.pinimg.com/564x/23/8b/7f/238b7f2849994039b217c3eeb3706001.jpg" alt="파일 모아보기 and 채팅방 나가기" width="40" height="40">
                     </button>
                 </div>
@@ -41,92 +67,43 @@
 
             <!-- 채팅내역 -->
             <div id="chatting_chattingroom_content">
-                <!-- 채팅 내역한줄 -->
-                <div class="chatting_chattingroom_content_user">
-                    <div>
-                        <img src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg"  alt="프로필" width="50" height="50">
-                    </div>
-                    <div>
-                        <p>안녕이름</p>
-                        <p>오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자</p>
-                    </div>
-                    <div>
-                        <p>1</p>
-                        <p>오후 5:31</p>
-                    </div>
-                </div>  <!-- 채팅 내역 한줄 끝 -->
-
-                <div class="chatting_chattingroom_content_user">
-                    <div>
-                        <img src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg"  alt="프로필" width="50" height="50">
-                    </div>
-                    <div>
-                        <p>안녕이름</p>
-                        <p>오늘 샤브샤브먹자</p>
-                    </div>
-                    <div>
-                        <p>1</p>
-                        <p>오후 5:31</p>
-
-                        
-                    </div>
-                </div>  <!-- 채팅 내역 한줄 끝 -->
-
-                <div class="chatting_chattingroom_content_my">
-                    <div>
-                        <p>1</p>
-                        <p>오후 5:31</p>
-                    </div>
-                    <div>
-                        <p>오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자</p>
-                    </div>
-                    
-                </div>  <!-- 채팅 내역 한줄 끝 -->
-
-                <div class="chatting_chattingroom_content_my">
-                    <div>
-                        <p>1</p>
-                        <p>오후 5:31</p>
-                    </div>
-                    <div>
-                        <p>오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자</p>
-                    </div>
-                    
-                </div>  <!-- 채팅 내역 한줄 끝 -->
-
-                <div class="chatting_chattingroom_content_my">
-                    <div>
-                        <p>1</p>
-                        <p>오후 5:31</p>
-                    </div>
-                    <div>
-                        <p>오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자</p>
-                    </div>
-                    
-                </div>  <!-- 채팅 내역 한줄 끝 -->
-
-                <div class="chatting_chattingroom_content_my">
-                    <div>
-                        <p>1</p>
-                        <p>오후 5:31</p>
-                    </div>
-                    <div>
-                        <p>오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자</p>
-                    </div>
-                    
-                </div>  <!-- 채팅 내역 한줄 끝 -->
-
-                <div class="chatting_chattingroom_content_my">
-                    <div>
-                        <p>1</p>
-                        <p>오후 5:31</p>
-                    </div>
-                    <div>
-                        <p>오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자오늘 샤브샤브먹자</p>
-                    </div>
-                </div>  <!-- 채팅 내역 한줄 끝 -->
-
-            </div>
+            	<!--
+            		채팅내역 class
+           			상대 : chatting_chattingroom_content_user	
+           			나 : chatting_chattingroom_content_my
+            	-->
+            	<c:forEach var="chatHistory" items="${chatHistorys}">
+            		<!-- 로그인된 사원 채팅 -->
+	            	<c:if test="${chatHistory.empNo eq employee.empNo }">
+	            		<div class="chatting_chattingroom_content_my">
+		                    <div>
+		                        <p>${chatHistory.chatReadCount}</p>
+		                        <p>${chatHistory.chatCreationDate}</p>
+		                    </div>
+		                    <div>
+		                        <p>${chatHistory.chatContent}</p>
+		                    </div>
+		                </div>
+					</c:if>
+					
+					<!-- 로그인되지 않은 다른 사원 채팅 -->
+					<c:if test="${chatHistory.empNo ne employee.empNo }">
+	            		<div class="chatting_chattingroom_content_user">
+	            			<div>
+	            				<img src="${path}/chatHistory.empProfile" alt="프로필" width="50" height="50">
+	            			</div>
+	            			<div>
+	            				<p>${chatHistory.empName}</p>
+	            				<p>${chatHistory.chatContent}</p>
+	            			</div>
+	            			<div>
+	            				<p>${chatHistory.chatReadCount}</p>
+	            				<p>${chatHistory.chatCreationDate}</p>
+	            			</div>
+	            		</div>
+ 					</c:if>                	
+            	</c:forEach>
+            </div>	<!-- 채팅내역 출력 끝 -->
 
             <!-- 채팅입력 칸 -->
             <div id="chatting_chattingroom_bottom">
@@ -154,8 +131,17 @@
 
 	<script>
 		const loginId = "${employee.empId}";
+		const loginEmpName = "${employee.empName}";
 		const loginEmpNo = "${employee.empNo}";
 		const path = "${pageContext.request.contextPath }";
+		const chatRoomNo = "${chatName.chatRoomNo}";
+		const chatJoinCount = "${chatName.chatJoinCount -1}";
+		
+		
+		//나중에 삭제함
+		console.log("chatName : "+"${chatName}");
+		console.log("chatHistorys : "+"${chatHistorys}");
+		
 	</script>
 	
 	<!-- script문 -->

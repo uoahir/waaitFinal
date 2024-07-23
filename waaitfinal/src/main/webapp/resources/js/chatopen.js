@@ -41,11 +41,13 @@
 	
 	//채팅방목록에서 채팅방을 클릭했을 때
 	//채팅방을 눌렀을때 해당하는 채팅방의 번호를 보내서 채팅내역을 출력해야함.
+	//해당 채팅방번호, 로그인된 사원번호 전달
 	const chatroomopen=(e)=>{
 		console.log("채팅방 클릭");
 		const chatroomNo = e.currentTarget.dataset.chatroomNo;
 		console.log("채팅방 번호 : "+chatroomNo);
-		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatroomNo,"_blank","top=100, left=400, height=700, width=550");
+		console.log("로그인된 사원 번호 : "+loginEmpNo);
+		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatroomNo+"&loginEmpNo="+loginEmpNo,"_blank","top=100, left=400, height=700, width=550");
 		
 		chatserver.onload = function(){
 			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
@@ -68,7 +70,7 @@
 			case "사원목록" : chatuserPrint(receiveMsg);break;
 			
 			//case "open" : alertMessage(receiveMsg);break; 	//채팅방에 입장할 때
-			case "msg" : messagePrint(receiveMsg);break;	//메세지 왔을때
+			//case "msg" : messagePrint(receiveMsg);break;	//메세지 왔을때
 			//case "attend" :addAttend(receiveMsg);break;		//새로운사람이 입장할 때
 			//case "close" : alertMessage(receiveMsg);break;
 		}
@@ -261,7 +263,7 @@
 
 
 
-
+ 
 
 
 	
@@ -344,7 +346,7 @@
 			if(chatroom.chatRoomName!=null){
 				$p1.innerText=chatroom.chatRoomName;
 			}else{
-				$p1.innerText=chatroom.empName;
+				$p1.innerText=chatroom.chatHistory.empName;
 			}
 			$p2.innerText=chatroom.chatHistory.chatContent;
 			
@@ -417,7 +419,7 @@
 
 
 	//메세지 출력
-	const messagePrint=(msg)=>{
+	/*const messagePrint=(msg)=>{
 		console.log("messagePrint : "+msg);
 		console.log(msg);
 		
@@ -482,15 +484,13 @@
 			$div.classList.add("chatting_chattingroom_content_user");
 			
 			document.querySelector("#chatting_chattingroom_content").appendChild($div);
-		}
-		
-		
-	}
+		}				
+	}*/
 
 
 
 	//채팅방에서 전송버튼 눌렀을때 작동하는 js 
-	const sendMessage=()=>{
+	/*const sendMessage=()=>{
 		const inputData = document.querySelector("#msg").value;
 		console.log("sendMessage : "+inputData);
 		if(inputData.length > 0){
@@ -502,7 +502,7 @@
 			alert("메세지를 입력하세요!");
 			document.querySelector("#msg").focus();
 		}
-	}
+	}*/
 
 
 	/*const alertMessage=(msg)=>{

@@ -18,6 +18,15 @@ public class ChatHistory {
 	private String chatCreationDate;	//채팅작성 날짜
 	private int chatReadCount;	//채팅 읽 안읽
 	
+	//Employee
+	private String empName;
+	private String empProfile;
+	
+	//개인톡방일떄 사용
+	private String chatEmpName;
+	
+	//chatRoomName -> empName -> chatEmpName
+	// 채팅방이름 -> (그룹)개설자이름 -> (개인)상대방이름
 	
 	
 }
