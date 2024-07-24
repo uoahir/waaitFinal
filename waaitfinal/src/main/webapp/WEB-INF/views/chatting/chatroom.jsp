@@ -113,7 +113,7 @@
                 <div>
                     <button onclick="sendMessage();">전송</button>
                     <button>파일전송</button>
-                    <input type="file" value="파일전송">
+                    <input type="file" class="multiple-files-filepond" value="파일전송" multiple>
                 </div>
             </div>
 

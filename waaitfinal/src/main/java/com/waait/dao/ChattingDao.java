@@ -20,4 +20,10 @@ public interface ChattingDao {
 	List<ChatHistory> selectChatRoomHistory(SqlSession session, Map<String, Integer> param);
 	
 	int insertChatHistory(SqlSession session, Message message);
+	
+	int insertChatRoom(SqlSession session, Map<String, Object> chatRoomParam);
+	
+	int selectSEQ_ChatRoomNo(SqlSession session);
+	
+	int insertChatJoin(SqlSession session, Map<String, Object> chatJoinParam);
 }

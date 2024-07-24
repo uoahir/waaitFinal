@@ -38,7 +38,25 @@ public class ChattingDaoImpl implements ChattingDao {
 	public int insertChatHistory(SqlSession session, Message message) {
 		return session.insert("chatting.insertChatHistory",message);
 	}
+	
 
+	@Override
+	public int insertChatRoom(SqlSession session, Map<String, Object> chatRoomParam) {
+		System.out.println("7");
+		return session.insert("chatting.insertChatRoom",chatRoomParam);
+	}
+
+	@Override
+	public int selectSEQ_ChatRoomNo(SqlSession session) {
+		return session.selectOne("chatting.selectSEQ_ChatRoomNo");
+	}
+
+	@Override
+	public int insertChatJoin(SqlSession session, Map<String, Object> chatJoinParam) {
+		return session.insert("chatting.insertChatJoin",chatJoinParam);
+	}
+	
+	
 	
 	
 	

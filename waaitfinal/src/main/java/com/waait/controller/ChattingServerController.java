@@ -188,6 +188,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 		Map<String, Object> chatRoomtotal = new HashMap<>();
 		chatRoomtotal.put("type", msg.getType());
 		chatRoomtotal.put("chatRoomlist", chatRoomlist);
+		chatRoomtotal.put("loginEmpNo", loginEmpNo);
 		System.out.println("chatRoomlist - chatRoomtotal : "+chatRoomtotal);
 		
 		for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {
@@ -207,7 +208,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 	
 	
 	
-	
+	//사원 목록
 	private void chatUserlist(Message msg) {
 		System.out.println("chatUserlist 실행");
 		long loginEmpNo = msg.getEmpNo();
@@ -216,6 +217,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 		Map<String, Object> chatUsertotal = new HashMap<>();
 		chatUsertotal.put("type", msg.getType());
 		chatUsertotal.put("chatUserlist", chatUserlist);
+		chatUsertotal.put("loginEmpNo", loginEmpNo);
 		System.out.println("chatUserlist - chatUsertotal : "+chatUsertotal);
 		
 		for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {

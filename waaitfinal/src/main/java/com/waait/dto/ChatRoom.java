@@ -32,4 +32,6 @@ public class ChatRoom {
 	//채팅조인 카운트 자기포함한 카운트 -1 해서 사용해야됨.
 	private int chatJoinCount;
 	
+	// 1:1채팅방일때 상대방 사원이름
+	private String chatEmpName;
 }
