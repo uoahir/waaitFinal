@@ -47,7 +47,7 @@ public class ScheduleController {
 			System.out.println(e);
 		});
 		
-		return "schedule/schedulemain2";
+		return "schedule/schedulemain";
 	}
 	
 	// 사용자 로그인 시큐리티로 데이터 가져오기
@@ -74,30 +74,36 @@ public class ScheduleController {
 //		}
 //		if(s.getSchePrivate()==null) {
 //			s.setSchePrivate("N");
-//		}
+//		}       
 		
 		int result=service.insertSchedule(s);
-		return "redirect:/schedule/myschedule";
+		return "redirect:/schedule/myschedule2";
 		
 	}
 	
 	@RequestMapping("/updateSchedule.do")
 	public String updateSchdule() {
 		
-	return "redirect:/schedule/myschedule";
+	return "/schedule/updatemodal";
 	}
 	
 	//삭제하기
 	@PostMapping("/deleteSchedule.do")
-	public String deleteSchedule(int scheNo) {
+	public String deleteSchedule(int scheNo,Model model) {
+		
+		String msg,loc;
 		
 		int result=service.deleteSchedule(scheNo);	
 		if(result>0) {
-			//msg=""; 이거 해주기
+			msg="일정 삭제 성공"; 
+			loc="/schedule/schedulemain2";
 		}
 		else {
-			//msg=""  이거 해주기
-		}
+			msg="삭제 실패. 다시 시도하세요";
+			loc="/schedule/deleteSchedule.do";					
+		}		
+		model.addAttribute("msg",msg);
+		model.addAttribute("loc",loc);
 		
 		return "redirect:/schedule/myschedule";
 	}

@@ -18,3 +18,5 @@ public interface ScheduleDao {
 	int deleteSchedule(SqlSession session, int num);
 	
 }
+
+
