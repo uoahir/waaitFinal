@@ -99,9 +99,22 @@
 					}
 					
 					const modifyDept = () => {
-						const wantModifyDept = document.getElementById("modifyWantDept")[2].dataset.deptCode;
-						console.log(wantModifyDept);
-						
+						const deptSelect = document.getElementById("modifyWantDept");
+						const wantModifyDeptName = deptSelect.value;
+						const wantModifyDeptCode = deptSelect[deptSelect.selectedIndex].dataset.deptcode;
+						fetch("${path }/manage/empmodifydept.do", {
+							method : "POST",
+							headers : {
+								"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+							},
+							body : "wantModifyDeptName=" + wantModifyDeptName + "&wantModifyDeptCode=" + wantModifyDeptCode
+						})
+						.then(response => response.text())
+						.then(data => {
+							console.log(data);
+						});
+						console.log(wantModifyDeptCode);
+						//내일 매핑할 컨트롤러 만들면됨.
 					}
 				</script>
 			</div>
