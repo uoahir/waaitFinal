@@ -159,7 +159,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 			});
 			
 			if(messages.size() >= 5) {
-				//insert할때 벌크 인서트 
+				//서버닫힐때 DB에 저장해야됨
 				int result = service.insertChatHistory(messages);	
 				//한번 저장시키고 list안에 내용물 비우기
 				messages.clear();
@@ -168,9 +168,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 				}else {
 					System.out.println("채팅내역 저장안됨?");
 				}
-				
 			}
-		
 		}
 	
 	}
@@ -190,6 +188,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 		Map<String, Object> chatRoomtotal = new HashMap<>();
 		chatRoomtotal.put("type", msg.getType());
 		chatRoomtotal.put("chatRoomlist", chatRoomlist);
+		chatRoomtotal.put("loginEmpNo", loginEmpNo);
 		System.out.println("chatRoomlist - chatRoomtotal : "+chatRoomtotal);
 		
 		for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {
@@ -209,7 +208,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 	
 	
 	
-	
+	//사원 목록
 	private void chatUserlist(Message msg) {
 		System.out.println("chatUserlist 실행");
 		long loginEmpNo = msg.getEmpNo();
@@ -218,6 +217,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 		Map<String, Object> chatUsertotal = new HashMap<>();
 		chatUsertotal.put("type", msg.getType());
 		chatUsertotal.put("chatUserlist", chatUserlist);
+		chatUsertotal.put("loginEmpNo", loginEmpNo);
 		System.out.println("chatUserlist - chatUsertotal : "+chatUsertotal);
 		
 		for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {

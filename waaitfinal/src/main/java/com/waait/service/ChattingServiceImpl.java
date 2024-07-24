@@ -1,5 +1,6 @@
 package com.waait.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +59,38 @@ public class ChattingServiceImpl implements ChattingService {
 			result = dao.insertChatHistory(session, message);
 		}
 		return result;
+	}
+
+
+	@Override
+	public int insertChatRoom(Map<String, Object> chatRoomParam) {
+		System.out.println("6");
+		int result = dao.insertChatRoom(session, chatRoomParam);
+		System.out.println("result : "+result);
+		return result;
+	}
+
+
+	
+	@Override
+	public int insertChatJoin(List<Long> chatJoinParam) {
+		int chatRoomNo = dao.selectSEQ_ChatRoomNo(session);
+		int result2 = 0;
+		
+		System.out.println("서비스 chatRoomNo : "+chatRoomNo);
+		System.out.println("서비스 chatJoinParam : "+chatJoinParam);
+//		List<Long> params = (List<Long>) chatJoinParam.get("chatEmpNo");
+		
+		for(Long chatEmpNo : chatJoinParam) {
+			Map<String, Object> param = new HashMap<>();
+			param.put("chatRoomNo", chatRoomNo);
+			param.put("chatEmpNo", chatEmpNo);
+			result2 = dao.insertChatJoin(session, param);
+		}			
+		
+		System.out.println("서비스 result2 : "+result2);
+		
+		return chatRoomNo;
 	}
 	
 	

@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="${path }/resources/assets/extensions/toastify-js/src/toastify.css">
 <link rel="stylesheet" href="${path }/resources/assets/compiled/css/app.css">
 <link rel="stylesheet" href="${path }/resources/assets/compiled/css/app-dark.css">
+<link rel="stylesheet" href="${path }/resources/waait/mail/writemail_css.css">
 </head>
 <body>
 	<h1>헤더</h1>
@@ -39,7 +40,6 @@
 							</c:forEach>
 						</c:if>
 						<c:if test="${mails.receivers.size() == 0 }">
-							<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
 							<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
 						</c:if>
 					</div>
@@ -106,15 +106,15 @@
 		            </div>
 		        </div>
 		    </section>
-			<button class="btn btn-primary" type="button" onclick="mailContentInputHidden()">테스트버튼</button>
-		    <input type="text" name="mailContent" hidden="true">
-		    <input type="text" name="mailReceiver" hidden="true">
-		    <input type="submit" name="mailStatus" value="전송">
-		    <input type="submit" name="mailStatus" value="임시저장">
+		    <div class="actionButtonContainer">
+			    <input type="text" name="mailContent" hidden="true">
+			    <input type="text" name="mailReceiver" hidden="true">
+			    <input type="submit" name="mailStatus" class="btn btn-outline-primary" value="임시저장">
+			    <input type="submit" name="mailStatus" class="btn btn-outline-success" value="전송">
+		    </div>
 	    </form>
     </c:if>
     
-    <button onclick="fileUploadTest()">파일업로드테스트</button>
     <script>
     	document.querySelector("input[name='mailReceiver']").addEventListener("keyup", e => {
     		console.log("이벤트발생");

@@ -19,4 +19,8 @@ public interface ChattingService {
 	List<ChatHistory> selectChatRoomHistory(Map<String, Integer> param);
 	
 	int insertChatHistory(List<Message> messages);
+	
+	int insertChatRoom(Map<String, Object> chatRoomParam);
+	
+	int insertChatJoin(List<Long> chatJoinParam);
 }
