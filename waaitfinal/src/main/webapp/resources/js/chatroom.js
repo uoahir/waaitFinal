@@ -14,6 +14,118 @@
 	}
 	
 	
+	// 서버 -> 클라이언트 메세지받았을때 오는 곳
+	chatserver.onmessage=(response)=>{
+		const receiveMsg = Message.deconvert(response.data);
+		console.log(receiveMsg);
+		
+		switch(receiveMsg.type){
+			case "메세지" : messagePrint(receiveMsg);break;	//메세지 전송, 받았을때
+			
+		}		
+	}
+	
+	
+	//매세지 출력
+	const messagePrint=(msg)=>{
+		console.log("messagePrint : "+msg);
+		console.log(msg);
+		if(chatRoomNo == msg.chatRoomNo){
+			if(msg.empName == loginEmpName){
+				//로그인된 사람 메세지 출력
+				const $div = document.createElement("div");
+				const $div1 = document.createElement("div");
+				const $div2 = document.createElement("div");
+				
+				const $p1 = document.createElement("p");
+				const $p2 = document.createElement("p");
+				const $p3 = document.createElement("p");
+				
+				$p1.innerText = msg.chatReadCount;
+				$p2.innerText = msg.chatCreationDate;
+				$p3.innerText = msg.chatContent;
+				
+				$div1.appendChild($p1);
+				$div1.appendChild($p2);
+				$div2.appendChild($p3);
+				
+				$div.appendChild($div1);
+				$div.appendChild($div2);
+				
+				$div.classList.add("chatting_chattingroom_content_my");
+				
+				document.querySelector("#chatting_chattingroom_content").appendChild($div);
+			}else{
+				//로그인된 사람이 아닌 다른 사용자 메세지 출력
+				const $div = document.createElement("div");
+				const $div1 = document.createElement("div");
+				const $div2 = document.createElement("div");
+				const $div3 = document.createElement("div");
+				
+				const $profile = document.createElement("img");
+				
+				$profile.style.width="50px";
+				$profile.style.height="50px";
+				$profile.style.borderRadius="100%";
+				$profile.setAttribute("src","${path}/resources/images/joyee.png");	// 사원번호를 이용해 프로필사진 가져오기
+				
+				const $p1 = document.createElement("p");
+				const $p2 = document.createElement("p");
+				const $p3 = document.createElement("p");
+				const $p4 = document.createElement("p");
+				
+				$p1.innerText = msg.empName;
+				$p2.innerText = msg.chatContent;
+				$p3.innerText = msg.chatReadCount;
+				$p4.innerText = msg.chatCreationDate;
+				
+				$div1.appendChild($profile);
+				$div2.appendChild($p1);
+				$div2.appendChild($p2);
+				$div3.appendChild($p3);
+				$div3.appendChild($p4);
+				
+				$div.appendChild($div1);
+				$div.appendChild($div2);
+				$div.appendChild($div3);
+				
+				$div.classList.add("chatting_chattingroom_content_user");
+				
+				document.querySelector("#chatting_chattingroom_content").appendChild($div);
+			}	
+		}				
+	}
+	
+	
+	
+	//채팅방에서 전송버튼 눌렀을때 작동하는 js 
+	const sendMessage=()=>{
+		const inputData = document.querySelector("#msg").value;
+		console.log("sendMessage : "+inputData);
+		
+		if(inputData.length > 0){
+			//현재 시간 가져와 활용
+			const now = new Date();
+			const year = now.getFullYear();
+			const month = (now.getMonth()+1).toString().padStart(2,"0");
+			const day = now.getDate().toString().padStart(2,"0");
+			const hours = now.getHours().toString().padStart(2,"0");
+			const minutes = now.getMinutes().toString().padStart(2,"0");
+			const seconds = now.getSeconds().toString().padStart(2,"0");
+			const msgTime = year+"/"+month+"/"+day+" "+hours+":"+minutes+":"+seconds;
+			
+			//타입 , 방번호, 전송자사원번호, 채팅내용
+			const msgObj = new Message("메세지",loginEmpNo,loginEmpName,chatRoomNo,inputData,msgTime,chatJoinCount).convert();
+			chatserver.send(msgObj);
+			console.log("chatserver.send 전송메세지 : "+msgObj);
+			document.querySelector("#msg").value = "";
+		}else{
+			alert("메세지를 입력하세요!");
+			document.querySelector("#msg").focus();
+		}
+	}
+	
+	
 	
 	
 	
@@ -39,4 +151,4 @@
 			return JSON.parse(data);
 		}
 		
-	} 
+	}

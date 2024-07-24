@@ -30,32 +30,22 @@
             <div class="modal-body">
                 <form id="eventForm" action="${pageContext.request.contextPath }/schedule/insertSchedule.do" method='POST'>                   
                     <div class="mb-3">
-                        <label for="scheTitle" class="form-label">일정명</label>
+                        <label for="scheTitle" class="form-label"><strong>일정명</strong></label>
                         <h6 id="modalScheTitle" ></h6>                       
                     </div>
                     <div class="mb-3">
-                        <label for="scheContent" class="form-label">일정내용</label>
+                        <label for="scheContent" class="form-label"><strong>일정내용</strong></label>
                         <h6 id="modalScheContent"> </h6>
                     </div>
                     <div class="mb-3">
-                        <label for="scheTime" class="form-label">시작 일자</label>
+                        <label for="scheTime" class="form-label"><strong>시작 일자</strong></label>
                         <h6 id="modalScheTime"> </h6>
                     </div>
                     <div class="mb-3">
-                        <label for="scheEnd" class="form-label">종료 일자</label>
-                        <h6 id="modalScheEnd"> </h6>
+                        <label for="scheEnd" class="form-label"><strong>종료 일자</strong></label>
+                        <h6 id="modalScheEnd"></h6>
                     </div>
-                    <div class="mb-12">
-                    	<label for="scheColor" class="form-label"> 캘린더 색상</label>
-                        <select id="color" name="scheColor">
-			              <option value="red">빨강색</option>
-			              <option value="orange">주황색</option>
-			              <option value="yellow">노랑색</option>
-			              <option value="green">초록색</option>
-			              <option value="blue">파랑색</option>
-			              <option value="indigo">남색</option>
-			              <option value="purple">보라색</option>
-			            </select>
+                    <div class="mb-12">                    
 			            <label for="scheAllDay" class="form-label">종일일정</label>
                         <input type="checkbox" name="scheAllDay" value="true" id="scheAllDay">
                          <label for="schePrivate" class="form-label">개인일정</label>
