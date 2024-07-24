@@ -47,7 +47,7 @@ public class ScheduleController {
 			System.out.println(e);
 		});
 		
-		return "schedule/schedulemain";
+		return "schedule/schedulepage";
 	}
 	
 	// 사용자 로그인 시큐리티로 데이터 가져오기
@@ -77,7 +77,7 @@ public class ScheduleController {
 //		}       
 		
 		int result=service.insertSchedule(s);
-		return "redirect:/schedule/myschedule2";
+		return "redirect:/schedule/schedulepage";
 		
 	}
 	
@@ -94,16 +94,16 @@ public class ScheduleController {
 		String msg,loc;
 		
 		int result=service.deleteSchedule(scheNo);	
-		if(result>0) {
-			msg="일정 삭제 성공"; 
-			loc="/schedule/schedulemain2";
-		}
-		else {
-			msg="삭제 실패. 다시 시도하세요";
-			loc="/schedule/deleteSchedule.do";					
-		}		
-		model.addAttribute("msg",msg);
-		model.addAttribute("loc",loc);
+//		if(result>0) {
+//			msg="일정 삭제 성공"; 
+//			loc="/schedule/schedulepage";
+//		}
+//		else {
+//			msg="삭제 실패. 다시 시도하세요";
+//			loc="/schedule/deleteSchedule.do";					
+//		}		
+//		model.addAttribute("msg",msg);
+//		model.addAttribute("loc",loc);
 		
 		return "redirect:/schedule/myschedule";
 	}
