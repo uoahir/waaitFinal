@@ -114,6 +114,7 @@ public class MailService {
 	
 	@Transactional
 	public int sendMail(Map<String, Object> param) {
+		int checkCount = 0;
 		int result = 0;
 		int mailSequence = dao.selectSequence(session);
 		System.out.println("mailSequence : " + mailSequence);
@@ -123,6 +124,16 @@ public class MailService {
 		
 		String[] mailReceiverAddressArr = (String[]) param.get("mailReceiverAddress");
 		System.out.println("MailReceiverAddressArrLength : " + mailReceiverAddressArr.length);
+		
+		for(String receiverAddress : mailReceiverAddressArr) {
+			if(receiverAddress.length() > 0) checkCount++;
+		}
+		
+		if(checkCount == 1) {
+			for(String receiverAddress : mailReceiverAddressArr) {
+				if(receiverAddress.length() > 0) param.put("mailReceiverAddress", receiverAddress);
+			}
+		}
 		
 		if(mailReceiverAddressArr.length > 1) {
 			for(int i = 0; i < mailReceiverAddressArr.length; i++) {
@@ -134,7 +145,7 @@ public class MailService {
 		} else {
 			result = dao.enrollReceiverInfo(session, param);
 		}
-		return mailSequence;
+ 		return mailSequence;
 	}
 	
 	@Transactional

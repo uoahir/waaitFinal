@@ -156,7 +156,7 @@
 															} else {
 																document.getElementById("myMailBoxListContainer").innerHTML
 																	+= "<div style='display:flex;'>"
-																		+ "<a href='' class='list-group-item' name='myMailBox' id='" + data.myMailBoxNo + "' onclick='selectMenu(event)'>"
+																		+ "<a href='javascript:changeView(\"${path }/mail/joinmymailbox.do?myMailBoxNo=" + data.myMailBoxNo + "\")' class='list-group-item' name='myMailBox' id='" + data.myMailBoxNo + "' onclick='selectMenu(event)'>"
 																			+ "<div class='fonticon-wrap d-inline me-3'>"
 																				+ "<svg class='bi' width='1.5em' height='1.5em' fill='currentColor'>"
 																					+ "<use xlink:href='${path }/resources/assets/static/images/bootstrap-icons.svg#envelope' />"
@@ -829,6 +829,7 @@
 			
 			if(checkedCount == 0) return;//수정해야함
 			console.log("mailNoStr : " + mailNoStr);
+			
 			fetch("${path }/mail/deletemail.do", {
 				method : "POST",
 				headers : {

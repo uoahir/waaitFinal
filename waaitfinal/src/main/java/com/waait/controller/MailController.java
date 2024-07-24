@@ -377,17 +377,22 @@ public class MailController {
 	
 	@PostMapping("/sendmail.do")
 	public String sendMail(MultipartFile[] upFile, HttpSession session, String mailContent, String mailTitle, String[] mailReceiverAddress, String mailStatus) {
+		System.out.println("매개변수로 들어온 receiverArr 길이 : " + mailReceiverAddress.length);
+		Arrays.stream(mailReceiverAddress).forEach(m -> {
+			System.out.println("mailReceiverAddress : " + m);
+			if(m.length() == 0) {
+				System.out.println("빈 배열");
+			}
+		});
+		
 		long writerNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("mailContent", mailContent);
 		param.put("mailTitle", mailTitle);
+		System.out.println("mailConetnt : " + mailContent + " mailTitle : " + mailTitle + " mailStatus : " + mailStatus + " :writerNo : " + writerNo);
 		param.put("mailReceiverAddress", mailReceiverAddress);
 		param.put("mailStatus", mailStatus);
 		param.put("writerNo", writerNo);
-		System.out.println("mailConetnt : " + mailContent + " mailTitle : " + mailTitle);
-		Arrays.stream(mailReceiverAddress).forEach(m -> {
-			System.out.println("mailReceiverAddress : " + m);
-		});
 		int mailSequence = service.sendMail(param);
 		
 		String path = session.getServletContext().getRealPath("resources/upload/mail");
@@ -595,6 +600,8 @@ public class MailController {
 		} else if(returnViewName.equals("보낸메일함")) {
 			System.out.println("보낸메일함 조건문");
 			return joinSendingMailBox(model, 1);
+		} else if(returnViewName.equals("myMailBox")) {
+			return myMailBoxDetailView(1, model, 1);
 		}
 		return null;
 	}
@@ -614,7 +621,14 @@ public class MailController {
 		System.out.println("완전삭제를 위한 trashMailList : " + getMailForDelete);
 		
 		getMailForDelete.forEach(mail -> {
-			if(mail.getSenderMailAddress().equals(loginMemberMailAddress)) {
+			if(mail.getSenderMailAddress().equals(loginMemberMailAddress) && 
+					mail.getReceivers().get(0).getMailReceiverAddress().equals(loginMemberMailAddress)) {
+				System.out.println("내게쓰기 조건문");
+				deleteSqlParam.put("mailNo", String.valueOf(mail.getMailNo()));
+				deleteSqlParam.put("loginMemberMailAddress", loginMemberMailAddress);
+				service.receiverPerfectlyDeleteMail(deleteSqlParam);
+				service.senderPerfectlyDeleteMail(mail.getMailNo());
+			} else if(mail.getSenderMailAddress().equals(loginMemberMailAddress)) {
 				System.out.println("발신자 완전삭제 조건문");
 				service.senderPerfectlyDeleteMail(mail.getMailNo());
 			} else {
@@ -624,36 +638,6 @@ public class MailController {
 				service.receiverPerfectlyDeleteMail(deleteSqlParam);
 			}
 		});
-		//String filePath = session.getServletContext().getRealPath("/resources/upload/mail/");
-		
-		
-		/*
-		 * 메일을 완전삭제할때 쓰레기통에 있는 메일을 체크박스로 클라이언트가 완전삭제 하고자하는 mailNo를 requestParam으로 받게됩니다
-		 * getMailForDelete는 완전삭제 하고자하는 메일을 받은 List입니다. 받아온 list의 작성자메일주소와 현재로그인한 사원의
-		 * 메일주소가 같으면 보낸사람이 삭제하는 것으로 간주하고 list의 발신인 메일주소와 로그인한 사원의 메일주소와 같다면 받은사람이 삭제하는
-		 * 것으로 간주합니다.
-		 */ 
-		
-		
-		
-//		getMailForDelete.forEach(mail -> {
-//			int receiverDeleteStatusCount = 0;
-//			if(mail.getSenderMailAddress().equals(loginMemberMailAddress)) {
-//				int mailNo = mail.getMailNo();
-//				service.senderPerfectlyDeleteMail(mailNo);
-//			}
-//			
-//			for(MailReceiver receiver : mail.getReceivers()) {
-//				if(receiver.getReceiverDeleteStatus().equals("Y")) receiverDeleteStatusCount++;
-//			}
-//					
-//			mail.getReceivers().forEach(receiver -> {
-//				if(receiver.getMailReceiverAddress().equals(loginMemberMailAddress)) {
-//					int mailReceiverNo = receiver.getMailReceiverNo();
-//					service.receiverPerfectlyDeleteMail(mailReceiverNo);
-//				}
-//			});
-//		});
 		
 		return "redirect:/mail/jointrashmailbox.do";
 	}
@@ -730,8 +714,10 @@ public class MailController {
 		numPerpage = getUserSettingNumPerpage(empNo);
 		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
 		int totalData = service.getSearchMailTotalData(searchParam);
+		int pageBarSize = 5;
+		String url = "/mail/searchmail.do";
 		
-		String pageBar = paging(totalData, cPage, numPerpage, cPage, receiverMailAddress);
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
 		
 		List<Mail> searchList = service.searchReceiveMail(searchParam, pagingParam);
 		model.addAttribute("mails", searchList);

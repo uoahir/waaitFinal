@@ -28,7 +28,7 @@ public class Employee implements UserDetails{
     private String empId;
     private String empPwd;
     private String deptCode;
-    private Department department;              
+    private Department department;
     private String levelCode;
     private JobLevel jobLevel;
     private String empName;

@@ -83,6 +83,7 @@
 					<div class="receiverContainer">
 						<span>받는사람 : </span>
 						<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
+						<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
 					</div>
 					<div class="matilTitleContainer">
 						<span>제목 : </span><input type="text" name="mailTitle" placeholder="제목입력">
