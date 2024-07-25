@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+.senderContainer {
+	border-bottom : 1px solid black;
+}
+.actionButtonContainer {
+	display : flex;
+	justify-content : right;
+}

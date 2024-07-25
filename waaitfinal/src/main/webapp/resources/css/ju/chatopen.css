@@ -131,6 +131,10 @@
             /* border: 1px solid red; */
             width: 100%;
         }
+        
+        .chatting_userlist_printarea>div:hover{
+        	background-color: #AEAEAE;
+        }
 
         .chatting_userlist_printarea_profile{
             display: flex;
@@ -160,7 +164,182 @@
             border-radius: 100%;
             border: 3px solid #AEAEAE;
         }
-        /* userlist 끝 */
+     /* userlist 끝 */
 	
+	
+	
+	
+	
+	/* 채팅방목록 시작 */
+	
+	#chatting_chattingroomlist{
+            /* border: 1px solid red; */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+         /* 검색창 */
+         #chatting_chattingroomlist_search{
+            /* border: 1px solid blue; */
+            width: 100%;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -2px;
+            padding-top: 20px;
+            position: fixed;
+            background-color: white;
+        }
+
+         #chatting_chattingroomlist_search>div{
+            border: 1px solid black;
+            width: 100%;
+            height: 40px;
+            /* background-color: aqua; */
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            
+           
+            margin: 0 100px 0 20px;
+        }
+
+         #chatting_chattingroomlist_search>div>img{
+           /*  border: 1px solid red; */
+            margin-left: 10px;
+        }
+
+         #chatting_chattingroomlist_search>div>input{
+            /* border: 1px solid red; */
+            height: 80%;
+            width: 100%;
+           	border: 0;
+        }
+
+         #chatting_chattingroomlist_search>div>p{
+            /* border: 1px solid red; */
+            height: 100%;
+            font-size: 20px;
+            align-content: center;
+            margin-left: auto;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        /* 검색창 끝 */
+
+        #chatting_chattingroomlist_printarea_all{
+            /* border: 1px solid red; */
+            margin-top: 90px;
+            padding: 0 20px 0 20px;
+        }
+
+        .chatting_chattingroomlist_printarea{
+            /* border: 1px solid red; */
+            width: 100%;
+            display: flex;
+            margin-bottom: 10px;
+            padding: 10px 0 10px 0;
+            cursor: pointer;
+        }
+        
+        .chatting_chattingroomlist_printarea:hover{
+        	background-color: #AEAEAE;
+        }
+
+        .chatting_chattingroomlist_printarea>*{
+            margin-left: 10px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .chatting_chattingroomlist_printarea_profile{
+            /* margin-bottom: 30px; */
+            margin-left: 20px;
+        }
+
+        .chatting_chattingroomlist_printarea_profile>button{
+            border: 0;
+            background-color: transparent;
+        }
+
+        .chatting_chattingroomlist_printarea_profile_img{
+            border-radius: 100%;
+            /* background-color: red; */
+        }
+
+        .chatting_chattingroomlist_printarea>div>div{
+            /* background-color: red; */
+            display: flex;
+            /* margin-left: 30px; */
+        }
+
+        .chatting_chattingroomlist_printarea>div>div>p:nth-child(2){
+            margin-left: 20px;
+            color: #888282;
+        }
+
+        .chatting_chattingroomlist_printarea>div>div>p{
+            margin: 0;
+        }
+
+        .chatting_chattingroomlist_printarea>div>p{
+            margin: 0;
+            margin-top: 10px;
+        }
+
+        .chatting_chattingroomlist_printarea>div:nth-child(3){
+            /* background-color: red; */
+            margin-left: auto;
+            margin-right: 10px;
+            color: #888282;
+        }
+	
+	/* 채팅방목록 끝 */
+	
+	
+	
+	
+	/* 모달창 */
+	.modal {
+	    display: none;  /* 기본적으로 숨김 */
+	    position: fixed;
+	    z-index: 1;
+	    left: 0;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    overflow: auto;
+	    /* background-color: rgb(0, 0, 0); Fallback 색상
+	    background-color: rgba(0, 0, 0, 0.4); 불투명 배경 */
+	}
+	
+	.modal>div{
+		/* background-color: #fefefe; */
+	    margin: 300px auto auto 80px; /* 상단에서부터 15% 떨어지고 가운데 정렬 */
+	    padding: 0px;
+	    border: 1px solid #888;
+	    width: 100px; /* 너비를 조절하여 적절하게 설정 */
+	    height: 106px;
+	    
+	}
+	
+	.modal>div>div{
+		display: flex;
+   		justify-content: space-around;
+   		
+ 		cursor: pointer;
+	    background-color: #f1f1f1;
+	    /* border-radius: 5px; */
+	    /* border: 1px solid #888; */
+	    text-align: center;
+	    width: 100%;
+	}
+	
+	.modal>div>div:hover{
+		background-color: #ddd;
+	}
+	/* 모달창 끝 */
 	
 	

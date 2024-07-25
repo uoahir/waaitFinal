@@ -28,7 +28,7 @@ public class Employee implements UserDetails{
     private String empId;
     private String empPwd;
     private String deptCode;
-    private Department department;              
+    private Department department;
     private String levelCode;
     private JobLevel jobLevel;
     private String empName;
@@ -42,6 +42,9 @@ public class Employee implements UserDetails{
     private String empPhone;
     private String empAddress;
     private String empSignfile;
+	private int basicAnnualLeave; // 기본연차
+	private int remainingAnnualLeave; // 잔여연차
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> auth  = new HashSet<>();

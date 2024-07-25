@@ -1,5 +1,6 @@
 package com.waait.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class MailService {
 		return dao.getSpamDomain(session, empNo);
 	}
 
-	public List<MailSetting> getMailSetting(Long empNo) {
+	public MailSetting getMailSetting(Long empNo) {
 		return dao.getMailSetting(session, empNo);
 	}
 
@@ -45,7 +46,7 @@ public class MailService {
 
 	public List<Mail> getAllMail(String loginMemberEmailDomain) {
 		return dao.getAllMail(session, loginMemberEmailDomain);
-	}
+	} //??
 
 	public List<Mail> getSpamMail(Map<String, Object> param) {
 		return dao.getSpamMail(session, param);
@@ -83,8 +84,12 @@ public class MailService {
 	}
 	
 	@Transactional
-	public void updateReadStatus(int mailNo) {
-		dao.updateReadStatus(session, mailNo);
+	public void updateReceiverReadStatus(Map<String, Object> sqlParam) {
+		dao.updateReceiverReadStatus(session, sqlParam);
+	}
+	
+	public void updateRecentReadStatus(int mailNo) {
+		dao.updateRecentReadStatus(session, mailNo);
 	}
 	
 	@Transactional
@@ -109,6 +114,7 @@ public class MailService {
 	
 	@Transactional
 	public int sendMail(Map<String, Object> param) {
+		int checkCount = 0;
 		int result = 0;
 		int mailSequence = dao.selectSequence(session);
 		System.out.println("mailSequence : " + mailSequence);
@@ -116,18 +122,30 @@ public class MailService {
 		
 		dao.enrollSendMailInfo(session, param);
 		
-		String mailReceiverAddress = (String) param.get("mailReceiverAddress");
+		String[] mailReceiverAddressArr = (String[]) param.get("mailReceiverAddress");
+		System.out.println("MailReceiverAddressArrLength : " + mailReceiverAddressArr.length);
 		
-		if(mailReceiverAddress.contains(",")) {
-			String[] mailReceiverAddressArr = mailReceiverAddress.split(",");
+		for(String receiverAddress : mailReceiverAddressArr) {
+			if(receiverAddress.length() > 0) checkCount++;
+		}
+		
+		if(checkCount == 1) {
+			for(String receiverAddress : mailReceiverAddressArr) {
+				if(receiverAddress.length() > 0) param.put("mailReceiverAddress", receiverAddress);
+			}
+		}
+		
+		if(mailReceiverAddressArr.length > 1) {
 			for(int i = 0; i < mailReceiverAddressArr.length; i++) {
-				param.put("mailReceiverAddress", mailReceiverAddressArr[i]);
-				result = dao.enrollReceiverInfo(session, param);
+				if(mailReceiverAddressArr[i].length() != 0) {
+					param.put("mailReceiverAddress", mailReceiverAddressArr[i]);
+					result = dao.enrollReceiverInfo(session, param);
+				}
 			}
 		} else {
 			result = dao.enrollReceiverInfo(session, param);
 		}
-		return mailSequence;
+ 		return mailSequence;
 	}
 	
 	@Transactional
@@ -147,16 +165,28 @@ public class MailService {
 		return result;
 	}
 
-	public List<Mail> joinMyMailBoxDetail(int myMailBoxNo) {
-		return dao.joinMyMailBoxDetail(session, myMailBoxNo);
+	public List<Mail> joinMyMailBoxDetail(int myMailBoxNo, Map<String, Integer> pagingParam) {
+		return dao.joinMyMailBoxDetail(session, myMailBoxNo, pagingParam);
 	}
-
+	
+	public int getMyMailBoxTotalData(int myMailBoxNo) {
+		return dao.getMyMailBoxTotalData(session, myMailBoxNo);
+	}
+	
+	public int getFavoriteMailTotalData(String loginMemberEmailDomain) {
+		return dao.getFavoriteMailTotalData(session, loginMemberEmailDomain);
+	}
+	
 	public List<Mail> joinFavoriteMailBox(String loginMemberEmailDomain) {
 		return dao.joinFavoriteMailBox(session, loginMemberEmailDomain);
 	}
 
 	public List<Mail> joinTempoSaveMailBox(long empNo) {
 		return dao.joinTempoSaveMailBox(session, empNo);
+	}
+	
+	public int getTempoSaveMailTotalData(long empNo) {
+		return dao.getTempoSaveMailTotalData(session, empNo);
 	}
 
 	public Mail joinTempoSaveMailByMailNo(int mailNo) {
@@ -174,7 +204,23 @@ public class MailService {
 			result = dao.deleteMail(session, mailNoStr);			
 		}
 		return result;
+	} //안쓸지도?
+	
+	@Transactional
+	public int deleteReceiveMail(Map<String, Object> sqlParam) {
+		return dao.deleteReceiveMail(session, sqlParam);
 	}
+	
+	@Transactional
+	public int deleteSendingMail(int mailNo) {
+		return dao.deleteSendingMail(session, mailNo);
+	}
+	
+//	@Transactional
+//	public int deleteMailSendToMe(int mailNo) {
+//		return dao.deleteMailSendToMe(session, mailNo);
+//	} 모르겠다
+	
 	
 	@Transactional
 	public int moveMailToTrashMailBox(List<Mail> mailInMyMailBox) {
@@ -191,28 +237,60 @@ public class MailService {
 		return dao.deleteMyMailBox(session, myMailBoxNo);
 	}
 
-	public List<Mail> jointrashmailbox(String receiverMailAddress) {
-		return dao.jointrashmailbox(session, receiverMailAddress);
+	public List<Mail> jointrashmailbox(String mailAddress, Map<String, Integer> pagingParam) {
+		return dao.jointrashmailbox(session, mailAddress, pagingParam);
 	}
 	
 	@Transactional
-	public void perfectlyDeleteMail(String mailNoStr) {
+	public void senderPerfectlyDeleteMail(int mailNo) {
+		dao.senderPerfectlyDeleteMail(session, mailNo);
+	}
+	
+	public void receiverPerfectlyDeleteMail(Map<String, String> deleteSqlParam) {
+		dao.receiverPerfectlyDeleteMail(session, deleteSqlParam);
+	}
+	
+	public int senderRestoreMail(int mailNo) {
+		return dao.senderRestoreMail(session, mailNo);
+	}
+	
+	public int receiverRestoreMail(Map<String, Object> restoreSqlParam) {
+		return dao.receiverRestoreMail(session, restoreSqlParam);
+	}
+	
+	public List<Mail> getMailForDelete(String mailNoStr) {
+		List<Mail> getMailForDelete = new ArrayList<Mail>();
 		if(mailNoStr.contains(",")) {
 			String[] mailNoArr = mailNoStr.split(",");
 			for(int i = 0; i < mailNoArr.length; i++) {
-				dao.perfectlyDeleteMail(session, mailNoArr[i]);
+				getMailForDelete.add(dao.getMailForDelete(session, mailNoArr[i]));
 			}
 		} else {
-			dao.perfectlyDeleteMail(session, mailNoStr);			
+			System.out.println("일단 else문이냐?");
+			getMailForDelete.add(dao.getMailForDelete(session, mailNoStr));
 		}
+		return getMailForDelete;
+	}
+	
+	public List<Mail> getTrashMailForRestore(String mailNoStr) {
+		List<Mail> trashMailListByMailNo = new ArrayList<Mail>();
+		if(mailNoStr.contains(",")) {
+			String[] mailNoArr = mailNoStr.split(",");
+			for(int i = 0; i < mailNoArr.length; i++) {
+				trashMailListByMailNo.add(dao.getTrashMailByMailNoForRestore(session, mailNoArr[i]));
+			}
+		} else {
+			trashMailListByMailNo.add(dao.getTrashMailByMailNoForRestore(session, mailNoStr));	
+		}
+		return trashMailListByMailNo;
 	}
 
-	public List<Mail> joinSendingMailBox(long empNo) {
-		return dao.joinSendingMailBox(session, empNo);
+	public List<Mail> joinSendingMailBox(long empNo, Map<String, Integer> pagingParam) {
+		return dao.joinSendingMailBox(session, empNo, pagingParam);
 	}
 
-	public List<Mail> searchMail(Map<String, String> searchParam) {
-		return dao.searchMail(session, searchParam);
+	public List<Mail> searchReceiveMail(Map<String, Object> searchParam, Map<String, Integer> pagingParam) {
+		return dao.searchReceiveMail(session, searchParam, pagingParam);
 	}
 	
 	@Transactional
@@ -224,5 +302,45 @@ public class MailService {
 	public void enrollRecentSearchKeyword(RecentSearch recentSearch) {
 		dao.enrollRecentSearchKeyword(session, recentSearch);
 	}
+
+	public int joinSendingMailBoxTotalData(long empNo) {
+		return dao.joinSendingMailBoxData(session, empNo);
+	}
+
+	public int trashMailBoxTotalData(String receiverMailAddress) {
+		return dao.trashMailBoxTotalData(session, receiverMailAddress);
+	}
+
+	public int notReadDataCount(Map<String, Object> mailSettings) {
+		return dao.notReadDataCount(session, mailSettings);
+	}
+
+	public int getSpamMailCount(Map<String, Object> param) {
+		return dao.getSpamMailCount(session, param);
+	}
+
+	public int getSearchMailTotalData(Map<String, Object> searchParam) {
+		return dao.getSearchMailTotalData(session, searchParam);
+	}
+	
+	@Transactional
+	public int applyMailSetting(Map<String, Object> mailSettingParam) {
+		int result = 0;
+		if(mailSettingParam.containsKey("spamMailAddressArr")) {
+			String[] spamMailAddressArr = (String[]) mailSettingParam.get("spamMailAddressArr");
+			for(String spamMailAddress : spamMailAddressArr) {
+				if(spamMailAddress.length() > 0) {
+					mailSettingParam.put("spamMailAddress", spamMailAddress);
+					result = dao.settingSpamMailAddress(session, mailSettingParam);
+				}
+			}
+		}
+		
+		result = dao.settingNumPerpage(session, mailSettingParam);
+		return result;
+	}
+
+
+
 
 }

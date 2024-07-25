@@ -75,7 +75,6 @@ var contextPath = "${path}";
     <div class="sidebar-menu">
         <ul class="menu">
             <li class="sidebar-title">Menu</li>
-            
             <li
                 class="sidebar-item active ">
                 <a href="index.html" class='sidebar-link'>
@@ -84,6 +83,20 @@ var contextPath = "${path}";
                 </a>
                 
 
+            </li>
+            <li
+                class="sidebar-item ">
+                <a href="${path }/manage/managemain.do" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>인사관리</span>
+                </a>                
+            </li>
+            <li
+                class="sidebar-item ">
+                <a href="${path }/schedule/myschedule" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>캘린더</span>
+                </a>                
             </li>
             
             <li

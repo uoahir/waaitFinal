@@ -16,7 +16,14 @@ import com.waait.dto.SpamDomain;
 
 @Repository
 public class MailDao {
-
+	
+	public RowBounds getRowBounds(Map<String, Integer> pagingParam) {
+		int cPage = pagingParam.get("cPage");
+		int numPerpage = pagingParam.get("numPerpage");
+		RowBounds rb = new RowBounds((cPage - 1) * numPerpage, numPerpage);
+		return rb;
+	}
+	
 	public List<Mail> getReceiveMail(SqlSession session, Map<String, Object> mailSettings) {
 		int cPage = (int) mailSettings.get("cPage");
 		int numPerpage = (int) mailSettings.get("numPerpage");
@@ -28,8 +35,8 @@ public class MailDao {
 		return session.selectList("mail.selectSpamDomainAddress", empNo);
 	}
 
-	public List<MailSetting> getMailSetting(SqlSession session, long empNo) {
-		return session.selectList("mail.selectMailSetting", empNo);
+	public MailSetting getMailSetting(SqlSession session, long empNo) {
+		return session.selectOne("mail.selectMailSetting", empNo);
 	}
 
 	public void setMailSetting(SqlSession session, long empNo) {
@@ -46,7 +53,7 @@ public class MailDao {
 
 	public List<Mail> getAllMail(SqlSession session, String loginMemberEmailDomain) {
 		return session.selectList("mail.getAllMail", loginMemberEmailDomain);
-	}
+	} //??
 
 	public List<Mail> getSpamMail(SqlSession session, Map<String, Object> param) {
 		return session.selectList("mail.getSpamMail", param);
@@ -72,8 +79,12 @@ public class MailDao {
 		return session.selectOne("mail.getMailDetailByNo", param);
 	}
 
-	public void updateReadStatus(SqlSession session, int mailNo) {
-		session.update("mail.updateReadStatus", mailNo);
+	public void updateReceiverReadStatus(SqlSession session, Map<String, Object> sqlParam) {
+		session.update("mail.updateReceiverReadStatus", sqlParam);
+	}
+	
+	public void updateRecentReadStatus(SqlSession session, int mailNo) {
+		session.update("mail.updateRecentReadStatus", mailNo);
 	}
 
 	public int addFavoriteMail(SqlSession session, String mailNo) {
@@ -99,17 +110,34 @@ public class MailDao {
 	public int addMailMyMailBox(SqlSession session, Map<String, Object> param) {
 		return session.insert("mail.addMailMyMailBox", param);
 	}
-
-	public List<Mail> joinMyMailBoxDetail(SqlSession session, int myMailBoxNo) {
-		return session.selectList("mail.joinMyMailBoxDetail", myMailBoxNo);
+	
+	public int getMyMailBoxTotalData(SqlSession session, int myMailBoxNo) {
+		return session.selectOne("mail.getMyMailBoxTotalData", myMailBoxNo);
 	}
 
+	public List<Mail> joinMyMailBoxDetail(SqlSession session, int myMailBoxNo, Map<String, Integer> pagingParam) {
+		if(pagingParam != null) {
+			RowBounds rb = getRowBounds(pagingParam);
+			return session.selectList("mail.joinMyMailBoxDetail", myMailBoxNo, rb);			
+		} else {
+			return session.selectList("mail.getAllMyMailBoxDetail", myMailBoxNo);
+		}
+	}
+	
+	public int getFavoriteMailTotalData(SqlSession session, String loginMemberEmailDomain) {
+		return session.selectOne("mail.getFavoriteMailTotalData", loginMemberEmailDomain);
+	}
+	
 	public List<Mail> joinFavoriteMailBox(SqlSession session, String loginMemberEmailDomain) {
 		return session.selectList("mail.joinFavoriteMailBox", loginMemberEmailDomain);
 	}
 
 	public List<Mail> joinTempoSaveMailBox(SqlSession session, long empNo) {
 		return session.selectList("mail.joinTempoSaveMailBox", empNo);
+	}
+	
+	public int getTempoSaveMailTotalData(SqlSession session, long empNo) {
+		return session.selectOne("mail.getTempoSaveMailTotalData", empNo);
 	}
 
 	public Mail joinTempoSaveMailByMailNo(SqlSession session, int mailNo) {
@@ -118,6 +146,22 @@ public class MailDao {
 
 	public int deleteMail(SqlSession session, String mailNo) {
 		return session.update("mail.deleteMail", mailNo);
+	}
+	
+	public int deleteReceiveMail(SqlSession session, Map<String, Object> sqlParam) {
+		return session.update("mail.deleteReceiveMail", sqlParam);
+	}
+	
+	public int deleteSendingMail(SqlSession session, int mailNo) {
+		return session.update("mail.deleteSendingMail", mailNo);
+	}
+	
+	public int deleteMailSendToMe(SqlSession session, int mailNo) {
+		return session.update("mail.deleteMailSendToMe", mailNo);
+	}
+	
+	public Mail getTrashMailByMailNoForRestore(SqlSession session, String mailNo) {
+		return session.selectOne("mail.getTrashMailForRestore", mailNo);
 	}
 
 	public int moveMailToTrashMailBox(SqlSession session, int mailNo) {
@@ -128,20 +172,43 @@ public class MailDao {
 		return session.delete("mail.deleteMyMailBox", myMailBoxNo);
 	}
 
-	public List<Mail> jointrashmailbox(SqlSession session, String receiverMailAddress) {
-		return session.selectList("mail.jointrashmailbox", receiverMailAddress);
+	public List<Mail> jointrashmailbox(SqlSession session, String mailAddress, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("mail.jointrashmailbox", mailAddress, rb);
 	}
 
-	public void perfectlyDeleteMail(SqlSession session, String mailNo) {
-		session.delete("mail.perfectlyDeleteMail", mailNo);
+	public void senderPerfectlyDeleteMail(SqlSession session, int mailNo) {
+		session.update("mail.senderPerfectlyDeleteMail", mailNo);
+	}
+	
+	public void deleteAllMailInfo(SqlSession session, int mailNo) {
+		session.delete("mail.deleteAllMailInfo", mailNo);
+	}
+	
+	public void receiverPerfectlyDeleteMail(SqlSession session, Map<String, String> deleteSqlParam) {
+		session.delete("mail.receiverPerfectlyDeleteMail", deleteSqlParam);
+	}
+	
+	public int senderRestoreMail(SqlSession session, int mailNo) {
+		return session.update("mail.senderRestoreMail", mailNo);
+	}
+	
+	public int receiverRestoreMail(SqlSession session, Map<String, Object> restoreSqlParam) {
+		return session.update("mail.receiverRestoreMail", restoreSqlParam);
+	}
+	
+	public Mail getMailForDelete(SqlSession session, String mailNoStr) {
+		return session.selectOne("mail.getMailForDelete", mailNoStr);
 	}
 
-	public List<Mail> joinSendingMailBox(SqlSession session, long empNo) {
-		return session.selectList("mail.joinSendingMailBox", empNo);
+	public List<Mail> joinSendingMailBox(SqlSession session, long empNo, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("mail.joinSendingMailBox", empNo, rb);
 	}
 
-	public List<Mail> searchMail(SqlSession session, Map<String, String> searchParam) {
-		return session.selectList("mail.searchMail", searchParam);
+	public List<Mail> searchReceiveMail(SqlSession session, Map<String, Object> searchParam, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("mail.searchReceiveMail", searchParam, rb);
 	}
 
 	public int updateFile(SqlSession session, MailFile mailFile) {
@@ -151,6 +218,39 @@ public class MailDao {
 	public void enrollRecentSearchKeyword(SqlSession session, RecentSearch recentSearch) {
 		session.insert("mail.enrollRecentSearchKeyword", recentSearch);
 	}
+
+	public int joinSendingMailBoxData(SqlSession session, long empNo) {
+		return session.selectOne("mail.joinSendingMailBoxTotalData", empNo);
+	}
+
+	public int trashMailBoxTotalData(SqlSession session, String receiverMailAddress) {
+		return session.selectOne("mail.trashMailBoxTotalData", receiverMailAddress);
+	}
+
+	public int notReadDataCount(SqlSession session, Map<String, Object> mailSettings) {
+		return session.selectOne("mail.notReadDataCount", mailSettings);
+	}
+
+	public int getSpamMailCount(SqlSession session, Map<String, Object> param) {
+		return session.selectOne("mail.getSpamMailCount", param);
+	}
+
+	public int getSearchMailTotalData(SqlSession session, Map<String, Object> searchParam) {
+		return session.selectOne("mail.getSearchMailTotalData", searchParam);
+	}
+
+	public int settingSpamMailAddress(SqlSession session, Map<String, Object> mailSettingParam) {
+		return session.insert("mail.settingSpamMailAddress", mailSettingParam);
+	}
+
+	public int settingNumPerpage(SqlSession session, Map<String, Object> mailSettingParam) {
+		return session.update("mail.settingNumPerpage", mailSettingParam);
+	}
+
+	
+
+
+
 
 
 

@@ -1,0 +1,82 @@
+@charset "UTF-8";
+
+/* body 스타일 */
+  html, body {
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+  
+/* 캘린더 위의 해더 스타일(날짜가 있는 부분) */
+.fc-header-toolbar {
+  padding-top: 1em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+/* 공휴일 빨간색으로 표시 */
+.fc-col-header-cell-cushion, .fc-daygrid-day-number {
+    text-decoration: none;
+}
+
+.fc-scrollgrid-sync-inner > .fc-col-header-cell-cushion,
+.fc-day-mon .fc-daygrid-day-number,
+.fc-day-tue .fc-daygrid-day-number,
+.fc-day-wed .fc-daygrid-day-number,
+.fc-day-thu .fc-daygrid-day-number,
+.fc-day-fri .fc-daygrid-day-number {
+    color: black;
+}
+
+.fc-day-sun .fc-col-header-cell-cushion,
+.fc-day-sun a{
+    color : red;
+}
+
+.fc-day-sat .fc-col-header-cell-cushion,
+.fc-day-sat a {
+    color : blue;
+}
+
+/* 일정요약 모달 */
+.popoverTitleCalendar {
+  width: 100%;
+  height: 100%;
+  padding: 15px 15px;
+  font-size: 13px;
+  border-radius: 5px 5px 0 0;
+}
+
+.popoverInfoCalendar i {
+  font-size: 14px;
+  margin-right: 10px;
+  line-height: inherit;
+  color: #d3d4da;
+}
+
+.popoverInfoCalendar p {
+  margin-bottom: 1px;
+}
+
+.popoverDescCalendar {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #E3E3E3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.popover-title {
+  background: transparent;
+  font-weight: 600;
+  padding: 0 !important;
+  border: none;
+}
+
+.popover-content {
+  padding: 15px 15px;
+  font-size: 13px;
+}
+
+
