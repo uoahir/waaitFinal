@@ -86,9 +86,14 @@
                 <a href="${path }/manage/managemain.do" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>인사관리</span>
-                </a>
-                
-
+                </a>                
+            </li>
+            <li
+                class="sidebar-item ">
+                <a href="${path }/schedule/myschedule" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>캘린더</span>
+                </a>                
             </li>
             
             <li
