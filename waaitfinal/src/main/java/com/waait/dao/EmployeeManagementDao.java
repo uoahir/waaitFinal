@@ -24,4 +24,8 @@ public class EmployeeManagementDao {
 		return session.selectOne("em.searchEmpForModifyDepartment", searchParam);
 	}
 
+	public int modifyEmployeeDept(SqlSession session, Map<String, String> modifyParam) {
+		return session.update("em.modifyEmployeeDept", modifyParam);
+	}
+
 }

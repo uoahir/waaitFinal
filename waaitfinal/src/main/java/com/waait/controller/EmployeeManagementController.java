@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +35,8 @@ public class EmployeeManagementController {
 	
 	@GetMapping("/managemain.do")
 	public String manageMainView(Model model) {
-		List<Department> departmentList = service.getDepartment();
+		List<Department> departmentList = getDepartmentList();
+		
 		System.out.println("departmentList : " + departmentList);
 		
 		List<Employee> employeeInfoList = service.getEmployees();
@@ -109,5 +111,34 @@ public class EmployeeManagementController {
 		responseMap.put("searchEmployee", searchEmployee);
 		responseMap.put("departments", departmentList);
 		return responseMap;
+	}
+	
+	@PostMapping("/empmodifydept.do")
+	public @ResponseBody int modifyEmployeeDept(String wantModifyDeptName, String wantModifyDeptCode, String empId) {
+		int result = 0;
+		System.out.println("wantModifyDeptCode : " + wantModifyDeptCode);
+		Map<String, String> modifyParam = Map.of("wantModifyDeptCode", wantModifyDeptCode, "empId", empId);
+		result = service.modifyEmployeeDept(modifyParam);
+		if(result < 0) return result;
+		
+		//Employee 
+		
+		return result;
+	}
+	
+	//부서와 팀 가져오는 테스트
+	@GetMapping("/departmenttest.do")
+	@ResponseBody
+	public void getEmployeeDepartment() {
+		String empId = "emp005";
+		//List<Employee> searchEmp = service.getEmployeeDepartment(empId);
+	}
+	
+	public List<Department> getDepartmentList() {
+		List<Department> departmentTableList = service.getDepartment();
+		List<Department> departmentList = departmentTableList.stream().filter(dept -> {
+			return dept.getDeptName().substring(dept.getDeptName().length() - 1).equals("부");
+		}).collect(Collectors.toList());
+		return departmentList;
 	}
 }

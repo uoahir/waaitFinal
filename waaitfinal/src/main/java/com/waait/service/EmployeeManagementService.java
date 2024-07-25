@@ -30,4 +30,8 @@ public class EmployeeManagementService {
 	public Employee searchEmpForModifyDepartment(Map<String, String> searchParam) {
 		return dao.searchEmpForModifyDepartment(session, searchParam);
 	}
+
+	public int modifyEmployeeDept(Map<String, String> modifyParam) {
+		return dao.modifyEmployeeDept(session, modifyParam);
+	}
 }

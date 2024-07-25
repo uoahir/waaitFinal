@@ -81,7 +81,7 @@
 							document.getElementById("searchResultContainer").innerHTML = 
 								"<h3>검색결과</h3>"
 								+ "<ul>"
-									+ "<li>아이디 : " + searchEmp.empId + "</li>"
+									+ "<li id='empIdLi' data-empId='" + searchEmp.empId + "'>아이디 : " + searchEmp.empId + "</li>"
 									+ "<li>이름 : " + searchEmp.empName + "</li>"
 									+ "<li>출생일 : " + searchEmp.empBirth + "</li>"
 									+ "<li>성별 : " + searchEmp.empGender + "</li>"
@@ -102,12 +102,15 @@
 						const deptSelect = document.getElementById("modifyWantDept");
 						const wantModifyDeptName = deptSelect.value;
 						const wantModifyDeptCode = deptSelect[deptSelect.selectedIndex].dataset.deptcode;
+						const empId = document.getElementById("empIdLi").dataset.empid;
+						console.log("empId : " + empId);
 						fetch("${path }/manage/empmodifydept.do", {
 							method : "POST",
 							headers : {
 								"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
 							},
 							body : "wantModifyDeptName=" + wantModifyDeptName + "&wantModifyDeptCode=" + wantModifyDeptCode
+										+ "&empId=" + empId
 						})
 						.then(response => response.text())
 						.then(data => {
@@ -170,6 +173,18 @@
 			</table>
 		</div>
 	</div>
+	<button onclick="departmentTest">사원테스트</button>
+	<button onclick="departmentAddTest">부서추가테스트</button>
+	
+	<script>
+		const departmentTest = () => {
+			fetch("${path }/manage/departmenttest.do")
+		}
+		
+		const departmentAddTest = () => {
+			
+		}
+	</script>
 </body>
 <style>
 	#total {
