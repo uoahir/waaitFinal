@@ -26,4 +26,8 @@ public interface ChattingDao {
 	int selectSEQ_ChatRoomNo(SqlSession session);
 	
 	int insertChatJoin(SqlSession session, Map<String, Object> chatJoinParam);
+	
+	List<Employee> selectChatEmployeelist(SqlSession session, int chatroomNo);
+
+	List<Employee> selectChatEmployeelistnot(SqlSession session, int chatroomNo);
 }

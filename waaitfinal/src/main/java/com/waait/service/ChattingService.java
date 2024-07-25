@@ -23,4 +23,9 @@ public interface ChattingService {
 	int insertChatRoom(Map<String, Object> chatRoomParam);
 	
 	int insertChatJoin(List<Long> chatJoinParam);
+	
+	Map<String, Object> selectChatEmployeelist(int chatroomNo);
+	
+	void insertChatJoinInvite(Map<String, Object> param);
+	
 }
