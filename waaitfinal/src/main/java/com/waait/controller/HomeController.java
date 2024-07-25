@@ -1,12 +1,23 @@
 package com.waait.controller;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.cglib.core.Local;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.waait.dto.Employee;
+import com.waait.dto.Work;
 import com.waait.service.EmployeeService;
+import com.waait.service.WorkService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +28,7 @@ public class HomeController {
 
 	private final EmployeeService employeeService;
 	private final BCryptPasswordEncoder encoder;
+	private final WorkService workService;
 
 	@GetMapping("/login")
 	public String loginForm() {
@@ -42,11 +54,24 @@ public class HomeController {
 		employeeService.insertEmployee(employee);
 		return "redirect:/user";
 	}
-	@GetMapping("/")
-	public String homeController() {
-		System.out.println("Dd");
+	@GetMapping("/") //화면에 데이터 출력부분
+	public String homeController(Model model) {
+		
+		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Map<String, String> param = new HashMap<>();
+		LocalDateTime now = LocalDateTime.now();
+		Timestamp timestamp = Timestamp.valueOf(now);
+		System.out.println("20"+(timestamp.getYear()%100)+"-"+(timestamp.getMonth()+1)+"-"+(timestamp.getDate()));
+		String today = "20"+(timestamp.getYear()%100)+"-"+(timestamp.getMonth()+1)+"-"+(timestamp.getDate());
+		param.put("today", today);
+		param.put("empNo",""+employee.getEmpNo());
+		
+		Work work = workService.selectByEmpNoWork(param);
+		
+		model.addAttribute("work",work);
 		return "index";
 	}
+	//----------------------------------------------------------------------------------
 	@GetMapping("/accountprofile")
 	public String accountProfile() {
 		System.out.println("dd");
