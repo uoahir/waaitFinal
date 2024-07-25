@@ -3,6 +3,7 @@ package com.waait.service;
 import java.util.List;
 import java.util.Map;
 
+import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
 import com.waait.dto.Department;
 import com.waait.dto.Document;
@@ -15,12 +16,13 @@ public interface EDocService {
 	List<Department> deptList();
 	
 //	결재 로직
-	int insertBasicEdoc(Document document, int[] approval); // 내부보고서(기본문서 작성)
-	List<Document> awaitingApproval(Long empNo, Map<String,Integer> page); // 승인대기문서 출력(결재자)
-	Document selectDocumentById(int docId); // 문서 조회 
-	Document selectDocumentDetail(Map<String, Object> param); // 결재자가 해당 문서 클릭 시 실행되는 로직 ~ ! ~ ! 
+	int insertBasicEdoc(AbstractDocument document, int[] approval); // 내부보고서(기본문서 작성)
+	List<AbstractDocument> awaitingApproval(Long empNo, Map<String,Integer> page); // 승인대기문서 출력(결재자)
+	List<AbstractDocument> inprogressDocument(Long empNo, Map<String,Integer> page); // 진행중인문서 출력(상신자)
+	AbstractDocument selectDocumentById(int docId); // 문서 조회 
+	AbstractDocument selectDocumentDetail(Map<String, Object> param); // 결재자가 해당 문서 클릭 시 실행되는 로직 ~ ! ~ ! 
 	// update 는 언제해죠야하지 ?
-	int updateFirstOpened(int docId); // 결재자들 중 최초 결재자가 문서를 처음으로 열었을 때, 문서 상태를 상신 -> 검토 중으로 update
+	int updateFirstOpened(int docId); // 결재자들 중 최초 결재자가 문서를 처음으로 열었을 때, 문서 상태를 상신 -> 검토 중 // 결재 상태를 승인전 -> 검토중 으로 update
 	
 //	해당문서 결재라인 가져오기
 	List<Approval> selectApprovalByDocId(int docId);
@@ -33,6 +35,5 @@ public interface EDocService {
 	
 //	기본문서 : 최종 결재자 - 승인버튼 클릭 시 approval table appStat update ~ ! document table docStat update ~ ! 
 	int updateFinalApproval(Map<String,Object> param);
-	
-	
+
 }

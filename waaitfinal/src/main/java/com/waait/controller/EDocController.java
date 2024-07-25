@@ -26,10 +26,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
+import com.waait.dto.BasicDocument;
 import com.waait.dto.Department;
 import com.waait.dto.Document;
 import com.waait.dto.Employee;
+import com.waait.dto.OffDocument;
+import com.waait.dto.TripDocument;
 import com.waait.service.EDocService;
 
 import jakarta.servlet.http.HttpSession;
@@ -49,22 +53,29 @@ public class EDocController {
 		System.out.println(type);
 		m.addAttribute("type", type);
 	}
+	@GetMapping("/offedoc")
+	public void offEdoc(@RequestParam String type,Model m) {
+		System.out.println(type);
+		m.addAttribute("type", type);
+	}
 	
+
 	@PostMapping("/basicedocend")
 	public String insertBasic(@RequestParam("empNo") int[] empNo, @RequestPart(value="obj") String obj, @RequestPart(value="file", required=false) List<MultipartFile> uploadFiles, HttpSession session) {
 	// required = false : 파일 첨부가 필수가 아닌 선택, value = "file" : MultipartFile 요청에서 input[name='file'] 추출
 		System.out.println("안녕");
-		Document doc;
+		AbstractDocument doc;
+		
 
 		try {
-			// json 형태의 문자열로 받아온 obj를 객체화
+//			// json 형태의 문자열로 받아온 obj를 객체화
 			ObjectMapper objectMapper = new ObjectMapper();
-			doc = objectMapper.readValue(obj, Document.class); 
+			doc = objectMapper.readValue(obj, BasicDocument.class); 
+			System.out.println(doc.getDocType());
 			
+			service.insertBasicEdoc(doc, empNo);
 			
-			int result = service.insertBasicEdoc(doc, empNo);
 			System.out.println(empNo.length);
-			System.out.println(result);
 			
 			// 파일 업로드 처리
 			
@@ -116,10 +127,23 @@ public class EDocController {
 		Long no = getEmployeeH().getEmpNo(); //  로그인된 empNo !!! 
 		
 //		승인 대기 중인 문서 출력
-		List<Document> documents = service.awaitingApproval(no, Map.of("cPage", cPage, "numPerpage", numPerpage));
+		List<AbstractDocument> documents = service.awaitingApproval(no, Map.of("cPage", cPage, "numPerpage", numPerpage));
 		m.addAttribute("documents", documents);
 		
 		return "edoc/home";
+	}
+	
+	@RequestMapping("/inprogress")
+	public String inprogress(Model m
+					, @RequestParam(defaultValue ="1") int cPage
+					, @RequestParam(defaultValue="10") int numPerpage) {
+		Long no = getEmployeeH().getEmpNo();
+		
+//		진행 중인 문서 출력
+		List<AbstractDocument> documents = service.inprogressDocument(no, Map.of("cPage", cPage, "numPerpage", numPerpage));
+		m.addAttribute("documents", documents);
+		
+		return "edoc/inprogress";
 	}
 	
 	@GetMapping("/selectdoc")
@@ -129,9 +153,9 @@ public class EDocController {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 	
-	@GetMapping("/openedoc{docId}/{docType}") 
-	public String openEdoc(@PathVariable int docId, @PathVariable String docType, Model m) {
-		
+	@GetMapping("/openedoc{docId}/{docType}/{docWriter}") 
+	public String openEdoc(@PathVariable int docId, @PathVariable String docType, @PathVariable Long docWriter, Model m) {
+		Long empNo = getEmployeeH().getEmpNo();
 		String page=""; 
 		String tableName="";
 		switch(docType) {
@@ -139,30 +163,39 @@ public class EDocController {
 			case "T02": tableName = ""; break;
 			case "T03": tableName = "trip_form"; page="edoc/opentrip"; break;
 			case "T04": tableName = "off_form"; page="edoc/openoff"; break;
-		}
-		Document doc = service.selectDocumentById(docId);
-		if(doc.getIsFirstOpened()==0) {
+		} // 문서유형에 따라, 조인되는 tableName 과 jsp 페이지를 매칭
+		AbstractDocument doc = service.selectDocumentById(docId); // 문서유형과는 상관 없음
+
+		if(empNo != docWriter && doc.getIsFirstOpened()==0) {
 			service.updateFirstOpened(docId);
 			// 처음 열었을 때만, 문서 상태 update ! docStatus, isFirstOpened
+			// getIsFirstOpened == 0 일 때만 실행되고, 1일 때는 update 가 실행되지 않음
 		}
 		
 		// 문서정보가져와서 담아주기 ~ 
 		Map<String,Object> param = new HashMap<>();
 		param.put("docId", docId);
 		param.put("tableName", tableName);
+		param.put("docType", docType);		
+		AbstractDocument abdocument = service.selectDocumentDetail(param);
 		
-		Document document = service.selectDocumentDetail(param);
-			
 		List<Approval> approvals = service.selectApprovalByDocId(docId);
 		System.out.println(approvals + "요겅!");
 		
 		if(approvals.size()>0) {
-			document.setApprovals(approvals);
+			abdocument.setApprovals(approvals);
 		}
 		
-		System.out.println(document);
-		
-		m.addAttribute("document", document);
+		if(abdocument instanceof BasicDocument) {
+			BasicDocument document = (BasicDocument)abdocument;
+			m.addAttribute("document", document);
+		} else if(abdocument instanceof TripDocument) {
+			TripDocument document = (TripDocument)abdocument;
+			m.addAttribute("document", document);
+		} else if(abdocument instanceof OffDocument) {
+			OffDocument document = (OffDocument)abdocument;
+			m.addAttribute("document", document);
+		} 
 	
 		return page;
 	}

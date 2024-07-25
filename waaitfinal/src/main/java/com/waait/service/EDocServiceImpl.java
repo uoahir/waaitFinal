@@ -1,6 +1,5 @@
 package com.waait.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.waait.dao.EDocDao;
+import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
+import com.waait.dto.BasicDocument;
 import com.waait.dto.Department;
 import com.waait.dto.Document;
 import com.waait.dto.Employee;
+import com.waait.dto.OffDocument;
+import com.waait.dto.TripDocument;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,15 +43,15 @@ public class EDocServiceImpl implements EDocService {
 //	내부보고서 insert 로직 ( 트랜잭셔널 ~ )
 	@Transactional
 	@Override
-	public int insertBasicEdoc(Document document, int[] approval) {
+	public int insertBasicEdoc(AbstractDocument document, int[] approval) {
 		
 		int successCount = 0;
 		
 		try {
 			
-			edocDao.insertDoc(session, document);
+			edocDao.insertDoc(session, (BasicDocument) document);
 			successCount++;
-			int result1=edocDao.insertEdocContent(session, document);
+			int result1=edocDao.insertEdocContent(session, (BasicDocument)document);
 			successCount++;
 		
 			int appId = document.getDocId();
@@ -77,20 +80,30 @@ public class EDocServiceImpl implements EDocService {
 
 //	승인대기문서 출력
 	@Override
-	public List<Document> awaitingApproval(Long empNo, Map<String, Integer> page) {
+	public List<AbstractDocument> awaitingApproval(Long empNo, Map<String, Integer> page) {
 		return edocDao.awaitingApproval(session, empNo, page);  // empNo : 로그인된 아이디임 !!!! 
 	}
 
 	@Override
-	public Document selectDocumentById(int docId) {
+	public AbstractDocument selectDocumentById(int docId) {
 		// TODO Auto-generated method stub
 		return edocDao.selectDocumentById(session, docId);
 	}
 
 	@Override
-	public Document selectDocumentDetail(Map<String,Object> param) {
-		// TODO Auto-generated method stub
-		return edocDao.selectDocumentDetail(session, param);
+	public AbstractDocument selectDocumentDetail(Map<String,Object> param) {
+		
+		String docType = (String)param.get("docType");
+		AbstractDocument doc = null;
+		
+		switch(docType) {
+			case "T01": doc =  edocDao.selectBasicDocument(session, param); 
+			case "T02": break;
+			case "T03": doc = edocDao.selectTripDocument(session, param); 
+			case "T04": doc = edocDao.selectOffDocument(session, param); 
+		}
+		
+		return doc;
 	}
 
 	@Override
@@ -143,6 +156,13 @@ public class EDocServiceImpl implements EDocService {
 		}
 		return 0;
 	}
+
+	@Override
+	public List<AbstractDocument> inprogressDocument(Long empNo, Map<String, Integer> page) {
+		// TODO Auto-generated method stub
+		return edocDao.inprogressDocument(session, empNo, page);
+	}
+	
 	
 	
 	
