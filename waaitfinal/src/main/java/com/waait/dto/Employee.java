@@ -42,7 +42,7 @@ public class Employee implements UserDetails{
     private String empPhone;
     private String empAddress;
     private String empSignfile;
-    private String teamName;
+//    private String teamName;
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> auth  = new HashSet<>();
