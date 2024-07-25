@@ -64,7 +64,8 @@
 		            >
 		              취소
 		            </button>
-                    <button type="submit" class="btn btn-primary">추가</button>
+                    <button type="submit" id="submitButton" class="btn btn-primary">등록</button>
+                    <button type="button" id="deleteEvent" class="btn btn-danger">삭제</button>
                 </form>
             </div>
         </div>

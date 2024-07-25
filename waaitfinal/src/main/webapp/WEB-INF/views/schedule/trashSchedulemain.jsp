@@ -86,7 +86,7 @@
         			$('#addEventModal').modal('show');
         		}
         	},
-        	mySaveButton:{
+/*         	mySaveButton:{
         		text:"저장하기",
         		click: async function(){
         			if(confirm("저장하시겠습니까?")){
@@ -100,14 +100,32 @@
         				});
         			}
         		}
-        	}
+        	} */
         },
         // 해더에 표시할 툴바
         headerToolbar: {
           left: 'prev,next today,myCustomButton,mySaveButton',
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-        },
+        },        
+        // < 클릭한 날짜와 시간 >
+        dateClick: function(info){ 
+        	var clickedDate=info.date;
+        
+      	//로컬 시간대로 포맷팅 함수
+        function toDateTimeLocal(date){  
+        	 var tzoffset=date.getTimezoneOffset()*60000;
+        	 var localISOTime=(new Date(date-tzoffset)).toISOString().slice(0,-1);
+        	 return localISOTime.slice(0,16);
+        }        	
+        $('#addEventModal').modal('show'); //모달 열기 
+        
+        document.getElementById('start').value=toDateTimeLocal(clickedDate); //모달의 시작시간 필드를 클릭한 날짜와 시간으로 설정
+        
+        var endDate=new Date(clickedDate); // 모달의 종료 시간 필드도 필요에 따라 설정(여기서는 1시간 후로 설정)
+        endDate.setHours(endDate.getHours()+1);
+        document.getElementById('end').value=toDateTimeLocal(endDate);        
+        },                   
         initialView: 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
         //initialDate: '2024-07-15', // 초기 날짜 설정 (설정하지 않으면 오늘 날짜가 보임)
         navLinks: true, // 날짜를 선택하면 Day 캘린더로 링크
@@ -116,35 +134,43 @@
         nowIndicator: true, // 현재 시간 마크 @
         dayMaxEvents: true, // 이벤트가 오버되면 높이 제한 (+4 이런식으로 표현됨)
         locale: 'ko', // 한국어 설정
-        events: loadEvents, // 일정 불러오기(loadEvents 함수 참조)  
-                
+        events: loadEvents, // 일정 불러오기(loadEvents 함수 참조)                          
         eventAdd: function(obj) { // 이벤트가 추가되면 발생하는 이벤트 
             console.log(obj);
           },
-          eventChange: function(obj) { // 이벤트가 수정되면 발생하는 이벤트 
-            console.log(obj);
-          },
-          eventRemove: function(obj){ // 이벤트가 삭제되면 발생하는 이벤트 
-            console.log(obj);
-          },
-           select: function(info){
-          	$('#addEventModal').modal('show'); //일정 추가하는 모달창 띄움
-            $('#start').val(info.startStr); 
-            $('#end').val(info.endStr);               
-          }       
+        eventClick: function(obj){
+        	updateSchedule(obj);
+        },
+        eventChange: function(obj) { // 이벤트가 수정되면 발생하는 이벤트 
+          console.log(obj);
+        },
+        eventRemove: function(obj){ // 이벤트가 삭제되면 발생하는 이벤트 
+          console.log(obj);
+        },
+        // < 빈 날짜 누르면 일정추가 >
+         select: function(info){
+        	$('#addEventModal').modal('show'); //일정 추가하는 모달창 띄움
+          $('#start').val(info.startStr); 
+          $('#end').val(info.endStr);                    
+          
+          $("#addEventModal").find("#subject").val("");
+          $("#addEventModal").find("#title").val("");
+          $("#addEventModal").find("#addEventModalLabel").text("일정 등록");
+          $("#addEventModal").find("button[type=submit]").text("등록");                            
+          
+        }       
                 
       });
       // 캘린더 랜더링
       calendar.render();
-            
-      
+                  
       // 폼 제출 처리 (상단에 저장하기 버튼)
-      $('#saveEventButton').click(function(){
+/*        $('#saveEventButton').click(function(){
     	  var eventData={
                   title: $('#scheTitle').val(),
                   start: $('#scheTime').val(),
                   end: $('#scheEnd').val()	  
-    	  };
+    	  }; 
     	  
     	  $.ajax({
     	  type: "POST",
@@ -156,14 +182,74 @@
               calendar.refetchEvents();
           }
           });
-      });
+      }); */
   });   
  
   })();
   
-  // 일정 클릭하면 상세 일정 보여주는 모달창 띄움
-    $(()=>{    	 
-        $(document).on("click", '.fc-daygrid-day-events', function(e) {
+  function getFullyearDate(date){
+	  	const year = date.getFullYear();
+	    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+	    const day = String(date.getDate()).padStart(2, '0');
+	    const hours = String(date.getHours()).padStart(2, '0');
+	    const minutes = String(date.getMinutes()).padStart(2, '0');
+	    const seconds = String(date.getSeconds()).padStart(2, '0');
+	    
+	    return `\${year}-\${month}-\${day}T\${hours}:\${minutes}:\${seconds}`;
+	    
+  }
+  
+  // 일정수정 모달창 띄움
+  function updateSchedule(object){
+	  console.log(object);
+		const choiceEvent=object.event;
+		console.log(choiceEvent);
+		const {title,allDay,start,end}=choiceEvent;
+		const {content,schePrivate,scheNo}=choiceEvent.extendedProps;			
+		console.log(start,end, typeof start);
+	    
+		document.getElementById('modalScheNo').value=scheNo;
+		document.getElementById('subject').value=title;
+		document.getElementById('title').value=content;  
+		document.getElementById('start').value=start;
+		document.getElementById('end').value=end;
+		$("#addEventModal").find("#addEventModalLabel").text("일정 수정");
+		$("#addEventModal").find("button[type=submit]").text("수정");		
+		$("#addEventModal").find("#start").val(getFullyearDate(start)); 	
+		if(end!= null){
+			$("#addEventModal").find("#end").val(getFullyearDate(end)); 				
+		}else{
+			$("#addEventModal").find("#end").val("");
+		}
+		$("#addEventModal").modal("show");
+		
+  }
+  
+  // 일정 클릭하면 일정 수정하는 모달창 띄움
+   $(()=>{
+	/*  $(document).on("click",'.fc-daygrid-day-events',function(e){
+		const eventTitle=$(e.currentTarget).find(".fc-event-title").text();
+		console.log(eventTitle);
+		const choiceEvent=calendar.getEvents().filter(e=>e["title"]===eventTitle)[0];
+		console.log(choiceEvent);
+		/* const {title,allDay,start,end}=choiceEvent;
+		const {content,schePrivate,scheNo}=choiceEvent.extendedProps;			
+		
+		document.getElementById('modalScheNo').value=scheNo;
+		document.getElementById('subject').innerHTML=title;
+		document.getElementById('title').innerHTML=content;  
+		document.getElementById('start').innerHTML=startDate;
+		document.getElementById('end').innerHTML=endDate;
+		
+		$("#detailModal").modal("show");
+		
+	 }); */
+	   
+   });
+         
+  // 일정 마우스 호버하면 상세 일정 보여주는 모달창 띄움
+     /* $(()=>{    	 
+        $(document).on("mouseenter", '.fc-daygrid-day-events', function(e) {
         	const eventTitle=$(e.currentTarget).find(".fc-event-title").text();
         	const choiceEvent=calendar.getEvents().filter(e=>e["title"]===eventTitle)[0];
         	console.log(choiceEvent);
@@ -181,21 +267,22 @@
     		document.getElementById('modalScheEnd').innerHTML=endDate;
     		       		 
     		$("#detailModal").modal("show");
-        });               
+        });            */     
 
         
         //위에서 일정을 클릭함으로써, 클릭한 해당 일정의 정보가 form에 담겨서 들어옴
         //일정삭제 이벤트
-		$("#deleteEvent").click(e=>{
+ 		$("#deleteEvent").click(e=>{
  			$(e.target).parents("form").attr("action","${path}/schedule/deleteSchedule.do");
  			$(e.target).parents("form").submit();
-		});       
+		});                      
+        
         //일정수정 이벤트
 		$("#updateEvent").click(e=>{
 			$(e.target).parents("form").attr("action","${path}/schedule/updateSchedule.do");
 			$(e.target).parents("form").submit();
 		});
-  }) 
+  //}) 
   //일정삭제 성공여부 alert창 띄우기
   document.addEventListener("DOMContentLoaded",function(){
   	var msg='${msg}';

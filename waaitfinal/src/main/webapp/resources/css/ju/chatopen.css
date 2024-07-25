@@ -131,6 +131,10 @@
             /* border: 1px solid red; */
             width: 100%;
         }
+        
+        .chatting_userlist_printarea>div:hover{
+        	background-color: #AEAEAE;
+        }
 
         .chatting_userlist_printarea_profile{
             display: flex;
@@ -293,5 +297,49 @@
         }
 	
 	/* 채팅방목록 끝 */
+	
+	
+	
+	
+	/* 모달창 */
+	.modal {
+	    display: none;  /* 기본적으로 숨김 */
+	    position: fixed;
+	    z-index: 1;
+	    left: 0;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    overflow: auto;
+	    /* background-color: rgb(0, 0, 0); Fallback 색상
+	    background-color: rgba(0, 0, 0, 0.4); 불투명 배경 */
+	}
+	
+	.modal>div{
+		/* background-color: #fefefe; */
+	    margin: 300px auto auto 80px; /* 상단에서부터 15% 떨어지고 가운데 정렬 */
+	    padding: 0px;
+	    border: 1px solid #888;
+	    width: 100px; /* 너비를 조절하여 적절하게 설정 */
+	    height: 106px;
+	    
+	}
+	
+	.modal>div>div{
+		display: flex;
+   		justify-content: space-around;
+   		
+ 		cursor: pointer;
+	    background-color: #f1f1f1;
+	    /* border-radius: 5px; */
+	    /* border: 1px solid #888; */
+	    text-align: center;
+	    width: 100%;
+	}
+	
+	.modal>div>div:hover{
+		background-color: #ddd;
+	}
+	/* 모달창 끝 */
 	
 	

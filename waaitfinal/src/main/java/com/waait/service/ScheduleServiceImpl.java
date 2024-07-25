@@ -32,6 +32,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public int updateSchedule(Schedule s) {
 		return dao.updateSchedule(session,s);
 	}
+
+	@Override
+	public int deleteSchedule(int num) {
+		return dao.deleteSchedule(session,num);
+	}
+	
 	
 	
 }

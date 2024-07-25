@@ -22,9 +22,9 @@ public class ChatRoom {
 	private String chatRoomPassword;	//채팅방 비밀번호
 	private String chatRoomIntroduction;	//채팅방 소개글
 	
-	//employee테이블
-	private String empName;
-	private String empProfile;
+	//employee테이블	chatHistory안에 넣었음
+//	private String empName;
+//	private String empProfile;
 	
 	//채팅기록 
 	private ChatHistory chatHistory;
@@ -32,4 +32,6 @@ public class ChatRoom {
 	//채팅조인 카운트 자기포함한 카운트 -1 해서 사용해야됨.
 	private int chatJoinCount;
 	
+	// 1:1채팅방일때 상대방 사원이름
+	private String chatEmpName;
 }

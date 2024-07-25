@@ -70,11 +70,13 @@ public class EDocController {
 		try {
 //			// json 형태의 문자열로 받아온 obj를 객체화
 			ObjectMapper objectMapper = new ObjectMapper();
-			doc = objectMapper.readValue(obj, BasicDocument.class); 
+			doc = objectMapper.readValue(obj, BasicDocument.class);
+			
+			
 			System.out.println(doc.getDocType());
 			
 			service.insertBasicEdoc(doc, empNo);
-			
+		
 			System.out.println(empNo.length);
 			
 			// 파일 업로드 처리
