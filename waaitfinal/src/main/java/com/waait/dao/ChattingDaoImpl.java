@@ -42,10 +42,10 @@ public class ChattingDaoImpl implements ChattingDao {
 
 	@Override
 	public int insertChatRoom(SqlSession session, Map<String, Object> chatRoomParam) {
-		System.out.println("7");
+//		System.out.println("7");
 		return session.insert("chatting.insertChatRoom",chatRoomParam);
 	}
-
+ 
 	@Override
 	public int selectSEQ_ChatRoomNo(SqlSession session) {
 		return session.selectOne("chatting.selectSEQ_ChatRoomNo");
@@ -55,6 +55,22 @@ public class ChattingDaoImpl implements ChattingDao {
 	public int insertChatJoin(SqlSession session, Map<String, Object> chatJoinParam) {
 		return session.insert("chatting.insertChatJoin",chatJoinParam);
 	}
+
+	@Override
+	public List<Employee> selectChatEmployeelist(SqlSession session, int chatroomNo) {
+		return session.selectList("chatting.selectChatEmployeelist",chatroomNo);
+	}
+
+	@Override
+	public List<Employee> selectChatEmployeelistnot(SqlSession session, int chatroomNo) {
+		return session.selectList("chatting.selectChatEmployeelistnot",chatroomNo);
+	}
+
+	@Override
+	public int deleteChatJoin(SqlSession session, Map<String, Object> param) {
+		return session.delete("chatting.deleteChatJoin",param);
+	}
+	
 	
 	
 	

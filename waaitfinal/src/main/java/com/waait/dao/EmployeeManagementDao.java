@@ -19,9 +19,22 @@ public class EmployeeManagementDao {
 	public List<Employee> getEmployees(SqlSession session) {
 		return session.selectList("em.getEmployees");
 	}
+	
+	public Employee getEmployeeById(SqlSession session, String empId) {
+		return session.selectOne("em.getEmployeeById", empId);
+	}
 
 	public Employee searchEmpForModifyDepartment(SqlSession session, Map<String, String> searchParam) {
 		return session.selectOne("em.searchEmpForModifyDepartment", searchParam);
 	}
+
+	public int modifyEmployeeDept(SqlSession session, Map<String, Object> modifyParam) {
+		return session.update("em.modifyEmployeeDept", modifyParam);
+	}
+
+	public int insertMovingDepartment(SqlSession session, Map<String, Object> modifyParam) {
+		return session.insert("em.insertMovingDepartment", modifyParam);
+	}
+
 
 }

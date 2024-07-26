@@ -25,7 +25,7 @@
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
 	<!-- FullCalendar 언어 CDN -->
 	  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
-	</head>
+	</head>	
 	
 	<body style="padding:100px;">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/schedule/schedule.css">
@@ -84,10 +84,16 @@
         slotMaxTime: '18:00', // Day 캘린더에서 종료 시간
         customButtons:{
         	myCustomButton:{
-        		text:"일정 추가하기",
+        		text:"일정 추가",
         		click: function(){
         			//부트스트랩 모달 열기
-        			$('#addEventModal').modal('show');
+        			$('#addEventModal').modal('show');        			           
+	      	          
+	       	        $("#addEventModal").find("#subject").val("");
+	       	        $("#addEventModal").find("#title").val("");
+	       	        $("#addEventModal").find("#addEventModalLabel").text("일정 등록");
+	       	        $("#addEventModal").find("#submitButton").text("등록");     
+        			
         		}
         	},
 /*         	mySaveButton:{
@@ -160,7 +166,7 @@
           $("#addEventModal").find("#subject").val("");
           $("#addEventModal").find("#title").val("");
           $("#addEventModal").find("#addEventModalLabel").text("일정 등록");
-          $("#addEventModal").find("button[type=submit]").text("등록");                            
+          $("#addEventModal").find("#submitButton").text("등록");                            
           
         }       
                 
@@ -217,8 +223,11 @@
 		document.getElementById('title').value=content;  
 		document.getElementById('start').value=start;
 		document.getElementById('end').value=end;
+		document.getElementById('scheAllDay').checked=allDay;
+		document.getElementById('schePrivate').checked=schePrivate;
+		
 		$("#addEventModal").find("#addEventModalLabel").text("일정 수정");
-		$("#addEventModal").find("button[type=submit]").text("수정");		
+		$("#addEventModal").find("#submitButton").text("수정");				
 		$("#addEventModal").find("#start").val(getFullyearDate(start)); 	
 		if(end!= null){
 			$("#addEventModal").find("#end").val(getFullyearDate(end)); 				
@@ -261,8 +270,10 @@
 		});                      
         
         //일정수정 이벤트
-		$("#updateEvent").click(e=>{
-			$(e.target).parents("form").attr("action","${path}/schedule/updateSchedule.do");
+		$("#submitButton").click(e=>{
+			if(e.target.innerText==='수정'){
+				$(e.target).parents("form").attr("action","${path}/schedule/updateSchedule.do");
+			}
 			$(e.target).parents("form").submit();
 		});
   //}) 
@@ -297,10 +308,6 @@
   
   
 </script>  
-	
-	
-	
-
 
   </body>
 </html>
