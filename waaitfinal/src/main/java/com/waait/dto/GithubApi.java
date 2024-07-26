@@ -8,13 +8,16 @@ import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.kohsuke.github.PagedIterator;
 import org.kohsuke.github.PagedSearchIterable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-@ConfigurationProperties(prefix = "github")
 @Component
 public class GithubApi {
 	GitHub gitHub;
-	String token;
+	
+    @Value("${token}")
+    private String token;
+	
 	
 	
 	 public PagedIterator<GHCommit> getCommits(String userId) {
