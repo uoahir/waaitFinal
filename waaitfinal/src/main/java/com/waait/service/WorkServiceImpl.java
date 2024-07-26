@@ -26,6 +26,11 @@ public class WorkServiceImpl implements WorkService{
 		Work work = workDao.selectByEmpNoWork(sqlSession,param);
 		return work;
 	}
+	@Override
+	public int insertLeaveWork(Map<String, Object> map) {
+		int rs = workDao.insertLeaveWork(sqlSession,map);
+		return rs;
+	}
 	
 
 }

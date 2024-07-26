@@ -28,3 +28,24 @@ const work =()=>{
 	})
 	
 }
+const leaveWork =()=>{
+	fetch(`${contextPath}/insert/leavework`,{
+		method : "POST",
+		headers: {
+			'Content-Type' : 'application/json;charset=UTF-8'
+		}
+	}).then(response=>response.json())
+	.then(data=>{
+		location.assign(`${contextPath}/`);
+	})
+	.catch((error)=>{
+		console.log(error);
+		location.assign(`${contextPath}/teamproject/error`);
+	})
+	
+}
+
+
+const noWork =()=>{
+	alert("아직 출근을 하지않았습니다");
+}

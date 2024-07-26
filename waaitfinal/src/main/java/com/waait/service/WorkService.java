@@ -10,4 +10,6 @@ public interface WorkService {
 
 	Work selectByEmpNoWork(Map<String, String> param);
 
+	int insertLeaveWork(Map<String, Object> map);
+
 }

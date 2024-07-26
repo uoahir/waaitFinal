@@ -12,4 +12,6 @@ public interface WorkDao {
 
 	Work selectByEmpNoWork(SqlSession sqlSession, Map<String, String> param);
 
+	int insertLeaveWork(SqlSession sqlSession, Map<String, Object> map);
+
 }

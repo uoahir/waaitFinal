@@ -1022,14 +1022,20 @@ var contextPath = "${path}";
                             <h5 class="font-bold">John Duck</h5>
                             <c:if test="${work!=null}">
                             	<button>${work.workStart.getHours()}:${work.workStart.getMinutes()} </button>
-                            	
+                            	<c:if test="${work.workEnd == null }">
+                            	<button onclick="leaveWork()">퇴근</button>
+                            	</c:if>
+                            	<c:if test="${work.workEnd != null }">
+                            	<button>${work.workEnd.getHours()}:${work.workEnd.getMinutes()} </button>
+                            	</c:if>	
                             </c:if>
                             <c:if test="${work==null}">
                            <button onclick="work()">출근</button> 
+                           <button onclick="noWork()">퇴근</button>
                             </c:if>
                            
                             
-                            <button onclick="leaveWork()">퇴근</button>
+                            
                         </div>
                     </div>
                 </div>

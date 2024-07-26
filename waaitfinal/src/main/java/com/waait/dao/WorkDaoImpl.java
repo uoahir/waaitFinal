@@ -21,5 +21,10 @@ public class WorkDaoImpl implements WorkDao{
 		
 		return sqlSession.insert("work.insertWorkStart",work);
 	}
+
+	@Override
+	public int insertLeaveWork(SqlSession sqlSession, Map<String, Object> map) {		
+		return sqlSession.update("work.insertLeaveWork",map);
+	}
 	
 }

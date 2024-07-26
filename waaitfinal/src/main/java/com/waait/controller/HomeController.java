@@ -58,11 +58,12 @@ public class HomeController {
 	public String homeController(Model model) {
 		
 		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Map<String, String> param = new HashMap<>();
+		
 		LocalDateTime now = LocalDateTime.now();
 		Timestamp timestamp = Timestamp.valueOf(now);
 		System.out.println("20"+(timestamp.getYear()%100)+"-"+(timestamp.getMonth()+1)+"-"+(timestamp.getDate()));
 		String today = "20"+(timestamp.getYear()%100)+"-"+(timestamp.getMonth()+1)+"-"+(timestamp.getDate());
+		Map<String, String> param = new HashMap<>();
 		param.put("today", today);
 		param.put("empNo",""+employee.getEmpNo());
 		

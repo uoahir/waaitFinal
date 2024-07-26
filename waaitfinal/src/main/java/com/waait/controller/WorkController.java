@@ -51,4 +51,38 @@ public class WorkController {
 		return ResponseEntity.ok(result);
 
 	}
+	@ResponseBody
+	@PostMapping("/insert/leavework")
+	public ResponseEntity<Map<String,String>> insertLeaveWork(){
+		LocalDateTime now = LocalDateTime.now();
+		Timestamp timestamp = Timestamp.valueOf(now);
+		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Map<String, String> param = new HashMap<>();
+		String today = "20"+(timestamp.getYear()%100)+"-"+(timestamp.getMonth()+1)+"-"+(timestamp.getDate());
+		param.put("today", today);
+		param.put("empNo",""+employee.getEmpNo());
+		
+		Work todaywork = workService.selectByEmpNoWork(param);
+		System.out.println("ddd"+todaywork);
+		Work work = Work.builder().workDate(timestamp).empNo(employee.getEmpNo()).workEnd(timestamp).build();
+		if(todaywork.getWorkStatus()!=null) {
+			if(timestamp.getHours()>17 && timestamp.getMinutes()>=0) {
+				work.setWorkStatus("지각");
+			}else {
+				work.setWorkStatus("비정상");
+			}
+		}else {
+			work.setWorkStatus("정상");
+		}
+		System.out.println("Dd"+work);
+		System.out.println(today);
+		Map<String, Object> map = new HashMap<>();
+		map.put("today", today);
+		map.put("work", work);
+		int result = workService.insertLeaveWork(map);
+		
+		Map<String,String> rs= new HashMap<>();
+		
+		return ResponseEntity.ok(rs);
+	}
 }
