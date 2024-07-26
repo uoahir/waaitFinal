@@ -13,4 +13,10 @@ public class SpringScheduler {
 		System.out.println("쉬는시간~");
 	}
 	
+	// 30일 지난 메세지 삭제
+	
+	// 채팅방에 참여된 모든 사원이 나가면 채팅방을 delete하면서 채팅기록도 같이 delete해주기...?
+	
+	
+	
 }

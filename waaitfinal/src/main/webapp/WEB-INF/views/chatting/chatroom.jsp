@@ -21,6 +21,8 @@
 <!-- 스타일 적용 -->
 <link rel="stylesheet" href="${path}/resources/css/ju/chatroom.css">
 
+<!-- jquery -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 
 </head>
@@ -48,9 +50,19 @@
                 		</c:otherwise>
                 	</c:choose>
                     
-                    <!-- 개인톡방 참여자 수 안띄움 -->
+                    <!-- 
+                    	개인톡방 참여자 수 안띄움
+                    	
+                    	누르면 채팅방에 속한 리스트가 출력되고 프로필 누르면 프로필 출력 (나중에)
+                    	리스트 아래 대화 상대초대하기 버튼 누르면 채팅방 만들기 처럼 사원목록 출력 (이미 속한사람은 안뜨게 필터)
+                    	form태그 사용해서 클릭된 사원번호 넘겨서 chatjoin테이블에 추가 chatRoomNo도 같이 넘겨줌
+                    	완료되면 load? 해서 최신화? 
+                   	 -->
                     <c:if test="${chatName.chatRoomType ne 'C1'}">
-	                    <p>${chatName.chatJoinCount}</p>                    
+                    	<div id="chatjoincount"  onclick="chatEmpList();">
+	                    	<img src="https://i.pinimg.com/564x/43/14/0a/43140a3803e5f1b39c1ffac1a35a3ec7.jpg" alt="사원수" width="20" height="20">
+		                    <p>${chatName.chatJoinCount}</p>                    
+                    	</div>
                     </c:if>
                     
                     
@@ -118,6 +130,278 @@
             </div>
 
         </div>
+        
+        
+        <!-- 모달 채팅방 사원수 눌렀을때 사원리스트 출력 -->
+        <div id="modal_chatemplist" class="modal">
+			<div>
+				<div>
+					<div id="modal_chatinvitation_groupchat">
+						<c:if test="${not empty employees}">
+							<c:forEach var="emp" items="${employees}">
+								<c:if test="${emp.empNo eq employee.empNo }">
+									<div class="chatting_userlist_printarea_profile">
+				                        <button onclick="asd(event);">
+				                            <img class="chatting_userlist_printarea_profile_img_green" 
+				                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+				                        </button>
+										<h4>나</h4>
+				                        <p>${emp.jobLevel.levelName}</p>
+				                        <p>${emp.empName}</p>
+				                    </div>
+								</c:if>
+							</c:forEach>
+							<c:forEach var="emp" items="${employees}">
+								<c:if test="${emp.empNo ne employee.empNo }">
+									<div class="chatting_userlist_printarea_profile">
+				                        <button onclick="asd(event);">
+				                            <img class="chatting_userlist_printarea_profile_img_green" 
+				                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+				                        </button>
+				                        <p>${emp.jobLevel.levelName}</p>
+				                        <p>${emp.empName}</p>
+				                    </div>
+			                    </c:if>
+							</c:forEach>
+						</c:if>
+					</div>
+				</div>
+				<!-- 이걸 누르면 아래 모달이 실행됨 -->
+				<div onclick="chatinvitationemplist();">
+					<p>+ 채팅상대 초대하기</p>
+				</div>
+			</div>
+		</div>
+        <!-- 모달 채팅방 사원수 눌렀을때 사원리스트 출력 닫음 -->
+        
+        
+        
+        <!-- 모달창 사원리스트아래에 초대하기 버튼 누르면 출력되는 모달창 -->
+        <div id="modal_chatinvitation" class="modal">
+	        
+				<div>
+					<div>
+						<div id="modal_chatinvite_search">
+			    			<h3>채팅상대 초대하기</h3>
+			                <div>
+			                    <img src="https://i.pinimg.com/564x/95/ee/40/95ee408c19f2c9d10629b70c4cea3e51.jpg" alt="" width="34px" height="34px">
+			                    <input type="text" placeholder="사용자이름, 부서명 검색">
+			                    <p onclick="">X</p>
+			                </div>
+			            </div>
+					</div>
+					<div>
+						<!-- 사용자 목록 -->
+		            <div id="chatting_userlist_printarea_all">
+		                <c:if test="${not empty employeesnot}">
+
+		               		<!-- 부서 출력 D1 -->
+		               		<div class="chatting_userlist_printarea">
+			               		<p>대표실 (1/2)</p>
+			               		<c:forEach var="emp" items="${employeesnot}">
+				               		<c:if test="${'D1' eq emp.deptCode}">
+				               			<c:if test="${emp.empNo ne employee.empNo }">
+					               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
+						                        <button onclick="asd(event);">
+						                            <img class="chatting_userlist_printarea_profile_img_green" 
+						                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+						                        </button>
+						                        <p>${emp.jobLevel.levelName}</p>
+					                        	<p>${emp.empName}</p>
+					                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
+						                    </div>
+				               			</c:if>
+				               		</c:if>
+			               		</c:forEach>
+		               		</div>
+		               		
+		               		
+		               		
+		               		<!-- 부서 출력 D2 -->
+		       				<div class="chatting_userlist_printarea">
+		               		<p>개발부 (1/2)</p>
+		               		<c:forEach var="emp" items="${employeesnot}">
+			               		<c:if test="${'D2' eq emp.deptCode}">
+			               			<c:if test="${emp.empNo ne employee.empNo }">
+				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
+					                        <button onclick="asd(event);">
+					                            <img class="chatting_userlist_printarea_profile_img_green" 
+					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                        </button>
+					                        <p>${emp.jobLevel.levelName}</p>
+				                        	<p>${emp.empName}</p>
+				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
+					                    </div>
+			               			</c:if>
+			               		</c:if>
+		               		</c:forEach>
+		               		</div>
+		               		
+		               		
+		               		<!-- 부서 출력 D3 -->
+		       				<div class="chatting_userlist_printarea">
+		               		<p>개발 1팀 (1/2)</p>
+		               		<c:forEach var="emp" items="${employeesnot}">
+			               		<c:if test="${'D3' eq emp.deptCode}">
+			               			<c:if test="${emp.empNo ne employee.empNo }">
+				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
+					                        <button onclick="asd(event);">
+					                            <img class="chatting_userlist_printarea_profile_img_green" 
+					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                        </button>
+					                        <p>${emp.jobLevel.levelName}</p>
+				                        	<p>${emp.empName}</p>
+				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
+					                    </div>
+			               			</c:if>
+			               		</c:if>
+		               		</c:forEach>
+		               		</div>
+			               		
+			               		
+		               		<!-- 부서 출력 D4 -->
+		       				<div class="chatting_userlist_printarea">
+		               		<p>개발 2팀 (1/2)</p>
+		               		<c:forEach var="emp" items="${employeesnot}">
+			               		<c:if test="${'D4' eq emp.deptCode}">
+			               			<c:if test="${emp.empNo ne employee.empNo }">
+				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
+					                        <button onclick="asd(event);">
+					                            <img class="chatting_userlist_printarea_profile_img_green" 
+					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                        </button>
+					                        <p>${emp.jobLevel.levelName}</p>
+				                        	<p>${emp.empName}</p>
+				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
+					                    </div>
+			               			</c:if>
+			               		</c:if>
+		               		</c:forEach>
+		               		</div>
+		               		
+		               		
+		               		<!-- 부서 출력 D5 -->
+		       				<div class="chatting_userlist_printarea">
+		               		<p>경영관리부 (1/2)</p>
+		               		<c:forEach var="emp" items="${employeesnot}">
+			               		<c:if test="${'D5' eq emp.deptCode}">
+			               			<c:if test="${emp.empNo ne employee.empNo }">
+				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
+					                        <button onclick="asd(event);">
+					                            <img class="chatting_userlist_printarea_profile_img_green" 
+					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                        </button>
+					                        <p>${emp.jobLevel.levelName}</p>
+				                        	<p>${emp.empName}</p>
+				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
+					                    </div>
+			               			</c:if>
+			               		</c:if>
+		               		</c:forEach>
+		               		</div>
+		               		
+		               		
+		               		
+		               		<!-- 부서 출력 D6 -->
+		       				<div class="chatting_userlist_printarea">
+		               		<p>재정팀 (1/2)</p>
+		               		<c:forEach var="emp" items="${employeesnot}">
+			               		<c:if test="${'D6' eq emp.deptCode}">
+			               			<c:if test="${emp.empNo ne employee.empNo }">
+				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
+					                        <button onclick="asd(event);">
+					                            <img class="chatting_userlist_printarea_profile_img_green" 
+					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                        </button>
+					                        <p>${emp.jobLevel.levelName}</p>
+				                        	<p>${emp.empName}</p>
+				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
+					                    </div>
+			               			</c:if>
+			               		</c:if>
+		               		</c:forEach>
+		               		</div>
+		               		
+		               		
+		               		
+		               		<!-- 부서 출력 D7 -->
+		       				<div class="chatting_userlist_printarea">
+		               		<p>인사팀 (1/2)</p>
+		               		<c:forEach var="emp" items="${employeesnot}">
+			               		<c:if test="${'D7' eq emp.deptCode}">
+			               			<c:if test="${emp.empNo ne employee.empNo }">
+				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
+					                        <button onclick="asd(event);">
+					                            <img class="chatting_userlist_printarea_profile_img_green" 
+					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                        </button>
+					                        <p>${emp.jobLevel.levelName}</p>
+				                        	<p>${emp.empName}</p>
+				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
+					                    </div>
+			               			</c:if>
+			               		</c:if>
+		               		</c:forEach>
+		               		</div>
+		               		
+		               		
+		               		
+		               		
+		               		<!-- 부서 출력 D8 -->
+		       				<div class="chatting_userlist_printarea">
+		               		<p>영업팀 (1/2)</p>
+		               		<c:forEach var="emp" items="${employeesnot}">
+			               		<c:if test="${'D8' eq emp.deptCode}">
+			               			<c:if test="${emp.empNo ne employee.empNo }">
+				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
+					                        <button onclick="asd(event);">
+					                            <img class="chatting_userlist_printarea_profile_img_green" 
+					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                        </button>
+					                        <p>${emp.jobLevel.levelName}</p>
+				                        	<p>${emp.empName}</p>
+				                        	<!-- 나중에 label로 업그레이드 해보기 -->
+				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
+					                    </div>
+			               			</c:if>
+			               		</c:if>
+		               		</c:forEach>
+		               		</div>
+		               		
+		                		
+		                		
+		                </c:if>	<!-- ${not empty employees } 끝남 -->
+		                
+		                </div>
+		            </div>
+
+		        <button class="create_chatjoin" onclick="insertchatjoin();">채팅상대 초대하기</button>
+		        <button class="create_chatjoin" id="modal_chatinvite_cancel">취소</button>
+		        </div>
+			
+		</div>
+		<!-- 모달창 사원리스트아래에 초대하기 버튼 누르면 출력되는 모달창 닫음-->
+		
+		
+		<!-- 모달창 설정? 처럼 띄우고 일단은 채팅방 나가기 버튼만 만들어서 나가는 기능 구현하기 -->
+		<!-- 나가기를 누르면 ajax로 방번호, 로그인된 사원번호를 보내서 chatjoin테이블에서 해당하는 row delete하기 -->
+		<div id="modal_chat_exit">
+			<div>
+				<div id="modal_chat_exit_content">	<!-- 공간 만들어두고 나중에 사용 -->
+					<p>다른 기능넣을 공간</p>
+				</div>
+				<div id="modal_chat_exit_button">
+					<button onclick="deletechatjoin();">
+						<img src="https://i.pinimg.com/564x/86/a4/e6/86a4e6c3faabedd34bb8229fd5eb8b04.jpg" alt="나가기이미지" width="40px" height="40px">
+						<p>채팅방 나가기<p>
+					</button>
+				</div>
+			</div>
+		</div>
+		
+		<!-- 모달 나가기 닫 -->
+		
+        
     </main>
 
 
@@ -133,20 +417,22 @@
 		const loginId = "${employee.empId}";
 		const loginEmpName = "${employee.empName}";
 		const loginEmpNo = "${employee.empNo}";
-		const path = "${pageContext.request.contextPath }";
+		const path = "${pageContext.request.contextPath}";
 		const chatRoomNo = "${chatName.chatRoomNo}";
 		const chatJoinCount = "${chatName.chatJoinCount -1}";
+		const chatRoomType = "${chatName.chatRoomType}";
 		
 		
 		//나중에 삭제함
 		console.log("chatName : "+"${chatName}");
 		console.log("chatHistorys : "+"${chatHistorys}");
+		console.log("chatEmployees : "+"${employees}");
 		
 	</script>
 	
 	<!-- script문 -->
 	<script type="text/javascript" src="${path}/resources/js/chatroom.js"></script>
-	<%-- <script type="text/javascript" src="${path}/resources/js/chatopen.js"></script> --%>
+	
 </body>
 </html>
 

@@ -2,9 +2,12 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <html lang="ko">
-
+<script>
+var contextPath = "${path}";
+</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1017,7 +1020,22 @@
                         </div>
                         <div class="ms-3 name">
                             <h5 class="font-bold">John Duck</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
+                            <c:if test="${work!=null}">
+                            	<button>${work.workStart.getHours()}:${work.workStart.getMinutes()} </button>
+                            	<c:if test="${work.workEnd == null }">
+                            	<button onclick="leaveWork()">퇴근</button>
+                            	</c:if>
+                            	<c:if test="${work.workEnd != null }">
+                            	<button>${work.workEnd.getHours()}:${work.workEnd.getMinutes()} </button>
+                            	</c:if>	
+                            </c:if>
+                            <c:if test="${work==null}">
+                           <button onclick="work()">출근</button> 
+                           <button onclick="noWork()">퇴근</button>
+                            </c:if>
+                           
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -1095,7 +1113,7 @@
 <!-- Need: Apexcharts -->
 <script src="${path }/resources/assets/extensions/apexcharts/apexcharts.min.js"></script>
 <script src="${path }/resources/assets/static/js/pages/dashboard.js"></script>
-
+<script src="${path }/resources/waait/index.js"></script>
 </body>
 
 </html>

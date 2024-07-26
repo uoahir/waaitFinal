@@ -64,9 +64,9 @@ public class ChattingServiceImpl implements ChattingService {
 
 	@Override
 	public int insertChatRoom(Map<String, Object> chatRoomParam) {
-		System.out.println("6");
+//		System.out.println("6");
 		int result = dao.insertChatRoom(session, chatRoomParam);
-		System.out.println("result : "+result);
+		System.out.println("insertChatRoom - result : "+result);
 		return result;
 	}
 
@@ -92,6 +92,41 @@ public class ChattingServiceImpl implements ChattingService {
 		
 		return chatRoomNo;
 	}
+
+
+	@Override
+	public Map<String, Object> selectChatEmployeelist(int chatroomNo) {
+		List<Employee> employees = dao.selectChatEmployeelist(session, chatroomNo);
+		
+		List<Employee> employeesnot = dao.selectChatEmployeelistnot(session, chatroomNo);
+		
+		Map<String, Object> employee = new HashMap<>();
+		
+		employee.put("employees", employees);
+		employee.put("employeesnot", employeesnot);
+		return employee;
+	}
+
+
+	@Override
+	public void insertChatJoinInvite(Map<String, Object> param) {
+	 	List<Long> chatEmpNos = (List<Long>) param.get("chatEmpNo");
+		
+	 	chatEmpNos.forEach(e->{
+	 		Map<String, Object> chatParam = new HashMap<>();
+	 		chatParam.put("chatRoomNo", param.get("chatRoomNo"));
+	 		chatParam.put("chatEmpNo", e);
+	 		dao.insertChatJoin(session, chatParam);
+	 	});
+	}
+
+
+	@Override
+	public void deleteChatJoin(Map<String, Object> param) {
+		dao.deleteChatJoin(session, param);
+	}
+	
+	
 	
 	
 	
