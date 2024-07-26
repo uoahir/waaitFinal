@@ -15,7 +15,7 @@
 		<div class="card-body ">
 			<div class="d-flex">
 				<div style="width: 90%; margin-left:5px;">
-					<h5>Document waiting for approval</h5>
+					<h5>Approved Document</h5>
 				</div>
 				<div style="float: right; width:10%;" class="mb-5">
 					<div class="dropdown">
@@ -41,10 +41,10 @@
 	        	<table class="table" id="table1">
 					<thead>
 						<tr>
-							<th>No</th>
+							<th>Document Number</th>
 							<th>Type</th>
 							<th>Title</th>
-							<th>Writer</th>
+							<th>Approver</th>
 							<th>Submission Date</th>
 							<th>Status</th>
 						</tr>
@@ -53,19 +53,17 @@
 						<c:if test="${not empty documents }">
 							<c:forEach items="${documents }" var="d">
 								<tr onclick = "isFirstOpened('${d.docId}','${d.type.docType }','${d.docWriter }');">
-									<td>${d.rnum }</td>
+									<td>${d.docNumber }</td>
 									<td>${d.type.type }</td>
 									<td>${d.docTitle }</td>
-									<td>${d.employee.empName }</td>
 									<td>${d.docDate }</td>
+									<td>${d.docDate }</td><!-- appDate -->
 									<td>
-										<span class="badge bg-light-primary">${d.approvalOne.appStat }</span>
+										<span class="badge bg-light-primary">${d.docStat }</span>
 									</td>
 								</tr>
 							</c:forEach>
-						</c:if>
-						
-	                        
+						</c:if> 
 					</tbody>
 				</table>
 			</div>
@@ -73,7 +71,7 @@
 	</div>    
 	<script type="text/javascript">
 		const isFirstOpened = (docId,docType,docWriter) => {
-			window.open("${path}/edoc/openedoc"+docId+"/"+docType +"/"+docWriter,"_blank" ,"width=1200, height=1000");
+			window.open("${path}/edoc/openedoc"+docId+"/"+docType+"/"+docWriter,"_blank" ,"width=1200, height=1000");
 			// 새 창 열기로 오픈하면 , 여러 문서를 동시에 작업할 수 있음 ~ 
 		}
 	</script>

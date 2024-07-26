@@ -15,7 +15,7 @@
 		<div class="card-body ">
 			<div class="d-flex">
 				<div style="width: 90%; margin-left:5px;">
-					<h5>Document waiting for approval</h5>
+					<h5>Document In Progress</h5>
 				</div>
 				<div style="float: right; width:10%;" class="mb-5">
 					<div class="dropdown">
@@ -44,7 +44,7 @@
 							<th>No</th>
 							<th>Type</th>
 							<th>Title</th>
-							<th>Writer</th>
+							<th>Approver</th>
 							<th>Submission Date</th>
 							<th>Status</th>
 						</tr>
@@ -59,7 +59,7 @@
 									<td>${d.employee.empName }</td>
 									<td>${d.docDate }</td>
 									<td>
-										<span class="badge bg-light-primary">${d.approvalOne.appStat }</span>
+										<span class="badge bg-light-primary">${d.docStat }</span>
 									</td>
 								</tr>
 							</c:forEach>
@@ -73,7 +73,7 @@
 	</div>    
 	<script type="text/javascript">
 		const isFirstOpened = (docId,docType,docWriter) => {
-			window.open("${path}/edoc/openedoc"+docId+"/"+docType +"/"+docWriter,"_blank" ,"width=1200, height=1000");
+			window.open("${path}/edoc/openedoc"+docId+"/"+docType+"/"+docWriter,"_blank" ,"width=1200, height=1000");
 			// 새 창 열기로 오픈하면 , 여러 문서를 동시에 작업할 수 있음 ~ 
 		}
 	</script>

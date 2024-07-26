@@ -29,65 +29,127 @@
 <section class="container">
 	<div class="card mt-5">
 		<div class="card-header">
-			<h2 class="card-title">Business Report</h2>
+			<h2 class="card-title">OFF APPLICATION</h2>
 	    </div>
 	    <div class="card-body">
-			<form action="${path }/edoc/basicedocend" id="docForm" method="POST"
-				enctype="multipart/form-data">
+			<form action="${path }/edoc/offedocend" id="docForm" method="POST">
 				<div id="button" style="text-align: right;">
 					<button type="button" onclick="appline();" class="btn btn-outline-secondary">Approval Line</button>
-					<button type="button" class="btn btn-outline-secondary" onclick="insertedoc();">Submission</button>
+					<button type="button" class="btn btn-outline-secondary" onclick="insertoff();">Submission</button>
 					<button type="button" class="btn btn-outline-secondary" onclick="save();">Save</button>
 					<button type="button" class="btn btn-outline-secondary">Print Preview</button>
 				</div>
 				<div class="line mt-3" style="width:100%; height:120px;"></div>
-				<div class="card-body d-flex">
-					<div id="title" style="width:50%;">
-						<label for="docTitle">Title
-						<input class = "round form-controll" type="text" id="docTitle" name="docTitle"></label>
+				<div class="card-body d-flex" style = "width:100%;">
+					<div class="form-group row align-items-center d-flex" style = "width:100%;"> 
+						<div class="col-lg-1 col-3" style = "margin-left:5px;">
+						    <label class="col-form-label" for="docTitle">Title</label>
+						</div>
+						<div class="col-lg-2 col-3">
+						    <input type="text" class="form-control" name="docTitle" value = "휴가신청서" readOnly>
+						</div>
+						
+						<div class="col-lg-2 col-3" style="margin-left:360px;">
+						    <input type="text" class="form-control" id = "deptName" name="deptName" value = "${employee.department.deptName }" readOnly>
+						</div>
+						<div class="col-lg-2 col-3">
+						    <input type="text" class="form-control" id = "empName" name="empName" value = "${employee.empName }" readOnly>
+						</div>
+						<input type="hidden" id = "docWriter" name="docWriter" value = "${employee.empNo }">
+						
 					</div>
-					<div id="writer" style="width:50%;">
-						<input type="text" id="deptName" id="deptName"
-							value="${employee.department.deptName }" readOnly /> <input
-							type="text" id="empName" name="empName" value=${employee.empName }
-							readOnly> <input type="hidden" id="docWriter"
-							name="docWriter" value=${employee.empNo }>
+				</div>
+				
+				<div class ="card-body">
+					<!-- 여기에는 휴가신청에 필요한 input 데이터들 넣기 ~ ! -->
+					<div class="form-group row align-items-center"> 
+						<div class="col-md-3">
+							<div class="input-group">
+							<label class="input-group-text" for="inputGroupSelect01">Type</label>
+								<select class="form-select" id="inputGroupSelect01">
+								    <option value="none">휴가종류</option>
+								    <option value="연차">연차</option>
+								    <option value="오전반차">오전반차</option>
+								    <option value="오후반차">오후반차</option>
+								    <option value="오후반차">공가</option>
+								    <option value="병가">병가</option>
+								    <option value="조퇴">조퇴</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-lg-1 col-2">
+						    <label class="col-form-label" for="startDate">Start Date</label>
+						</div>
+						<div class="col-lg-3 col-9">
+						    <input type="datetime-local" id="startDate" class="form-control" name="startDate">
+						</div>
+						<div class="col-lg-1 col-2">
+						    <label class="col-form-label" for="endDate">End Date</label>
+						</div>
+						<div class="col-lg-3 col-9">
+						    <input type="datetime-local" id="endDate" class="form-control" name="endDate">
+						</div>
+						<div class="card-body">
+	                        <div class="form-floating col-lg-100 col-11">
+	                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+	                            <label for="floatingTextarea">Reason</label>
+	                        </div>
+                    	</div>
 					</div>
+					
 				</div>
-				<div id="content">
-					<div class="card-body">
-                        <div id="editor" style="display: none;">
-							
-                        </div>
-                        <input type="hidden" name="basicContent" id="basicContent">
-                    </div>			
-
-					<!-- <textarea name="basicConent" id="basicContent"></textarea> -->
-				</div>
-				<div id="life">
-					보존연한 <label for="1"> <input type="radio" name="docLife"
-						id="1" value="1" checked> 1년
-					</label> <label for="3"> <input type="radio" name="docLife" id="3"
-						value="3"> 3년
-					</label> <label for="5"> <input type="radio" name="docLife" id="5"
-						value="5"> 5년
-					</label> <label for="10"> <input type="radio" name="docLife" id="10"
-						value="10"> 10년
-					</label> <label for="permanent"> <input type="radio" name="docLife"
-						id="permanent" value="permanent"> 영구
-					</label>
-				</div>
-				<div id="open">
-					보안등급 <label for="a"> <input type="radio" name="docOpen"
-						id="a" value="all" checked> 전체공개
-					</label> <label for="b"> <input type="radio" name="docOpen" id="b"
-						value="dept"> 부서공개
-					</label> <label for="c"> <input type="radio" name="docOpen" id="c"
-						value="private"> 비공개
-					</label>
-				</div>
-				<div>
-					<input type="file" name="docFile" multiple>
+				
+				<div class="card-body">
+					<div id="life" class = "d-flex ">
+						<div class="mt-1" style = "margin-right:10px;">
+							<h6>보존연한</h6>
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="1" value="1"> 
+							<label for="1" class="form-check-label">1년 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="3" value="3"> 
+							<label for="3" class="form-check-label">3년 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="5" value="5"> 
+							<label for="5" class="form-check-label">5년 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="10" value="10"> 
+							<label for="10" class="form-check-label">10년 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="permanent" value="permanent"> 
+							<label for="permanent" class="form-check-label">영구 </label> 
+						</div>
+					</div>
+					<div id="open" class = "d-flex">
+						<div class="mt-1" style = "margin-right:10px;">
+							<h6>보안등급</h6>
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docOpen"
+							id="a" value="all">
+							<label for="a" class="form-check-label">전체공개 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docOpen"
+							id="b" value="dept">
+							<label for="b" class="form-check-label">부서공개 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docOpen"
+							id="c" value="private">
+							<label for="c" class="form-check-label">비공개 </label> 
+						</div>
+					</div>
 				</div>
 				<input type="hidden" name="docType" value="${type}">
 			</form>

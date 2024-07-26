@@ -156,7 +156,7 @@
 															} else {
 																document.getElementById("myMailBoxListContainer").innerHTML
 																	+= "<div style='display:flex;'>"
-																		+ "<a href='' class='list-group-item' name='myMailBox' id='" + data.myMailBoxNo + "' onclick='selectMenu(event)'>"
+																		+ "<a href='javascript:changeView(\"${path }/mail/joinmymailbox.do?myMailBoxNo=" + data.myMailBoxNo + "\")' class='list-group-item' name='myMailBox' id='" + data.myMailBoxNo + "' onclick='selectMenu(event)'>"
 																			+ "<div class='fonticon-wrap d-inline me-3'>"
 																				+ "<svg class='bi' width='1.5em' height='1.5em' fill='currentColor'>"
 																					+ "<use xlink:href='${path }/resources/assets/static/images/bootstrap-icons.svg#envelope' />"
@@ -800,7 +800,7 @@
 					.then(response => response.text())
 					.then(data => {
 						document.getElementById("mailListContainer").innerHTML = data;
-					});
+					}); 
 				}
 			} else {
 				alert("체크박스를 먼저 체크해주세요");
@@ -828,10 +828,22 @@
 			});
 			
 			if(checkedCount == 0) return;//수정해야함
+			console.log("mailNoStr : " + mailNoStr);
 			
-			if(selectMenuName == "보낸메일함") {
+			fetch("${path }/mail/deletemail.do", {
+				method : "POST",
+				headers : {
+					"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+				},
+				body : "mailNoStr=" + mailNoStr + "&returnViewName=" + selectMenuName
+			})
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById("mailListContainer").innerHTML = data;
+			});
+			/* if(selectMenuName == "보낸메일함") {
 				console.log("보낸메일함 삭제");
-				fetch("${path }/mail/deletsendmail.do", {
+				fetch("${path }/mail/deletesendmail.do", {
 					method : "POST",
 					headers : {
 						"content-type" : "application/x-www-form-urlencoded;charset=utf-8"
@@ -844,7 +856,7 @@
 				});
 			} else if(selectMenuName == "받은메일함") {
 				console.log("받은메일함 삭제");
-				fetch("${path }/mail/deletreceivemail.do", {
+				fetch("${path }/mail/deletereceivemail.do", {
 					method : "POST",
 					headers : {
 						"content-type" : "application/x-www-form-urlencoded;charset=utf-8"
@@ -855,7 +867,7 @@
 				.then(data => {
 					document.getElementById("mailListContainer").innerHTML = data;
 				});
-			}
+			} */
 		})
 		return selectMenu;
 	})();
@@ -923,22 +935,38 @@
 				if(e.checked) checkedMailCount++;
 			});
 			
+			console.log("checkedMailCount : " + checkedMailCount);
+			console.log(count == checkedMailCount);
 			if(checkedMailCount > 0) {
 				checkMail.forEach(e => {
 					if(e.checked) {
 						if(checkedMailCount == count) {
 							mailNoStr += e.id;
 						} else {
+							console.log(",더함 else문에빠짐");
 							mailNoStr += e.id + ","
 						}
+						count++;
 					}
-					count++;
 				});
 				
-				fetch("${path }/mail/restoremail.do?mailNoStr=" + mailNoStr)
+				console.log("mailNoStr : " + mailNoStr);
+				fetch("${path }/mail/restoretrashmail.do?mailNoStr=" + mailNoStr, {
+					method : "POST",
+					headers : {
+						"Content_Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+					},
+					body : "mailNoStr=" + mailNoStr
+				})
 				.then(response => response.text())
 				.then(data => {
-					document.getElementById("myMailBoxListContainer").innerHTML = data;
+					console.log(data);
+					if(data > 0) {
+						alert("복구되었습니다.");
+					} else {
+						alert("복구에 실패했습니다.");
+					}
+					changeView("/mail/jointrashmailbox.do");
 				})
 			} else {
 				alert("메일을 먼저 체크해주세요");

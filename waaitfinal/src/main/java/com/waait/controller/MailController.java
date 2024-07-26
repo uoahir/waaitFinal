@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.waait.dto.Employee;
 import com.waait.dto.Mail;
 import com.waait.dto.MailFile;
-import com.waait.dto.MailReceiver;
 import com.waait.dto.MailSetting;
 import com.waait.dto.MyMailBox;
 import com.waait.dto.RecentSearch;
@@ -331,12 +330,13 @@ public class MailController {
 	
 	@GetMapping("/maildetail.do")
 	public String mailDetailView(Model model, int mailNo) {
+		System.out.println("매개변수로 들어온 mailNo : " + mailNo);
 		String userMailAddress = getLoginEmpInfo().getEmpEmail();
 		long empNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> param = Map.of("mailNo", mailNo, "userMailAddress", userMailAddress);
 		
 		Mail mail = service.getMailDetailByNo(param);
-		
+		System.out.println("maildetail로 보낼 메일 : " + mail);
 		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo);
 		
 		service.updateReceiverReadStatus(param);
@@ -377,17 +377,22 @@ public class MailController {
 	
 	@PostMapping("/sendmail.do")
 	public String sendMail(MultipartFile[] upFile, HttpSession session, String mailContent, String mailTitle, String[] mailReceiverAddress, String mailStatus) {
+		System.out.println("매개변수로 들어온 receiverArr 길이 : " + mailReceiverAddress.length);
+		Arrays.stream(mailReceiverAddress).forEach(m -> {
+			System.out.println("mailReceiverAddress : " + m);
+			if(m.length() == 0) {
+				System.out.println("빈 배열");
+			}
+		});
+		
 		long writerNo = getLoginEmpInfo().getEmpNo();
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("mailContent", mailContent);
 		param.put("mailTitle", mailTitle);
+		System.out.println("mailConetnt : " + mailContent + " mailTitle : " + mailTitle + " mailStatus : " + mailStatus + " :writerNo : " + writerNo);
 		param.put("mailReceiverAddress", mailReceiverAddress);
 		param.put("mailStatus", mailStatus);
 		param.put("writerNo", writerNo);
-		System.out.println("mailConetnt : " + mailContent + " mailTitle : " + mailTitle);
-		Arrays.stream(mailReceiverAddress).forEach(m -> {
-			System.out.println("mailReceiverAddress : " + m);
-		});
 		int mailSequence = service.sendMail(param);
 		
 		String path = session.getServletContext().getRealPath("resources/upload/mail");
@@ -511,47 +516,25 @@ public class MailController {
 		return "mail/writemail";
 	}
 	
-//	@PostMapping("/deletemail.do")
-//	public String deleteMail(String mailNoStr, Model model) {
-//		int result = service.deleteMail(mailNoStr);
-//		Employee employee = getLoginEmpInfo();
-//		String mailReceiverAddress = employee.getEmpEmail();
-//		long empNo = employee.getEmpNo();
-//		int numPerpage = 0;
+//	@PostMapping("/deletreceivemail.do")
+//	public String deleteReceiveMail(String mailNoStr, Model model) {
+//		String receiverAddress = getLoginEmpInfo().getEmpEmail();
+//		System.out.println("mailNoStr : " + mailNoStr);
+//		Map<String, String> sqlParam = new HashMap<String, String>();
+//		sqlParam.put("mailNoStr", mailNoStr);
+//		sqlParam.put("receiverAddress", receiverAddress);
 //		
-//		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
-//		List<MyMailBox> myMailBoxList = service.getMyMailBox(empNo); //??
+//		service.deleteReceiveMail(sqlParam);
 //		
-//		numPerpage = getUserSettingNumPerpage(empNo);
-//		
-//		int cPage = 1;
-//		Map<String, Object> mailSettings = Map.of("cPage", cPage, "numPerpage", numPerpage,
-//													"spamDomains", spamDomains, "mailReceiverAddress", mailReceiverAddress);
-//		
-//		List<Mail> mailList = service.getReceiveMail(mailSettings);
-//		model.addAttribute("mails", mailList);
-//		return "mail/mailresponse/mail_list_response";
-//	} 안쓸지도?
-	
-	@PostMapping("/deletreceivemail.do")
-	public String deleteReceiveMail(String mailNoStr, Model model) {
-		String receiverAddress = getLoginEmpInfo().getEmpEmail();
-		System.out.println("mailNoStr : " + mailNoStr);
-		Map<String, String> sqlParam = new HashMap<String, String>();
-		sqlParam.put("mailNoStr", mailNoStr);
-		sqlParam.put("receiverAddress", receiverAddress);
-		
-		service.deleteReceiveMail(sqlParam);
-		
-		return receivingMail(model, 1);
-	}
-	
-	@PostMapping("/deletsendmail.do")
-	public String deleteSendMail(String mailNoStr, Model model) {
-		System.out.println("mailNoStr : " + mailNoStr);
-		service.deleteSendingMail(mailNoStr);
-		return joinSendingMailBox(model, 1);
-	}
+//		return receivingMail(model, 1);
+//	}
+//	
+//	@PostMapping("/deletsendmail.do")
+//	public String deleteSendMail(String mailNoStr, Model model) {
+//		System.out.println("mailNoStr : " + mailNoStr);
+//		service.deleteSendingMail(mailNoStr);
+//		return joinSendingMailBox(model, 1);
+//	}
 	
 	@PostMapping("/deletemymailbox.do")
 	public String deleteMyMailBox(int myMailBoxNo, Model model) {
@@ -565,14 +548,6 @@ public class MailController {
 		model.addAttribute("mailBoxes", myMailBoxList);
 		
 		return "mail/mailresponse/mymailbox_list";
-	}
-	
-	@GetMapping("/restoremail.do")
-	public String restoreMail(String mailNoStr, Model model) {
-		List<Mail> trashMailList = service.getTrashMailByMailNoForRestore(mailNoStr);
-		System.out.println("trashMailListByMailNo : " + trashMailList);
-		//service.restoreMail(mailNoStr);
-		return jointrashmailbox(model, 1);
 	}
 	
 	@GetMapping("/jointrashmailbox.do")
@@ -595,23 +570,41 @@ public class MailController {
 		return "mail/mailresponse/trash_mail_list"; //여기도 jsp도
 	}
 	
-//	@PostMapping("/senderperfectlydeletemail.do")
-//	public String senderPerfectlyDeleteMail(String mailNoStr) {
-//		System.out.println("메일완전삭제 mailNoStr : " + mailNoStr);
-//		service.senderPerfectlyDeleteMail(mailNoStr);
-//		return "redirect:/mail/jointrashmailbox.do";
-//	} // jsp에서 요청주소 변경해야함
-//	
-//	@PostMapping("/receiverperfectlydeletemail.do")
-//	public String receiverPerfectlyDeleteMail(String mailNoStr) {
-//		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
-//		System.out.println("수신자 완전삭제 메일번호 : " + mailNoStr);
-//		Map<String, String> sqlParam = new HashMap<String, String>();
-//		sqlParam.put("receiverMailAddress", receiverMailAddress);
-//		sqlParam.put("mailNoStr", mailNoStr);
-//		service.receiverPerfectlyDeleteMail(sqlParam);
-//		return "redirect:/mail/jointrashmailbox.do";
-//	}
+	@PostMapping("/deletemail.do")
+	public String deleteMail(String mailNoStr, String returnViewName, Model model) {
+		System.out.println("mailNoStr : " + mailNoStr);
+		String userMailAddress = getLoginEmpInfo().getEmpEmail();
+		List<Mail> mailListForDelete = service.getMailForDelete(mailNoStr);
+		System.out.println("mailListForDelete : " + mailListForDelete);
+		System.out.println("returnViewName : " + returnViewName);
+	
+		for(Mail mail : mailListForDelete) {
+			if(mail.getSenderMailAddress().equals(userMailAddress) && 
+					mail.getReceivers().get(0).getMailReceiverAddress().equals(userMailAddress)) {
+				Map<String, Object> sqlParam = Map.of("mailNo", mail.getMailNo(),
+						"userMailAddress", userMailAddress);
+				service.deleteSendingMail(mail.getMailNo());
+				service.deleteReceiveMail(sqlParam);
+			} else if(mail.getSenderMailAddress().equals(userMailAddress)) {
+				service.deleteSendingMail(mail.getMailNo());
+			} else {
+				Map<String, Object> sqlParam = Map.of("mailNo", mail.getMailNo(),
+													"userMailAddress", userMailAddress);
+				service.deleteReceiveMail(sqlParam);
+			}
+		}
+		
+		if(returnViewName.equals("받은메일함"))  {
+			System.out.println("받은메일함 조건문");
+			return receivingMail(model, 1);
+		} else if(returnViewName.equals("보낸메일함")) {
+			System.out.println("보낸메일함 조건문");
+			return joinSendingMailBox(model, 1);
+		} else if(returnViewName.equals("myMailBox")) {
+			return myMailBoxDetailView(1, model, 1);
+		}
+		return null;
+	}
 	
 	@PostMapping("/perfectlydeletemail.do")
 	public String perfectlyDeleteMail(String mailNoStr, HttpSession session) {
@@ -624,11 +617,18 @@ public class MailController {
 		sqlParam.put("mailNoStr", mailNoStr);
 		
 		//쓰레기통에있는 메일을 선택한 mailNo로 조회
-		List<Mail> getMailForDelete = service.getMailForDelete(sqlParam);
+		List<Mail> getMailForDelete = service.getMailForDelete(mailNoStr);
 		System.out.println("완전삭제를 위한 trashMailList : " + getMailForDelete);
 		
 		getMailForDelete.forEach(mail -> {
-			if(mail.getSenderMailAddress().equals(loginMemberMailAddress)) {
+			if(mail.getSenderMailAddress().equals(loginMemberMailAddress) && 
+					mail.getReceivers().get(0).getMailReceiverAddress().equals(loginMemberMailAddress)) {
+				System.out.println("내게쓰기 조건문");
+				deleteSqlParam.put("mailNo", String.valueOf(mail.getMailNo()));
+				deleteSqlParam.put("loginMemberMailAddress", loginMemberMailAddress);
+				service.receiverPerfectlyDeleteMail(deleteSqlParam);
+				service.senderPerfectlyDeleteMail(mail.getMailNo());
+			} else if(mail.getSenderMailAddress().equals(loginMemberMailAddress)) {
 				System.out.println("발신자 완전삭제 조건문");
 				service.senderPerfectlyDeleteMail(mail.getMailNo());
 			} else {
@@ -638,40 +638,38 @@ public class MailController {
 				service.receiverPerfectlyDeleteMail(deleteSqlParam);
 			}
 		});
-		//String filePath = session.getServletContext().getRealPath("/resources/upload/mail/");
-		
-		
-		/*
-		 * 메일을 완전삭제할때 쓰레기통에 있는 메일을 체크박스로 클라이언트가 완전삭제 하고자하는 mailNo를 requestParam으로 받게됩니다
-		 * getMailForDelete는 완전삭제 하고자하는 메일을 받은 List입니다. 받아온 list의 작성자메일주소와 현재로그인한 사원의
-		 * 메일주소가 같으면 보낸사람이 삭제하는 것으로 간주하고 list의 발신인 메일주소와 로그인한 사원의 메일주소와 같다면 받은사람이 삭제하는
-		 * 것으로 간주합니다.
-		 */ 
-		
-		
-		
-//		getMailForDelete.forEach(mail -> {
-//			int receiverDeleteStatusCount = 0;
-//			if(mail.getSenderMailAddress().equals(loginMemberMailAddress)) {
-//				int mailNo = mail.getMailNo();
-//				service.senderPerfectlyDeleteMail(mailNo);
-//			}
-//			
-//			for(MailReceiver receiver : mail.getReceivers()) {
-//				if(receiver.getReceiverDeleteStatus().equals("Y")) receiverDeleteStatusCount++;
-//			}
-//					
-//			mail.getReceivers().forEach(receiver -> {
-//				if(receiver.getMailReceiverAddress().equals(loginMemberMailAddress)) {
-//					int mailReceiverNo = receiver.getMailReceiverNo();
-//					service.receiverPerfectlyDeleteMail(mailReceiverNo);
-//				}
-//			});
-//		});
-		
-		
 		
 		return "redirect:/mail/jointrashmailbox.do";
+	}
+	
+	@PostMapping("/restoretrashmail.do")
+	public @ResponseBody int restoreTrashMail(String mailNoStr) {
+		int result = 0;
+		String userMailAddress = getLoginEmpInfo().getEmpEmail();
+		
+		List<Mail> getMailForRestore = service.getTrashMailForRestore(mailNoStr);
+		
+		for(Mail mail : getMailForRestore) {
+			if(mail.getSenderMailAddress().equals(userMailAddress) && 
+					mail.getReceivers().get(0).getMailReceiverAddress().equals(userMailAddress)) {
+				Map<String, Object> restoreSqlParam = new HashMap<String, Object>();
+				restoreSqlParam.put("mailNo", mail.getMailNo());
+				restoreSqlParam.put("userMailAddress", userMailAddress);
+				result = service.senderRestoreMail(mail.getMailNo());
+				result = service.receiverRestoreMail(restoreSqlParam);
+			} else if(mail.getSenderMailAddress().equals(userMailAddress)) {
+				System.out.println("발신자 복구 조건문 and mailNo : " + mail.getMailNo());
+				result = service.senderRestoreMail(mail.getMailNo());
+			} else {
+				System.out.println("수신자 복구 조건문");
+				Map<String, Object> restoreSqlParam = new HashMap<String, Object>();
+				restoreSqlParam.put("mailNo", mail.getMailNo());
+				restoreSqlParam.put("userMailAddress", userMailAddress);
+				result = service.receiverRestoreMail(restoreSqlParam);
+			}
+		}
+		
+		return result;
 	}
 	
 	@GetMapping("/joinsendingmailbox.do")
@@ -716,8 +714,10 @@ public class MailController {
 		numPerpage = getUserSettingNumPerpage(empNo);
 		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
 		int totalData = service.getSearchMailTotalData(searchParam);
+		int pageBarSize = 5;
+		String url = "/mail/searchmail.do";
 		
-		String pageBar = paging(totalData, cPage, numPerpage, cPage, receiverMailAddress);
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
 		
 		List<Mail> searchList = service.searchReceiveMail(searchParam, pagingParam);
 		model.addAttribute("mails", searchList);
