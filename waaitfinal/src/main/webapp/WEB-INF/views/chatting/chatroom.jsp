@@ -384,9 +384,22 @@
 		
 		
 		<!-- 모달창 설정? 처럼 띄우고 일단은 채팅방 나가기 버튼만 만들어서 나가는 기능 구현하기 -->
+		<!-- 나가기를 누르면 ajax로 방번호, 로그인된 사원번호를 보내서 chatjoin테이블에서 해당하는 row delete하기 -->
+		<div id="modal_chat_exit">
+			<div>
+				<div id="modal_chat_exit_content">	<!-- 공간 만들어두고 나중에 사용 -->
+					<p>다른 기능넣을 공간</p>
+				</div>
+				<div id="modal_chat_exit_button">
+					<button onclick="deletechatjoin();">
+						<img src="https://i.pinimg.com/564x/86/a4/e6/86a4e6c3faabedd34bb8229fd5eb8b04.jpg" alt="나가기이미지" width="40px" height="40px">
+						<p>채팅방 나가기<p>
+					</button>
+				</div>
+			</div>
+		</div>
 		
-		
-		
+		<!-- 모달 나가기 닫 -->
 		
         
     </main>
@@ -407,6 +420,7 @@
 		const path = "${pageContext.request.contextPath}";
 		const chatRoomNo = "${chatName.chatRoomNo}";
 		const chatJoinCount = "${chatName.chatJoinCount -1}";
+		const chatRoomType = "${chatName.chatRoomType}";
 		
 		
 		//나중에 삭제함
@@ -418,7 +432,7 @@
 	
 	<!-- script문 -->
 	<script type="text/javascript" src="${path}/resources/js/chatroom.js"></script>
-	<%-- <script type="text/javascript" src="${path}/resources/js/chatopen.js"></script> --%>
+	
 </body>
 </html>
 

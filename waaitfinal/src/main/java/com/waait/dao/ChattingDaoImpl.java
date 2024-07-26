@@ -65,6 +65,11 @@ public class ChattingDaoImpl implements ChattingDao {
 	public List<Employee> selectChatEmployeelistnot(SqlSession session, int chatroomNo) {
 		return session.selectList("chatting.selectChatEmployeelistnot",chatroomNo);
 	}
+
+	@Override
+	public int deleteChatJoin(SqlSession session, Map<String, Object> param) {
+		return session.delete("chatting.deleteChatJoin",param);
+	}
 	
 	
 	

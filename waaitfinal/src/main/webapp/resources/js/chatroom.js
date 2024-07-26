@@ -188,12 +188,13 @@
 	            chatEmpNo: chatEmpNo
 	        },
 			success : function(){
-				
+				alert("초대 성공");
+    			window.location.reload();
 			},
 	        error: function(jqXHR, textStatus, errorThrown) {
 	            console.error("초대 실패: " + textStatus, errorThrown);
 	        }
-		})
+		});
 		
 		const modal2 = document.getElementById("modal_chatinvitation");
 		if(modal2.style.display === "block"){
@@ -202,10 +203,58 @@
 			modal2.style.display = "block";
 		}
 		
-   		 alert("초대 성공");
-    	window.location.reload();
+   		 
 	}
 	// 채팅방초대 모달 끝
+	
+	
+	// 채팅방 나가기 모달창
+	const setting=()=>{
+		const modal = document.getElementById("modal_chat_exit");
+		if(modal.style.display === "block"){
+			modal.style.display = "none";
+		}else{
+			modal.style.display = "block";
+		}
+	}
+	
+	document.getElementById("modal_chat_exit").addEventListener("click",function(){
+		const modal = document.getElementById("modal_chat_exit");
+		if(modal.style.display === "block"){
+			modal.style.display = "none";
+		}else{
+			modal.style.display = "block";
+		}
+	});
+	
+	// 방번호, 사원번호(서버에서 로그인된 사원번호) 넘겨서 처리하기
+	const deletechatjoin=()=>{
+		console.log("채팅방 번호 : "+chatRoomNo);
+		//1:1방은 나갈수없게 분기처리
+		if(chatRoomType != "C1"){
+			$.ajax({
+				type : "POST",
+				url : path+"/chat/deletechatjoin.do",
+				data: {
+		            chatRoomNo: chatRoomNo
+		        },
+				success : function(){
+	    			window.close();
+				},
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            console.error("채팅방 나가기 실패: " + textStatus, errorThrown);
+		        }
+			});
+		}else{
+			alert("1:1 방은 나갈수 없습니다.");
+		}
+		
+		
+	}
+	
+	// 채팅방 나가기 모달 끝
+	
+	
 	
 	
 	

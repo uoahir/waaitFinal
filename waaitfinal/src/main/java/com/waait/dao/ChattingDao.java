@@ -30,4 +30,6 @@ public interface ChattingDao {
 	List<Employee> selectChatEmployeelist(SqlSession session, int chatroomNo);
 
 	List<Employee> selectChatEmployeelistnot(SqlSession session, int chatroomNo);
+	
+	int deleteChatJoin(SqlSession session, Map<String, Object> param);
 }

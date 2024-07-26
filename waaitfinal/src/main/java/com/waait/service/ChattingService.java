@@ -28,4 +28,5 @@ public interface ChattingService {
 	
 	void insertChatJoinInvite(Map<String, Object> param);
 	
+	void deleteChatJoin(Map<String, Object> param);
 }

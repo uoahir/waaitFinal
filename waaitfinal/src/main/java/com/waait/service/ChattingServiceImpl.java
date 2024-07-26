@@ -1,6 +1,5 @@
 package com.waait.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,8 +118,14 @@ public class ChattingServiceImpl implements ChattingService {
 	 		chatParam.put("chatEmpNo", e);
 	 		dao.insertChatJoin(session, chatParam);
 	 	});
-	 	
 	}
+
+
+	@Override
+	public void deleteChatJoin(Map<String, Object> param) {
+		dao.deleteChatJoin(session, param);
+	}
+	
 	
 	
 	

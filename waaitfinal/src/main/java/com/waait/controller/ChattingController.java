@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.waait.dto.ChatHistory;
@@ -168,7 +170,8 @@ public class ChattingController {
 	//insert하면서 방을 생성하고 새창열기로 만든 채팅방? 열고
 	//방번호 사원번호
 	@PostMapping("/insertchatjoin.do")
-	public void insertChatJoin(
+	@ResponseBody
+	public ResponseEntity<String> insertChatJoin(
 			@RequestParam("chatRoomNo") int chatRoomNo,
 			@RequestParam("chatEmpNo") List<Long> chatEmpNo 
 			) {
@@ -180,6 +183,31 @@ public class ChattingController {
 		param.put("chatEmpNo", chatEmpNo);
 		
 		service.insertChatJoinInvite(param);
+		
+		return ResponseEntity.ok("Success");
+	}
+	
+	
+	
+	//방번호 사원번호
+	@PostMapping("/deletechatjoin.do")
+	@ResponseBody
+	public ResponseEntity<String> deleteChatJoin(
+			@RequestParam("chatRoomNo") int chatRoomNo
+			) {
+		Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+		Long empNo = loginEmployee.getEmpNo();
+		
+		System.out.println("컨트롤러 - deleteChatJoin - chatRoomNo : "+chatRoomNo);
+		System.out.println("컨트롤러 - deleteChatJoin - empNo : "+empNo);
+		
+		Map<String, Object> param = new HashMap<>();
+		param.put("chatRoomNo", chatRoomNo);
+		param.put("empNo", empNo);
+		
+		service.deleteChatJoin(param);
+		
+		return ResponseEntity.ok("Success");
 	}
 	
 	
