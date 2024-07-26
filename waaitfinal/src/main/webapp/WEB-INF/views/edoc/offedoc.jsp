@@ -35,7 +35,7 @@
 			<form action="${path }/edoc/offedocend" id="docForm" method="POST">
 				<div id="button" style="text-align: right;">
 					<button type="button" onclick="appline();" class="btn btn-outline-secondary">Approval Line</button>
-					<button type="button" class="btn btn-outline-secondary" onclick="insertoff();">Submission</button>
+					<button type="button" class="btn btn-outline-secondary" onclick="insertOff();">Submission</button>
 					<button type="button" class="btn btn-outline-secondary" onclick="save();">Save</button>
 					<button type="button" class="btn btn-outline-secondary">Print Preview</button>
 				</div>
@@ -63,10 +63,18 @@
 				<div class ="card-body">
 					<!-- 여기에는 휴가신청에 필요한 input 데이터들 넣기 ~ ! -->
 					<div class="form-group row align-items-center"> 
-						<div class="col-md-3">
+						<div class = "d-flex mb-5">
+							<div class="col-lg-1 col-2">
+							    <label class="col-form-label" for="hasVacation">보유연차</label>
+							</div>
+							<div class="col-lg-2 col-5"">
+							    <input type="text" id="hasVacation" class="form-control" name="hasVacation" value =${employee.remainingAnnualLeave } readOnly>
+							</div>
+						</div>
+						<div class="col-md-3">	
 							<div class="input-group">
-							<label class="input-group-text" for="inputGroupSelect01">Type</label>
-								<select class="form-select" id="inputGroupSelect01">
+								<label class="input-group-text" for="inputGroupSelect01">Type</label>
+								<select class="form-select" id="inputGroupSelect01" name="vacaType" onchange="selectVacation();">
 								    <option value="none">휴가종류</option>
 								    <option value="연차">연차</option>
 								    <option value="오전반차">오전반차</option>
@@ -77,21 +85,12 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-lg-1 col-2">
-						    <label class="col-form-label" for="startDate">Start Date</label>
-						</div>
-						<div class="col-lg-3 col-9">
-						    <input type="datetime-local" id="startDate" class="form-control" name="startDate">
-						</div>
-						<div class="col-lg-1 col-2">
-						    <label class="col-form-label" for="endDate">End Date</label>
-						</div>
-						<div class="col-lg-3 col-9">
-						    <input type="datetime-local" id="endDate" class="form-control" name="endDate">
+						<div id = "detail" class="d-flex align-items-center" style="width:100%; height:90px;" >
+							<!-- 선택되는 연차 타입에 따라 동적으로 태그 바꿔줌 -->
 						</div>
 						<div class="card-body">
-	                        <div class="form-floating col-lg-100 col-11">
-	                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+	                        <div class="form-floating col-lg-150 col-50">
+	                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" name="reason"></textarea>
 	                            <label for="floatingTextarea">Reason</label>
 	                        </div>
                     	</div>
@@ -164,7 +163,203 @@
     		empNo : "${employee.empNo}"
     	}
     </script>
+    <script src="${path }/resouces/"></script>
 	<script>	
+	
+	const selectVacation = () => {
+		const type = document.querySelector("#inputGroupSelect01 option:checked").value;
+		const $vacation = document.querySelector("#detail");
+		
+		// Clear previous elements
+	    $vacation.innerHTML = '';
+		
+		const $labelDiv1 = document.createElement("div");
+		$labelDiv1.classList.add('col-lg-1', 'col-2');
+		$labelDiv1.setAttribute("style","margin-left:40px;");
+		
+		const $labelDiv2 = document.createElement("div");
+		$labelDiv2.classList.add('col-lg-1', 'col-2');
+		$labelDiv2.setAttribute("style","margin-left:40px;");
+		
+		const $labelDiv3 = document.createElement("div");
+		$labelDiv3.classList.add('col-lg-1', 'col-2');
+		$labelDiv3.setAttribute("style","margin-left:40px;");
+		
+		const $inputDiv1 = document.createElement("div");
+		$inputDiv1.classList.add('col-lg-2', 'col-5');
+		
+		const $inputDiv2 = document.createElement("div");
+		$inputDiv2.classList.add('col-lg-2', 'col-5');
+		
+		const $inputDiv3 = document.createElement("div");
+		$inputDiv3.classList.add('col-lg-2', 'col-5');
+		
+		console.log(type);
+		if(type==='연차'){ 
+			const label = document.createElement("label");
+			label.innerText = 'Start Date';
+			label.classList.add('col-form-label');
+			label.setAttribute('for','startDate');
+			$labelDiv1.appendChild(label);
+			
+			const input = document.createElement('input');
+			input.setAttribute('type','date');
+			input.id = 'startDate';
+			input.classList.add('form-control');
+			input.setAttribute('name','startDate');
+			$inputDiv1.appendChild(input);
+			
+			const label2 = document.createElement('label');
+			label2.innerText='End Date';
+			label2.classList.add('col-form-label');
+			label2.setAttribute('for','endDate');
+			$labelDiv2.appendChild(label2);
+			
+			const input2 = document.createElement('input');
+			input2.setAttribute('type','date');
+			input2.id = 'endDate';
+			input2.classList.add('form-control');
+			input2.setAttribute('name','endDate');
+			$inputDiv2.appendChild(input2);
+			
+			const label3 = document.createElement('label');
+			label3.innerText='Vacation Used';
+			label3.classList.add('col-form-label');
+			label3.setAttribute('for','vacaUsed');
+			$labelDiv3.appendChild(label3);
+			
+			const input3 = document.createElement('input');
+			input3.setAttribute('type','text');
+			input3.id = 'vacaUsed';
+			input3.classList.add('form-control');
+			input3.setAttribute('name','vacaUsed');
+			input3.setAttribute('readOnly','true');
+			$inputDiv3.appendChild(input3);
+		    
+			$vacation.appendChild($labelDiv1);
+			$vacation.appendChild($inputDiv1);
+			$vacation.appendChild($labelDiv2);
+			$vacation.appendChild($inputDiv2);
+			$vacation.appendChild($labelDiv3);
+			$vacation.appendChild($inputDiv3);
+			
+			// Function to format date as yyyy-mm-dd
+		    const formatDate = (date) => {
+		        const d = new Date(date);
+		        const month = ('0' + (d.getMonth() + 1)).slice(-2);
+		        const day = ('0' + d.getDate()).slice(-2);
+		        const year = d.getFullYear();
+		        return year+'-'+month+'-'+day;
+		    }
+
+		    // Set min attribute to today's date for both date inputs
+		    const today = new Date();
+		    const formattedDate = formatDate(today);
+
+		    document.getElementById('startDate').setAttribute('min', formattedDate);
+		    document.getElementById('endDate').setAttribute('min', formattedDate);
+		    
+		    const calculateDays = () => {
+		    	const startDate = document.getElementById('startDate').value;
+		    	const endDate = document.getElementById('endDate').value;
+		    	const $vacaUsed = document.getElementById('vacaUsed');
+		    	const hasVacationInput = document.getElementById('hasVacation');
+	            const hasVacation = parseInt(hasVacationInput.value, 10);
+		    	
+		    	if(startDate && endDate) {
+		    		const start = new Date(startDate);
+		    		const end = new Date(endDate);
+		    		const timeDiff = end - start;
+		    		const daysDiff = timeDiff/(1000 * 3600 * 24) + 1;
+		    		
+		    		if (daysDiff > hasVacation) {
+		    			alert('보유하고 있는 연차일수를 초과하였습니다.');
+		    			$vacaUsed.setAttribute('value', '');
+		    		} else if(daysDiff <= 0){
+		    			alert('유효하지 않은 사용일수입니다.');
+		    			$vacaUsed.setAttribute('value','');
+		    		} else {
+	                    $vacaUsed.setAttribute('value', daysDiff);
+	                }
+		    	}
+		    }
+		    
+		    document.getElementById('startDate').addEventListener('change', calculateDays);
+		    document.getElementById('endDate').addEventListener('change', calculateDays);
+		    
+
+		} else if(type === '오전반차' || type ==='오후반차') {
+			const label = document.createElement("label");
+			label.innerText = 'Select Date';
+			label.classList.add('col-form-label');
+			label.setAttribute('for','selectDate');
+			$labelDiv1.appendChild(label);
+			
+			const input = document.createElement('input');
+			input.setAttribute('type','date');
+			input.id = 'selectDate';
+			input.classList.add('form-control');
+			input.setAttribute('name','selectDate');
+			$inputDiv1.appendChild(input);
+			
+			const label2 = document.createElement("label");
+			label2.innerText = 'Start Date';
+			label2.classList.add('col-form-label');
+			label2.setAttribute('for','startDate');
+			$labelDiv2.appendChild(label2);
+			
+			const input2 = document.createElement('input');
+			input2.setAttribute('type','date');
+			input2.id = 'startDate';
+			input2.classList.add('form-control');
+			input2.setAttribute('name','startDate');
+			$inputDiv2.appendChild(input2);
+			
+			const label3 = document.createElement('label');
+			label3.innerText='End Date';
+			label3.classList.add('col-form-label');
+			label3.setAttribute('for','endDate');
+			$labelDiv3.appendChild(label3);
+			
+			const input3 = document.createElement('input');
+			input3.setAttribute('type','date');
+			input3.id = 'endDate';
+			input3.classList.add('form-control');
+			input3.setAttribute('name','endDate');
+			$inputDiv3.appendChild(input3);
+	
+			$vacation.appendChild($labelDiv1);
+			$vacation.appendChild($inputDiv1);
+			$vacation.appendChild($labelDiv2);
+			$vacation.appendChild($inputDiv2);
+			$vacation.appendChild($labelDiv3);
+			$vacation.appendChild($inputDiv3);
+			
+			// Function to format date as yyyy-mm-dd
+		    const formatDate = (date) => {
+		        const d = new Date(date);
+		        const month = ('0' + (d.getMonth() + 1)).slice(-2);
+		        const day = ('0' + d.getDate()).slice(-2);
+		        const year = d.getFullYear();
+		        
+		        return year+'-'+month+'-'+day;
+		    }
+
+		    // Set min attribute to today's date for both date inputs
+		    const today = new Date();
+		    const formattedDate = formatDate(today);
+
+		    document.getElementById('startDate').setAttribute('min', formattedDate);
+		    document.getElementById('endDate').setAttribute('min', formattedDate);
+		   	document.getElementById('selectDate').setAttribute('min',formattedDate);
+			
+		}
+		
+		
+		
+	}
+	
+	
     function setApprovalLine(employees) {
         const $docForm = document.getElementById("docForm");
         const $lineDiv = document.querySelector(".line");
@@ -237,56 +432,60 @@
         }
     }
     
-	const insertedoc = () => {
+    const insertOff = () => {
 		const form = document.getElementById("docForm");
-			const formData = new FormData(form);
-            /* const content = document.querySelector("#basicContent").value; */
-            const basicContent = document.querySelector(".ck-content").innerHTML;
-            console.log(basicContent);
-            document.querySelector("#basicContent").setAttribute("value",basicContent);
-			const content = document.querySelector("#basicContent").value;
-			console.log(content);          
-			
-           const obj = {
-			  docTitle: formData.get("docTitle"),
-              docWriter: formData.get("docWriter"),
-              docLife: formData.get("docLife"),
-              docOpen: formData.get("docOpen"),
-              docContent : content,
-              docType : formData.get("docType")
-           };
-
-           const jsonData = new Blob([JSON.stringify(obj)], { type: 'multipart/form-data' });
-           formData.append('obj', jsonData);
-
-           fetch('${path}/edoc/basicedocend', {
-               method: "POST",
-               /* headers:{
-               	'Content-Type':'multipart/form-data'	
-               }, */ 
-               body: formData
-           })
-           .then((res) => {
-               if (!res.ok) {
-                   throw new Error('네트워크 응답이 좋지 않습니다.');
-               } else {
+		const formData = new FormData(form);
+          			
+		const obj = {
+			docTitle: formData.get("docTitle"),
+			docWriter: formData.get("docWriter"),
+			docLife: formData.get("docLife"),
+			docOpen: formData.get("docOpen"),
+			docType : formData.get("docType"),
+			vacaType : formData.get("vacaType"),
+			startDate : formData.get("startDate"),
+			endDate : formData.get("endDate"),
+			vacaUsed : formData.get("vacaUsed"),
+			empNo : formData.getAll("empNo").map(Number)
+		};
+		
+		if(obj.vacaUsed == '') {
+			console.log(1);
+			alert('ㅇㅅㅇ');
+		} else {
+			fetch('${path}/edoc/offedocend', {
+				method: "POST",
+				headers:{
+					'Content-Type':'application/json'	
+				},
+				body: JSON.stringify(obj)
+			})
+			.then((res) => {
+				if (!res.ok) {
+					throw new Error('네트워크 응답이 좋지 않습니다.');
+				} else {
 					alert("상신완료");
-   					opener.document.location.reload();
-   					self.close();
-               }
-           })
-           .catch((error) => {
-               console.error('오류 발생:', error);
-           });
-       };
+					opener.document.location.reload();
+					self.close();
+	          	}
+			})
+			.catch((error) => {
+				console.error('오류 발생:', error);
+			});
+		}
+		console.log(obj);
+         	/*  const jsonData = new Blob([JSON.stringify(obj)], { type: 'application/json' });
+          		formData.append('obj', jsonData); */
+
+		
+	};
+    
 
 	const appline = () => {
 		window.open("${path}/edoc/appline", "appline", "height=500, width=500");
 	};
 
     </script>
-<script src="https://cdn.ckeditor.com/ckeditor5/34.2.0/classic/ckeditor.js"></script>
-<script src="/assets/static/js/pages/ckeditor.js"></script>
 
 </section>
     <script src="${path }/resources/assets/compiled/js/app.js"></script>

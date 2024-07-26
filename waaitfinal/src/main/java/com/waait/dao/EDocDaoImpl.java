@@ -136,7 +136,28 @@ public class EDocDaoImpl implements EDocDao {
 		// TODO Auto-generated method stub
 		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
 		return session.selectList("edoc.inprogressDocument",empNo,rb);
+	}
+
+	@Override
+	public List<AbstractDocument> approvedDocument(SqlSession session, Long empNo, Map<String, Integer> page) {
+		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
+		return session.selectList("edoc.approvedDocument",empNo,rb);
+	}
+
+	@Override
+	public int insertOffContent(SqlSession session, AbstractDocument doc) {
+		// TODO Auto-generated method stub
+		OffDocument odoc = (OffDocument) doc;
+		return session.insert("edoc.insertOffContent", odoc);
+	}
+
+	@Override
+	public int insertVacation(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.insert("edoc.insertVacation", param);
 	}	
+	
+	
 	
 	
 	

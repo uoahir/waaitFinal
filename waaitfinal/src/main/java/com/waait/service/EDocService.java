@@ -17,8 +17,10 @@ public interface EDocService {
 	
 //	결재 로직
 	int insertBasicEdoc(AbstractDocument document, int[] approval); // 내부보고서(기본문서 작성)
+	int insertOffEdoc(AbstractDocument document, int[] approval, Map<String, Object> param); // 휴가신청서(기본문서 작성)
 	List<AbstractDocument> awaitingApproval(Long empNo, Map<String,Integer> page); // 승인대기문서 출력(결재자)
 	List<AbstractDocument> inprogressDocument(Long empNo, Map<String,Integer> page); // 진행중인문서 출력(상신자)
+	List<AbstractDocument> approvedDocument(Long empNo, Map<String,Integer> page); // 승인완료된 문서 출력(내가올린문서 중 승인완료된 건 !)
 	AbstractDocument selectDocumentById(int docId); // 문서 조회 
 	AbstractDocument selectDocumentDetail(Map<String, Object> param); // 결재자가 해당 문서 클릭 시 실행되는 로직 ~ ! ~ ! 
 	// update 는 언제해죠야하지 ?

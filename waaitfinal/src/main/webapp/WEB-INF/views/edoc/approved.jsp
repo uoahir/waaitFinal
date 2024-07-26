@@ -44,9 +44,8 @@
 							<th>Document Number</th>
 							<th>Type</th>
 							<th>Title</th>
-							<th>Approver</th>
 							<th>Submission Date</th>
-							<th>Status</th>
+							<th>Approved Date</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -57,10 +56,7 @@
 									<td>${d.type.type }</td>
 									<td>${d.docTitle }</td>
 									<td>${d.docDate }</td>
-									<td>${d.docDate }</td><!-- appDate -->
-									<td>
-										<span class="badge bg-light-primary">${d.docStat }</span>
-									</td>
+									<td>${d.approvalOne.appDate }</td><!-- appDate -->
 								</tr>
 							</c:forEach>
 						</c:if> 

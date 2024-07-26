@@ -59,12 +59,39 @@ public class EDocController {
 		m.addAttribute("type", type);
 	}
 	
+	@PostMapping("/offedocend")
+	public String insertOff(@RequestBody OffDocument offDocument) {
+		System.out.println(offDocument);
+		OffDocument doc;
+		int vacaCount = getEmployeeH().getRemainingAnnualLeave();
+		System.out.println(vacaCount);
+		int vacaUsed = offDocument.getVacaUsed();
+		String empNo = offDocument.getDocWriter();
+		String vacaType = offDocument.getVacaType();
+		int vacaLeft = vacaCount - vacaUsed;
+		
+		try {
+			Map<String, Object> param = new HashMap<>();
+			param.put("vacaCount", vacaCount);
+			param.put("empNo", empNo);
+			param.put("vacaUsed", vacaUsed);
+			param.put("vacaType", vacaType);
+			param.put("vacaLeft", vacaLeft);
+			
+			service.insertOffEdoc(offDocument, offDocument.getEmpNo(), param);
+			
+		} catch(RuntimeException e) {
+			e.printStackTrace();
+		}
+		
+		return "redirect:/edoc/home";
+	}
 
 	@PostMapping("/basicedocend")
 	public String insertBasic(@RequestParam("empNo") int[] empNo, @RequestPart(value="obj") String obj, @RequestPart(value="file", required=false) List<MultipartFile> uploadFiles, HttpSession session) {
 	// required = false : 파일 첨부가 필수가 아닌 선택, value = "file" : MultipartFile 요청에서 input[name='file'] 추출
 		System.out.println("안녕");
-		AbstractDocument doc;
+		BasicDocument doc;
 		
 
 		try {
@@ -146,6 +173,19 @@ public class EDocController {
 		m.addAttribute("documents", documents);
 		
 		return "edoc/inprogress";
+	}
+	
+	@RequestMapping("/approved")
+	public String approved(Model m
+			, @RequestParam(defaultValue ="1") int cPage
+			, @RequestParam(defaultValue="10") int numPerpage) {
+		Long no = getEmployeeH().getEmpNo();
+		
+//		승인완료된 문서 출력 (docWriter 가 로그인된 empNo와 같고, docStatus 가 '승인')
+		List<AbstractDocument> documents = service.approvedDocument(no, Map.of("cPage", cPage, "numPerpage", numPerpage));
+		m.addAttribute("documents", documents);
+		
+		return "edoc/approved";
 	}
 	
 	@GetMapping("/selectdoc")
@@ -233,7 +273,8 @@ public class EDocController {
 		} else {
 			// 최종결재자 !!! 
 			// 해당 docId, login된 empNo를 가지고, appStat을 승인, document table docstat 을 승인으로 변경	
-			service.updateFinalApproval(param);
+			int result = service.updateFinalApproval(param);
+			System.out.println("이게 최종결재자가 승인 눌렀을 때 실행되어야 하고 값은 2여야하는데 ? " + result);
 		}
 		
 		return ResponseEntity.ok(service.selectApprovalByDocId(doc.getDocId()));
