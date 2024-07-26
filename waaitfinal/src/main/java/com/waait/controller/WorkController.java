@@ -33,7 +33,7 @@ public class WorkController {
                  .empNo(employee.getEmpNo())
                  .workStart(timestamp)
                  .build();
-		if (timestamp.getHours() > 9 && timestamp.getMinutes() > 0) { // 9시 0분기준
+		if (timestamp.getHours() > 8 && timestamp.getMinutes() > 0) { // 9시 0분기준
 			work.setWorkStatus("지각");
 		} else {
 			work.setWorkStatus("null");

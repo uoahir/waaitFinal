@@ -69,6 +69,7 @@ public class HomeController {
 		Work work = workService.selectByEmpNoWork(param);
 		
 		model.addAttribute("work",work);
+					
 		return "index";
 	}
 	//----------------------------------------------------------------------------------

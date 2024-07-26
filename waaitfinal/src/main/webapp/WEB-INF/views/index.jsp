@@ -1020,7 +1020,15 @@ var contextPath = "${path}";
                         </div>
                         <div class="ms-3 name">
                             <h5 class="font-bold">John Duck</h5>
-                            <button onclick="work()">출근</button>
+                            <c:if test="${work!=null}">
+                            	<button>${work.workStart.getHours()}:${work.workStart.getMinutes()} </button>
+                            	
+                            </c:if>
+                            <c:if test="${work==null}">
+                           <button onclick="work()">출근</button> 
+                            </c:if>
+                           
+                            
                             <button onclick="leaveWork()">퇴근</button>
                         </div>
                     </div>
