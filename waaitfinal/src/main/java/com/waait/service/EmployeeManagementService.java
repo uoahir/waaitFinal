@@ -36,12 +36,22 @@ public class EmployeeManagementService {
 		return dao.searchEmpForModifyDepartment(session, searchParam);
 	}
 	
+	public List<Department> getTeamListByDeptCode(String deptCode) {
+		return dao.getTeamListByDeptCode(session, deptCode);
+	}
+	
 	@Transactional
 	public int modifyEmployeeDept(Map<String, Object> modifyParam) {
 		int result = 0;
 		result = dao.modifyEmployeeDept(session, modifyParam);
+		
+		String teamCode = (String) modifyParam.get("wantModifyTeamCode");
+		String wantModifyTeamName = dao.getTeamName(session, teamCode);
+		
+		modifyParam.put("wantModifyTeamName", wantModifyTeamName);
 		result = dao.insertMovingDepartment(session, modifyParam);
 		return result;
 	}
+
 
 }

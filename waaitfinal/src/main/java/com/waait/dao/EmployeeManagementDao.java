@@ -35,6 +35,14 @@ public class EmployeeManagementDao {
 	public int insertMovingDepartment(SqlSession session, Map<String, Object> modifyParam) {
 		return session.insert("em.insertMovingDepartment", modifyParam);
 	}
+	
+	public List<Department> getTeamListByDeptCode(SqlSession session, String deptCode) {
+		return session.selectList("em.getTeamListByDeptCode", deptCode);
+	}
+
+	public String getTeamName(SqlSession session, String teamCode) {
+		return session.selectOne("em.getTeamName", teamCode);
+	}
 
 
 }

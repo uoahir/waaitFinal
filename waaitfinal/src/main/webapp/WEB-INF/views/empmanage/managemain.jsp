@@ -109,6 +109,29 @@
 								+ selectDeptString
 								+ selectTeamString
 								+ "<button onclick='modifyDept()'>변경완료</button>";
+								
+							document.getElementById("modifyWantDept").addEventListener("change", e => {
+								const modifyDeptSelect = e.currentTarget;
+								const deptCode = modifyDeptSelect[modifyDeptSelect.selectedIndex].dataset.deptcode;
+								fetch("${path }/manage/changedeptselect.do", {
+									method : "POST",
+									headers : {
+										"Content-Type" : "application/json"
+									},
+									body : JSON.stringify({
+										deptCode : deptCode
+									})
+								})
+								.then(response => response.json())
+								.then(data => {
+									const team = data.teamList;
+									let changeOptionString = "";
+									for(let key in team) {
+										changeOptionString += "<option value='" + team[key].deptName + "' data-deptcode='" + team[key].deptCode + "'>" + team[key].deptName + "</option>"
+									}
+									document.getElementById("modifyWantTeam").innerHTML = changeOptionString;  
+								})
+							});
 						});
 					}
 					
@@ -137,11 +160,74 @@
 						console.log(wantModifyDeptCode);
 						//내일 매핑할 컨트롤러 만들면됨.
 					}
+					
+					
 				</script>
 			</div>
-			<div id="div1-3">
-				<h1>인사이동 내역조회</h1>
+			<div id="div1-3" style="margin-left : 10px;">
+				<div>
+					<h1>인사이동 내역조회</h1>
+					<select id="joinBySelect">
+						<option value="이름">이름으로 조회</option>
+						<option value="아이디">아이디로 조회</option>
+						<option value="기간">기간으로 조회</option>
+					</select>
+					<input type="text" name="parameter" placeholder="입력">
+					<input type="date" name="startDate" hidden="true">
+					<input type="date" name="endDate" hidden="true">
+					<button onclick="joinMovingDepartment()">조회하기</button>
+				</div>
 			</div>
+			<script>
+				document.getElementById("joinBySelect").addEventListener("change", e => {
+					const select = e.currentTarget;
+					
+					if(select[select.selectedIndex].value == "기간") {
+						console.log("조건문 왔음");
+						document.querySelector("input[name='startDate']").hidden = false;
+						document.querySelector("input[name='endDate']").hidden = false;
+						document.querySelector("input[name='parameter']").hidden = true;
+					} else {
+						document.querySelector("input[name='startDate']").hidden = true;
+						document.querySelector("input[name='endDate']").hidden = true;
+						document.querySelector("input[name='parameter']").hidden = false;
+					}
+				});
+				
+				const joinMovingDepartment = () => {
+					const status = document.getElementById("joinBySelect").value;
+					let searchParam = "";
+					let param;
+					
+					if(status == "기간") {
+						const startDate = document.querySelector("input[name='startDate']").value;
+						const endDate = document.querySelector("input[name='endDate']").value;
+						param = {
+							status : status,
+							startDate : startDate,
+							endDate : endDate
+						}
+					} else {
+						searchParam = document.querySelector("input[name='parameter']").value;
+						param = {
+							status : status,
+							searchParam : searchParam
+						}
+					}
+					
+					fetch("${path }/manage/joinmovingdepartment.do", {
+						method : "POST",
+						headers : {
+							"Content-Type" : "application/json"
+						},
+						body : JSON.stringify(param)
+					})
+					.then(response => response.json())
+					.then(data => {
+						console.log(data);
+					});
+				}
+			</script>
 		</div>
 		<div id="empInfoContainer">
 			<table>
