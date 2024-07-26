@@ -104,34 +104,81 @@ public class EmployeeManagementController {
 		String empId = searchParam.get("empId");
 		String empName = searchParam.get("empName");;
 		System.out.println("empId : " + empId + " empName : " + empName);
+		
 		Employee searchEmployee = service.searchEmpForModifyDepartment(searchParam);
-		List<Department> departmentList = service.getDepartment();
+		searchEmployee = setEmpFieldDeptName(searchEmployee);
+		
+		List<Department> departmentList = getDepartmentList();
+		List<Department> teamList = getTeamList();
 		System.out.println("searchEmployee : " + searchEmployee);
+		
 		Map<String, Object> responseMap = new HashMap<String, Object>();
 		responseMap.put("searchEmployee", searchEmployee);
 		responseMap.put("departments", departmentList);
+		responseMap.put("teams", teamList);
+		
 		return responseMap;
 	}
 	
 	@PostMapping("/empmodifydept.do")
-	public @ResponseBody int modifyEmployeeDept(String wantModifyDeptName, String wantModifyDeptCode, String empId) {
+	public @ResponseBody int modifyEmployeeDept(String wantModifyDeptName, String wantModifyDeptCode, String wantModifyTeamCode, String empId) {
 		int result = 0;
 		System.out.println("wantModifyDeptCode : " + wantModifyDeptCode);
-		Map<String, String> modifyParam = Map.of("wantModifyDeptCode", wantModifyDeptCode, "empId", empId);
+		
+		Employee emp = service.getEmployeeById(empId);
+		
+		Map<String, Object> modifyParam = Map.of("wantModifyDeptCode", wantModifyTeamCode, "empId", empId, "empOriInfo", emp);
 		result = service.modifyEmployeeDept(modifyParam);
 		if(result < 0) return result;
 		
-		//Employee 
+		
 		
 		return result;
 	}
 	
-	//부서와 팀 가져오는 테스트
-	@GetMapping("/departmenttest.do")
-	@ResponseBody
-	public void getEmployeeDepartment() {
-		String empId = "emp005";
-		//List<Employee> searchEmp = service.getEmployeeDepartment(empId);
+	
+	public List<Employee> setEmpFieldDeptName(List<Employee> employeeList) {
+		//List<Employee> employeeList = service.getEmployees();
+		List<Department> departmentList = getDepartmentList();
+
+		for(Employee e : employeeList) {
+			if(e.getDepartment().getDeptCode() != "D1"
+					&& e.getDepartment().getParentCode().equals("D1")) {
+				e.setDeptName(e.getDepartment().getDeptName());
+			}
+			
+			for(Department d : departmentList) {
+				if(e.getDepartment().getParentCode().equals(d.getDeptCode())) {
+					e.setDeptName(d.getDeptName());
+				} else if(e.getDepartment().getDeptCode().equals(d.getDeptCode())) {
+					e.setDeptName(d.getDeptName());
+				}
+			}
+			
+			if(e.getDeptName() == null) e.setDeptName("대표실");
+		}
+		return employeeList;
+	}
+	
+	public Employee setEmpFieldDeptName(Employee emp) {
+		List<Department> departmentList = getDepartmentList();
+		
+		if(emp.getDepartment().getDeptCode() != "D1"
+				&& emp.getDepartment().getParentCode().equals("D1")) {
+			emp.setDeptName(emp.getDepartment().getDeptName());
+		}
+		
+		for(Department d : departmentList) {
+			if(emp.getDepartment().getParentCode().equals(d.getDeptCode())) {
+				emp.setDeptName(d.getDeptName());
+			} else if(emp.getDepartment().getDeptCode().equals(d.getDeptCode())) {
+				emp.setDeptName(d.getDeptName());
+			}
+		}
+		
+		if(emp.getDeptName() == null) emp.setDeptName("대표실");
+		System.out.println("setFieldDeptName : " + emp);
+		return emp;
 	}
 	
 	public List<Department> getDepartmentList() {
@@ -140,5 +187,13 @@ public class EmployeeManagementController {
 			return dept.getDeptName().substring(dept.getDeptName().length() - 1).equals("부");
 		}).collect(Collectors.toList());
 		return departmentList;
+	}
+	
+	public List<Department> getTeamList() {
+		List<Department> departmentTableList = service.getDepartment();
+		List<Department> teamList = departmentTableList.stream().filter(dept -> {
+			return dept.getDeptName().substring(dept.getDeptName().length() - 1).equals("팀");
+		}).collect(Collectors.toList());
+		return teamList;
 	}
 }

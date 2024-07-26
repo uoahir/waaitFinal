@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.waait.dao.EmployeeManagementDao;
 import com.waait.dto.Department;
@@ -26,12 +27,21 @@ public class EmployeeManagementService {
 	public List<Employee> getEmployees() {
 		return dao.getEmployees(session);
 	}
+	
+	public Employee getEmployeeById(String empId) {
+		return dao.getEmployeeById(session, empId);
+	}
 
 	public Employee searchEmpForModifyDepartment(Map<String, String> searchParam) {
 		return dao.searchEmpForModifyDepartment(session, searchParam);
 	}
-
-	public int modifyEmployeeDept(Map<String, String> modifyParam) {
-		return dao.modifyEmployeeDept(session, modifyParam);
+	
+	@Transactional
+	public int modifyEmployeeDept(Map<String, Object> modifyParam) {
+		int result = 0;
+		result = dao.modifyEmployeeDept(session, modifyParam);
+		result = dao.insertMovingDepartment(session, modifyParam);
+		return result;
 	}
+
 }

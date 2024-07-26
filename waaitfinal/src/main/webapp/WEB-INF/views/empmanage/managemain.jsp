@@ -66,17 +66,30 @@
 						.then(data => {
 							const searchEmp = data.searchEmployee;
 							const dept = data.departments;
+							const team = data.teams;
+							let count = 0;
 							console.log(dept);
-
-							let selectString = "<select id='modifyWantDept'>";
+							
+							let selectTeamString = "<select id='modifyWantTeam'>";
+							let selectDeptString = "<select id='modifyWantDept'>";
 							for(let key in dept) {
 								if(dept[key].deptName == searchEmp.department.deptName) {
-									selectString += "<option value='" + dept[key].deptName + "' disabled>" + dept[key].deptName + "</option>"
+									selectDeptString += "<option value='" + dept[key].deptName + "' disabled>" + dept[key].deptName + "</option>"
 								} else {
-									selectString += "<option value='" + dept[key].deptName + "' data-deptCode='" + dept[key].deptCode + "'>" + dept[key].deptName + "</option>"	
+									selectDeptString += "<option value='" + dept[key].deptName + "' data-deptCode='" + dept[key].deptCode + "'>" + dept[key].deptName + "</option>"	
 								}
+								
+								if(count == 0) {
+									for(let k in team) {
+										if(dept[key].deptCode == team[k].parentCode) {
+											selectTeamString += "<option value='" + team[k].deptName + "' data-deptcode='" + team[k].deptCode + "'>" + team[k].deptName + "</option>"
+										}										
+									}
+								}
+								count++;
 							}
-							selectString += "</select>"
+							selectDeptString += "</select>";
+							selectTeamString += "</select>";
 							
 							document.getElementById("searchResultContainer").innerHTML = 
 								"<h3>검색결과</h3>"
@@ -91,26 +104,31 @@
 									+ "<li>직급 : " + searchEmp.jobLevel.levelName + "</li>"
 								+ "</ul>"
 								+ "<h1>현재부서</h1>"
-								+ "<p>" + searchEmp.department.deptName + "</p>"
+								+ "<p>부서 : " + searchEmp.deptName + " 팀 : " + searchEmp.department.deptName + "</p>"
 								+ "<h1>변경할 부서</h1>"
-								+ selectString
+								+ selectDeptString
+								+ selectTeamString
 								+ "<button onclick='modifyDept()'>변경완료</button>";
 						});
 					}
 					
 					const modifyDept = () => {
 						const deptSelect = document.getElementById("modifyWantDept");
-						const wantModifyDeptName = deptSelect.value;
+						const teamSelect = document.getElementById("modifyWantTeam");
+						
+						const wantModifyDeptName = deptSelect.value; //안쓸거같음..
 						const wantModifyDeptCode = deptSelect[deptSelect.selectedIndex].dataset.deptcode;
+						const wantModifyTeamCode = teamSelect[teamSelect.selectedIndex].dataset.deptcode;
 						const empId = document.getElementById("empIdLi").dataset.empid;
 						console.log("empId : " + empId);
+						console.log("teamCode : " + wantModifyTeamCode);
 						fetch("${path }/manage/empmodifydept.do", {
 							method : "POST",
 							headers : {
 								"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
 							},
 							body : "wantModifyDeptName=" + wantModifyDeptName + "&wantModifyDeptCode=" + wantModifyDeptCode
-										+ "&empId=" + empId
+										+ "&empId=" + empId + "&wantModifyTeamCode=" + wantModifyTeamCode
 						})
 						.then(response => response.text())
 						.then(data => {
@@ -173,8 +191,8 @@
 			</table>
 		</div>
 	</div>
-	<button onclick="departmentTest">사원테스트</button>
-	<button onclick="departmentAddTest">부서추가테스트</button>
+	<button onclick="departmentTest()">사원테스트</button>
+	<button onclick="departmentAddTest()">부서추가테스트</button>
 	
 	<script>
 		const departmentTest = () => {
