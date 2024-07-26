@@ -32,7 +32,7 @@
 		        <div id="chatting_userlist">
 		            <!-- 상단 검색창 -->
 		            <div id="chatting_userlist_search">
-		    			<h3>대화 상대추가</h3>
+		    			<h3>대화상대 선택</h3>
 		    			<div>
 							<input type="text" placeholder="채팅방 이름을 입력해주세요" name="chatRoomName">
 		                    <p onclick="">X</p>
@@ -222,11 +222,8 @@
 		               		</c:forEach>
 		               		</div>
 		               		
-		                		
-		                		
 		                </c:if>	<!-- ${not empty employees } 끝남 -->
-		                
-		                
+	
 		            </div>
 		        </div>
 		        <input type="submit" value="채팅방 생성" id="create_chatroom">

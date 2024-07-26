@@ -26,11 +26,11 @@
 			console.log("로그인된 사원 번호 : "+loginEmpNo);
 			
 			let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo+"&loginEmpNo="+loginEmpNo,"_blank","top=100, left=400, height=700, width=550");
-			console.log("되니?");
+			//console.log("되니?");
 			chatserver.onload = function() {
-				console.log("이건 되니?");
+				//console.log("이건 되니?");
 				chatserver.socket = new WebSocket("ws://localhost:5731/chat");
-				console.log("이이거는 되니?");
+				//console.log("이이거는 되니?");
 			}
 		}		
 	}
@@ -59,7 +59,7 @@
 	const chatinvitation=()=>{
 		console.log("채팅방추가 클릭");
 		//모달 띄우기
-		var modal = document.getElementById("modal_chatinvitation");
+		const modal = document.getElementById("modal_chatinvitation");
 		
 		if(modal.style.display === "block"){
 			modal.style.display = "none";
@@ -70,7 +70,7 @@
 	}
 	
 	document.getElementById("modal_chatinvitation").addEventListener("click",function(){
-		var modal = document.getElementById("modal_chatinvitation");
+		const modal = document.getElementById("modal_chatinvitation");
 		
 		if(modal.style.display === "block"){
 			modal.style.display = "none";
@@ -100,13 +100,10 @@
 						console.log("클릭된 사원번호 : "+empNo);
 					});
 				});
-				
-				
-				
-				
-				
 			}
 		})
+		
+		
 	})
 	//채팅방추가 일반채팅 끝
 	
