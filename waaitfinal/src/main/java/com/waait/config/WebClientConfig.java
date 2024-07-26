@@ -6,23 +6,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
-
-
 @Configuration
 @Component
-
 public class WebClientConfig {
 
-    @Value("${token}")
-    private String token;
+	@Value("${token}")
+	private String token;
 
-	
-	   @Bean
-	    public WebClient webClient() {
-	        return WebClient.builder()
-	                .defaultHeader("Authorization", "Bearer "+token)
-	                .defaultHeader("Accept", "application/vnd.github+json")
-	                .defaultHeader("User-Agent", "MyGitHubApp")
-	                .build();
-	    }
+	@Bean
+	public WebClient webClient() {
+		return WebClient.builder().defaultHeader("Authorization", "Bearer " + token)
+				.defaultHeader("Accept", "application/vnd.github+json").defaultHeader("User-Agent", "MyGitHubApp")
+				.build();
+	}
 }
