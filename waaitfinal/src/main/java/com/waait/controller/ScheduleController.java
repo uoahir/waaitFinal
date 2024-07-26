@@ -47,7 +47,7 @@ public class ScheduleController {
 			System.out.println(e);
 		});
 		
-		return "schedule/schedulemain";
+		return "schedule/schedulepage";
 	}
 	
 	// 사용자 로그인 시큐리티로 데이터 가져오기
@@ -77,14 +77,31 @@ public class ScheduleController {
 //		}       
 		
 		int result=service.insertSchedule(s);
-		return "redirect:/schedule/myschedule2";
+		return "redirect:/schedule/myschedule";
 		
 	}
 	
 	@RequestMapping("/updateSchedule.do")
-	public String updateSchdule() {
+	public String updateSchdule(Schedule s,Model model,String scheTimeData, String scheEndData) {
+		try {
+			//사용자가 입력한 날짜 및 시간 데이터를 Timestamp 객체로 변환하여 Schedule 객체의 scheTime 필드에 설정하는 역할
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"); //Timestamp로 들어가서 파싱해주기
+			s.setScheTime(new Timestamp(sdf.parse(scheTimeData).getTime())); // sdf.parse(scheTimeData): scheTimeData 문자열을 SimpleDateFormat을 사용하여 Date 객체로 변환
+			s.setScheEnd(new Timestamp(sdf.parse(scheEndData).getTime()));
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		Employee loginEmp=(Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		s.setEmpNo(loginEmp.getEmpNo());
+		s.setScheWriter(loginEmp.getEmpName());
+		int result=service.updateSchedule(s);
+		if(result>0) {
+			model.addAttribute("msg","수정 성공");
+		}else {
+			model.addAttribute("msg", "수정 실패");
+		}
 		
-	return "/schedule/updatemodal";
+	return "redirect:/schedule/myschedule";
 	}
 	
 	//삭제하기
@@ -94,16 +111,16 @@ public class ScheduleController {
 		String msg,loc;
 		
 		int result=service.deleteSchedule(scheNo);	
-		if(result>0) {
-			msg="일정 삭제 성공"; 
-			loc="/schedule/schedulemain2";
-		}
-		else {
-			msg="삭제 실패. 다시 시도하세요";
-			loc="/schedule/deleteSchedule.do";					
-		}		
-		model.addAttribute("msg",msg);
-		model.addAttribute("loc",loc);
+//		if(result>0) {
+//			msg="일정 삭제 성공"; 
+//			loc="/schedule/schedulepage";
+//		}
+//		else {
+//			msg="삭제 실패. 다시 시도하세요";
+//			loc="/schedule/deleteSchedule.do";					
+//		}		
+//		model.addAttribute("msg",msg);
+//		model.addAttribute("loc",loc);
 		
 		return "redirect:/schedule/myschedule";
 	}

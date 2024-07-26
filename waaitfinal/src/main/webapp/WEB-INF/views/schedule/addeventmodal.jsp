@@ -55,6 +55,7 @@
                         <input type="checkbox" name="scheAllDay" value="true" id="scheAllDay">
                          <label for="schePrivate" class="form-label">개인일정</label>
                         <input type="checkbox" name="schePrivate" value="Y" id="schePrivate">
+                        <input type="hidden" name="scheNo" id="modalScheNo" value="0"/>
                     </div>
                    
                     <button
@@ -64,7 +65,8 @@
 		            >
 		              취소
 		            </button>
-                    <button type="submit" class="btn btn-primary">추가</button>
+                    <button type="button" id="submitButton" class="btn btn-primary">등록</button>
+                    <button type="button" id="deleteEvent" class="btn btn-danger">삭제</button>
                 </form>
             </div>
         </div>
