@@ -7,18 +7,41 @@
 
 <section class="section">
 
-
+	<!-- jQuery CDN -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>			
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%-- <%@ include file="/WEB-INF/views/common/header.jsp" %> --%>
 
-  <head>
-	<title>캘린더2</title>
-	<!-- jQuery CDN -->
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>			
+	<!-- 부트스트랩 -->
+	 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e" type="image/x-icon">
+    <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAiCAYAAADRcLDBAAAEs2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS41LjAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgZXhpZjpQaXhlbFhEaW1lbnNpb249IjMzIgogICBleGlmOlBpeGVsWURpbWVuc2lvbj0iMzQiCiAgIGV4aWY6Q29sb3JTcGFjZT0iMSIKICAgdGlmZjpJbWFnZVdpZHRoPSIzMyIKICAgdGlmZjpJbWFnZUxlbmd0aD0iMzQiCiAgIHRpZmY6UmVzb2x1dGlvblVuaXQ9IjIiCiAgIHRpZmY6WFJlc29sdXRpb249Ijk2LjAiCiAgIHRpZmY6WVJlc29sdXRpb249Ijk2LjAiCiAgIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiCiAgIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIKICAgeG1wOk1vZGlmeURhdGU9IjIwMjItMDMtMzFUMTA6NTA6MjMrMDI6MDAiCiAgIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMDMtMzFUMTA6NTA6MjMrMDI6MDAiPgogICA8eG1wTU06SGlzdG9yeT4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJwcm9kdWNlZCIKICAgICAgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWZmaW5pdHkgRGVzaWduZXIgMS4xMC4xIgogICAgICBzdEV2dDp3aGVuPSIyMDIyLTAzLTMxVDEwOjUwOjIzKzAyOjAwIi8+CiAgICA8L3JkZjpTZXE+CiAgIDwveG1wTU06SGlzdG9yeT4KICA8L3JkZjpEZXNjcmlwdGlvbj4KIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+Cjw/eHBhY2tldCBlbmQ9InIiPz5V57uAAAABgmlDQ1BzUkdCIElFQzYxOTY2LTIuMQAAKJF1kc8rRFEUxz9maORHo1hYKC9hISNGTWwsRn4VFmOUX5uZZ36oeTOv954kW2WrKLHxa8FfwFZZK0WkZClrYoOe87ypmWTO7dzzud97z+nec8ETzaiaWd4NWtYyIiNhZWZ2TvE946WZSjqoj6mmPjE1HKWkfdxR5sSbgFOr9Ll/rXoxYapQVik8oOqGJTwqPL5i6Q5vCzeo6dii8KlwpyEXFL519LjLLw6nXP5y2IhGBsFTJ6ykijhexGra0ITl5bRqmWU1fx/nJTWJ7PSUxBbxJkwijBBGYYwhBgnRQ7/MIQIE6ZIVJfK7f/MnyUmuKrPOKgZLpEhj0SnqslRPSEyKnpCRYdXp/9++msneoFu9JgwVT7b91ga+LfjetO3PQ9v+PgLvI1xkC/m5A+h7F32zoLXug38dzi4LWnwHzjeg8UGPGbFfySvuSSbh9QRqZ6H+Gqrm3Z7l9zm+h+iafNUV7O5Bu5z3L/wAdthn7QIme0YAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJTSURBVFiF7Zi9axRBGIefEw2IdxFBRQsLWUTBaywSK4ubdSGVIY1Y6HZql8ZKCGIqwX/AYLmCgVQKfiDn7jZeEQMWfsSAHAiKqPiB5mIgELWYOW5vzc3O7niHhT/YZvY37/swM/vOzJbIqVq9uQ04CYwCI8AhYAlYAB4Dc7HnrOSJWcoJcBS4ARzQ2F4BZ2LPmTeNuykHwEWgkQGAet9QfiMZjUSt3hwD7psGTWgs9pwH1hC1enMYeA7sKwDxBqjGnvNdZzKZjqmCAKh+U1kmEwi3IEBbIsugnY5avTkEtIAtFhBrQCX2nLVehqyRqFoCAAwBh3WGLAhbgCRIYYinwLolwLqKUwwi9pxV4KUlxKKKUwxC6ZElRCPLYAJxGfhSEOCz6m8HEXvOB2CyIMSk6m8HoXQTmMkJcA2YNTHm3congOvATo3tE3A29pxbpnFzQSiQPcB55IFmFNgFfEQeahaAGZMpsIJIAZWAHcDX2HN+2cT6r39GxmvC9aPNwH5gO1BOPFuBVWAZue0vA9+A12EgjPadnhCuH1WAE8ivYAQ4ohKaagV4gvxi5oG7YSA2vApsCOH60WngKrA3R9IsvQUuhIGY00K4flQG7gHH/mLytB4C42EgfrQb0mV7us8AAMeBS8mGNMR4nwHamtBB7B4QRNdaS0M8GxDEog7iyoAguvJ0QYSBuAOcAt71Kfl7wA8DcTvZ2KtOlJEr+ByyQtqqhTyHTIeB+ONeqi3brh+VgIN0fohUgWGggizZFTplu12yW8iy/YLOGWMpDMTPXnl+Az9vj2HERYqPAAAAAElFTkSuQmCC" type="image/png">
+    
+    <link rel="stylesheet" crossorigin href="${path }/resources/assets/compiled/css/app.css">
+  <link rel="stylesheet" crossorigin href="${path }/resources/assets/compiled/css/app-dark.css">
 
-	<!-- 원래 코드 -->
- 	<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> --> 
+  <head>
+  
+	<title>캘린더2</title>
+		<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>SCHEDULE</h3>
+                <p class="text-subtitle text-muted">일정관리</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Calendar</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+	   
 	
 	<!-- FullCalendar CDN -->
 	<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
@@ -26,6 +49,12 @@
 	<!-- FullCalendar 언어 CDN -->
 	  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
 	</head>	
+	<style>
+		#main {
+			background-color : white;
+			border-radius : 25px;
+		}
+	</style> 
 	
 	<body style="padding:100px;">
 	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/schedule/schedule.css">
@@ -38,26 +67,29 @@
 	<%@include file="/WEB-INF/views/schedule/addeventmodal.jsp" %>
 	 <%@include file="/WEB-INF/views/schedule/detailmodal.jsp"  %>  
   	<div class="card">
+
 	<!-- calendar 태그 -->
-	 <div id='calendar-container'>
+	 <div id='calendar-container' style="background-color:white">
 		<div id='calendar'></div>
 	</div>
 	</div>
+	
 
-  <script>  
-  
+  <script>    
   /* DB에서 일정 뽑아오기 */
 	function loadEvents(info, successCallback, failureCallback){
 	  var events = [
 		  //DB에서 가져온 이벤트들
 		  <c:forEach var="event" items='${total}'>
 		  	{
+		  		color: '${event.scheColor}',
 		  		title: '${event.scheTitle}',
 		  		start: '${fn:replace(event.scheTime," ","T")}',
 		  		end: '${fn:replace(event.scheEnd, " ", "T")}',
 		  		allDay: ${event.scheAllDay},
 		  		editable:true,
-		  		extendedProps:{"content":"${event.scheContent}","schePrivate":"${event.schePrivate}","scheNo":"${event.scheNo}"},
+		  		extendedProps:{"content":"${event.scheContent}","schePrivate":"${event.schePrivate}",
+		  					"scheNo":"${event.scheNo}","color":"${event.scheColor}"},
 		  	},
 		  </c:forEach>
 /* 			{
@@ -78,7 +110,8 @@
       var calendarEl = $('#calendar')[0];
       // full-calendar 생성하기
       calendar = new FullCalendar.Calendar(calendarEl, {
-        height: '550px', // calendar 높이 설정
+        height: '650px', // calendar 높이 설정
+        aspectRatio: 1,
         expandRows: true, // 화면에 맞게 높이 재설정
         slotMinTime: '09:00', // Day 캘린더에서 시작 시간
         slotMaxTime: '18:00', // Day 캘린더에서 종료 시간
@@ -87,6 +120,7 @@
         		text:"일정 추가",
         		click: function(){
         			//부트스트랩 모달 열기
+        			console.log($('#addEventModal'));
         			$('#addEventModal').modal('show');        			           
 	      	          
 	       	        $("#addEventModal").find("#subject").val("");
@@ -159,7 +193,8 @@
         },
         // < 빈 날짜 누르면 일정추가 >
          select: function(info){
-        	$('#addEventModal').modal('show'); //일정 추가하는 모달창 띄움
+          console.log($('#addEventModal'));
+          $('#addEventModal').modal('show'); //일정 추가하는 모달창 띄움
           $('#start').val(info.startStr); 
           $('#end').val(info.endStr);                    
           
@@ -215,7 +250,7 @@
 		const choiceEvent=object.event;
 		console.log(choiceEvent);
 		const {title,allDay,start,end}=choiceEvent;
-		const {content,schePrivate,scheNo}=choiceEvent.extendedProps;			
+		const {content,schePrivate,scheNo,color}=choiceEvent.extendedProps;			
 		console.log(start,end, typeof start);
 	    
 		document.getElementById('modalScheNo').value=scheNo;
@@ -225,6 +260,7 @@
 		document.getElementById('end').value=end;
 		document.getElementById('scheAllDay').checked=allDay;
 		document.getElementById('schePrivate').checked=schePrivate;
+		document.getElementById('color').value=color;
 		
 		$("#addEventModal").find("#addEventModalLabel").text("일정 수정");
 		$("#addEventModal").find("#submitButton").text("수정");				
@@ -305,8 +341,19 @@
 		}
       
       
-  
-  
+/*   	 $(()=>{
+  		 const mode=$("html").attr("data-bs-theme")
+  		console.log(mode);
+  		 if(mode==='dark')
+  			$("#calendar-container").css("backgoundColor","white");
+  		console.log($("#calendar-container"));
+  	}); 
+  	
+  	const htmlTag = document.querySelector("html[lang='en']");
+  	if(htmlTag.getAttribute("data-bs-theme") == "dark") {
+  		document.getElementById("main").style.backgroundColor = "white";	
+  	} */
+  	
 </script>  
 
   </body>
@@ -319,4 +366,4 @@
      
 
 </section>
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<%-- <jsp:include page="${path}/WEB-INF/views/common/footer.jsp" /> --%>
