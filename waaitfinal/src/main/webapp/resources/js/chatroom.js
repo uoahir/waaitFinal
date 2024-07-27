@@ -104,7 +104,7 @@
 		console.log("sendMessage : "+inputData);
 		
 		if(inputData.length > 0){
-			//현재 시간 가져와 활용
+			//현재 시간 가져와 활용			
 			const now = new Date();
 			const year = now.getFullYear();
 			const month = (now.getMonth()+1).toString().padStart(2,"0");
@@ -124,6 +124,136 @@
 			document.querySelector("#msg").focus();
 		}
 	}
+	
+	
+	
+	
+	// 채팅방참여 수 누르면 채팅방에 속한 사원 리스트 출력 and 사원 초대
+	const chatEmpList=()=>{
+		const modal = document.getElementById("modal_chatemplist");
+		if(modal.style.display === "block"){
+			modal.style.display = "none";
+		}else{
+			modal.style.display = "block";
+		}
+	}
+	
+	document.getElementById("modal_chatemplist").addEventListener("click",function(){
+		const modal = document.getElementById("modal_chatemplist");
+		if(modal.style.display === "block"){
+			modal.style.display = "none";
+		}else{
+			modal.style.display = "block";
+		}
+		
+	})
+	
+	const chatinvitationemplist=()=>{
+		const modal2 = document.getElementById("modal_chatinvitation");
+		if(modal2.style.display === "block"){
+			modal2.style.display = "none";
+		}else{
+			modal2.style.display = "block";
+		}
+	}
+	
+	document.getElementById("modal_chatinvite_cancel").addEventListener("click",function(){
+		const modal2 = document.getElementById("modal_chatinvitation");
+		if(modal2.style.display === "block"){
+			modal2.style.display = "none";
+		}else{
+			modal2.style.display = "block";
+		}
+	});
+	
+	
+	const insertchatjoin=()=>{
+		const chatEmpNo = [];
+		const checkboxes = document.querySelectorAll('input[name="chatemps"]:checked');
+		
+		checkboxes.forEach(function(checkbox) {
+        chatEmpNo.push(checkbox.value);
+	    });
+	    
+	    console.log("채팅방 번호 : "+chatRoomNo);
+	    console.log("선택된 사원번호 : "+chatEmpNo);
+    	
+    	$.ajax({
+			type : "POST",
+			url : path+"/chat/insertchatjoin.do",
+			traditional: true, // 배열을 전송할 때 필요
+			/*contentType : 'application/json; charset=utf-8',*/
+			data: {
+	            chatRoomNo: chatRoomNo,
+	            chatEmpNo: chatEmpNo
+	        },
+			success : function(){
+				alert("초대 성공");
+    			window.location.reload();
+			},
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            console.error("초대 실패: " + textStatus, errorThrown);
+	        }
+		});
+		
+		const modal2 = document.getElementById("modal_chatinvitation");
+		if(modal2.style.display === "block"){
+			modal2.style.display = "none";
+		}else{
+			modal2.style.display = "block";
+		}
+		
+   		 
+	}
+	// 채팅방초대 모달 끝
+	
+	
+	// 채팅방 나가기 모달창
+	const setting=()=>{
+		const modal = document.getElementById("modal_chat_exit");
+		if(modal.style.display === "block"){
+			modal.style.display = "none";
+		}else{
+			modal.style.display = "block";
+		}
+	}
+	
+	document.getElementById("modal_chat_exit").addEventListener("click",function(){
+		const modal = document.getElementById("modal_chat_exit");
+		if(modal.style.display === "block"){
+			modal.style.display = "none";
+		}else{
+			modal.style.display = "block";
+		}
+	});
+	
+	// 방번호, 사원번호(서버에서 로그인된 사원번호) 넘겨서 처리하기
+	const deletechatjoin=()=>{
+		console.log("채팅방 번호 : "+chatRoomNo);
+		//1:1방은 나갈수없게 분기처리
+		if(chatRoomType != "C1"){
+			$.ajax({
+				type : "POST",
+				url : path+"/chat/deletechatjoin.do",
+				data: {
+		            chatRoomNo: chatRoomNo
+		        },
+				success : function(){
+	    			window.close();
+				},
+		        error: function(jqXHR, textStatus, errorThrown) {
+		            console.error("채팅방 나가기 실패: " + textStatus, errorThrown);
+		        }
+			});
+		}else{
+			alert("1:1 방은 나갈수 없습니다.");
+		}
+		
+		
+	}
+	
+	// 채팅방 나가기 모달 끝
+	
 	
 	
 	
