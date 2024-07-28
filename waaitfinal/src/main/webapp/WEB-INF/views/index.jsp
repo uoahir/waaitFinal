@@ -1019,7 +1019,7 @@ var contextPath = "${path}";
                             <img src="${path}/resources/assets/compiled/jpg/1.jpg" alt="Face 1">
                         </div>
                         <div class="ms-3 name">
-                            <h5 class="font-bold">John Duck</h5>
+                            <h5 class="font-bold" id="empNamePrint">John Duck</h5>
                             <c:if test="${work!=null}">
                             	<button>${work.workStart.getHours()}:${work.workStart.getMinutes()} </button>
                             	<c:if test="${work.workEnd == null }">

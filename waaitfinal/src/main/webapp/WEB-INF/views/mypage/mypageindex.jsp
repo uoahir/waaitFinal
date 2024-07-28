@@ -1015,8 +1015,10 @@
                             <img src="${path}/resources/assets/compiled/jpg/1.jpg" alt="Face 1">
                         </div>
                         <div class="ms-3 name">
-                            <h5 class="font-bold">John Duck</h5>
+                        	<c:forEach var="m" items="${total }">
+                            <h5 class="font-bold">${m.empName }</h5>
                             <h6 class="text-muted mb-0">@johnducky</h6>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>

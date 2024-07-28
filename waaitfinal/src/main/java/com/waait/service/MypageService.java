@@ -1,10 +1,16 @@
 package com.waait.service;
 
+import java.util.List;
+
 import com.waait.dto.Employee;
+import com.waait.dto.Mypage;
 
 public interface MypageService {
 	
 	//새로운 비밀번호 삽입
-	int updateEmpPwd(Employee e);
+//	int updateEmpPwd(Employee e);	
+	//사원 정보 불러오기
+	List<Mypage> myInfoList(Long empNumber);
+	
 	
 }
