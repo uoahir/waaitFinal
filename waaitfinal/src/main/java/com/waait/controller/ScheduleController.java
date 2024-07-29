@@ -47,7 +47,7 @@ public class ScheduleController {
 			System.out.println(e);
 		});
 		
-		return "schedule/schedulepage";
+		return "schedule/mypageindex";
 	}
 	
 	// 사용자 로그인 시큐리티로 데이터 가져오기
