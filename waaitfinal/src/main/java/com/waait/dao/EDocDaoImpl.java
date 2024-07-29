@@ -136,7 +136,51 @@ public class EDocDaoImpl implements EDocDao {
 		// TODO Auto-generated method stub
 		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
 		return session.selectList("edoc.inprogressDocument",empNo,rb);
+	}
+
+	@Override
+	public List<AbstractDocument> approvedDocument(SqlSession session, Long empNo, Map<String, Integer> page) {
+		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
+		return session.selectList("edoc.approvedDocument",empNo,rb);
+	}
+
+	@Override
+	public int insertOffContent(SqlSession session, AbstractDocument doc) {
+		// TODO Auto-generated method stub
+		OffDocument odoc = (OffDocument) doc;
+		return session.insert("edoc.insertOffContent", odoc);
+	}
+
+	@Override
+	public int insertVacation(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.insert("edoc.insertVacation", param);
+	}
+
+	@Override
+	public int updateVacation(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateVacation", param);
+	}
+
+//	휴가신청서 상신 시, employee 의 remainingLeave를 변경 
+	@Override
+	public int updateEmployeeRemainingLeave(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateEmployeeRemainingLeave", param);
+	}
+
+//	사원의 연차정보 뽑아오기
+	@Override
+	public List<OffDocument> getOffDocumentList(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.selectList("edoc.getOffDocumentList", empNo);
 	}	
+	
+	
+	
+	
+	
 	
 	
 	

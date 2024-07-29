@@ -1,7 +1,6 @@
 package com.waait.dto;
 
-import java.sql.Date;
-
+import java.sql.Timestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +16,7 @@ public class Approval {
 	private int appEmp;
 	private int appOrder;
 	private String appStat;
-	private Date appDate;
+	private Timestamp appDate;
 	private String reason;
 	private Employee employee;
 }

@@ -1,6 +1,7 @@
 package com.waait.dto;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Objects;
 
 import lombok.AllArgsConstructor;
@@ -13,9 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class OffDocument extends AbstractDocument {
-	private String offType;
-	private Date startDate;
-	private Date endDate;
+	private String vacaType;
+	private String startDate;
+	private String endDate;
+	private int vacaUsed;
+	private int[] empNo;
 	
 	@Override
 	public String getDocument() {
@@ -32,16 +35,22 @@ public class OffDocument extends AbstractDocument {
 		if (getClass() != obj.getClass())
 			return false;
 		OffDocument other = (OffDocument) obj;
-		return Objects.equals(endDate, other.endDate) && Objects.equals(offType, other.offType)
-				&& Objects.equals(startDate, other.startDate);
+		return Objects.equals(endDate, other.endDate) && Objects.equals(vacaType, other.vacaType)
+				&& Objects.equals(startDate, other.startDate) && vacaUsed == other.vacaUsed;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + Objects.hash(endDate, offType, startDate);
+		result = prime * result + Objects.hash(endDate, vacaType, startDate, vacaUsed);
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "OffDocument [vacaType=" + vacaType + ", startDate=" + startDate + ", endDate=" + endDate + ", vacaUsed="
+				+ vacaUsed + ", empNo=" + Arrays.toString(empNo) + ", toString()=" + super.toString() + "]";
 	}
 	
 	
