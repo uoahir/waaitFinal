@@ -29,6 +29,7 @@ public interface EDocDao {
 //	휴가신청서 insert
 	int insertOffContent(SqlSession session, AbstractDocument doc);
 	int insertVacation(SqlSession session, Map<String, Object> param);
+	int updateEmployeeRemainingLeave(SqlSession session, Map<String, Object> param);
 	
 //	결재라인, 최초 문서 상신 시 현재결재자 update
 	int updateFirstApprover(SqlSession session, int docId);
@@ -66,4 +67,10 @@ public interface EDocDao {
 //	최종결재자인 경우
 //	document(문서) 테이블에서 해당 문서의 status를 검토중 -> 승인으로 update ! 
 	int updateDocStatToApproval(SqlSession session, Map<String,Object> param);
+//	휴가신청서 
+	int updateVacation(SqlSession session, Map<String, Object> param);
+	
+//	사원의 연차정보 뽑아오기
+	List<OffDocument> getOffDocumentList(SqlSession session, Long empNo);
+	
 }

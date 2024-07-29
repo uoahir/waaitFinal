@@ -5,16 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-
+@Data
 // 추상클래스는 인스턴스화 불가능 ( 객체바로 생성할 수 없음 ) -> 따라서 Builder 어노테이션 사용 불가
 public abstract class AbstractDocument implements DocumentInter {
 	private int docId;
 	private int rnum;
-	private String docWriter;
+	private int docWriter;
 	private Employee employee;
 	// employee 
 	private String docType;
@@ -53,10 +51,10 @@ public abstract class AbstractDocument implements DocumentInter {
 	public void setRnum(int rnum) {
 		this.rnum = rnum;
 	}
-	public String getDocWriter() {
+	public int getDocWriter() {
 		return docWriter;
 	}
-	public void setDocWriter(String docWriter) {
+	public void setDocWriter(int docWriter) {
 		this.docWriter = docWriter;
 	}
 	public Employee getEmployee() {

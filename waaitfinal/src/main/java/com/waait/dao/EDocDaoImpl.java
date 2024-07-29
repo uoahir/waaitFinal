@@ -155,7 +155,30 @@ public class EDocDaoImpl implements EDocDao {
 	public int insertVacation(SqlSession session, Map<String, Object> param) {
 		// TODO Auto-generated method stub
 		return session.insert("edoc.insertVacation", param);
+	}
+
+	@Override
+	public int updateVacation(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateVacation", param);
+	}
+
+//	휴가신청서 상신 시, employee 의 remainingLeave를 변경 
+	@Override
+	public int updateEmployeeRemainingLeave(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateEmployeeRemainingLeave", param);
+	}
+
+//	사원의 연차정보 뽑아오기
+	@Override
+	public List<OffDocument> getOffDocumentList(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.selectList("edoc.getOffDocumentList", empNo);
 	}	
+	
+	
+	
 	
 	
 	

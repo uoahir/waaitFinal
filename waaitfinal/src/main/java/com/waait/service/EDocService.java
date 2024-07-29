@@ -6,8 +6,8 @@ import java.util.Map;
 import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
 import com.waait.dto.Department;
-import com.waait.dto.Document;
 import com.waait.dto.Employee;
+import com.waait.dto.OffDocument;
 
 public interface EDocService {
 
@@ -38,4 +38,6 @@ public interface EDocService {
 //	기본문서 : 최종 결재자 - 승인버튼 클릭 시 approval table appStat update ~ ! document table docStat update ~ ! 
 	int updateFinalApproval(Map<String,Object> param);
 
+//	사원의 연차정보 가져오기
+	List<OffDocument> getOffDocumentList(Long empNo);
 }

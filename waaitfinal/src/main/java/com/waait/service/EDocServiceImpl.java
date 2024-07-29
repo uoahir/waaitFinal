@@ -59,6 +59,9 @@ public class EDocServiceImpl implements EDocService {
 			edocDao.insertVacation(session, param);
 			successCount ++;
 			
+			edocDao.updateEmployeeRemainingLeave(session, param);
+			successCount ++;
+			
 			
 			for(int i = 0; i < approval.length; i++) {
 					
@@ -186,12 +189,18 @@ public class EDocServiceImpl implements EDocService {
 	public int updateFinalApproval(Map<String, Object> param) {
 		int updateCount = 0;
 		System.out.println("service" + param);
+		
+		String docType = (String)param.get("docType");
+		System.out.println(docType);
 		try {
 			
 			edocDao.updateAppStat(session, param);
 			updateCount++;
 			edocDao.updateDocStatToApproval(session, param);
 			updateCount++;
+			if(docType.equals("T04")) {
+				edocDao.updateVacation(session, param);
+			}
 			
 		} catch(Exception e) {
 			throw new RuntimeException("One of the task failed", e);
@@ -210,6 +219,13 @@ public class EDocServiceImpl implements EDocService {
 		// TODO Auto-generated method stub
 		return edocDao.approvedDocument(session, empNo, page);
 	}
+
+	@Override
+	public List<OffDocument> getOffDocumentList(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.getOffDocumentList(session, empNo);
+	}
+	
 	
 	
 }

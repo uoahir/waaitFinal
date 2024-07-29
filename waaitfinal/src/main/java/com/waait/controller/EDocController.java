@@ -30,7 +30,6 @@ import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
 import com.waait.dto.BasicDocument;
 import com.waait.dto.Department;
-import com.waait.dto.Document;
 import com.waait.dto.Employee;
 import com.waait.dto.OffDocument;
 import com.waait.dto.TripDocument;
@@ -48,6 +47,11 @@ public class EDocController {
 	
 	private final EDocService service;
 	
+	public final static String RESULT_CODE_SUCCESS = "success";
+	public final static String RESULT_CODE_FAIL = "fail";
+	public final static int CODE_SUCCESS = 1;
+	public final static int CODE_FAIL = -1;
+	
 	@GetMapping("/basicedoc")
 	public void basicEdoc(@RequestParam String type,Model m) {
 		System.out.println(type);
@@ -61,14 +65,17 @@ public class EDocController {
 	
 	@PostMapping("/offedocend")
 	public String insertOff(@RequestBody OffDocument offDocument) {
+		long docWriter = getEmployeeH().getEmpNo();
 		System.out.println(offDocument);
 		OffDocument doc;
 		int vacaCount = getEmployeeH().getRemainingAnnualLeave();
 		System.out.println(vacaCount);
 		int vacaUsed = offDocument.getVacaUsed();
-		String empNo = offDocument.getDocWriter();
+		int empNo = offDocument.getDocWriter();
 		String vacaType = offDocument.getVacaType();
 		int vacaLeft = vacaCount - vacaUsed;
+		System.out.println(vacaLeft);
+		System.out.println(vacaUsed);
 		
 		try {
 			Map<String, Object> param = new HashMap<>();
@@ -77,6 +84,7 @@ public class EDocController {
 			param.put("vacaUsed", vacaUsed);
 			param.put("vacaType", vacaType);
 			param.put("vacaLeft", vacaLeft);
+			param.put("docWriter", docWriter);
 			
 			service.insertOffEdoc(offDocument, offDocument.getEmpNo(), param);
 			
@@ -243,11 +251,13 @@ public class EDocController {
 	}
 	
 	@ResponseBody
-	@PostMapping("/approval")
-	public ResponseEntity<List<Approval>> approval(@RequestBody Document doc) throws JsonMappingException, JsonProcessingException {
+	@PostMapping("/approval")  // 승인을 구분해줘야 함 -> 기본보고서 || 휴가신청 중간결재까지는 똑같고 최종승인에서 변경됨 !!!! 
+	public ResponseEntity<List<Approval>> approval(@RequestBody BasicDocument doc) throws JsonMappingException, JsonProcessingException {
 		
 		int docId = doc.getDocId();
-		int finalOrder = doc.getRnum();
+		int finalOrder = doc.getRnum(); // approval 의 사이즈를 rnum에다가 담아준 거임 == 최종결재자 번호임 
+		String docType = doc.getDocType();
+		int writer = doc.getDocWriter();
 		
 		// document 랑 approval 이랑 join where docId = #{docId} and  했을 때, appOrder 가지고와서 비교 !   
 		// login 한 아이디가 필요함 !!!! appEmp == loginedEmpNo -> getAppOrder 
@@ -256,6 +266,8 @@ public class EDocController {
 		Map<String,Object> param = new HashMap<>();
 		param.put("docId", docId);
 		param.put("empNo", empNo);
+		param.put("docType", docType);
+		param.put("writer", writer);
 		
 		Approval app = service.selectApprovalByDocIdAndEmpNo(param);
 		
@@ -274,10 +286,17 @@ public class EDocController {
 			// 최종결재자 !!! 
 			// 해당 docId, login된 empNo를 가지고, appStat을 승인, document table docstat 을 승인으로 변경	
 			int result = service.updateFinalApproval(param);
-			System.out.println("이게 최종결재자가 승인 눌렀을 때 실행되어야 하고 값은 2여야하는데 ? " + result);
 		}
 		
 		return ResponseEntity.ok(service.selectApprovalByDocId(doc.getDocId()));
+	}
+	
+	@ResponseBody
+	@GetMapping("/offcheck")
+	public List<OffDocument> offcheck(){
+		Long empNo = getEmployeeH().getEmpNo();
+		List<OffDocument> data = service.getOffDocumentList(empNo);
+		return data;
 	}
 	
 }

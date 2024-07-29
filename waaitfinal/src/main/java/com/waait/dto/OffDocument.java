@@ -1,6 +1,7 @@
 package com.waait.dto;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Objects;
 
 import lombok.AllArgsConstructor;
@@ -45,5 +46,13 @@ public class OffDocument extends AbstractDocument {
 		result = prime * result + Objects.hash(endDate, vacaType, startDate, vacaUsed);
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return "OffDocument [vacaType=" + vacaType + ", startDate=" + startDate + ", endDate=" + endDate + ", vacaUsed="
+				+ vacaUsed + ", empNo=" + Arrays.toString(empNo) + ", toString()=" + super.toString() + "]";
+	}
+	
+	
 
 }
