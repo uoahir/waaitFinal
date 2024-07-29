@@ -24,8 +24,8 @@
             <div class="sidebar-wrapper active">
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
-            <div class="logo">
-                <a href="index.html"><img src="/resources/images/logo.png" alt="Logo" srcset="" width="40px" height="40px"></a>
+            <div class="logo" style="height: 100; ">
+                <a href="index.html"><img src="/resources/images/logo.png" alt="Logo" srcset="" width="150px" style="height:90px"></a>
             </div>
             <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -47,6 +47,30 @@
                     <input class="form-check-input  me-0" type="checkbox" id="toggle-dark" style="cursor: pointer">
                     <label class="form-check-label"></label>
                 </div>
+                <script>
+                	const darkmodeResult = document.querySelector("html[lang='en']");
+                	let result;
+                	if(darkmodeResult.getAttribute("data-bs-theme") == "dark") {
+                		document.querySelector("img[alt='Logo']").src = "${path }/resources/images/waaitLogoWhite.png";
+                		result = true;
+                	} else {
+                		document.querySelector("img[alt='Logo']").src = "${path }/resources/images/logo.png";
+                		result = false;
+                	}
+                	
+                	document.getElementById("toggle-dark").addEventListener("click", e => {
+                		const logoTag = document.querySelector("img[alt='Logo']");
+                		console.log(logoTag);
+                		if(result == false) {
+                			console.log("왔냐?");
+	                		logoTag.src = "${path }/resources/images/waaitLogoWhite.png";
+							result = true;                			
+                		} else {
+                			logoTag.src = "${path }/resources/images/logo.png";
+                			result = false; 
+                		}
+                	})
+                </script>
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
                     role="img" class="iconify iconify--mdi" width="20" height="20" preserveAspectRatio="xMidYMid meet"
                     viewBox="0 0 24 24">

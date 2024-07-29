@@ -43,13 +43,13 @@
                     <div class="mb-12">
                     	<label for="scheColor" class="form-label"> 캘린더 색상</label>
                         <select id="color" name="scheColor">
-			              <option value="red">빨강색</option>
-			              <option value="orange">주황색</option>
-			              <option value="yellow">노랑색</option>
-			              <option value="green">초록색</option>
-			              <option value="blue">파랑색</option>
-			              <option value="indigo">남색</option>
-			              <option value="purple">보라색</option>
+			              <option value=#FF6F61>빨강색</option>
+			              <option value="#FFB347">주황색</option>
+			              <option value="#F8BBD0">분홍색</option>
+			              <option value="#B2D7A3">초록색</option>
+			              <option value="#A7C7E7">파랑색</option>
+			              <option value="#779ECB">남색</option>
+			              <option value="#CBAACB">보라색</option>
 			            </select>
 			            <label for="scheAllDay" class="form-label">종일일정</label>
                         <input type="checkbox" name="scheAllDay" value="true" id="scheAllDay">
