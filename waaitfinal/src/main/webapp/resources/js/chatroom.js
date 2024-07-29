@@ -171,6 +171,11 @@
 		const chatEmpNo = [];
 		const checkboxes = document.querySelectorAll('input[name="chatemps"]:checked');
 		
+		if(checkboxes.length === 0){
+			alert("초대할 사원을 선택해주세요");
+			return;
+		}
+		
 		checkboxes.forEach(function(checkbox) {
         chatEmpNo.push(checkbox.value);
 	    });

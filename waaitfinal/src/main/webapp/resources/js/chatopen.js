@@ -83,6 +83,9 @@
 	
 	//채팅방추가 화면 전환 일반채팅
 	document.getElementById("modal_chatinvitation_groupchat").addEventListener("click",function(){
+		
+		
+		
 		$.ajax({
 			type : "GET",
 			url : path+"/chat/chatinvitation.do",
@@ -92,6 +95,16 @@
 			success : function(data){
 				//일반채팅 화면 넣기
 				document.querySelector("#chatting_main_content").innerHTML = data;
+				
+				// form태그 submit때 체크박스가 체크 되지 않았다면 alert창 띄우기
+				document.getElementById('create_chatroom').addEventListener('click', function(event) {
+				    const checkboxes = document.querySelectorAll('input[name="chatemps"]:checked');
+				    if (checkboxes.length === 0) {
+				        event.preventDefault(); // 폼 제출 중단
+				        alert("사원을 선택해주세요");
+				    }
+				});
+				
 				//이벤트 부여 사원번호출력
 				const profiles = document.querySelectorAll(".chatting_userlist_printarea_profile");
 				profiles.forEach((profilediv, i)=>{
