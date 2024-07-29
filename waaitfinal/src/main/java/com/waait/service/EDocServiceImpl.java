@@ -40,6 +40,50 @@ public class EDocServiceImpl implements EDocService {
 		return edocDao.deptList(session);
 	}
 
+//	휴가신청서 insert 로직 (트랜잭셔널 ~ )
+	@Transactional
+	@Override
+	public int insertOffEdoc(AbstractDocument document, int[] approval, Map<String,Object> param) {
+		
+		int successCount = 0;
+		
+		try {
+			edocDao.insertDoc(session, (OffDocument)document);
+			successCount ++;
+			edocDao.insertOffContent(session, (OffDocument)document);
+			successCount ++;
+			
+			int appId = document.getDocId();
+			param.put("docId", appId);
+			
+			edocDao.insertVacation(session, param);
+			successCount ++;
+			
+			edocDao.updateEmployeeRemainingLeave(session, param);
+			successCount ++;
+			
+			
+			for(int i = 0; i < approval.length; i++) {
+					
+				Approval app = Approval.builder().appEmp(approval[i]).docId(appId).appOrder(i+1).build();
+				System.out.println(app);
+				edocDao.insertApproval(session, app);
+			}	
+			
+			successCount++;
+			// approval line 데이터가 생성됨. -> 결재라인에 결재자들이 순서대로 들어가있음
+			// Document에 있는 현재결재자 컬럼값을 바로 업데이트 해줘야 함. 
+			
+			edocDao.updateFirstApprover(session, appId);
+			successCount++;
+			
+		} catch(Exception e) {
+			throw new RuntimeException("One of the tasks failed", e);
+		}
+		return successCount;
+	}
+	
+	
 //	내부보고서 insert 로직 ( 트랜잭셔널 ~ )
 	@Transactional
 	@Override
@@ -144,17 +188,24 @@ public class EDocServiceImpl implements EDocService {
 	@Override
 	public int updateFinalApproval(Map<String, Object> param) {
 		int updateCount = 0;
+		System.out.println("service" + param);
+		
+		String docType = (String)param.get("docType");
+		System.out.println(docType);
 		try {
 			
 			edocDao.updateAppStat(session, param);
 			updateCount++;
 			edocDao.updateDocStatToApproval(session, param);
 			updateCount++;
+			if(docType.equals("T04")) {
+				edocDao.updateVacation(session, param);
+			}
 			
 		} catch(Exception e) {
 			throw new RuntimeException("One of the task failed", e);
 		}
-		return 0;
+		return updateCount;
 	}
 
 	@Override
@@ -162,17 +213,18 @@ public class EDocServiceImpl implements EDocService {
 		// TODO Auto-generated method stub
 		return edocDao.inprogressDocument(session, empNo, page);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
+	@Override
+	public List<AbstractDocument> approvedDocument(Long empNo, Map<String, Integer> page) {
+		// TODO Auto-generated method stub
+		return edocDao.approvedDocument(session, empNo, page);
+	}
 
-	
+	@Override
+	public List<OffDocument> getOffDocumentList(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.getOffDocumentList(session, empNo);
+	}
 	
 	
 	

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 
 <jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
@@ -44,9 +45,8 @@
 							<th>Document Number</th>
 							<th>Type</th>
 							<th>Title</th>
-							<th>Approver</th>
 							<th>Submission Date</th>
-							<th>Status</th>
+							<th>Approved Date</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -57,10 +57,9 @@
 									<td>${d.type.type }</td>
 									<td>${d.docTitle }</td>
 									<td>${d.docDate }</td>
-									<td>${d.docDate }</td><!-- appDate -->
 									<td>
-										<span class="badge bg-light-primary">${d.docStat }</span>
-									</td>
+										<fmt:formatDate value = "${d.approvalOne.appDate }" type="date" pattern = "yyyy-MM-dd" />
+									</td><!-- appDate -->
 								</tr>
 							</c:forEach>
 						</c:if> 
