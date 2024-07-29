@@ -2,13 +2,14 @@ package com.waait.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.waait.dto.Department;
 import com.waait.dto.Employee;
+import com.waait.dto.MovingDepartment;
 import com.waait.service.EmployeeManagementService;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeManagementController {
 	
 	private final EmployeeManagementService service;
+	//private final ObjectMapper mapper;
 	
 	@GetMapping("/managemain.do")
 	public String manageMainView(Model model) {
@@ -102,7 +105,7 @@ public class EmployeeManagementController {
 	@PostMapping("/searchempformodifydept.do")
 	public @ResponseBody Map<String, Object> searchEmpForModifyDepartment(@RequestBody Map<String, String> searchParam) {
 		String empId = searchParam.get("empId");
-		String empName = searchParam.get("empName");;
+		String empName = searchParam.get("empName");
 		System.out.println("empId : " + empId + " empName : " + empName);
 		
 		Employee searchEmployee = service.searchEmpForModifyDepartment(searchParam);
@@ -120,18 +123,99 @@ public class EmployeeManagementController {
 		return responseMap;
 	}
 	
+	@PostMapping("/changedeptselect.do")
+	public @ResponseBody Map<String, Object> getTeamListByDeptCode(@RequestBody Map<String, String> paramMap) {
+		String deptCode = paramMap.get("deptCode");
+		System.out.println("deptCode : " + deptCode);
+		List<Department> teamList = service.getTeamListByDeptCode(deptCode);
+		
+		Map<String, Object> responseMap = new HashMap<String, Object>();
+		responseMap.put("teamList", teamList);
+		
+		return responseMap;
+	}
+	
 	@PostMapping("/empmodifydept.do")
 	public @ResponseBody int modifyEmployeeDept(String wantModifyDeptName, String wantModifyDeptCode, String wantModifyTeamCode, String empId) {
 		int result = 0;
-		System.out.println("wantModifyDeptCode : " + wantModifyDeptCode);
+		System.out.println("wantModifyDeptCode : " + wantModifyDeptCode + " wantModifyTeamCode : " + wantModifyTeamCode);
 		
 		Employee emp = service.getEmployeeById(empId);
+		emp = setEmpFieldDeptName(emp);
 		
-		Map<String, Object> modifyParam = Map.of("wantModifyDeptCode", wantModifyTeamCode, "empId", empId, "empOriInfo", emp);
+		Map<String, Object> modifyParam = new HashMap<String, Object>();
+		modifyParam.put("wantModifyTeamCode", wantModifyTeamCode);
+		modifyParam.put("wantModifyDeptCode", wantModifyDeptCode);
+		modifyParam.put("empId", empId);
+		modifyParam.put("empOriInfo", emp);
+		modifyParam.put("wantModifyDeptName", wantModifyDeptName);
+		
 		result = service.modifyEmployeeDept(modifyParam);
 		if(result < 0) return result;
 		
 		
+		
+		return result;
+	}
+	
+	@PostMapping("/joinmovingdepartment.do")
+	public @ResponseBody Map<String, Object> joinMovingDepartment(@RequestBody Map<String, String> param) throws Exception {
+		System.out.println("param : " + param);
+		String status = param.get("status");
+		Map<String, Object> sqlParam = new HashMap<String, Object>();
+		if(status.equals("date")) {
+			System.out.println("date조건문 들어옴");
+			String startDateStr = param.get("startDate");
+			String endDateStr = param.get("endDate");
+			Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
+			Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
+			
+			sqlParam.put("status", status);
+			sqlParam.put("startDate", startDate);
+			sqlParam.put("endDate", endDate);
+		} else {
+			String searchParam = param.get("searchParam");
+			
+			sqlParam.put("status", status);
+			sqlParam.put("searchParam", searchParam);
+		}
+		
+		List<MovingDepartment> movingDepartmentList = service.searchMovingDepartment(sqlParam);
+		System.out.println("joinList : " + movingDepartmentList);
+		
+		Map<String, Object> returnMap = Map.of("movingDepartmentList", movingDepartmentList);
+		
+		return returnMap;
+	}
+	
+	@GetMapping("/enrolldepartment.do")
+	public @ResponseBody int enrollDepartment(String deptName, String teamName) {
+		int result = 0;
+		System.out.println("deptName : " + deptName + " teamNameStr : " + teamName);
+		List<Integer> existDeptCode = service.getDeptCode();
+		existDeptCode.forEach(System.out::println);
+		existDeptCode.sort((p, n) -> {
+			return n - p;
+		});
+		System.out.println("========== 정렬후 ==========");
+		existDeptCode.forEach(System.out::println);
+		
+		String newDeptCode = "D" + (existDeptCode.get(0) + 1);
+		
+		Map<String, Object> sqlParam = new HashMap<String, Object>();
+		if(teamName == "") {
+			System.out.println("공란");
+			sqlParam.put("newDeptCode", newDeptCode);
+			sqlParam.put("newDeptName", deptName + "부");
+			
+		} else {
+			sqlParam.put("newDeptCodeNumber", existDeptCode.get(0) + 1);
+			sqlParam.put("newDeptCode", newDeptCode);
+			sqlParam.put("newDeptName", deptName + "부");
+			sqlParam.put("newTeamNameStr", teamName);
+		}
+		
+		result = service.enrollDepartment(sqlParam);
 		
 		return result;
 	}
@@ -178,6 +262,7 @@ public class EmployeeManagementController {
 		
 		if(emp.getDeptName() == null) emp.setDeptName("대표실");
 		System.out.println("setFieldDeptName : " + emp);
+		
 		return emp;
 	}
 	

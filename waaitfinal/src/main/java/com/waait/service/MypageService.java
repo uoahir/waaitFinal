@@ -11,6 +11,8 @@ public interface MypageService {
 //	int updateEmpPwd(Employee e);	
 	//사원 정보 불러오기
 	List<Mypage> myInfoList(Long empNumber);
+	//총 연차,잔여연차 출력
+	
 	
 	
 }
