@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.waait.dto.Department;
 import com.waait.dto.Employee;
+import com.waait.dto.JobLevel;
 import com.waait.dto.MovingDepartment;
 
 @Repository
@@ -19,6 +20,10 @@ public class EmployeeManagementDao {
 
 	public List<Employee> getEmployees(SqlSession session) {
 		return session.selectList("em.getEmployees");
+	}
+	
+	public List<JobLevel> getJobLevel(SqlSession session) {
+		return session.selectList("em.getJobLevel");
 	}
 	
 	public Employee getEmployeeById(SqlSession session, String empId) {
@@ -59,6 +64,14 @@ public class EmployeeManagementDao {
 
 	public int enrollDepartmentWithTeam(SqlSession session, Map<String, String> teamSqlParam) {
 		return session.insert("em.enrollDepartmentWithTeam", teamSqlParam);
+	}
+
+	public int enrollTeamWithParentDept(SqlSession session, Map<String, Object> sqlParam) {
+		return session.insert("em.enrollTeamWithParentDept", sqlParam);
+	}
+
+	public int enrollTeamNoParentDept(SqlSession session, Map<String, Object> sqlParam) {
+		return session.insert("em.enrollTeamNoParentDept", sqlParam);
 	}
 
 

@@ -367,18 +367,75 @@
 			</script>
 			
 			<div id="div1-5" style="margin-left:10px">
-				<h1>팀 추가하기</h1>
-				<input type="radio" name="checkInheritDept" value="y">있음
-				<input type="radio" name="checkInheritDept" value="n">없음
-				<c:if test="${not empty depts }">
-					<select id="selectDepartment">
-						<c:forEach var="d" items="${depts }">
-							<option id="${d.deptCode }">${d.deptName }</option>
-						</c:forEach>
-					</select>
-				</c:if>
+				<div id="headLine">
+					<h1>팀 추가하기</h1>
+					<input type="radio" name="checkInheritDept" value="y">있음
+					<input type="radio" name="checkInheritDept" value="n">없음
+					<c:if test="${not empty depts }">
+						<select id="selectDepartment" hidden="true">
+							<c:forEach var="d" items="${depts }">
+								<option value="${d.deptCode }">${d.deptName }</option>
+							</c:forEach>
+						</select>
+					</c:if>
+				</div>
+				<div id="enrollTeamContainer">
+					<input type="text" name="createTeam" placeholder="팀 이름 입력" hidden="true">
+					<button onclick="enrollTeam()">팀 등록</button>
+				</div>
 			</div>
 		</div>
+		<script>
+			document.querySelectorAll("input[name='checkInheritDept']").forEach(e => {
+				e.addEventListener("click", e => {
+					if(e.target.checked && e.target.value == "y") {
+						document.getElementById("selectDepartment").hidden = false;
+						document.querySelector("input[name='createTeam']").hidden = false;
+					} else {
+						document.getElementById("selectDepartment").hidden = true;
+						document.querySelector("input[name='createTeam']").hidden = false;
+					}
+				})
+			})
+			
+			const enrollTeam = () => {
+				const teamName = document.querySelector("input[name='createTeam']").value;
+				let param = {};
+				if(teamName.length == 0) {
+					alert("팀 이름을 입력해주세요");
+					return;
+				} else {
+					document.querySelectorAll("input[name='checkInheritDept']").forEach(e => {
+						if(e.checked && e.value == 'y') {
+							console.log("있음체크");
+							const parentDeptCode = document.getElementById("selectDepartment").value;
+							console.log("parentDeptCode : " + parentDeptCode);
+							param = {
+								parentDeptCode : parentDeptCode,
+								teamName : teamName
+							}
+						} else if(e.checked && e.value == 'n') {
+							console.log("없음체크");
+							param = {
+								teamName : teamName
+							}
+						}
+					})
+					
+					fetch("${path }/manage/enrollteam.do", {
+						method : "POST",
+						headers : {
+							"Content-Type" : "application/json"
+						},
+						body : JSON.stringify(param)
+					})
+					.then(response => response.text())
+					.then(data => {
+						console.log(data);
+					});
+				}
+			}
+		</script>
 		<div id="empInfoContainer">
 			<table>
 					<tr>

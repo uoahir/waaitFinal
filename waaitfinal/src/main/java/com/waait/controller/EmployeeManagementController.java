@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientAutoConfiguration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.waait.dto.Department;
 import com.waait.dto.Employee;
+import com.waait.dto.JobLevel;
 import com.waait.dto.MovingDepartment;
 import com.waait.service.EmployeeManagementService;
 
@@ -35,6 +35,39 @@ public class EmployeeManagementController {
 	
 	private final EmployeeManagementService service;
 	//private final ObjectMapper mapper;
+	
+	//test
+	@GetMapping("/empmanagemain.do")
+	public String empManageMainView() {
+		return "empmanage/empmanagemain";
+	}
+	
+	//test
+	@GetMapping("/enrollemployeeview.do")
+	public String empEnrollView(Model model) {
+		List<Department> departmentList = getDepartmentList();
+		List<JobLevel> jobLevelList = service.getJobLevel();
+		System.out.println("departmentList : " + departmentList);
+		System.out.println("jobLevelList : " + jobLevelList);
+		
+		model.addAttribute("depts", departmentList);
+		model.addAttribute("jobs", jobLevelList);
+		return "empmanage/enrollemployee";
+	}
+	
+	@PostMapping("/getteam.do")
+	public @ResponseBody List<Department> getTeamByDeptCode(String deptCode) {
+		if(deptCode.equals("D1")) {
+			List<Department> teamList = getTeamList();
+			teamList = teamList.stream().filter(team -> {
+				return team.getParentCode().equals("D1");
+			}).collect(Collectors.toList());
+			return teamList;
+		} else {
+			List<Department> teamList = service.getTeamListByDeptCode(deptCode);			
+			return teamList;
+		}
+	}
 	
 	@GetMapping("/managemain.do")
 	public String manageMainView(Model model) {
@@ -51,7 +84,7 @@ public class EmployeeManagementController {
 	}
 	
 	@PostMapping("/enrollemployee.do")
-	public String enrollEmployee(@ModelAttribute Employee emp, MultipartFile profile,
+	public String enrollEmployee(@ModelAttribute Employee emp, String engName, MultipartFile profile,
 									MultipartFile signfile, HttpSession session) {
 		String signfilePath = session.getServletContext().getRealPath("/resources/upload/emp/signfile/");
 		String profilePath = session.getServletContext().getRealPath("/resources/upload/emp/profile/");
@@ -63,7 +96,7 @@ public class EmployeeManagementController {
 			String ext = oriName.substring(oriName.lastIndexOf("."));
 			Date now = new Date(System.currentTimeMillis());
 			int randomNum = (int) (Math.random() * 10000) + 1;
-			String rename = "employeeprofile" + (new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(now)) + "_"
+			String rename = engName + "profile" + (new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(now)) + "_"
 								+ randomNum + ext;
 			
 			
@@ -71,7 +104,7 @@ public class EmployeeManagementController {
 			if(!dirProfile.exists()) dirProfile.mkdirs();
 			
 			try {
-				signfile.transferTo(new File(profilePath, rename));
+				profile.transferTo(new File(profilePath, rename));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -79,11 +112,11 @@ public class EmployeeManagementController {
 		
 		if(signfile != null) {
 			System.out.println("signFile originalName : " + signfile.getOriginalFilename());
-			String oriName = profile.getOriginalFilename();
+			String oriName = signfile.getOriginalFilename();
 			String ext = oriName.substring(oriName.lastIndexOf("."));
 			Date now = new Date(System.currentTimeMillis());
 			int randomNum = (int) (Math.random() * 10000) + 1;
-			String rename = "employeesignfile" + (new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(now)) + "_"
+			String rename = engName + "signfile" + (new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(now)) + "_"
 								+ randomNum + ext;
 			
 			
@@ -97,7 +130,7 @@ public class EmployeeManagementController {
 			}
 		}
 		
-		emp.setEmpEmail(emp.getEmpId() + "@waait.com");
+		emp.setEmpEmail(engName + "@waait.com");
 		
 		return null;
 	}
@@ -216,6 +249,25 @@ public class EmployeeManagementController {
 		}
 		
 		result = service.enrollDepartment(sqlParam);
+		
+		return result;
+	}
+	
+	@PostMapping("/enrollteam.do")
+	public @ResponseBody int enrollTeam(@RequestBody Map<String, Object> jsonParam) {
+		int result = 0;
+		
+		List<Integer> existDeptCode = service.getDeptCode();
+		existDeptCode.forEach(System.out::println);
+		existDeptCode.sort((p, n) -> {
+			return n - p;
+		});
+		
+		String newTeamCode = "D" + (existDeptCode.get(0) + 1);
+		
+		jsonParam.put("newTeamCode", newTeamCode);
+		
+		result = service.enrollTeam(jsonParam);
 		
 		return result;
 	}

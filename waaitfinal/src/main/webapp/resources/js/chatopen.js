@@ -9,8 +9,8 @@
 	//ws : http
 	//wss : https
 	// 클라이언트에서 WebSocket 연결 설정
-	const server = new WebSocket("ws://localhost:5731/chat");	// /+chatRoomNo
-
+	//const server = new WebSocket("ws://localhost:5731/chat");	// /+chatRoomNo
+	const server = new WebSocket("wss://14.36.141.71:15555/chat");
 	//입장했을때 실행됨. // WebSocket 연결이 열렸을 때
 	server.onopen=(response)=>{
 		const msg = new Message("open","",loginId);
@@ -29,7 +29,8 @@
 			//console.log("되니?");
 			chatserver.onload = function() {
 				//console.log("이건 되니?");
-				chatserver.socket = new WebSocket("ws://localhost:5731/chat");
+				//chatserver.socket = new WebSocket("ws://localhost:5731/chat");
+				chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
 				//console.log("이이거는 되니?");
 			}
 		}		
@@ -120,7 +121,8 @@
 		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatroomNo+"&loginEmpNo="+loginEmpNo,"_blank","top=100, left=400, height=700, width=550");
 		
 		chatserver.onload = function(){
-			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
+			//chatserver.socket = new WebSocket("ws://localhost:5731/chat");
+			chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
 		}
 	}
 	

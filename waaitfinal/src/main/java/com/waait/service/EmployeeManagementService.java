@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.waait.dao.EmployeeManagementDao;
 import com.waait.dto.Department;
 import com.waait.dto.Employee;
+import com.waait.dto.JobLevel;
 import com.waait.dto.MovingDepartment;
 
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,10 @@ public class EmployeeManagementService {
 
 	public List<Employee> getEmployees() {
 		return dao.getEmployees(session);
+	}
+	
+	public List<JobLevel> getJobLevel() {
+		return dao.getJobLevel(session);
 	}
 	
 	public Employee getEmployeeById(String empId) {
@@ -92,6 +97,18 @@ public class EmployeeManagementService {
 		}
 		return result;
 	}
+
+	public int enrollTeam(Map<String, Object> jsonParam) {
+		int result = 0;
+		jsonParam.put("teamName", jsonParam.get("teamName") + "팀");
+		if(jsonParam.containsKey("parentDeptCode")) {
+			result = dao.enrollTeamWithParentDept(session, jsonParam);
+		} else {
+			result = dao.enrollTeamNoParentDept(session, jsonParam);
+		}
+		return result;
+	}
+
 
 
 }

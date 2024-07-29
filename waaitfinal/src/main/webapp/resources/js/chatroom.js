@@ -4,8 +4,8 @@
 	console.log(loginId);
 	
 	//클라이언트에서 WebSocket 연결설정
-	const chatserver = new WebSocket("ws://localhost:5731/chat");
-	
+	//const chatserver = new WebSocket("ws://localhost:5731/chat");
+	const chatserver = new WebSocket("wss://14.36.141.71:15555/chat");
 	//WebSocket이 연결됐을때 실행
 	chatserver.onopen = (response) =>{
 		const msg = new Message("open","",loginId);
