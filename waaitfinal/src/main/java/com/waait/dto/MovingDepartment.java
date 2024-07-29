@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MovingDepartment {
+public class MovingDepartment{
 	private int movingDepartmentNo;
 	private int empNo;
-	private String previouseDept;
+	private String previousDept;
 	private String nextDept;
-	private String previouseTeam;
+	private String previousTeam;
 	private String nextTeam;
+	private String modifyDate;
+	private Employee employee;
 }

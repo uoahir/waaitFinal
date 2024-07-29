@@ -319,8 +319,8 @@ public class MailService {
 		return dao.getSpamMailCount(session, param);
 	}
 
-	public int getSearchMailTotalData(Map<String, Object> searchParam) {
-		return dao.getSearchMailTotalData(session, searchParam);
+	public int getSearchReceiveMailTotalData(Map<String, Object> searchParam) {
+		return dao.getSearchReceiveMailTotalData(session, searchParam);
 	}
 	
 	@Transactional
@@ -338,6 +338,10 @@ public class MailService {
 		
 		result = dao.settingNumPerpage(session, mailSettingParam);
 		return result;
+	}
+
+	public List<RecentSearch> getRecentSearch(long empNo) {
+		return dao.getRecentSearch(session, empNo);
 	}
 
 

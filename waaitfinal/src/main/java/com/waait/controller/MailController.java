@@ -163,6 +163,8 @@ public class MailController {
 		List<Mail> mailList = service.getReceiveMail(mailSettings);
 		
 		int notReadCount = service.notReadDataCount(mailSettings);
+		
+		List<RecentSearch> searchList = service.getRecentSearch(empNo);
 //		List<MyMailBoxDetail> myMailBoxList = service.getMyMailBox(empNo);
 		
 		System.out.println("가져온 mailList : " + mailList);
@@ -704,7 +706,7 @@ public class MailController {
 		switch(modifySearchType) {
 			case "내용" : searchType = "M.MAILCONTENT"; break;
 			case "타이틀" : searchType = "M.MAILTITLE"; break;
-			case "보낸사람" : searchType = "M.SENDERMAILADDRESS"; break;
+			case "보낸사람" : searchType = "E.EMPEMAIL"; break;
 		}
 		
 		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);
@@ -713,7 +715,7 @@ public class MailController {
 		int numPerpage = 0;
 		numPerpage = getUserSettingNumPerpage(empNo);
 		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
-		int totalData = service.getSearchMailTotalData(searchParam);
+		int totalData = service.getSearchReceiveMailTotalData(searchParam);
 		int pageBarSize = 5;
 		String url = "/mail/searchmail.do";
 		

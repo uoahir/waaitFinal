@@ -159,16 +159,65 @@ public class EmployeeManagementController {
 	}
 	
 	@PostMapping("/joinmovingdepartment.do")
-	@ResponseBody
-	public void joinMovingDepartment(@RequestBody Map<String, String> param) throws Exception {
+	public @ResponseBody Map<String, Object> joinMovingDepartment(@RequestBody Map<String, String> param) throws Exception {
 		System.out.println("param : " + param);
-		String startDateStr = param.get("startDate");
-		Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
-		Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse("2024-07-26");
-		Map<String, Object> sqlParam = Map.of("startDate", startDate, "endDate", endDate);
-		//List<MovingDepartment> movingDepartmentList = service.searchMovingDepartment(sqlParam);
+		String status = param.get("status");
+		Map<String, Object> sqlParam = new HashMap<String, Object>();
+		if(status.equals("date")) {
+			System.out.println("date조건문 들어옴");
+			String startDateStr = param.get("startDate");
+			String endDateStr = param.get("endDate");
+			Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateStr);
+			Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateStr);
+			
+			sqlParam.put("status", status);
+			sqlParam.put("startDate", startDate);
+			sqlParam.put("endDate", endDate);
+		} else {
+			String searchParam = param.get("searchParam");
+			
+			sqlParam.put("status", status);
+			sqlParam.put("searchParam", searchParam);
+		}
 		
+		List<MovingDepartment> movingDepartmentList = service.searchMovingDepartment(sqlParam);
+		System.out.println("joinList : " + movingDepartmentList);
 		
+		Map<String, Object> returnMap = Map.of("movingDepartmentList", movingDepartmentList);
+		
+		return returnMap;
+	}
+	
+	@GetMapping("/enrolldepartment.do")
+	public @ResponseBody int enrollDepartment(String deptName, String teamName) {
+		int result = 0;
+		System.out.println("deptName : " + deptName + " teamNameStr : " + teamName);
+		List<Integer> existDeptCode = service.getDeptCode();
+		existDeptCode.forEach(System.out::println);
+		existDeptCode.sort((p, n) -> {
+			return n - p;
+		});
+		System.out.println("========== 정렬후 ==========");
+		existDeptCode.forEach(System.out::println);
+		
+		String newDeptCode = "D" + (existDeptCode.get(0) + 1);
+		
+		Map<String, Object> sqlParam = new HashMap<String, Object>();
+		if(teamName == "") {
+			System.out.println("공란");
+			sqlParam.put("newDeptCode", newDeptCode);
+			sqlParam.put("newDeptName", deptName + "부");
+			
+		} else {
+			sqlParam.put("newDeptCodeNumber", existDeptCode.get(0) + 1);
+			sqlParam.put("newDeptCode", newDeptCode);
+			sqlParam.put("newDeptName", deptName + "부");
+			sqlParam.put("newTeamNameStr", teamName);
+		}
+		
+		result = service.enrollDepartment(sqlParam);
+		
+		return result;
 	}
 	
 	

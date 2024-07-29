@@ -168,21 +168,39 @@
 				<div>
 					<h1>인사이동 내역조회</h1>
 					<select id="joinBySelect">
-						<option value="이름">이름으로 조회</option>
-						<option value="아이디">아이디로 조회</option>
-						<option value="기간">기간으로 조회</option>
+						<option value="name">이름으로 조회</option>
+						<option value="id">아이디로 조회</option>
+						<option value="date">기간으로 조회</option>
 					</select>
 					<input type="text" name="parameter" placeholder="입력">
 					<input type="date" name="startDate" hidden="true">
 					<input type="date" name="endDate" hidden="true">
 					<button onclick="joinMovingDepartment()">조회하기</button>
+					<div id="searchMVDContainer">
+						
+					</div>
+				</div>
+			</div>
+			<div id="div1-4" style="margin-left : 10px;">
+				<div id="deptInputContainer">
+					<h1>부서 추가하기</h1>
+					<input type="text" name="deptName" placeholder="부서명 입력">
+					<h3>팀 존재 여부</h3>
+					<input type="radio" name="existTeam" value='y'>있음
+					<input type="radio" name="existTeam" value='n'>없음
+				</div>
+				<div id="teamInputContainer">
+					
+				</div>
+				<div id="submitDeptButtonContainer">
+				
 				</div>
 			</div>
 			<script>
 				document.getElementById("joinBySelect").addEventListener("change", e => {
 					const select = e.currentTarget;
 					
-					if(select[select.selectedIndex].value == "기간") {
+					if(select[select.selectedIndex].value == "date") {
 						console.log("조건문 왔음");
 						document.querySelector("input[name='startDate']").hidden = false;
 						document.querySelector("input[name='endDate']").hidden = false;
@@ -199,7 +217,7 @@
 					let searchParam = "";
 					let param;
 					
-					if(status == "기간") {
+					if(status == "date") {
 						const startDate = document.querySelector("input[name='startDate']").value;
 						const endDate = document.querySelector("input[name='endDate']").value;
 						param = {
@@ -224,10 +242,142 @@
 					})
 					.then(response => response.json())
 					.then(data => {
-						console.log(data);
+						const movingDepartmentList = data.movingDepartmentList;
+						
+						if(movingDepartmentList.length > 0) {
+							let tableStr = "<table>"
+											+ "<tr>"
+												+ "<th>사원이름</th>"
+												+ "<th>변경 전 부서</th>"
+												+ "<th>변경 후 부서</th>"
+												+ "<th>변경 전 팀</th>"
+												+ "<th>변경 후 팀</th>"
+												+ "<th>변경 날짜</th>"
+											+ "</tr>";
+							for(let i = 0; i < movingDepartmentList.length; i++) {
+								let movingDepartmentData = movingDepartmentList[i];
+								tableStr += "<tr>"
+												+ "<td>" + movingDepartmentData["employee"].empName + "</td>"
+												+ "<td>" + movingDepartmentData["previousDept"] + "</td>"
+												+ "<td>" + movingDepartmentData["nextDept"] + "</td>"
+												+ "<td>" + movingDepartmentData["previousTeam"] + "</td>"
+												+ "<td>" + movingDepartmentData["nextTeam"] + "</td>"
+												+ "<td>" + movingDepartmentData["modifyDate"] + "</td>"
+							}
+							tableStr += "</table>";
+							document.getElementById("searchMVDContainer").innerHTML = tableStr;
+						} else {
+							alert("조회된 데이터가 없습니다.");
+						}
 					});
 				}
+				
+				document.querySelectorAll("input[name='existTeam']").forEach(e => {
+					e.addEventListener("click", e => {
+						document.querySelectorAll("input[name='existTeam']").forEach(e => {
+							
+							if(e.checked && e.value == 'n') {
+								document.getElementById("teamInputContainer").innerHTML = "";
+								const button = document.createElement("button");
+								button.setAttribute("onclick", "enrollDepartment()");
+								button.innerText = "등록";
+								document.getElementById("submitDeptButtonContainer").appendChild(button);
+							} else if(e.checked && e.value == 'y') {
+								document.getElementById("submitDeptButtonContainer").innerHTML = "";
+								const teamInput = document.createElement("input");
+								teamInput.setAttribute("name", "teamName");
+								teamInput.setAttribute("type", "text");
+								teamInput.setAttribute("placeholder", "팀명 입력");
+								
+								const addButton = document.createElement("button");
+								addButton.setAttribute("onclick", "addTeamInput()");
+								addButton.innerText = "팀 추가";
+								
+								const deleteButton = document.createElement("button")
+								deleteButton.setAttribute("onclick", "deleteTeamInput()");
+								deleteButton.innerText = "팀 입력란 삭제";
+								
+								const button = document.createElement("button");
+								button.setAttribute("onclick", "enrollDepartment()");
+								button.innerText = "등록";
+								
+								document.getElementById("submitDeptButtonContainer").appendChild(button);
+								document.getElementById("teamInputContainer").appendChild(teamInput);
+								document.getElementById("teamInputContainer").appendChild(addButton);
+								document.getElementById("teamInputContainer").appendChild(deleteButton);
+							}
+						});
+					});
+				});
+				
+				const enrollDepartment = () => {
+					const newDeptName = document.querySelector("input[name='deptName']").value;
+					let newTeamName = "";
+					let spaceBoolean = false;
+					document.querySelectorAll("input[name='existTeam']").forEach(e => {
+						console.log(e);
+						if(e.value == 'y') {
+							console.log('y');
+							const teamNameInput = document.querySelectorAll("input[name='teamName']");
+							for(let i = 0; i < teamNameInput.length; i++) {
+								if(teamNameInput[i].value == "") {
+									spaceBoolean = true;
+									alert("입력란은 공란일 수 없습니다.");
+									return;
+								} else {
+									if(i == teamNameInput.length - 1) {
+										newTeamName += teamNameInput[i].value;
+									} else {
+										newTeamName += teamNameInput[i].value + ",";
+									}
+									
+								}
+							}
+						}
+						
+					})
+					if(spaceBoolean) return;
+					
+					console.log("newTeamName : " + newTeamName);
+					
+					fetch("${path }/manage/enrolldepartment.do?deptName=" + newDeptName + "&teamName=" + newTeamName)
+					.then(response => response.text())
+					.then(data => {
+						console.log(data);
+					});
+					
+				}
+				
+				const addTeamInput = () => {
+					const teamInput = document.createElement("input");
+					const div = document.createElement("div");
+					teamInput.setAttribute("name", "teamName");
+					teamInput.setAttribute("type", "text");
+					teamInput.setAttribute("placeholder", "팀명 입력");
+					div.appendChild(teamInput);
+					document.getElementById("teamInputContainer").appendChild(div);
+				}
+				
+				const deleteTeamInput = () => {
+					//const teamInputs = document.querySelectorAll("input[name='teamName']");
+					const teamInputContainer = document.getElementById("teamInputContainer");
+					console.log(teamInputContainer.lastElementChild);
+					teamInputContainer.removeChild(teamInputContainer.lastElementChild);
+				}
 			</script>
+			
+			<div id="div1-5" style="margin-left:10px">
+				<h1>팀 추가하기</h1>
+				<input type="radio" name="checkInheritDept" value="y">있음
+				<input type="radio" name="checkInheritDept" value="n">없음
+				<c:if test="${not empty depts }">
+					<select id="selectDepartment">
+						<c:forEach var="d" items="${depts }">
+							<option id="${d.deptCode }">${d.deptName }</option>
+						</c:forEach>
+					</select>
+				</c:if>
+			</div>
 		</div>
 		<div id="empInfoContainer">
 			<table>

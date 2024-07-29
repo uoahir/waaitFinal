@@ -235,8 +235,8 @@ public class MailDao {
 		return session.selectOne("mail.getSpamMailCount", param);
 	}
 
-	public int getSearchMailTotalData(SqlSession session, Map<String, Object> searchParam) {
-		return session.selectOne("mail.getSearchMailTotalData", searchParam);
+	public int getSearchReceiveMailTotalData(SqlSession session, Map<String, Object> searchParam) {
+		return session.selectOne("mail.getSearchReceiveMailTotalData", searchParam);
 	}
 
 	public int settingSpamMailAddress(SqlSession session, Map<String, Object> mailSettingParam) {
@@ -245,6 +245,10 @@ public class MailDao {
 
 	public int settingNumPerpage(SqlSession session, Map<String, Object> mailSettingParam) {
 		return session.update("mail.settingNumPerpage", mailSettingParam);
+	}
+
+	public List<RecentSearch> getRecentSearch(SqlSession session, long empNo) {
+		return session.selectList("mail.getRecentSearch", empNo);
 	}
 
 	

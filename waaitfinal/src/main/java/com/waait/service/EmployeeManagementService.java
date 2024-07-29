@@ -1,5 +1,6 @@
 package com.waait.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.waait.dao.EmployeeManagementDao;
 import com.waait.dto.Department;
 import com.waait.dto.Employee;
+import com.waait.dto.MovingDepartment;
 
 import lombok.RequiredArgsConstructor;
 
@@ -50,6 +52,44 @@ public class EmployeeManagementService {
 		
 		modifyParam.put("wantModifyTeamName", wantModifyTeamName);
 		result = dao.insertMovingDepartment(session, modifyParam);
+		return result;
+	}
+
+	public List<MovingDepartment> searchMovingDepartment(Map<String, Object> sqlParam) {
+		return dao.searchMovingDepartment(session, sqlParam);
+	}
+
+	public List<Integer> getDeptCode() {
+		return dao.getDeptCode(session);
+	}
+
+	@Transactional
+	public int enrollDepartment(Map<String, Object> sqlParam) {
+		int result = 0;
+		Map<String, String> teamSqlParam = new HashMap<String, String>();
+		if(sqlParam.get("newTeamNameStr") == null) {
+			result = dao.enrollDepartment(session, sqlParam);
+		} else {
+			result = dao.enrollDepartment(session, sqlParam);
+			
+			int newDepartmentSeq = (int) sqlParam.get("newDeptCodeNumber");
+			
+			String newTeamNameStr = (String) sqlParam.get("newTeamNameStr");
+			if(newTeamNameStr.contains(",")) {
+				String[] teamNameArr = newTeamNameStr.split(",");
+				for(int i = 0; i < teamNameArr.length; i++) {
+					teamSqlParam.put("newDeptCode", (String) sqlParam.get("newDeptCode"));
+					teamSqlParam.put("teamCode", "D" + (newDepartmentSeq + i + 1));
+					teamSqlParam.put("teamName", teamNameArr[i] + "팀");
+					result = dao.enrollDepartmentWithTeam(session, teamSqlParam);
+				}
+			} else {
+				teamSqlParam.put("newDeptCode", (String) sqlParam.get("newDeptCode"));
+				teamSqlParam.put("teamCode", "D" + (newDepartmentSeq + 1));
+				teamSqlParam.put("teamName", newTeamNameStr);
+				result = dao.enrollDepartmentWithTeam(session, teamSqlParam);
+			}
+		}
 		return result;
 	}
 

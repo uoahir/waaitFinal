@@ -1655,8 +1655,65 @@
 				<span class="contentSpan"></span>
 			</button>
 		</div>
+		<div id="recentSearchContainer">
+			<p style="margin:0px; padding-left:3px;">최근 검색어</p>
+			<div class="recentButtonContainer padding-top-5" id="recentSearchButtonContainer">
+				<button class="recentSearchButton padding-bottom-5" onclick="searchMailByRecentSearch(event)">
+					<span class="recentSearchType">[보낸사람]</span>
+					<span class="recentContentSpan">waait@waait.com</span>
+				</button>
+				<button class="searchDeleteButton padding-bottom-5" data-searchNo="1" onclick="deleteSearchHistory(event)">
+					x
+				</button>
+			</div>
+			<div class="recentButtonContainer padding-top-5" id="recentSearchButtonContainer">
+				<button class="recentSearchButton padding-bottom-5" onclick="searchMailByRecentSearch(event)">
+					<span class="recentSearchType">[보낸사람]</span>
+					<span class="recentContentSpan">waait@waait.com</span>
+				</button>
+				<button class="searchDeleteButton padding-bottom-5" data-searchNo="1" onclick="deleteSearchHistory(event)">
+					x
+				</button>
+			</div>
+		</div>
 	</div>
-	
+	<style>
+		.padding-top-5 {
+			padding-top : 5px;
+		}
+		.padding-bottom-5 {
+			padding-bottom: 5px;
+		}
+		#recentSearchContainer {
+			height : 100%;
+		}
+		#recentSearchContainer > .recentButtonContainer:first-of-type {
+		    margin-top: 15px;
+		}
+		.recentButtonContainer {
+			display : flex;
+		}
+		.recentSearchButton {
+			width : 70%;
+			text-align : left;
+			border : none;
+			border-bottom : 1px solid gainsboro;
+			background-color : white;
+		}
+		.searchDeleteButton {
+			width : 30%;
+			color : red;
+			border : none;
+			border-bottom : 1px solid gainsboro;
+			background-color : white;
+		}
+	</style>
+	<script>
+		const deleteSearchHistory = (e) => {
+			const recentSearchNo = e.currentTarget.dataset.searchno;
+			console.log(recentSearchNo);
+		}
+	</script>
 	<!-- 내 메일함으로 이동하는 모달 -->
 	<div class="outer-mymailbox-modal modal">
         <div class="mymailbox-modal">
@@ -1689,14 +1746,15 @@
 		.modal {
 			position:absolute;
 			display:none;
+			border-radius : 10px;
 			
 			/* justify-content:center; */
 			/* border:1px solid red; */
 			
-			left:698px;
+			left:600PX;
 			top:185px;
 			
-			width:40%;
+			width:36%;
 			height:30%;
 			
 			background-color:white;
@@ -1705,13 +1763,15 @@
 		.button {
 			width:100%;
 			height:100%;
-			border-bottom:1px solid black;
+			border-bottom:1px solid gainsboro;
+			padding-top:5px;
+			padding-bottom:5px;
 		}
 		
 		.button button{
 			width:100%;
 			height:100%;
-			background-color:rgba(145, 145, 145, 0.1);
+			background-color:white;
 			border:none;
 			text-align:left;
 		}
@@ -1725,6 +1785,10 @@
 			border:none;
 			color:red;
 			margin-left:35px;
+		}
+		
+		#recentSearchContainer {
+			margin-top : 30px;
 		}
 		
 		/* 내 메일함 이동 modal */
