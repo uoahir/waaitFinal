@@ -151,7 +151,7 @@ public class EmployeeManagementController {
 			e.printStackTrace();
 		}
 		
-		String encryptionPwd = encoder.encode(initialRandomPwd);
+		String encryptionPwd = encoder.encode("0000");
 		
 		String gender = "";
 		if(emp.getEmpGender().equals("m")) {
