@@ -14,9 +14,9 @@ public interface ChattingService {
 	
 	List<ChatRoom> selectChatRoomlist(long loginEmpNo);
 	
-	ChatRoom selectChatRoomName(Map<String, Integer> param);
+	ChatRoom selectChatRoomName(Map<String, Number> param);
 	
-	List<ChatHistory> selectChatRoomHistory(Map<String, Integer> param);
+	List<ChatHistory> selectChatRoomHistory(Map<String, Number> param);
 	
 	int insertChatHistory(List<Message> messages);
 	
@@ -29,4 +29,8 @@ public interface ChattingService {
 	void insertChatJoinInvite(Map<String, Object> param);
 	
 	void deleteChatJoin(Map<String, Object> param);
+	
+	Employee selectEmpProfile(Long empNo);
+	
+	Integer selectProfilechatOpen(Map<String, Object> param);
 }
