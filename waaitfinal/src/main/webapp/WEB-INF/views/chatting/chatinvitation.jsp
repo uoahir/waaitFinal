@@ -20,7 +20,8 @@
 <!-- jquery -->
 <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
 
-
+<!-- script문 -->
+<!-- <script type="text/javascript" src="${path}/resources/js/chatinvitation.js"></script> -->
 
 
 </head>
@@ -237,13 +238,9 @@
 		const loginEmpNo = "${employee.empNo}";
 		const path = "${pageContext.request.contextPath }";
 		
-		
-		 
-		 
 	</script>
 	
- 	<!-- script문 -->
-	<script type="text/javascript" src="${path}/resources/js/chatinvitation.js"></script>
+ 	
 	
 </body>
 </html>

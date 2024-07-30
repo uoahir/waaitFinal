@@ -9,7 +9,9 @@
 	//ws : http
 	//wss : https
 	// 클라이언트에서 WebSocket 연결 설정
-	const server = new WebSocket("ws://localhost:5731/chat");	// /+chatRoomNo
+	const server = new WebSocket("ws://localhost:5731/chat");
+	//const server = new WebSocket("wss://14.36.141.71:15555/chat");
+
 
 	//입장했을때 실행됨. // WebSocket 연결이 열렸을 때
 	server.onopen=(response)=>{
@@ -19,22 +21,26 @@
 	}
 
 
+	//채팅방생성하면서 바로 열기?
 	window.onload = function(){
 		if(chatRoomNo > 0){
 			console.log("채팅방 열리나?");
 			console.log("채팅방 번호 : "+chatRoomNo);
-			console.log("로그인된 사원 번호 : "+loginEmpNo);
 			
-			let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo+"&loginEmpNo="+loginEmpNo,"_blank","top=100, left=400, height=700, width=550");
-			//console.log("되니?");
-			chatserver.onload = function() {
-				//console.log("이건 되니?");
-				chatserver.socket = new WebSocket("ws://localhost:5731/chat");
-				//console.log("이이거는 되니?");
-			}
+			//채팅방 열기
+			openChatRoom(chatRoomNo);
 		}		
 	}
 
+
+	// 채팅방 새창 여는 함수 // 매개변수 방번호 꼭! 넘겨주기
+	function openChatRoom(chatRoomNo){
+		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo,"_blank","top=100, left=400, height=700, width=550");
+		chatserver.onload = function(){
+			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
+			//chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
+		}
+	}
 
 
 
@@ -83,6 +89,7 @@
 	
 	//채팅방추가 화면 전환 일반채팅
 	document.getElementById("modal_chatinvitation_groupchat").addEventListener("click",function(){
+		
 		$.ajax({
 			type : "GET",
 			url : path+"/chat/chatinvitation.do",
@@ -92,6 +99,16 @@
 			success : function(data){
 				//일반채팅 화면 넣기
 				document.querySelector("#chatting_main_content").innerHTML = data;
+				
+				// form태그 submit때 체크박스가 체크 되지 않았다면 alert창 띄우기
+				document.getElementById('create_chatroom').addEventListener('click', function(event) {
+				    const checkboxes = document.querySelectorAll('input[name="chatemps"]:checked');
+				    if (checkboxes.length === 0) {
+				        event.preventDefault(); // 폼 제출 중단
+				        alert("사원을 선택해주세요");
+				    }
+				});
+				
 				//이벤트 부여 사원번호출력
 				const profiles = document.querySelectorAll(".chatting_userlist_printarea_profile");
 				profiles.forEach((profilediv, i)=>{
@@ -108,22 +125,173 @@
 	//채팅방추가 일반채팅 끝
 	
 	
-	
 	//채팅방목록에서 채팅방을 클릭했을 때
 	//채팅방을 눌렀을때 해당하는 채팅방의 번호를 보내서 채팅내역을 출력해야함.
 	//해당 채팅방번호, 로그인된 사원번호 전달
 	const chatroomopen=(e)=>{
 		console.log("채팅방 클릭");
-		const chatroomNo = e.currentTarget.dataset.chatroomNo;
-		console.log("채팅방 번호 : "+chatroomNo);
-		console.log("로그인된 사원 번호 : "+loginEmpNo);
-		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatroomNo+"&loginEmpNo="+loginEmpNo,"_blank","top=100, left=400, height=700, width=550");
+		const chatRoomNo = e.currentTarget.dataset.chatroomNo;
+		console.log("채팅방 번호 : "+chatRoomNo);
 		
-		chatserver.onload = function(){
-			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
-		}
+		//채팅방 여는 함수
+		openChatRoom(chatRoomNo);
 	}
 	
+	
+	/* 프로필 눌렀을떄 출려되는 모달 */
+	/* 나중에 프로필 생기면 꼭 주소 연결하기 */
+	
+	// 1:1대화를 클릭했을때 empNo값이 저장됨 하나의변수로 덮어씌우면서 사용함.
+	let lastEmpNo = null;
+	// 이벤트 핸들러 추가 여부를 확인하는 플래그
+	let isClickHandlerAdded = false; 
+	
+	const empprofile=(empNo)=>{
+		console.log(empNo);
+		
+		//모달창 열기
+		const modal = document.getElementById("modal_empprofile");
+		if(modal.style.display === "block"){
+			modal.style.display = "none";
+		}else{
+			modal.style.display = "block";
+		}
+		
+		$.ajax({
+			type : "POST",
+			url : path+"/chat/selectEmpProfile.do",
+			data : {
+				empNo:empNo
+				},
+			success : function(data){
+				console.log(data);
+				//프로필 사진
+				//나중에 프로필 생기면 꼭 주소 연결하기
+				const empProfile = document.querySelector("#modal_empprofile_top>div:nth-of-type(2)>img");
+				//empProfile.src = path+"/${data.empProfile}";
+				
+				//이름 직급
+				const empNameLevelName = document.querySelector("#modal_empprofile_top>div:nth-of-type(3)>h2");
+				empNameLevelName.innerText = data.empName+" "+data.jobLevel.levelName;
+				
+				//1:1 채팅 바로가기
+				const modalempprofileopenchatdiv = document.querySelector("#modal_empprofile_top>div:nth-of-type(4)");
+				
+				// 현재 empNo대입
+				lastEmpNo = data.empNo;
+				
+				// 자기 자신은 1:1 채팅 바로가기 버튼 출력안됨
+				if(data.empNo == loginEmpNo){
+					modalempprofileopenchatdiv.style.display = "none";
+				}else{
+					modalempprofileopenchatdiv.style.display = "flex";					
+				}
+				
+				//플래그를 이용해서 이벤트부여가 한번만되게 만듦
+				if(!isClickHandlerAdded){
+					// 클릭 이벤트 리스너 추가
+					modalempprofileopenchatdiv.addEventListener("click", modalempprofileopenchat);
+					isClickHandlerAdded = true;
+				}
+				
+				//부서 직급
+				const deptNameLevelName = document.querySelector("#modal_empprofile_middle>div:nth-of-type(1)>p");
+				deptNameLevelName.innerText = data.department.deptName+" "+data.jobLevel.levelName;
+				
+				//연락처
+				const empPhone = document.querySelector("#modal_empprofile_middle>div:nth-of-type(2)>p");
+				empPhone.innerText = data.empPhone;
+				
+				//이메일주소
+				const empEmail = document.querySelector("#modal_empprofile_middle>div:nth-of-type(3)>p");
+				empEmail.innerText = data.empEmail;
+				
+			},
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            console.error("프로필 에러 : " + textStatus, errorThrown);
+	        }
+		});
+	};
+	/* 프로필 모달 닫 */
+	
+	/* 프로필 모달 닫기버튼 */
+	const modalempprofileclose=()=>{
+		const modal = document.getElementById("modal_empprofile");
+		
+		if(modal.style.display === "block"){
+			modal.style.display = "none";
+		}else{
+			modal.style.display = "block";
+		}
+	}
+	/* 프로필 모달 닫기버튼 */
+	
+	
+	
+	/* 프로필 모달 채팅바로가기 */
+	// 자기 자신은 안되게 막아야함.
+	function modalempprofileopenchat () {
+		console.log(lastEmpNo);
+		
+		
+		$.ajax({
+			type : "POST",
+			url : path+"/chat/profilechatopen.do",
+			data: {
+	            chatEmpNo: lastEmpNo
+	        },
+			success : function(data){
+				/*alert(data);*/
+				console.log(data);
+
+				switch(data.type){
+					case "방있음" :	
+						// 1:1 방이 이미 있는 경우 채팅방 창 열기
+						openChatRoom(data.chatRoomNo);
+						
+					case "방없음" :
+						// 1: 방이 없는 경우 채팅방 생성 후 열기
+						console.log(data.chatemps);
+						
+						$.ajax({
+							type : "POST",
+							url : path+"/chat/insertchatroom.do",
+							traditional: true, // 배열을 전송할 때 필요
+							data: {
+					            chatemps: data.chatemps
+					        },
+							success : function(){
+				    			// 1. Ajax로 방번호 가져오는 컨트롤러 만들어서 가져옴
+				    			// 2. 기존 방 생성 컨트롤러랑 리턴값을 다르게 만들어 가져옴
+				    			$.ajax({
+									type : "POST",
+									url : path+"/chat/selectgetchatroomno.do",
+									data: {	},
+									success : function(response){
+						    			openChatRoom(response.chatRoomNo);
+									},
+							        error: function(jqXHR, textStatus, errorThrown) {
+							            console.error("방번호 가져오기 실패: " + textStatus, errorThrown);
+							        }
+								});
+							},
+					        error: function(jqXHR, textStatus, errorThrown) {
+					            console.error("채팅방 생성 실패: " + textStatus, errorThrown);
+					        }
+						});	
+				}
+			},
+	        error: function(jqXHR, textStatus, errorThrown) {
+	            console.error("프로필 1:1채팅 실패 : " + textStatus, errorThrown);
+	        }
+		});
+		
+		
+		
+		
+	}
+	
+	/* 프로필 모달 채팅바로가기 끝 */
 
 
 
