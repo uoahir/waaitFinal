@@ -175,7 +175,22 @@ public class EDocDaoImpl implements EDocDao {
 	public List<OffDocument> getOffDocumentList(SqlSession session, Long empNo) {
 		// TODO Auto-generated method stub
 		return session.selectList("edoc.getOffDocumentList", empNo);
+	}
+
+	@Override
+	public int getRemainingOff(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.getRemainingOff", empNo);
+	}
+
+//	작성자정보뽑아오기
+	@Override
+	public Employee getWriter(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.getWriter", empNo);
 	}	
+	
+	
 	
 	
 	

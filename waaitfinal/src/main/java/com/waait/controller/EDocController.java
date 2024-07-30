@@ -212,7 +212,7 @@ public class EDocController {
 			case "T01": tableName = "basic_form"; page="edoc/openbasic"; break;
 			case "T02": tableName = ""; break;
 			case "T03": tableName = "trip_form"; page="edoc/opentrip"; break;
-			case "T04": tableName = "off_form"; page="edoc/openoff"; break;
+			case "T04": tableName = "off_form"; page="edoc/openbasic"; break;
 		} // 문서유형에 따라, 조인되는 tableName 과 jsp 페이지를 매칭
 		AbstractDocument doc = service.selectDocumentById(docId); // 문서유형과는 상관 없음
 
@@ -239,6 +239,7 @@ public class EDocController {
 		if(abdocument instanceof BasicDocument) {
 			BasicDocument document = (BasicDocument)abdocument;
 			m.addAttribute("document", document);
+			System.out.println("얘 ! ! : " + document.getDocNumber());
 		} else if(abdocument instanceof TripDocument) {
 			TripDocument document = (TripDocument)abdocument;
 			m.addAttribute("document", document);
@@ -297,6 +298,25 @@ public class EDocController {
 		Long empNo = getEmployeeH().getEmpNo();
 		List<OffDocument> data = service.getOffDocumentList(empNo);
 		return data;
+	}
+	
+	@ResponseBody
+	@GetMapping("/remaining")
+	public String remainingOff() {
+		Long empNo = getEmployeeH().getEmpNo();
+		int result = service.getRemainingOff(empNo);
+		String result2 = String.valueOf(result);
+		System.out.println(result2);
+		return result2;
+	}
+	
+	@ResponseBody
+	@GetMapping("/docwriter")
+	public Employee getWriter() {
+		Long empNo = getEmployeeH().getEmpNo();
+		Employee emp = service.getWriter(empNo);
+		System.out.println("화긴" + emp);
+		return emp;
 	}
 	
 }
