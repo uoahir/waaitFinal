@@ -111,28 +111,34 @@
 															</td>
 															<th>휴가 신청 종료일시</th>
 															<td>
-																<c:if test="${document.vacaType eq '연차' || document.vacaType eq '오전반차' || document.vacaType eq '오후반차'}">
+																<c:if test="${document.vacaType ne '조퇴'}">
 																	<fmt:formatDate type="both" value="${document.endDate }" pattern="yyyy-MM-dd"/>
 																</c:if>
-																<c:if test="${document.vacaType ne '연차' && document.vacaType ne '오전반차' && document.vacaType ne '오후반차'}">
+																<c:if test="${document.vacaType eq '조퇴'}">
 																	<fmt:formatDate type="both" value="${document.endDate }" pattern="yyyy-MM-dd HH:mm"/>
 																</c:if>
+															</td>
+														</tr>
+														<tr>	
+															<th>휴가 사유</th>
+															<td colspan = "3">
+																안녕
 															</td>
 														</tr>
 													</c:if>
 												</tbody>
 											</table>
-							<%-- 				<table class="table">
+							 				<table class="table">
 												<tr>
 													<td rowspan="3">결재</td>
-													<c:forEach items="${edoc.approval }" var="a">
+													<c:forEach items="${document.approvals }" var="a">
 														<td class="text-center">
-															${a.aprvlEmpName }
+															${a.employee.empName }
 														</td>
 													</c:forEach>
 												</tr>
 												<tr>
-													<c:forEach items="${edoc.approval }" var="a">
+													<c:forEach items="${document.approvals }" var="a">
 														<td class="text-center">
 															<c:choose>
 																<c:when test="${a.aprvlApvCode eq 'APV002'}">
@@ -160,7 +166,7 @@
 														</td>
 													</c:forEach>
 												</tr>
-											</table> --%>
+											</table>
 										</div>
 										
 										<div class="container">
@@ -171,27 +177,9 @@
 														${document.docContent}
 													</c:if>
 													<c:if test="${document.docType eq 'T04' }">
-														<div class="d-flex">
-														<div>
-															휴가종류 : 
-														</div>
-														<div style="margin-left:10px;">
-															${document.vacaType }
-														</div>
-														</div>
-														<div >
-															휴가신청일
-														</div>
-														<div>
-															<c:if test="${document.vacaType eq '연차' || document.vacaType eq '오전반차' || document.vacaType eq '오후반차'}">
-																<fmt:formatDate type="both" value="${document.startDate }" pattern="yyyy-MM-dd"/>
-															</c:if>
-															<c:if test="${document.vacaType ne '연차' && document.vacaType ne '오전반차' && document.vacaType ne '오후반차'}">
-																<fmt:formatDate type="both" value="${document.startDate }" pattern="yyyy-MM-dd HH:mm"/>
-															</c:if>
-														</div>
-													
+														<div class = "card-body">
 														${document.reason}
+														</div>
 													</c:if>
 												</div>
 											</div>
