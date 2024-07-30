@@ -109,6 +109,8 @@ public class EmployeeManagementService {
 		return result;
 	}
 
-
+	public int enrollEmployee(Employee employee) {
+		return dao.enrollEmployee(session, employee);
+	}
 
 }

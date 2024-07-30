@@ -2,6 +2,7 @@ package com.waait.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +25,10 @@ import com.waait.dto.Department;
 import com.waait.dto.Employee;
 import com.waait.dto.JobLevel;
 import com.waait.dto.MovingDepartment;
+import com.waait.service.EmailService;
 import com.waait.service.EmployeeManagementService;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +38,8 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeManagementController {
 	
 	private final EmployeeManagementService service;
+	private final EmailService emailService;
+	private final BCryptPasswordEncoder encoder;
 	//private final ObjectMapper mapper;
 	
 	//test
@@ -57,7 +63,7 @@ public class EmployeeManagementController {
 	
 	@PostMapping("/getteam.do")
 	public @ResponseBody List<Department> getTeamByDeptCode(String deptCode) {
-		if(deptCode.equals("D1")) {
+		if(deptCode.equals("noDept")) {
 			List<Department> teamList = getTeamList();
 			teamList = teamList.stream().filter(team -> {
 				return team.getParentCode().equals("D1");
@@ -84,12 +90,12 @@ public class EmployeeManagementController {
 	}
 	
 	@PostMapping("/enrollemployee.do")
-	public String enrollEmployee(@ModelAttribute Employee emp, String engName, MultipartFile profile,
-									MultipartFile signfile, HttpSession session) {
+	public String enrollEmployee(@ModelAttribute Employee emp, String engName, String usingEmail, String deptCode, String teamCode,
+			MultipartFile profile, MultipartFile signfile, HttpSession session) {
 		String signfilePath = session.getServletContext().getRealPath("/resources/upload/emp/signfile/");
 		String profilePath = session.getServletContext().getRealPath("/resources/upload/emp/profile/");
 		System.out.println("등록하려는 사원정보 : " + emp);
-		
+		System.out.println("사원등록 parameter => usingEmail : " + usingEmail + " deptCode : " + deptCode + " teamCode : " + teamCode);
 		if(profile != null) {
 			System.out.println("profile originalName : " + profile.getOriginalFilename());
 			String oriName = profile.getOriginalFilename();
@@ -108,6 +114,7 @@ public class EmployeeManagementController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			emp.setEmpProfile(rename);
 		}
 		
 		if(signfile != null) {
@@ -128,9 +135,56 @@ public class EmployeeManagementController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			emp.setEmpSignfile(rename);
 		}
 		
+		Date now = new Date(System.currentTimeMillis());
+		int randomNum = (int) (Math.random() * 1000) + 1;
+		String initialRandomPwd = new SimpleDateFormat("yyMMddHHmmss").format(now) + randomNum;
+		String userId = engName + new SimpleDateFormat("yyMMmmSS").format(now);
+		emp.setEmpId(userId);
+		try {
+			emailService.sendInitialIdAndPwd(usingEmail, userId, initialRandomPwd);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		
+		String encryptionPwd = encoder.encode(initialRandomPwd);
+		
+		String gender = "";
+		if(emp.getEmpGender().equals("m")) {
+			gender = "남성";
+		} else {
+			gender = "여성";
+		}
 		emp.setEmpEmail(engName + "@waait.com");
+		emp.setEmpPwd(encryptionPwd);
+		emp.setEmpGender(gender);
+		
+		if(deptCode.equals("noDept")) {
+			emp.setDeptCode(teamCode);
+		} else if(teamCode.equals("noTeam")){
+			emp.setDeptCode(deptCode);
+		} else {
+			emp.setDeptCode(teamCode);
+		}
+		
+		switch(emp.getLevelCode()) {
+			case "L1" : emp.setBasicAnnualLeave(30);
+						emp.setRemainingAnnualLeave(30); break;
+			case "L2" : emp.setBasicAnnualLeave(25);
+						emp.setRemainingAnnualLeave(25); break;
+			case "L3" : emp.setBasicAnnualLeave(20);
+						emp.setRemainingAnnualLeave(20); break;
+			case "L4" : emp.setBasicAnnualLeave(15);
+						emp.setRemainingAnnualLeave(15); break;
+		}
+		System.out.println("등록할 사원정보 : " + emp);
+		
+		int result = 0;
+		result = service.enrollEmployee(emp);
 		
 		return null;
 	}

@@ -73,6 +73,9 @@ public class EmployeeManagementDao {
 	public int enrollTeamNoParentDept(SqlSession session, Map<String, Object> sqlParam) {
 		return session.insert("em.enrollTeamNoParentDept", sqlParam);
 	}
-
+		
+	public int enrollEmployee(SqlSession session, Employee employee) {
+		return session.insert("em.enrollEmployee",employee);
+	}
 
 }

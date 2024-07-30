@@ -137,13 +137,12 @@
 													document.getElementById("selectJob").addEventListener("click", e => {
 														if(e.target.value != "L1" && e.target.value != "L2") {
 															document.getElementById("teamContainer").hidden = false;
+															document.getElementById("noDeptOption").hidden = false;
+															let selectDept = document.getElementById("selectDept");
 														} else {
 															document.getElementById("teamContainer").hidden = true;
-														}
-														
-														if(e.target.value == "L2") {
-															console.log("L2임");
 															document.getElementById("noDeptOption").hidden = true;
+															selectDept.options[0].selected = true;
 														}
 													})
 													
@@ -168,7 +167,7 @@
 															if(data.length > 0 && (levelCode != "L1" && levelCode != "L2")) {
 																document.getElementById("teamContainer").hidden = false;
 																let optionStr = "<label for='selectTeam' class='form-label'>팀</label>"
-																					+ "<select name='' id='selectTeam' class='form-control'>";
+																					+ "<select name='department.deptCode' id='selectTeam' class='form-control'>";
 																for(let i = 0; i < data.length; i++) {
 																	let department = data[i];
 																	optionStr += "<option value='" + department["deptCode"] + "'>" + department["deptName"] + "</option>"
@@ -204,15 +203,28 @@
 													const selectJobLevel = document.getElementById("selectJob");
 													const selectDept = document.getElementById("selectDept");
 													const selectTeam = document.getElementById("selectTeam");
+													const deptHiddenInput = document.getElementById("inputDeptCode");
+													const teamHiddenInput = document.getElementById("inputTeamCode");
 													
 													if(selectJobLevel.value == "L1") {
-														document.getElementById("inputDeptCode").value = "D1";
+														deptHiddenInput.value = "D1";
+														teamHiddenInput.value = "noTeam";
 													} else if(selectJobLevel.value == "L2") {
-														document.getElementById("inputDeptCode").value = selectDept.value;
+														deptHiddenInput.value = selectDept.value;
+														teamHiddenInput.value = "noTeam";
 													} else {
-														document.getElementById("inputDeptCode").value = selectDept.value;
-														document.getElementById("inputTeamCode").value = selectTeam.value;
+														deptHiddenInput.value = selectDept.value;
+														teamHiddenInput.value = selectTeam.value;
 													}
+													
+													if(selectDept.value == "noDept") {
+														deptHiddenInput.value = "noDept";
+														teamHiddenInput.value = selectTeam.value;
+													} else {
+														deptHiddenInput = selectDept.value;
+														teamHiddenInput = selectTeam.value;
+													}
+													
 													return true;
 												}
 											</script>
@@ -246,7 +258,7 @@
 										</div>
 										<div class="form-group">
 											<label for="selectJob" class="form-label">직책</label><span style="color : red; margin-left : 10px;">직책이 대표이거나 부장일겨우 팀은 선택할 수 없습니다.</span>
-											<select name="jobLevel.levelCode" id="selectJob" class="form-control">
+											<select name="levelCode" id="selectJob" class="form-control">
 												<c:if test="${not empty jobs }">
 													<c:forEach var="job" items="${jobs }">
 														<option value="${job.levelCode }">직급 : ${job.levelName }</option>			
@@ -259,12 +271,12 @@
 										</div>
 										<div class="form-group">
 											<label for="selectDept" class="form-label">부서</label>
-											<select name="department.deptName" id="selectDept" class="form-control">
+											<select id="selectDept" class="form-control">
 												<c:if test="${not empty depts }">
 													<c:forEach var="dept" items="${depts }">
 														<option value="${dept.deptCode }">부서명 : ${dept.deptName }</option>			
 													</c:forEach>
-														<option  id="noDeptOption" value="D1">부서없음</option>
+														<option id="noDeptOption" value="noDept">부서없음</option>
 												</c:if>
 												<c:if test="${empty depts }">
 													<option value="empty" disabled>부서가 없습니다.</option>
@@ -273,6 +285,7 @@
 											<input type="text" id="inputDeptCode" name="deptCode" hidden="true">
 											<input type="text" id="inputTeamCode" name="teamCode" hidden="true">
 										</div>
+										
 										<div class="form-group" id="teamContainer" hidden="true">
 											
 										</div>
