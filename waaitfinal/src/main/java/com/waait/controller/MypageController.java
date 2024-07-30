@@ -30,7 +30,6 @@ public class MypageController {
 		Mypage mypage=new Mypage();
 		Employee employee=getLoginEmpInfo();
 		long empNumber=employee.getEmpNo();
-//		Schedule empno=empNumber
 		
 		List<Mypage> total=service.myInfoList(empNumber);
 		System.out.println(total);
