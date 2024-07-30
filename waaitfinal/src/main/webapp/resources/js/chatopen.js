@@ -21,23 +21,26 @@
 	}
 
 
+	//채팅방생성하면서 바로 열기?
 	window.onload = function(){
 		if(chatRoomNo > 0){
 			console.log("채팅방 열리나?");
 			console.log("채팅방 번호 : "+chatRoomNo);
-			console.log("로그인된 사원 번호 : "+loginEmpNo);
 			
-			let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo,"_blank","top=100, left=400, height=700, width=550");
-			//console.log("되니?");
-			chatserver.onload = function() {
-				//console.log("이건 되니?");
-				chatserver.socket = new WebSocket("ws://localhost:5731/chat");
-				//chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
-				//console.log("이이거는 되니?");
-			}
+			//채팅방 열기
+			openChatRoom(chatRoomNo);
 		}		
 	}
 
+
+	// 채팅방 새창 여는 함수 // 매개변수 방번호 꼭! 넘겨주기
+	function openChatRoom(chatRoomNo){
+		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo,"_blank","top=100, left=400, height=700, width=550");
+		chatserver.onload = function(){
+			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
+			//chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
+		}
+	}
 
 
 
@@ -127,15 +130,11 @@
 	//해당 채팅방번호, 로그인된 사원번호 전달
 	const chatroomopen=(e)=>{
 		console.log("채팅방 클릭");
-		const chatroomNo = e.currentTarget.dataset.chatroomNo;
-		console.log("채팅방 번호 : "+chatroomNo);
-		console.log("로그인된 사원 번호 : "+loginEmpNo);
-		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatroomNo,"_blank","top=100, left=400, height=700, width=550");
+		const chatRoomNo = e.currentTarget.dataset.chatroomNo;
+		console.log("채팅방 번호 : "+chatRoomNo);
 		
-		chatserver.onload = function(){
-			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
-			//chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
-		}
+		//채팅방 여는 함수
+		openChatRoom(chatRoomNo);
 	}
 	
 	
@@ -181,6 +180,13 @@
 				// 현재 empNo대입
 				lastEmpNo = data.empNo;
 				
+				// 자기 자신은 1:1 채팅 바로가기 버튼 출력안됨
+				if(data.empNo == loginEmpNo){
+					modalempprofileopenchatdiv.style.display = "none";
+				}else{
+					modalempprofileopenchatdiv.style.display = "flex";					
+				}
+				
 				//플래그를 이용해서 이벤트부여가 한번만되게 만듦
 				if(!isClickHandlerAdded){
 					// 클릭 이벤트 리스너 추가
@@ -223,6 +229,7 @@
 	
 	
 	/* 프로필 모달 채팅바로가기 */
+	// 자기 자신은 안되게 막아야함.
 	function modalempprofileopenchat () {
 		console.log(lastEmpNo);
 		
@@ -239,17 +246,40 @@
 
 				switch(data.type){
 					case "방있음" :	
-						let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+data.chatRoomNo,"_blank","top=100, left=400, height=700, width=550");
-						chatserver.onload = function(){
-							chatserver.socket = new WebSocket("ws://localhost:5731/chat");
-							//chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
-					}
-					case "방없음" :
+						// 1:1 방이 이미 있는 경우 채팅방 창 열기
+						openChatRoom(data.chatRoomNo);
 						
+					case "방없음" :
+						// 1: 방이 없는 경우 채팅방 생성 후 열기
+						console.log(data.chatemps);
+						
+						$.ajax({
+							type : "POST",
+							url : path+"/chat/insertchatroom.do",
+							traditional: true, // 배열을 전송할 때 필요
+							data: {
+					            chatemps: data.chatemps
+					        },
+							success : function(){
+				    			// 1. Ajax로 방번호 가져오는 컨트롤러 만들어서 가져옴
+				    			// 2. 기존 방 생성 컨트롤러랑 리턴값을 다르게 만들어 가져옴
+				    			$.ajax({
+									type : "POST",
+									url : path+"/chat/selectgetchatroomno.do",
+									data: {	},
+									success : function(response){
+						    			openChatRoom(response.chatRoomNo);
+									},
+							        error: function(jqXHR, textStatus, errorThrown) {
+							            console.error("방번호 가져오기 실패: " + textStatus, errorThrown);
+							        }
+								});
+							},
+					        error: function(jqXHR, textStatus, errorThrown) {
+					            console.error("채팅방 생성 실패: " + textStatus, errorThrown);
+					        }
+						});	
 				}
-				
-    			
-    			
 			},
 	        error: function(jqXHR, textStatus, errorThrown) {
 	            console.error("프로필 1:1채팅 실패 : " + textStatus, errorThrown);

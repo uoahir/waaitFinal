@@ -33,4 +33,6 @@ public interface ChattingService {
 	Employee selectEmpProfile(Long empNo);
 	
 	Integer selectProfilechatOpen(Map<String, Object> param);
+	
+	int selectGetChatRoomNo();
 }

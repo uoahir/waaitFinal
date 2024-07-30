@@ -140,6 +140,13 @@ public class ChattingServiceImpl implements ChattingService {
 		System.out.println("돌아오는 서비스 - chatRoomNo : "+chatRoomNo);
 		return chatRoomNo;
 	}
+
+
+	@Override
+	public int selectGetChatRoomNo() {
+		int chatRoomNo = dao.selectSEQ_ChatRoomNo(session);
+		return chatRoomNo;
+	}
 	
 	
 	

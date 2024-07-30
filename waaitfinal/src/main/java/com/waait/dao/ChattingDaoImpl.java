@@ -45,6 +45,7 @@ public class ChattingDaoImpl implements ChattingDao {
 		return session.insert("chatting.insertChatRoom",chatRoomParam);
 	}
  
+	//최근 방 시퀀스값 가져오기
 	@Override
 	public int selectSEQ_ChatRoomNo(SqlSession session) {
 		return session.selectOne("chatting.selectSEQ_ChatRoomNo");

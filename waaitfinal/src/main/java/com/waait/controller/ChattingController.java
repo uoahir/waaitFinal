@@ -235,7 +235,6 @@ public class ChattingController {
 	
 	//숫자를 반환하면 chatRoomOpen 매개변수로 넣어서 보냄 그러면 채팅방 열릴듯?
 	//반환 하지 않으면 insertChatRoom 매개변수로 List<Long> chatEmpNo로 자신과 상대방 empNo를 담아서 보내면 채팅방을 만들고 채팅방 열기
-	
 	@PostMapping("/profilechatopen.do")
 	@ResponseBody
 	public Map<String, Object> profilechatopen(
@@ -270,25 +269,30 @@ public class ChattingController {
 			System.out.println("채팅방 번호가 null임");
 	
 			List<Long> chatemps = new ArrayList<>();
-			
-			chatemps.add(empNo);
+			//상대 사원번호만 담아서 보내기
 			chatemps.add(chatEmpNo);
 			
-			System.out.println("chatEmpNo"+chatEmpNo);
+			System.out.println("chatEmpNo : "+chatEmpNo);
 			
 			resultParam.put("type", "방없음");
 			resultParam.put("chatemps", chatemps);
 			
 			System.out.println("컨트롤러 - profilechatopen - resultParam : "+resultParam);
 		}
-		
-		
 		return resultParam;
 	}
 	
 	
-	
-	
+	// 최근 방번호 가져오기 데이터만 전송함
+	@PostMapping("/selectgetchatroomno.do")
+	@ResponseBody
+	public Map<String, Object> selectGetChatRoomNo(){
+		Map<String, Object> response = new HashMap<>();
+		int chatRoomNo = service.selectGetChatRoomNo();
+		response.put("chatRoomNo", chatRoomNo);
+		System.out.println("최근 방번호 : "+response);
+		return response;
+	}
 	
 	
 	
