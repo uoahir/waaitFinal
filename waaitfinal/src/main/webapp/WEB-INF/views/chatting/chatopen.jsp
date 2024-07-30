@@ -93,7 +93,7 @@
 		                			<div class="chatting_userlist_printarea">
 					                    <p>나</p>
 					                    <div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -112,7 +112,7 @@
 			               		<c:if test="${'D1' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -133,7 +133,7 @@
 			               		<c:if test="${'D2' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -153,7 +153,7 @@
 			               		<c:if test="${'D3' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -173,7 +173,7 @@
 			               		<c:if test="${'D4' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -193,7 +193,7 @@
 			               		<c:if test="${'D5' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -214,7 +214,7 @@
 			               		<c:if test="${'D6' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -235,7 +235,7 @@
 			               		<c:if test="${'D7' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -257,7 +257,7 @@
 			               		<c:if test="${'D8' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile">
-					                        <button onclick="asd(event);">
+					                        <button onclick="empprofile(${emp.empNo});">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
 					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
 					                        </button>
@@ -284,7 +284,7 @@
 		
 	</div>
 	
-	
+	<!-- 채팅방추가 -->
 	<div id="modal_chatinvitation" class="modal">
 		<div>
 			<div>
@@ -295,6 +295,53 @@
 			</div>
 		</div>
 	</div>
+	
+	
+	<!-- 사원 프로필 모달창 -->
+	<div id="modal_empprofile">
+		<div>
+		
+			<div id="modal_empprofile_top">
+				<div>
+					<!-- 닫기버튼 -->
+					<button onclick="modalempprofileclose();">X</button>
+				</div>
+				<div>
+					<!-- 프로필 -->
+					<img src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="프로필" width="120px" height="120px">
+				</div>
+				<div>
+					<!-- 이름 직급 -->
+					<h2></h2>
+				</div>
+				<!-- 1:1채팅 바로가기 -->
+				<div>
+					<img src="https://i.pinimg.com/236x/c7/87/d4/c787d46e63b49b0ab99e98bd7a759c8a.jpg" alt="채팅바로가기" width="40" height="40">
+					<p>1:1 채팅</p>
+				</div>
+			</div>
+			
+			<div id="modal_empprofile_middle">
+				<div>
+					<h3>부서 / 직급</h3>
+					<p></p>
+				</div>
+				<div>
+					<h3>연락처</h3>
+					<p></p>
+				</div>
+				<div>
+					<h3>이메일</h3>
+					<p></p>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	<!-- 사원 프로필 모달창 끝 -->
+	
+	
+	
 	
 	<script>
 		const loginId = "${employee.empId}";

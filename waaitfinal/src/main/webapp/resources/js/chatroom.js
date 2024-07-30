@@ -5,6 +5,7 @@
 	
 	//클라이언트에서 WebSocket 연결설정
 	const chatserver = new WebSocket("ws://localhost:5731/chat");
+	//const chatserver = new WebSocket("wss://14.36.141.71:15555/chat");
 	
 	//WebSocket이 연결됐을때 실행
 	chatserver.onopen = (response) =>{
@@ -170,6 +171,11 @@
 	const insertchatjoin=()=>{
 		const chatEmpNo = [];
 		const checkboxes = document.querySelectorAll('input[name="chatemps"]:checked');
+		
+		if(checkboxes.length === 0){
+			alert("초대할 사원을 선택해주세요");
+			return;
+		}
 		
 		checkboxes.forEach(function(checkbox) {
         chatEmpNo.push(checkbox.value);

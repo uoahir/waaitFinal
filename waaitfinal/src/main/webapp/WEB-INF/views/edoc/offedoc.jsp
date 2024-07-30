@@ -68,7 +68,7 @@
 							    <label class="col-form-label" for="hasVacation">보유연차</label>
 							</div>
 							<div class="col-lg-2 col-5"">
-							    <input type="text" id="hasVacation" class="form-control" name="hasVacation" value =${employee.remainingAnnualLeave } readOnly>
+							    <input type="text" id="hasVacation" class="form-control" name="hasVacation" readOnly>
 							</div>
 						</div>
 						<div class="col-md-3">	
@@ -165,6 +165,15 @@
     </script>
     <script src="${path }/resouces/"></script>
 	<script>	
+	window.onload = function(){
+		
+		fetch("/edoc/docwriter")
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+			document.querySelector("#hasVacation").value = data.remainingAnnualLeave;
+		})
+	}
 	
 	const selectVacation = () => {
 		const type = document.querySelector("#inputGroupSelect01 option:checked").value;
