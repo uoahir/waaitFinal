@@ -1,6 +1,6 @@
 package com.waait.dto;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -15,9 +15,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OffDocument extends AbstractDocument {
 	private String vacaType;
-	private String startDate;
-	private String endDate;
+	private Timestamp startDate;
+	private Timestamp endDate;
 	private int vacaUsed;
+	private String reason;
 	private int[] empNo;
 	
 	@Override

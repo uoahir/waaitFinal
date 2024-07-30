@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var ="employee" value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}"/>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <html lang="en">
@@ -27,231 +26,12 @@
             </a>
         </div>
     </nav>
-	<section class="container">
-	<div class="card mt-5">
-		<div class="card-header">
-			<c:choose>
-				<c:when test="${document.docType eq 'T01' }"><h2 class="card-title">Basic Report</h2></c:when>
-				<c:when test="${document.docType eq 'T02' }"><h2 class="card-title">Expense Request Form</h2></c:when>
-				<c:when test="${document.docType eq 'T03' }"><h2 class="card-title">Business Travel Request Form</h2></c:when>
-				<c:when test="${document.docType eq 'T04' }"><h2 class="card-title">Leave Request Form</h2></c:when>
-			</c:choose>
-	    </div>
-		<div data-simplebar class="nicescroll-bar card-body">
-			<div class="file-list-view">
-				<!-- 탭 메뉴 -->
-				<ul class="nav nav-tabs nav-line nav-icon nav-light">
-					<li class="nav-item">
-						<a class="nav-link active" data-bs-toggle="tab" href="#document">
-							<span class="nav-link-text">전자문서</span>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" data-bs-toggle="tab" href="#attach_file">
-							<span class="nav-link-text">첨부파일</span>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" data-bs-toggle="tab" href="#comment_history">
-							<span class="nav-link-text">이력</span>
-						</a>
-					</li>
-				</ul>
-								<!-- 탭 내용 -->
-								<div class="tab-content">
-									<!-- 전자문서 탭 -->
-									<div class="tab-pane fade show active" id="document" data-edoc-no="${document.docNumber}">
-										<div class="table-responsive col-sm-8">
-											<table class="table">
-												<tbody>
-													<tr>
-														<th scope="row">문서종류</th>
-														<td>${document.type.type}</td>
-														<th scope="row">기안자</th>
-														<td>
-															<c:out value="${document.employee.department.deptName }"/> <c:out value="${document.employee.jobLevel.levelName }"/> <c:out value="${document.employee.empName }"/>
-														</td>
-													</tr>
-													<tr>
-														<th scope="row">보존연한</th>
-														<td>
-															${document.docLife }
-														</td>
-														<th scope="row">보안등급</th>
-														<td>
-															${document.docOpen}
-														</td>
-													</tr>
-													<tr>
-														<th scope="row">문서기안일</th>
-														<td>
-															<fmt:formatDate type="date" value="${document.docDate }" pattern="yyyy-MM-dd"/>
-														</td>
-														<th scope="row">문서종료일</th>
-														<td>
-															<fmt:formatDate type="both" value="${document.approvalOne.appDate }" pattern="yyyy-MM-dd"/>
-														</td>
-													</tr>
-													<c:if test="${document.docType eq 'T04'}">
-														<tr>
-															<th>휴가종류</th>
-															<td>${document.vacaType }</td>
-															<th>사용일수</th>
-															<td>${document.vacaUsed }</td>
-														</tr>
-														<tr>
-															<th>휴가 신청 시작일시</th>
-															<td>
-																<c:if test="${document.vacaType eq '연차' || document.vacaType eq '오전반차' || document.vacaType eq '오후반차'}">
-																<fmt:formatDate type="both" value="${document.startDate }" pattern="yyyy-MM-dd"/>
-																</c:if>
-																<c:if test="${document.vacaType ne '연차' && document.vacaType ne '오전반차' && document.vacaType ne '오후반차'}">
-																	<fmt:formatDate type="both" value="${document.startDate }" pattern="yyyy-MM-dd HH:mm"/>
-																</c:if>
-															</td>
-															<th>휴가 신청 종료일시</th>
-															<td>
-																<c:if test="${document.vacaType eq '연차' || document.vacaType eq '오전반차' || document.vacaType eq '오후반차'}">
-																	<fmt:formatDate type="both" value="${document.endDate }" pattern="yyyy-MM-dd"/>
-																</c:if>
-																<c:if test="${document.vacaType ne '연차' && document.vacaType ne '오전반차' && document.vacaType ne '오후반차'}">
-																	<fmt:formatDate type="both" value="${document.endDate }" pattern="yyyy-MM-dd HH:mm"/>
-																</c:if>
-															</td>
-														</tr>
-													</c:if>
-												</tbody>
-											</table>
-							<%-- 				<table class="table">
-												<tr>
-													<td rowspan="3">결재</td>
-													<c:forEach items="${edoc.approval }" var="a">
-														<td class="text-center">
-															${a.aprvlEmpName }
-														</td>
-													</c:forEach>
-												</tr>
-												<tr>
-													<c:forEach items="${edoc.approval }" var="a">
-														<td class="text-center">
-															<c:choose>
-																<c:when test="${a.aprvlApvCode eq 'APV002'}">
-																	<img class="img-autograph" src="${path }/resources/upload/edoc/autograph/defaultRevoke.png">
-																</c:when>
-																<c:when test="${a.aprvlApvCode ne 'APV000' }">
-																	<img class="img-autograph" src="${path }/resources/upload/edoc/autograph/${a.aprvlAutoFilename}">
-																</c:when>
-																<c:when test="${a.aprvlStatus eq 'W' and a.aprvlEmpNo eq loginEmp.emp_no }">
-																	<c:set var="currentApprovalNo" value="${a.aprvlNo }"/>
-																	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_approval">
-																		결재
-																	</button>
-																</c:when>
-															</c:choose>
-														</td>
-													</c:forEach>
-												</tr>
-												<tr>
-													<c:forEach items="${edoc.approval }" var="a">
-														<td class="text-center">
-														<c:if test="${a.aprvlApvCode ne 'APV000'}">
-															<fmt:formatDate type="date" value="${a.aprvlDate }"/>
-														</c:if>
-														</td>
-													</c:forEach>
-												</tr>
-											</table> --%>
-										</div>
-										
-										<div class="container">
-											<div class="document-content">
-												<div class="container card-text">
-													
-													<c:if test="${document.docType eq 'T01' }">
-														${document.docContent}
-													</c:if>
-													<c:if test="${document.docType eq 'T04' }">
-														<div class="d-flex">
-														<div>
-															휴가종류 : 
-														</div>
-														<div style="margin-left:10px;">
-															${document.vacaType }
-														</div>
-														</div>
-														<div >
-															휴가신청일
-														</div>
-														<div>
-															<c:if test="${document.vacaType eq '연차' || document.vacaType eq '오전반차' || document.vacaType eq '오후반차'}">
-																<fmt:formatDate type="both" value="${document.startDate }" pattern="yyyy-MM-dd"/>
-															</c:if>
-															<c:if test="${document.vacaType ne '연차' && document.vacaType ne '오전반차' && document.vacaType ne '오후반차'}">
-																<fmt:formatDate type="both" value="${document.startDate }" pattern="yyyy-MM-dd HH:mm"/>
-															</c:if>
-														</div>
-													
-														${document.reason}
-													</c:if>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- 첨부파일 탭 -->
-<%-- 									<div class="tab-pane fade" id="attach_file">
-										<div class="row">
-											<div class="list-group list-group-numbered">
-												<c:forEach var="file" items="${edoc.attachFiles }">
-													<a href="${path }/edoc/downloadFile?filename=${file.attachRenamedFilename}&edocNo=${edoc.edocNo}" class="list-group-item list-group-item-action">${file.attachOriginalFilename }</a>
-												</c:forEach>
-											</div>
-										</div>
-									</div> --%>
-									<!-- 의견/이력 탭 -->
-<%-- 									<div class="tab-pane fade" id="comment_history">
-										<div class="row ">
-											<div class="list-group list-group-numbered">
-												<c:forEach var="apv" items="${edoc.approval}">
-													<c:if test="${apv.aprvlApvCode ne 'APV000' }">
-														<div class="list-group-item col-sm-6">
-															<div class="card">
-																<div class="card-body">
-																	<h5 class="card-title">
-																		${apv.aprvlEmpName }&nbsp;
-																		<c:choose>
-																			<c:when test="${edoc.creater eq apv.aprvlEmpNo }">
-																				기안
-																			</c:when>
-																			<c:otherwise>
-																				${apv.aprvlApvCode.getCode()}
-																			</c:otherwise>
-																		</c:choose>
-																	</h5>
-																	<h6 class="card-subtitle">
-																		<fmt:formatDate type="date" value="${document.docDate }"/>
-																	</h6>
-																	<p class='card-text'>${apv.aprvlComment }</p>
-																</div>
-															</div>
-														</div>
-													</c:if>
-												</c:forEach>
-											</div>
-										</div>
-									</div> --%>
-								</div>
-							</div>
-						</div>
-					</div>
-	<!-- 			</div>
-			</div>
-		</div>
-	</div> -->
-</section>
+    
+
 <div class="container">
     <div class="card mt-5">
         <div class="card-header">
-            <h4 class="card-title">기본보고서</h4>
+            <h4 class="card-title">Single Layout</h4>
         </div>
         <div>
         <c:if test="${employee.empNo eq document.docWriter && document.docStat eq '상신' }">
@@ -263,9 +43,7 @@
         </c:if>
         </div>
         <div class="card-body">
-        	<div style="width:100%">
-        	<div id="line" class="d-flex" style="float:right;">
-        	</div>
+        	<div id="line" class="d-flex" style="float:right; width:100%">
         	</div>
             <div class="card-body d-flex">
 				<div id="title" style="width:50%;">
@@ -280,9 +58,9 @@
 			</div>
 			<div id="content">
 				<div class="card-body">
-                     <%--   <div id="editor" style="display: none;">
+                       <div id="editor" style="display: none;">
 							${document.docContent }
-                       </div> --%>
+                       </div>
                        <input type="hidden" name="basicContent" id="basicContent">
                    </div>			
 
@@ -387,8 +165,7 @@
 		// 문서열리자마자 해당문서 docWriter 정보랑 approvals 가지구 와서 ! 결재란 만들어주기 ! ! !
 		const $line = document.querySelector("#line");
 		console.log('${document.docType}');
-		console.log('${document.docNumber}');
-		console.log('${document.vacaUsed}');
+		console.log('${document.docContent}')
 		
 		console.log("${document.employee.empName}");
 		console.log("${document.employee.department.deptName}");
@@ -452,7 +229,8 @@
 				
 				$line.appendChild($appDiv);
 				
-			
+				const $content = document.querySelector("#editor");
+				$content.innerHTML = "${document.docContent}";
 			}
 		})
 		

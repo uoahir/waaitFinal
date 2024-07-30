@@ -73,4 +73,10 @@ public interface EDocDao {
 //	사원의 연차정보 뽑아오기
 	List<OffDocument> getOffDocumentList(SqlSession session, Long empNo);
 	
+//	사원의 잔여연차 뽑아오기
+	int getRemainingOff(SqlSession session, Long empNo);
+	
+//	작성자 정보 뽑아오기
+	Employee getWriter(SqlSession session, Long empNo);
+	
 }

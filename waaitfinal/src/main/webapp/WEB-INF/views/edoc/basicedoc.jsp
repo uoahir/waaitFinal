@@ -64,30 +64,57 @@
 
 					<!-- <textarea name="basicConent" id="basicContent"></textarea> -->
 				</div>
-				<div id="life">
-					보존연한 <label for="1"> <input type="radio" name="docLife"
-						id="1" value="1" checked> 1년
-					</label> <label for="3"> <input type="radio" name="docLife" id="3"
-						value="3"> 3년
-					</label> <label for="5"> <input type="radio" name="docLife" id="5"
-						value="5"> 5년
-					</label> <label for="10"> <input type="radio" name="docLife" id="10"
-						value="10"> 10년
-					</label> <label for="permanent"> <input type="radio" name="docLife"
-						id="permanent" value="permanent"> 영구
-					</label>
-				</div>
-				<div id="open">
-					보안등급 <label for="a"> <input type="radio" name="docOpen"
-						id="a" value="all" checked> 전체공개
-					</label> <label for="b"> <input type="radio" name="docOpen" id="b"
-						value="dept"> 부서공개
-					</label> <label for="c"> <input type="radio" name="docOpen" id="c"
-						value="private"> 비공개
-					</label>
-				</div>
-				<div>
-					<input type="file" name="docFile" multiple>
+				<div class="card-body">
+					<div id="life" class = "d-flex ">
+						<div class="mt-1" style = "margin-right:10px;">
+							<h6>보존연한</h6>
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="1" value="1"> 
+							<label for="1" class="form-check-label">1년 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="3" value="3"> 
+							<label for="3" class="form-check-label">3년 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="5" value="5"> 
+							<label for="5" class="form-check-label">5년 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="10" value="10"> 
+							<label for="10" class="form-check-label">10년 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docLife"
+							id="permanent" value="permanent"> 
+							<label for="permanent" class="form-check-label">영구 </label> 
+						</div>
+					</div>
+					<div id="open" class = "d-flex">
+						<div class="mt-1" style = "margin-right:10px;">
+							<h6>보안등급</h6>
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docOpen"
+							id="a" value="all">
+							<label for="a" class="form-check-label">전체공개 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docOpen"
+							id="b" value="dept">
+							<label for="b" class="form-check-label">부서공개 </label> 
+						</div>
+						<div class="form-check" style = "margin-right:10px;">
+							<input class="form-check-input" type="radio" name="docOpen"
+							id="c" value="private">
+							<label for="c" class="form-check-label">비공개 </label> 
+						</div>
+					</div>
 				</div>
 				<input type="hidden" name="docType" value="${type}">
 			</form>
