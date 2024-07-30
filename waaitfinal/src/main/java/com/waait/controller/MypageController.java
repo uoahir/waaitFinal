@@ -40,7 +40,7 @@ public class MypageController {
 		total.forEach(e->{
 			System.out.println(e);
 		});			
-		return "mypage/mypagedemo";
+		return "mypage/mypageindex";
 	}
 	
 	//사용자 로그인 시큐리티로 데이터 가져오기
@@ -66,7 +66,6 @@ public class MypageController {
 //		});			
 //		return "mypage/mypageindex";
 //	}
-	
 	
 	
 	
