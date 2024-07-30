@@ -40,4 +40,10 @@ public interface EDocService {
 
 //	사원의 연차정보 가져오기
 	List<OffDocument> getOffDocumentList(Long empNo);
+	
+//	해당사원의 보유연차(잔여연차) 가져오기
+	int getRemainingOff(Long empNo);
+	
+//	작성자 정보 뽑아오기
+	Employee getWriter(Long empNo);
 }

@@ -225,6 +225,20 @@ public class EDocServiceImpl implements EDocService {
 		// TODO Auto-generated method stub
 		return edocDao.getOffDocumentList(session, empNo);
 	}
+
+	@Override
+	public int getRemainingOff(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.getRemainingOff(session, empNo);
+	}
+
+	@Override
+	public Employee getWriter(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.getWriter(session, empNo);
+	}
+	
+	
 	
 	
 	

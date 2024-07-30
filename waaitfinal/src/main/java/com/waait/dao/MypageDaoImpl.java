@@ -16,14 +16,17 @@ public class MypageDaoImpl implements MypageDao {
 	
 	private SqlSession session;
 	
-//	@Override
-//	public int updateEmpPwd(SqlSession session, Employee e) {
-//		return session.insert("session.updateEmpPwd",e);
-//	}
 	@Override
 	public List<Mypage> myInfoList(SqlSession session, long empNumber) {
 		return session.selectList("mypage.myInfoList",empNumber);
 	}
+
+	@Override
+	public List<Mypage> myVacation(SqlSession session, long empNumber) {
+		return session.selectList("mypage.myVacation",empNumber);
+	}
+	
+	
 
 	
 	

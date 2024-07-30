@@ -146,7 +146,7 @@
 		})
 		
 				
-		/* fetch("/edoc/approval",{
+		fetch("/edoc/approval",{
 			method : 'POST',
 			headers: {
 				'Content-Type': 'application/json; charset=UTF-8;',
@@ -168,7 +168,6 @@
 				alert("승인실패");
 			}
 		})
-		 */
 		
 	}
 </script>

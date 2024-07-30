@@ -9,6 +9,7 @@ import com.waait.dto.Mypage;
 
 public interface MypageDao {
 
-//	int updateEmpPwd(SqlSession session,Employee e);
 	List<Mypage>myInfoList(SqlSession session, long empNumber);
+	List<Mypage>myVacation(SqlSession session,long empNumber);
+	
 }
