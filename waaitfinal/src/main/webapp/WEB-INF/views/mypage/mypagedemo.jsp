@@ -8,20 +8,62 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h3>마이페이지 데모</h3>
+	<h1>마이페이지 데모</h1><br>
+	<h2><나의 연차 조회></h2>
 	
 	<table>
 		<thead>
+		<tr>	
+			<th>사원번호</th>
+			<th>사원이름</th>
+		</tr>
+					<tr>
+						<td>${total.get(0).empNo }</td>
+						<td>${total.get(0).empName }</td>
+					</tr>			
+		</thead>
+	</table><br>
+	
+	<table>
+		<thead>
+		<tr>	
+			<th>잔여연차 / </th>
+			<th>총연차</th>
+		</tr>
 			<c:forEach var="m" items="${total }">
 					<tr>
-						<td>"EMPNO: "+${m.empNo }</td>
-						<td>"EMPNAME: "+${m.empName }</td>
-						<td>"vacationNo: "+${m.vacationNo }</td>
-						<td>"workNo: "+${m.workNo }</td>
+						<td>${m.vacaLeft }</td>
+						<td>${m.basicAnnualLeave }</td>
 					</tr>
 				</c:forEach>
 		</thead>
 	</table>
+	
+	<table>
+		<thead>
+			<tr>
+				<th>문서제목</th>
+				<th>승인상태</th>
+				<th>연차구분</th>
+				<th>연차시작일</th>
+				<th>연차끝</th>
+			</tr>
+			<c:forEach var="m" items="${total}">
+				<tr>
+					<td>휴가신청서</td>
+					<td>${m.vacaPermit }</td>
+					<td>${m.vacaType }</td>
+					<td>${m.startDate }</td>
+					<td>${m.endDate }</td>
+				</tr>
+			</c:forEach>
+		</thead>
+	</table>
+	
+	<br>
+	<br>
+	<h2><나의 근태 현황 조회></h2>
+	
 
 
 

@@ -7,12 +7,10 @@ import com.waait.dto.Mypage;
 
 public interface MypageService {
 	
-	//새로운 비밀번호 삽입
-//	int updateEmpPwd(Employee e);	
 	//사원 정보 불러오기
 	List<Mypage> myInfoList(Long empNumber);
 	//총 연차,잔여연차 출력
-	
+	List<Mypage> myVacation(Long empNumber);
 	
 	
 }
