@@ -1,9 +1,9 @@
 package com.waait.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.waait.dto.Schedule;
+import com.waait.dto.ShareSchedule;
 
 public interface ScheduleService {
 	
@@ -15,6 +15,8 @@ public interface ScheduleService {
 	int updateSchedule(Schedule s);
 	//일정 삭제하기
 	int deleteSchedule(int num);
+	//그룹일정 리스트에 출력 받아오기
+//	List<ShareSchedule> shareScheduleList(long empNumber); 
 	
 	
 

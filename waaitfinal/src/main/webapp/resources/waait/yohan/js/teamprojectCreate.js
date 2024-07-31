@@ -1,416 +1,326 @@
-/**
- * 
- */
-//보낼데이터 설정 부분 ---------------------------------------------------
-let projectName = "";
-let proejctSummary = "";
-let projectStartDate = "";
-let projectEndDate = "";
-console.log(employees[1].empName);
+employees.map(m => {
+	console.log(`번호: ${m.empNo} 이름: ${m.empName}`);
+});
 
-//const employeesList = [employees];
-/*const employeeList = [];
-employeeList.push(employees.map(m=>m)); 
-console.log(employeeList);
-*/// -----------------------------------------------------------------
+let projectNameV = "";
+let proejectSummaryV = "";
+let projectStartDateV = "";
+let projectEndDateV = "";
+let selectEmpList = [];
+let projectData = [];
+
 const projectInfo = document.getElementById("projectInfo");
-const functionBoxList = [];
-const projectEmployee = [];
-const functionBoxListTest = [];
-const basicFunction1 = () => {
-	const $div = document.createElement('div');
-	$div.style.height = "811px";
-	$div.id = "$div";
-	projectInfo.appendChild($div);
+const topbanner = document.getElementById("topbanner");
 
-	// "기능 추가하기" 버튼을 $div에 추가
-	const $button = document.createElement("button");
-	$button.id = "addBtn";
-	$button.innerText = "기능 추가하기";
-	$button.onclick = () => addFunctionBox($div);
-	$div.appendChild($button);
-}; //기본적인 div 생성해서 appendChild에 넣어줌
+const firstStep = () => {
+	projectNameV = document.getElementById("projectName").value;
+	proejectSummaryV = document.getElementById("proejectSummary").value;
+	projectStartDateV = document.getElementById("projectStartDate").value;
+	projectEndDateV = document.getElementById("projectEndDate").value;
 
-const removediv = () => {
-	projectInfo.firstChild.remove();
-}; //projectInfo 내부 div를 삭제함 
+	// projectInfo 내용을 지웁니다.
+	projectInfo.innerHTML = '';
+	topbanner.innerText = 'Project - Employees';
 
-const persentBar = (gauge) => { //게이지 바 부분 함수 
-	document.getElementById("persentBar").style.width = `${gauge}%`;    //bar에 대한 설정
-	document.getElementById("persentBar").setAttribute('aria-valuenow', `${gauge}`);
-};//게이지바에 있는 내용 삭제함 
-
-const addFunctionBox = (div) => {
-	const functionBox = document.createElement("input");
-	functionBox.className = "round ";
-	functionBox.name = "functionBox";
-	functionBoxList.push(functionBox);
-	div.appendChild(functionBox);
-}
-
-const firstStep = () => {  //1 -> 2 
-	console.log("첫단계");
-
-	projectName = document.getElementById("projectName").value;
-	proejctSummary = document.getElementById("proejctSummary").value;
-	projectStartDate = document.getElementById("projectStartDate").value;
-	projectEndDate = document.getElementById("projectEndDate").value;
-	//프로젝트에 대한 정보 
-	console.log(projectName);
-	console.log(proejctSummary);
-	console.log(projectStartDate);
-	console.log(projectEndDate);
-
-	if (projectName === '' || proejctSummary == '') {
-		document.getElementById("projectName").style.borderColor = 'red';
-		document.getElementById("proejctSummary").style.borderColor = 'red';
-		//확인했음
-	} else {
-		persentBar(50);
-		document.getElementById("firstStep").onclick = secondStep; //버튼 onclick속성변경
-		document.getElementById("projectInfo").removeChild(document.getElementById('proejctSummary'));
-		document.getElementById("projectInfo").removeChild(document.getElementById('projectName'));
-		document.getElementById("projectInfo").removeChild(document.getElementById("projectStartDate"));
-		document.getElementById("projectInfo").removeChild(document.getElementById("projectEndDate"));
-		removediv();
-		basicFunction1(); // secondStep을 위한 값 설정
-		document.getElementById("topbanner").innerText = 'Create Project - Function';
-	}
-} //첫단계 저장함
-
-const secondStep = () => {
-	/*removediv();
-	removediv();*/
-
-	persentBar(75);
-	document.getElementById("firstStep").onclick = thirdStep;
-	document.getElementById("addBtn").setAttribute("hidden", "on");
-
-	functionBoxList.forEach((functionBox, index) => {
-		console.log(`FunctionBox ${index + 1}: ${functionBox.value}`) //리스트로 받아옴
-	})
-	functionBoxList
-	document.getElementById("topbanner").innerText = 'Create Project - Employee';
-
-	// null 또는 빈 문자열이 아닌 요소만을 필터링하여 functionBoxListTest 배열에 추가
-	functionBoxList.filter(b => b.value !== null && b.value !== '').forEach(b => functionBoxListTest.push(projectFunction = {
-			
-				functionName : b.value
-			}));
-	// 결과 확인
-	console.log("아아아아아아아" + functionBoxListTest);
-	functionBoxList.forEach(box => box.parentNode.removeChild(box));
-	//const divEmployeeInfo = document.createElement("div");
-
-	employees.map((employee) => {
-		const empCheckbox = document.createElement("input");
-		empCheckbox.setAttribute("type", "checkbox");
-		empCheckbox.value = `${employee.empNo}`;
-		empCheckbox.className = "empCheckBox";
-
-		const divEmployeeInfo = document.createElement("div");
-		divEmployeeInfo.className = "d-flex";
-		divEmployeeInfo.style.alignItems = "center";
-		let toDate = new Date();
-		let year = toDate.getFullYear();
-		//console.log((employee.empStartDate+"").slice(-4));.
-		//console.log(year-(employee.empStartDate+"").slice(-4));
-		let devLevel = "";
-		if (year - (employee.empStartDate + "").slice(-4) < 4) {
-			devLevel = '초급'
-			console.log(devLevel);
-
-		} else if (year - (employee.empStartDate + "").slice(-4) < '6') {
-			devLevel = '중급'
-			console.log(devLevel);
-		} else if (year - (employee.empStartDate + "").slice(-4) < '10') {
-			devLevel = '고급'
-			console.log(devLevel);
-		} else {
-			devLevel = 'Tech Lead' //리드 개발자
-			console.log(devLevel);
-		}
-
-
-
-		const pEmpName = document.createElement("span");
-		pEmpName.className = "ml-1";
-		/*pEmpName.style.margin="auto";*/
-		pEmpName.innerText = employee.empName; 		// 이름 
-
-		const pEmplevelCode = document.createElement("span");
-		pEmplevelCode.innerText = employee.levelCode; //직급
-
-		const pEmpDeptCode = document.createElement("span");
-		pEmpDeptCode.innerText = employee.deptCode; //부서명
-
-		const empDevLevel = document.createElement("span");
-		empDevLevel.innerText = devLevel; // 년차
-		divEmployeeInfo.appendChild(empCheckbox);
-		divEmployeeInfo.appendChild(pEmpName); // 여기서 넣어야함
-		divEmployeeInfo.appendChild(pEmplevelCode); // 여기서 넣어야함
-		divEmployeeInfo.appendChild(pEmpDeptCode); // 여기서 넣어야함
-		divEmployeeInfo.appendChild(empDevLevel); // 여기서 넣어야함
-		//-----------------------------------------------------------------------
-		$div.appendChild(divEmployeeInfo);
-		console.log(employee);
-	})
-
-
-	// 업데이트된 functionBoxList 배열
-
-	//projectInfo.appendChild(divEmployeeInfo);
-	removediv();
-}
-//------------------------변수 선언-----------------------------------
-const allocationList = [];
-function Allocation(empName, empNo, allocationfun) {
-	this.empName = empName,
-		this.empNo = empNo,
-		this.allocationfun = allocationfun;
-}
-//------------------------------------------------------------------
-const thirdStep = () => { //할당해주는 파트
-
-
-
-
-
-
-
-	// 로직 처리
-	projectEmployee.length = 0;
-	document.querySelectorAll('.empCheckBox').forEach(check => {
-		if (check.checked) {
-			employees.forEach((e) => {
-				if (check.value == e.empNo) {
-					projectEmployee.push(e);
-				}
-			})
-		}
-	});
-
-
-	console.log('Selected Employees:', projectEmployee); //내가 선택한 employee
-	persentBar(100);
-	document.getElementById("firstStep").onclick = finalStep;
-	document.getElementById("firstStep").innerText = "프로젝트생성";
-	document.getElementById("topbanner").innerText = 'Create Project - Allocate';
-	console.log(projectEmployee);
-	projectInfo.replaceChildren(); //안에 있는 값삭제 
-	//-----------------div 만들기-----------------
-	const $div = document.createElement('div');
-	$div.style.height = "811px";
-	$div.id = "$div";
-	projectInfo.appendChild($div);
+	const $div = document.createElement("div");
+	$div.style.height = "800px";
 	$div.style.display = "flex";
-	$div.style.justifyItems = "center";
-	const dev1h4 = document.createElement("h2");
-	const dev2h4 = document.createElement("h2");
-	const dev3h4 = document.createElement("h2");
-	const dev4h4 = document.createElement("h2");
-	//------------------------------------------
-	dev1h4.style.textAlign = "center";
-	dev2h4.style.textAlign = "center";
-	dev3h4.style.textAlign = "center";
-	dev4h4.style.textAlign = "center";
+	$div.style.flexGrow = "1";
 
-	dev1h4.innerHTML = "초급";
-	dev2h4.innerHTML = "중급";
-	dev3h4.innerHTML = "고급";
-	dev4h4.innerHTML = "리드 개발자";
-	//----------------------------------------------
-	const dev1EmpName = document.createElement("div");
-	dev1EmpName.style.display = "flex";
-	dev1EmpName.style.height = "100px";
-	const dev2EmpName = document.createElement("div");
-	dev2EmpName.style.display = "flex";
-	dev2EmpName.style.height = "100px";
-	const dev3EmpName = document.createElement("div");
-	dev3EmpName.style.display = "flex";
-	dev3EmpName.style.height = "100px";
-	const dev4EmpName = document.createElement("div");
-	dev4EmpName.style.display = "flex";
-	dev4EmpName.style.height = "100px";
-	//---------------------------------------------이름 정렬할 곳
+	const employeeList = document.createElement("div");
+	const selectEmployeeList = document.createElement("div");
 
-	const dev4Div = document.createElement("div"); //lead개발자
-	dev4Div.appendChild(dev4h4);
-	dev4Div.id = "dev4";
-	const dev3Div = document.createElement("div"); //고급
-	dev3Div.appendChild(dev3h4);
-	dev3Div.id = "dev3";
-	const dev2Div = document.createElement("div"); //중급
-	dev2Div.appendChild(dev2h4);
-	dev2Div.id = "dev2";
-	const dev1Div = document.createElement("div"); //초급
+	//h3태그 해서 UI화면 
+	const employeeListh3 = document.createElement("h3");
+	employeeListh3.innerText = "employeeList";
+	employeeListh3.style.textAlign = "center";
+	const selectEmployeeListListh3 = document.createElement("h3");
+	selectEmployeeListListh3.style.textAlign = "center";
+	selectEmployeeListListh3.innerText = "selectEmployeeList";
 
-	dev1Div.appendChild(dev1h4);
-	dev1Div.id = "dev1";
-	//------------------div 넣기---------------
-	dev1Div.appendChild(dev1EmpName);
-	dev2Div.appendChild(dev2EmpName);
-	dev3Div.appendChild(dev3EmpName);
-	dev4Div.appendChild(dev4EmpName);
-	//-----------------------------------------
+	// 직원 박스
+	employeeList.style.width = "40%";
+	employeeList.style.height = "750px";
+	employeeList.style.border = "1px solid black";
+	employeeList.style.flexGrow = "1";
+	employeeList.style.marginRight = "10px"; // 선택사항: div들 사이에 간격 추가
 
+	// 선택된 직원 박스 
+	selectEmployeeList.style.width = "40%";
+	selectEmployeeList.style.height = "750px";
+	selectEmployeeList.style.border = "1px solid black";
+	selectEmployeeList.style.flexGrow = "1";
 
+	// 안에 박스 여기에 리스트 목록을 넣어야함
+	const divEmpList = document.createElement("div");
+	const divEmpSelectList = document.createElement("div");
+	divEmpSelectList.style.height = "90%";
+	divEmpSelectList.className = "card";
+	divEmpSelectList.id = "divEmpSelectList";
+	divEmpList.style.height = "90%";
+	divEmpList.className = "card";
+	divEmpList.id = "divEmpList";
+	employees.map(m => {
+		//const windowFeatures = "left=33%,top=33%,width=700px,height=700px";
+		const empOne = document.createElement("div");
+		empOne.style.display = "flex";
+		empOne.style.justifyContent = "space-around";
+		const empName = document.createElement("p"); //이름
+		const level = document.createElement("p");	// 등급
+		const dept = document.createElement("p");	// 부서
+		empName.style.width = "50px";
+		dept.style.width = "90px";
+		level.style.width = "50px";
 
-	const $divEmp = document.createElement("div");
-	/*$divEmp.style.display="flex";*/
-	//-----------------생성부분------------------------
-	const emph1 = document.createElement("h1");
-	const funh1 = document.createElement("h1");
-	funh1.style.textAlign = "center";
+		const no = document.createElement("p");
+		no.innerText = `${m.empNo}`;
+		no.setAttribute('hidden', true);
+		no.className = 'empNo';
 
-	//-----------------------------------------------
-	emph1.innerText = "Employee";
-	emph1.style.textAlign = "center";
-	$divEmp.style.border = "3px solid black";
-	$divEmp.style.width = "45%";
-	$divEmp.style.height = "90%";
-
-
-	$divEmp.appendChild(emph1);
-
-	$divEmp.appendChild(dev1Div);
-	$divEmp.appendChild(dev2Div);
-	$divEmp.appendChild(dev3Div);
-	$divEmp.appendChild(dev4Div);
-
-
-
-	//---------------------------전체 FUN DIV------------------------------
-	funh1.innerText = "Function";
-	const $divFun = document.createElement("div");
-	$divFun.style.border = "3px solid black";
-	$divFun.style.width = "45%";
-	$divFun.style.height = "90%";
-	$divFun.id = "$divFun";
-	$divFun.appendChild(funh1);
-	//---------------------------전체 FUN DIV------------------------------
-	const divInFun1 = document.createElement("div");
-	divInFun1.style.width = "100%";
-	divInFun1.style.height = "80%";
-	divInFun1.style.backgroundColor = "aqua";
-	console.log("내껀 왜안되냐고" + functionBoxList);
-	let i = 0;
-	functionBoxList.forEach((functionBox) => {
-		if (functionBox.value != '' && functionBox.value != null) {
-			const divinfun = document.createElement("div");
-			divinfun.style.display = "flex";
-
-			i++;
-			//------------------select-----------------
-			const $select = document.createElement("select");
-			$select.className = "function-select";
-			$select.dataset.function = functionBox.value;
-			projectEmployee.forEach((e) => {
-				const $option = document.createElement("option");
-				$option.className = "form-select";
-				$option.value = e.empNo;
-				$option.innerText = e.empName;
-				$select.appendChild($option);
-			});
-			//-----------------------------------------------
-			const p = document.createElement("p");
-			p.innerText = i + ". " + functionBox.value;
-			divinfun.appendChild(p);
-			divinfun.appendChild($select);
-			divInFun1.appendChild(divinfun);
-		}
-	});
-	let j = 0;
-	projectEmployee.forEach((e) => {
-		const $p = document.createElement("p");
-		$p.style.textAlign = "center";
-		$p.style.fontSize = "20px";
-		$p.style.width = "75px";
-		$p.style.height = "40px";
-		$p.addEventListener("click", () => {
-			window.open(`${contextPath}/empProject/${e.empNo}`);
-
-		})
-		/*$p.style.height = "25px";*/
-		//p.innerText = j+". "+e.empName;
-		//$divEmp.appendChild(p);
-
-		let toDate = new Date();
-		let year = toDate.getFullYear();
-		//console.log((employee.empStartDate+"").slice(-4));.
-		//console.log(year-(employee.empStartDate+"").slice(-4));
-
-		if (year - (e.empStartDate + "").slice(-4) < 4) {
-			$p.innerText = `${e.empName}`;
-			dev1EmpName.appendChild($p);
-		} else if (year - (e.empStartDate + "").slice(-4) < '6') {
-			$p.innerText = `${e.empName}`;
-			dev2EmpName.appendChild($p);
-		} else if (year - (e.empStartDate + "").slice(-4) < '10') {
-			$p.innerText = `${e.empName}`;
-			dev3EmpName.appendChild($p);
-		} else {
-			$p.innerText = `${e.empName}`;
-			dev4EmpName.appendChild($p);
-		}
-
-	});
-	console.log(functionBoxListTest);
-	//---------------기본 확인 값 출력------------------	
-	const butDiv = document.createElement("div");
-	butDiv.className = "d-flex mt-3";
-
-	const $AllocationButton = document.createElement("button");
-	$AllocationButton.innerText = "Allocation";
-	$AllocationButton.className = "btn btn-Success";
-	$AllocationButton.style.margin = "auto";
-	$AllocationButton.onclick = Allocation1;
-
-	const $UpdateButton = document.createElement("button");
-	$UpdateButton.innerText = "Update";
-	$UpdateButton.className = "btn btn-Danger";
-	$UpdateButton.style.margin = "auto";
-	$UpdateButton.onclick = UpdateButton;
-
-	//------------------------버튼 만들기----------------------------
-	butDiv.appendChild($AllocationButton);
-	butDiv.appendChild($UpdateButton);
-	$divFun.appendChild(divInFun1);//값 넣음
-	$divFun.appendChild(butDiv);
-
-	//projectEmployee list
-	$div.appendChild($divEmp);
-	$div.appendChild($divFun);
-	function Allocation1() {
-		allocationList.length = 0;
-		document.querySelectorAll('.function-select').forEach(select => {
-			const empNo = select.value;
-			const allocationFun = select.dataset.function;
-			const empName = select.options[select.selectedIndex].text;
-			/*const allocation = new Allocation(empName, empNo, allocationFun);*/
-			allocationList.push(Allocation = {
-				empNo: empNo,
-				allocationFun: allocationFun,
-				empName: empName
-			});
+		const employeeDetail = document.createElement("button");
+		employeeDetail.innerText = "프로젝트 내역";
+		employeeDetail.id = "employeeDetail";
+		employeeDetail.className = "btn btn-outline-secondary";
+		employeeDetail.addEventListener("click", () => {
+			window.open(`${contextPath}/employee${m.empNo}/projects`, null, `left=${(window.screen.width - 700) / 2}px,top=${(window.screen.height - 700) / 2}px,width=700px,height=700px`);
 		});
-		console.log("데이터 값 확인", allocationList);
-	}//함수 정의 
-	function UpdateButton() {
+		const employeeMove = document.createElement("button");
+		employeeMove.innerText = "선택";
+		employeeMove.className = "btn btn-outline-Primary";
+		employeeMove.id = "employeeMove";
+		employeeMove.addEventListener("click", () => {
+			divEmpSelectList.appendChild(empOne);
+			employeeMove.innerText = "삭제";
+			employeeMove.className = "btn btn-outline-Danger";
+			employeeMove.removeEventListener("click", moveToSelect);
+			employeeMove.addEventListener("click", moveToOriginal);
+		});
 
-		allocationList.length = 0;
-		console.log("데이터 값 확인", allocationList);
+		const moveToSelect = () => {
+			divEmpSelectList.appendChild(empOne);
+			employeeMove.innerText = "삭제";
+			employeeMove.className = "btn btn-outline-Danger";
+			employeeMove.removeEventListener("click", moveToSelect);
+			employeeMove.addEventListener("click", moveToOriginal);
+		};
+
+		const moveToOriginal = () => {
+			divEmpList.appendChild(empOne);
+			employeeMove.innerText = "선택";
+			employeeMove.className = "btn btn-outline-Primary";
+			employeeMove.removeEventListener("click", moveToOriginal);
+			employeeMove.addEventListener("click", moveToSelect);
+		};;
+
+		empName.innerText = `${m.empName}`;
+		if (m.levelCode === 'L1') {//대표
+			level.innerText = "대표";
+		} else if (m.levelCode === 'L2') { //부장
+			level.innerText = "부장";
+		} else if (m.levelCode === 'L3') { // 팀장
+			level.innerText = "팀장";
+		} else { //사원
+			level.innerText = "사원";
+		}
+		if (m.deptCode === 'D3' || m.deptCode === 'D4' || m.deptCode === 'D2') {
+			if (m.deptCode === 'D2') { //개발부
+				dept.innerText = "개발부";
+				empOne.appendChild(empName);
+				empOne.appendChild(dept);
+				empOne.appendChild(level);
+				empOne.appendChild(employeeDetail); // 상세정보
+				empOne.appendChild(employeeMove);
+				empOne.appendChild(no);
+				divEmpList.appendChild(empOne);
+			} else if (m.deptCode === 'D3') { //개발 1팀
+				dept.innerText = "개발 1팀";
+				empOne.appendChild(empName);
+				empOne.appendChild(dept);
+				empOne.appendChild(level);
+				empOne.appendChild(employeeDetail); // 상세정보
+				empOne.appendChild(employeeMove);
+				empOne.appendChild(no);
+				divEmpList.appendChild(empOne);
+			} else if (m.deptCode === 'D4') { //개발 2팀
+				dept.innerText = "개발 2팀"
+				empOne.appendChild(empName);
+				empOne.appendChild(dept);
+				empOne.appendChild(level);
+				empOne.appendChild(employeeDetail); // 상세정보
+				empOne.appendChild(employeeMove);
+				empOne.appendChild(no);
+				divEmpList.appendChild(empOne);
+			}
+		}
+
+	})
+	employeeList.appendChild(employeeListh3);
+	selectEmployeeList.appendChild(selectEmployeeListListh3);
+	selectEmployeeList.appendChild(divEmpSelectList);
+	employeeList.appendChild(divEmpList);
+
+	$div.appendChild(employeeList);
+	$div.appendChild(selectEmployeeList);
+	projectInfo.appendChild($div);
+
+	//-----------------------변환---------------------------------
+	document.getElementById("firstStep").onclick = secondStep;
+
+};
+const secondStep = () => {
+	const divEmpSelectList = document.getElementById("divEmpSelectList");
+	selectEmpList = Array.from(divEmpSelectList.childNodes).map(node => {
+		const empNo = node.querySelector('.empNo').innerText;
+		const empName = node.querySelector('p:first-child').innerText;
+		const dept = node.querySelector('p:nth-child(2)').innerText;
+		const level = node.querySelector('p:nth-child(3)').innerText;
+		return { empNo, empName, dept, level };
+	});
+	console.log("프로젝트이름" + projectNameV);
+	console.log("프로젝트 내용" + proejectSummaryV);
+	console.log("프로젝트 시작날짜" + projectStartDateV);
+	console.log("프로젝트 종료 날짜" + projectEndDateV);
+	projectInfo.innerHTML = '';
+	console.log(selectEmpList); // Debugging
+	// Further actions with selectEmpList
+	//----------화면 생성부분-------------------------------------
+	const $div = document.createElement("div");
+	$div.style.height = "800px";
+	$div.className = "card";
+	const $table = document.createElement("table");
+	$table.className = "table table-lg";
+	const $tr = document.createElement("tr");
+	const $td1 = document.createElement("td"); //제목
+	const $td2 = document.createElement("td"); //내용
+	const $td3 = document.createElement("td"); // 우선순위
+	const $td4 = document.createElement("td"); // 인원 
+	$td1.innerText = "제목"
+	$td2.innerText = "내용"
+	$td3.innerText = "우선순위"
+	$td4.innerText = "사원"
+	$tr.appendChild($td1);
+	$tr.appendChild($td2);
+	$tr.appendChild($td3);
+	$tr.appendChild($td4);
+	$table.appendChild($tr);
+	
+	
+	function addSelectBox() {
+		const $trFun = document.createElement("tr");
+		const $tdFun1 = document.createElement("td");
+		const $tdFun2 = document.createElement("td");
+		const $tdFun3 = document.createElement("td");
+		const $tdFun4 = document.createElement("td");
+		
+		
+		const $functionName = document.createElement("input");
+		$functionName.className="form-control square";
+		$functionName.style.width="300px";
+		$functionName.id="$functionName"; // id 값 
+		$tdFun1.appendChild($functionName); // td1 
+		
+		const $functionSummary = document.createElement("input");
+		$functionSummary.className="form-control square";
+		$functionSummary.style.width="300px";
+		$functionSummary.id="$functionSummary"; // id 값 
+		$tdFun2.appendChild($functionSummary); //td2
+		
+		
+		const $functionLevel = document.createElement("select");
+		$functionLevel.id="$functionLevel"; // id값 
+		const level1 = document.createElement("option");
+		const level2 = document.createElement("option");
+		const level3 = document.createElement("option");
+		level1.innerText="1순위";
+		level2.innerText="2순위";
+		level3.innerText="3순위";
+		
+		level1.value="1";
+		level2.value="2";
+		level3.value="3";
+		
+	
+		
+		
+		$functionLevel.appendChild(level1);
+		$functionLevel.appendChild(level2);
+		$functionLevel.appendChild(level3);
+		$tdFun3.appendChild($functionLevel); // td 3		
+					
+		const $select = document.createElement("select");
+		$select.id = "$select";
+		selectEmpList.map((emp) => {
+			const $option = document.createElement("option");
+			$option.value = emp.empNo;
+			$option.innerText = emp.empName;
+			$select.appendChild($option);
+		})
+		$tdFun4.appendChild($select);
+		$trFun.appendChild($tdFun1);
+		$trFun.appendChild($tdFun2);
+		$trFun.appendChild($tdFun3);
+		$trFun.appendChild($tdFun4);
+		
+		$table.appendChild($trFun);
 	}
+	$div.appendChild($table);
+	const $funButton = document.createElement("button");
+	$funButton.onclick=addSelectBox;
+	$funButton.innerText="추가 버튼";
+	$div.appendChild($funButton);
+	projectInfo.appendChild($div);
+	
+	document.getElementById("firstStep").onclick = thirdStep;
+	
+};
+const thirdStep = ()=>{
+	  const $table = document.querySelector("#projectInfo table");
+    const rows = $table.querySelectorAll("tr:not(:first-child)"); // exclude header row
+    
+
+    rows.forEach(row => {
+        const functionName = row.querySelector('input[id="$functionName"]').value;
+        const functionSummary = row.querySelector('input[id="$functionSummary"]').value;
+        const functionLevel = row.querySelector('select[id="$functionLevel"]').value;
+        const empNo = row.querySelector('select[id="$select"]').value; // empNo
+        const empSelect = row.querySelector('select[id="$select"]');
+        const empName = empSelect.options[empSelect.selectedIndex].innerText;
+        const functionStatus = "ToDo"; //전체 다 하는중일테니까 
+        projectData.push({ functionName, functionSummary, functionLevel, empNo, empName ,functionStatus});
+    });
+
+    console.log("선택된 사원 리스트:", selectEmpList);
+    console.log("Table data:", projectData);
+	connect();
+}
+
+
+function connect(){
+	fetch(`${contextPath}/teamproject/data`,{
+		method : 'POST',
+		headers : {
+			'Content-Type': 'application/json;charset=UTF-8'
+		},
+		body : JSON.stringify({
+			projectName: projectNameV, 
+			projectSummary: proejectSummaryV,
+			projectStartDate : projectStartDateV,
+			projectEndDate : projectEndDateV,
+			allocationList : projectData
+			
+		})
+	})
+	.then(res =>res.json())
+	.then(data =>{
+		location.assign(`${contextPath}/teamproject/main`);
+	}).catch(error=>{
+		location.assign(`${contextPath}/teamproject/error`);
+	})
+
 
 }
-function formatDate(dateString) {
-	const date = new Date(dateString);
-	const year = date.getFullYear();
-	const month = ('0' + (date.getMonth() + 1)).slice(-2);
-	const day = ('0' + date.getDate()).slice(-2);
-	return `${year}-${month}-${day}`;
-}
-
+//
+/*
 function connect() {
 	console.log(allocationList);
 	const formattedProjectStartDate = formatDate(projectStartDate);
@@ -461,11 +371,12 @@ function connect() {
 			location.assign(`${contextPath}/teamproject/error`);
 		});
 }
-// 81Line ajax통신
 
-const finalStep = () => {
-	alert("Project Create Success");
-	//location.assign(`${contextPath}/teamproject/main`)
-	connect();
-	document.getElementById("firstStep").onclick = thirdStep;
-}
+
+ */
+
+
+
+
+
+

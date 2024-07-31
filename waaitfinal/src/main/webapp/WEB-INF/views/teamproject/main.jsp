@@ -18,8 +18,9 @@ var empNo = "${employee.empNo}";
     </div>
     
     <div class="card mt-4" style="height:800px; width: 95%;">
-    	<div class="mt-5 d-flex" style="height: 200px;">
-    	<button class="" style="width: 500px; height: 200px; margin: auto;"
+    	<div class="mt-1 d-flex"  style="height: 100px;">
+    	<div></div>
+    	<button class="btn btn-Success" style="width: 250px; height: 50px; margin: auto;"
 		onclick="location.assign('${path}/teamproject/create')"	>Create Project</button>
     	</div>
     	<div>
@@ -44,10 +45,15 @@ var empNo = "${employee.empNo}";
     			<td>${tp.projectStartDate }</td>
     			<td>${tp.projectEndDate }</td>
     			<td>${tp.employee.empName}</td>
-    			<td id="empNo" hidden="true">${tp.employee.empNo}</td>	
-    			<td><span id="projectStatus">${tp.projectStatus}</span></td>
+    			<td id="empNo" hidden="true">${tp.employee.empNo}</td>
+    			<c:if test='${tp.projectStatus eq  "preparation" }'>
+    			<td><span id="projectStatus" class="badge bg-dark">${tp.projectStatus}</span></td>
+    			</c:if>
+    			<c:if test='${tp.projectStatus  !=  "preparation" }'>
+    			<td><span id="projectStatus" class="badge bg-dark">${tp.projectStatus}</span></td>
+    			</c:if>
     			<td><button class="btn btn-info" onclick="location.assign('${path}/teamproject${tp.projectNo}/info')">Info</button></td>
-    			<td><button class="btn btn-secondary" onclick="teamprojectUpdate(${tp.projectNo})">Update</button></td>
+    			<td><button class="btn btn-secondary" onclick="location.assign('${path}/project${tp.projectNo}/update');">Update</button></td>
     			</tr>
     				
     		</c:forEach>
