@@ -27,7 +27,7 @@
     
     <!-- script문 JU -->
     <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
-    
+    <script>const path = "${path}";</script>
     
     <div id="app">
         <div id="sidebar">

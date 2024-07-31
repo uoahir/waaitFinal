@@ -474,8 +474,8 @@
 				$userprofileimg.setAttribute("alt","프로필");
 				$userprofileimg.setAttribute("width","50px");
 				$userprofileimg.setAttribute("height","50px");
-				$userprofilebutton.setAttribute("dblclick", "profile(event);");
-				
+				$userprofilebutton.setAttribute("onclick", "empprofile("+chatuser.empNo+")");
+							
 				$userprofilediv.classList.add("chatting_userlist_printarea_profile");
 				$userprofileimg.classList.add("chatting_userlist_printarea_profile_img_green");
 				

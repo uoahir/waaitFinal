@@ -1,5 +1,24 @@
 
 
+	console.log("chatroom.js 오니?");
+
+	
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("외부 스크립트 파일");
+    // 외부 스크립트 파일에서 전역 변수 사용
+   /* console.log("Accessing variables from external script:");
+    console.log("loginId: " + loginId);
+    console.log("loginEmpName: " + loginEmpName);
+    console.log("loginEmpNo: " + loginEmpNo);
+    console.log("path: " + path);
+    console.log("chatRoomNo: " + chatRoomNo);
+    console.log("chatJoinCount: " + chatJoinCount);
+    console.log("chatRoomType: " + chatRoomType);*/
+    
+    //로딩 후 실행 웹 페이지를 스크롤 가장아래에 위치시킴
+	window.scrollTo(0, document.body.scrollHeight);
+});
+	
 	//로그인된 객체 저장 중
 	console.log(loginId);
 	
@@ -97,6 +116,16 @@
 		}				
 	}
 	
+
+	
+	//채팅방 메세지작성 칸 키업이벤트부여 엔터
+	document.querySelector("#msg").addEventListener("keyup",function(event){
+		if(event.key === "Enter" && !event.shiftKey){
+			// 엔터 키의 기본 동작(줄바꿈) 막음
+			event.preventDefault();
+			sendMessage();
+		}
+	});
 	
 	
 	//채팅방에서 전송버튼 눌렀을때 작동하는 js 
@@ -256,8 +285,6 @@
 		}else{
 			alert("1:1 방은 나갈수 없습니다.");
 		}
-		
-		
 	}
 	
 	// 채팅방 나가기 모달 끝
