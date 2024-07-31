@@ -56,7 +56,6 @@
 
 
 
-
 	//aside에 있는 사원목록 클릭헀을 때
 	const chatuserlist=()=>{
 		console.log("사원목록 클릭")
@@ -247,10 +246,8 @@
 	
 	
 	/* 프로필 모달 채팅바로가기 */
-	// 자기 자신은 안되게 막아야함.
 	function modalempprofileopenchat () {
 		console.log(lastEmpNo);
-		
 		
 		$.ajax({
 			type : "POST",
@@ -303,13 +300,20 @@
 	            console.error("프로필 1:1채팅 실패 : " + textStatus, errorThrown);
 	        }
 		});
-		
-		
-		
-		
 	}
-	
 	/* 프로필 모달 채팅바로가기 끝 */
+
+
+	// 현재는 메세지를 저장할 때 한번에 5개씩 리스트형태로 담아서 저장하기 떄문에 아래 기능을 구현하기에 어려움이 있어 한개씩 바로바로 insert되게 변경해서 구현해야됨.
+	
+	// 채팅 목록에서 자신이 채팅방 별로 안읽은 숫자 표시
+	// 채팅 카운팅? 테이블 만들어서 채팅을 한번 전송하면 채팅기록테이블엔 한번 할때 마다 바로 저장하고, 채팅 카운팅 테이블엔 채팅방에 참여하고 있는 사원 수 만큼 row추가 
+	// 채팅목록에서 안읽은 채팅 수 띄울 수 있음 
+
+	//CHATHISTORYCOUNT
+	// 추가 : 채팅기록 테이블에 저장시킬때 COUNT테이블에 채팅방에 속한 사원 수 만큼 ROW 추가
+	// 삭제 : 채팅방을 들어가는 기준으로 해당채팅방번호 + 로그인된 사원번호 ROW 삭제
+
 
 
 
@@ -322,13 +326,14 @@
 		console.log(receiveMsg);
 		
 		switch(receiveMsg.type){
-			case "채팅목록" : chatroomPrint(receiveMsg);break;
 			case "사원목록" : chatuserPrint(receiveMsg);break;
+			case "채팅목록" : chatroomPrint(receiveMsg);break;
 			
-			//case "open" : alertMessage(receiveMsg);break; 	//채팅방에 입장할 때
-			//case "msg" : messagePrint(receiveMsg);break;	//메세지 왔을때
-			//case "attend" :addAttend(receiveMsg);break;		//새로운사람이 입장할 때
-			//case "close" : alertMessage(receiveMsg);break;
+			// 채팅방에서 메세지를 전송했을때 작동함
+			// 채팅방에서 메세지를 전송했을때 (모든사람) 채팅목록 다시 불러와 최신화 시킴
+			// 자기가 어느 화면에 있던 무조건 채팅목록으로 이동해서 채팅목록을 띄워둔 사람만 최신화 하는 식으로 변경해야 할 것 같음
+			case "메세지" : chatroomlist();break;
+			
 		}
 	}
 
@@ -487,8 +492,8 @@
 				$userprofileimg.setAttribute("alt","프로필");
 				$userprofileimg.setAttribute("width","50px");
 				$userprofileimg.setAttribute("height","50px");
-				$userprofilebutton.setAttribute("dblclick", "profile(event);");
-				
+				$userprofilebutton.setAttribute("onclick", "empprofile("+chatuser.empNo+")");
+							
 				$userprofilediv.classList.add("chatting_userlist_printarea_profile");
 				$userprofileimg.classList.add("chatting_userlist_printarea_profile_img_green");
 				
@@ -601,6 +606,7 @@
 				const $p2 = document.createElement("p");
 				const $p3 = document.createElement("p");
 				const $p4 = document.createElement("p");
+				const $p5 = document.createElement("p");
 				
 				
 				//데이터 대입
@@ -620,6 +626,7 @@
 				
 				$p4.innerText=chatroom.chatJoinCount;
 				
+				$p5.innerText = chatroom.chatCount;
 				
 				$img.setAttribute("src", "${path}/"+chatroom.empProfile); // chatroom 객체의 프로필 이미지 URL 사용
 	        	$img.setAttribute("alt", "프로필");
@@ -657,6 +664,9 @@
 				$div2.appendChild($p2);
 				
 				$div3.appendChild($p3);
+				if(chatroom.chatCount>0){
+					$div3.appendChild($p5);					
+				}
 				
 				$div.appendChild($div1);
 				$div.appendChild($div2);

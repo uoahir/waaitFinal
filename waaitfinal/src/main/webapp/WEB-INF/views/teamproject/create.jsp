@@ -24,11 +24,11 @@
    	
   
     <div class="" style="height: 900px;">
-    	<div id="projectInfo" class="">
+    	<div id="projectInfo" >
     	
     	<input type="text" name="projectName" id="projectName" style="width: 100%; height: 50px">
          
-         <textarea class="form-control mt-5" id="proejctSummary" rows="17" cols="" placeholder="plz in code" name="codeContent"></textarea>
+         <textarea class="form-control mt-5" id="proejectSummary" rows="17" cols="" placeholder="plz in code" name="proejectSummary"></textarea>
    <div class="d-flex" style="justify-content: space-around;">
    <div class="card mt-4 d-flex" style="width: 40%">
     <form id="repoForm" >
@@ -55,13 +55,9 @@
        	<input type="date" name ="projectEndDate" id="projectEndDate">
       </div> 		  
     </div>
-    </div>	   
+    </div>	
     
-    
-    
-   
-    
-    	
+       
     	<div class="d-flex mb-3">
     	<div><button onclick="firstStep()" id="firstStep">다음단계</button></div>
     	<div class="progress progress-primary" style="width: 90%; margin: auto;">

@@ -31,29 +31,4 @@
             });
         });
 
-          document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const owner = document.getElementById('uploadOwner').value;
-            const repo = document.getElementById('uploadRepo').value;
-            const path = document.getElementById('path').value;
-            const message = document.getElementById('message').value;
-            const file = document.getElementById('file').files[0];
-
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('message', message);
-
-            fetch(`/repos/${owner}/${repo}/contents/${path}`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                alert(data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Failed to upload file');
-            });
-        });
+       
