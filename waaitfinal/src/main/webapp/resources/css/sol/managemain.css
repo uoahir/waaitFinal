@@ -2,3 +2,17 @@
 .mb-3 {
 	display : flex;
 }
+.optionContainer {
+	padding-left : 100px;
+	width : 50%;
+}
+.form-select {
+	width : 120px;
+	display : inline;
+}
+.headerTitle {
+	width : 20%;
+}
+.search-container {
+	width : 30%;
+}

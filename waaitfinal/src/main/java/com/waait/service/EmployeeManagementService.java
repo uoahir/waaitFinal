@@ -27,8 +27,8 @@ public class EmployeeManagementService {
 		return dao.getDepartment(session);
 	}
 
-	public List<Employee> getEmployees(Map<String, Integer> pagingParam) {
-		return dao.getEmployees(session, pagingParam);
+	public List<Employee> getEmployees(Map<String, Integer> pagingParam, Map<String, String> sqlParam) {
+		return dao.getEmployees(session, pagingParam, sqlParam);
 	}
 	
 	public int getEmployeesTotalData() {

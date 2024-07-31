@@ -5,9 +5,6 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <html lang="ko">
-<script>
-var contextPath = "${path}";
-</script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +19,8 @@ var contextPath = "${path}";
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/iconly.css">
   <link rel="stylesheet" href="${path}/resources/css/ju/headerju.css">
   <link rel="stylesheet" href="${path }/resources/css/sol/managemain.css">
+  <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
   
 </head>
 
@@ -103,27 +102,36 @@ var contextPath = "${path}";
 			</div>
         </div>
         <div id="main">
-            <header class="mb-3">
-            	<div>
+            <header class="mb-3" style="width:100%;">
+            	<div class="headerTitle">
             		<a href="#" class="burger-btn d-block d-xl-none">
                     	<i class="bi bi-justify fs-3"></i>
                 	</a>
                 <h3>인사관리</h3>
                 
             	</div>
-            	<div class="optionContainer" >
+            	<div class="search-container">
+            		<input type="text" class="form-control" name="param" placeholder="검색">
+            	</div>
+            	<div class="optionContainer">
+            		
             		<span>데이터수</span>
-            		<select id="numPerpage">
+            		<select id="numPerpage" class="form-select data-select">
 	                	<option value="5">5</option>
 	                	<option value="10">10</option>
 	                	<option value="15">15</option>
 	                	<option value="20">20</option>
                 	</select>
-                	<span>정렬할 데이터</span>
-                	<select id="sortdata">
+                	<span style="margin-left : 10px;">정렬</span>
+                	<select id="sortdata" class="form-select data-select">
                 		<option value="name">이름</option>
                 		<option value="gender">성별</option>
-                		
+                		<option value="birthday">출생일</option>
+                		<option value="jobLevel">직급</option>
+                	</select>
+                	<select id="sort" class="form-select data-select">
+                		<option value="asc">오름차순</option>
+                		<option value="desc">내림차순</option>
                 	</select>
             	</div>
             </header>
@@ -182,7 +190,27 @@ var contextPath = "${path}";
             </div>
         </div>
     </div>
-<!-- Need: Apexcharts -->
+    <!-- modal -->
+	<div class="modal">
+		<div class="button" id="searchTitleContainer">
+			<button id="searchTtitleButton" onclick="searchMail(event)">
+				<span class="searchType">[타이틀]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+		<div class="button" id="searchContentContainer">
+			<button id="searchContentButton" onclick="searchMail(event)">
+				<span class="searchType">[내용]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+		<div class="button" id="searchSenderContainer">
+			<button id="searchSenderButton" onclick="searchMail(event)">
+				<span class="searchType">[보낸사람]</span>
+				<span class="contentSpan"></span>
+			</button>
+		</div>
+	</div>
 </body>
 <script>
 	var path = "${path }";

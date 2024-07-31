@@ -132,7 +132,8 @@ public class EmployeeManagementController {
 		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
 		
 		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
-		List<Employee> employeeInfoList = service.getEmployees(pagingParam);
+		Map<String, String> sqlParam = Map.of("sortdata", "name", "sort", "asc");
+		List<Employee> employeeInfoList = service.getEmployees(pagingParam, sqlParam);
 		employeeInfoList = setEmpFieldTeamName(setEmpFieldDeptName(employeeInfoList));
 		
 		System.out.println("setting후 employee : " + employeeInfoList);
@@ -146,15 +147,18 @@ public class EmployeeManagementController {
 	
 	@GetMapping("/joinempInfo.do")
 	public String joinEmpInfo(Model model, 
-			@RequestParam(defaultValue = "1") int cPage, @RequestParam(defaultValue="5") int numPerpage) {
+			@RequestParam(defaultValue = "1") int cPage, @RequestParam(defaultValue="5") int numPerpage,
+			@RequestParam(defaultValue = "name") String sortdata, @RequestParam(defaultValue = "asc") String sort) {
+		System.out.println("checkParam : sortdata = " + sortdata + " sort = " + sort);
 		int totalData = service.getEmployeesTotalData();
 		int pageBarSize = 5;
 		String url = "/manage/joinempInfo.do";
 		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
 		
 		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		Map<String, String> sqlParam = Map.of("sortdata", sortdata, "sort", sort);
 		
-		List<Employee> employeeInfoList = service.getEmployees(pagingParam);
+		List<Employee> employeeInfoList = service.getEmployees(pagingParam, sqlParam);
 		employeeInfoList = setEmpFieldTeamName(setEmpFieldDeptName(employeeInfoList));
 		
 		model.addAttribute("employees", employeeInfoList);

@@ -26,9 +26,9 @@ public class EmployeeManagementDao {
 		return session.selectList("em.getDepartment");
 	}
 
-	public List<Employee> getEmployees(SqlSession session, Map<String, Integer> pagingParam) {
+	public List<Employee> getEmployees(SqlSession session, Map<String, Integer> pagingParam, Map<String, String> sqlParam) {
 		RowBounds rb = getRowBounds(pagingParam);
-		return session.selectList("em.getEmployees", null, rb);
+		return session.selectList("em.getEmployees", sqlParam, rb);
 	}
 	
 	public int getEmployeesTotalData(SqlSession session) {
