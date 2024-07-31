@@ -34,4 +34,9 @@ public class ChatRoom {
 	
 	// 1:1채팅방일때 상대방 사원이름
 	private String chatEmpName;
+	
+	//목록에서 안읽은 채팅 카운트
+	private int chatCount;
+	
+	
 }
