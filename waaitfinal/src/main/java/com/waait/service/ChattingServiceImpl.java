@@ -52,12 +52,12 @@ public class ChattingServiceImpl implements ChattingService {
 
 
 	@Override
-	public int insertChatHistory(List<Message> messages) {
+	public int insertChatHistory(Message msg) {
 //		int result = dao.insertChatHistory(session, messages);
 		int result = 0;
-		for(Message message : messages) {
-			result = dao.insertChatHistory(session, message);
-		}
+		//for(Message message : messages) {
+		result = dao.insertChatHistory(session, msg);
+		//}
 		return result;
 	}
 
@@ -146,6 +146,38 @@ public class ChattingServiceImpl implements ChattingService {
 	public int selectGetChatRoomNo() {
 		int chatRoomNo = dao.selectSEQ_ChatRoomNo(session);
 		return chatRoomNo;
+	}
+
+
+	@Override
+	public void insertChatHistoryCount(Map<String ,Number> param) {
+		System.out.println("서비스 - insertChatHistoryCount - param : "+param);
+		List<Long> empNos = dao.selectChatJoin(session, param);
+		int chatRoomNo = (int) param.get("chatRoomNo");
+		System.out.println("서비스 - insertChatHistoryCount - empNos : "+empNos);
+		
+		empNos.forEach(e->{
+			Map<String, Number> countParam = new HashMap<>();
+			countParam.put("empNo", e);
+			countParam.put("chatRoomNo",chatRoomNo);
+			int result = dao.insertChatHistoryCount(session, countParam);
+			if(result > 0) {
+				System.out.println("채팅카운트 저장됨?");
+			}else {
+				System.out.println("채팅카운트 저장안됨?");
+			}
+		});
+	}
+
+
+	@Override
+	public void deleteChatHistoryCount(Map<String, Number> param) {
+		int result = dao.deleteChatHistoryCount(session, param);
+		if(result > 0) {
+			System.out.println("채팅 count 삭제성공");
+		}else {
+			System.out.println("채팅 count 삭제실패");
+		}
 	}
 	
 	

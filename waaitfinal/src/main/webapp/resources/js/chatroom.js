@@ -117,6 +117,8 @@
 			
 			//타입 , 방번호, 전송자사원번호, 채팅내용
 			const msgObj = new Message("메세지",loginEmpNo,loginEmpName,chatRoomNo,inputData,msgTime,chatJoinCount).convert();
+			
+			//클라이언트 -> 서버
 			chatserver.send(msgObj);
 			console.log("chatserver.send 전송메세지 : "+msgObj);
 			document.querySelector("#msg").value = "";

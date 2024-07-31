@@ -1,5 +1,6 @@
 package com.waait.dto;
 
+import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public abstract class AbstractDocument implements DocumentInter {
 	// list는 작성자 기준으로 결재자 확인용
 	private Approval approvalOne; 
 	// approval 객체는 결재자 기준 화면출력용
+	private List<AttatchFile> attachFiles;
 	private String oriFilename;
 	private String renamedFilename;
 	private String docNumber; // 최종 승인 시 문서번호

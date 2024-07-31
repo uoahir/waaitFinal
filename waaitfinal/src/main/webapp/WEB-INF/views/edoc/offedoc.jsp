@@ -455,6 +455,7 @@
 			startDate : formData.get("startDate"),
 			endDate : formData.get("endDate"),
 			vacaUsed : formData.get("vacaUsed"),
+			reason : formData.get("reason"),
 			empNo : formData.getAll("empNo").map(Number)
 		};
 		
