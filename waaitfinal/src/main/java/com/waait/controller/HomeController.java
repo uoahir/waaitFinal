@@ -3,20 +3,21 @@ package com.waait.controller;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.waait.dto.Employee;
+import com.waait.dto.Mypage;
 import com.waait.dto.Work;
 import com.waait.service.EmployeeService;
+import com.waait.service.MypageService;
 import com.waait.service.WorkService;
 
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +30,7 @@ public class HomeController {
 	private final EmployeeService employeeService;
 	private final BCryptPasswordEncoder encoder;
 	private final WorkService workService;
+	private final MypageService service;
 
 	@GetMapping("/login")
 	public String loginForm() {
@@ -55,7 +57,7 @@ public class HomeController {
 		return "redirect:/user";
 	}
 	@GetMapping("/") //화면에 데이터 출력부분
-	public String homeController(Model model) {
+	public String homeController(Mypage empNo, Model model) {
 		
 		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
@@ -70,6 +72,22 @@ public class HomeController {
 		Work work = workService.selectByEmpNoWork(param);
 		
 		model.addAttribute("work",work);
+		
+		// 메인페이지에서 마이페이지 관련 출력 로직
+		Mypage mypage=new Mypage();
+		//Employee employee=getLoginEmpInfo();
+		long empNumber=employee.getEmpNo();
+		
+		List<Mypage> total=service.myInfoList(empNumber);
+		System.out.println(total);
+		mypage.setEmpNo(empNumber);
+		
+		model.addAttribute("total", total);
+		total.forEach(e->{
+			System.out.println(e);
+		});			
+		
+		
 					
 		return "index";
 	}
@@ -434,7 +452,10 @@ public class HomeController {
 	return "ui-widgets-todolist"; // 지희,오한 - todolist
 	}
 
-
+	//사용자 로그인 시큐리티로 데이터 가져오기
+	private Employee getLoginEmpInfo() {
+		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
 	
 
 }
