@@ -35,8 +35,8 @@ public class ChattingDaoImpl implements ChattingDao {
 	}
 
 	@Override
-	public int insertChatHistory(SqlSession session, Message message) {
-		return session.insert("chatting.insertChatHistory",message);
+	public int insertChatHistory(SqlSession session, Message msg) {
+		return session.insert("chatting.insertChatHistory",msg);
 	}
 	
 
@@ -81,6 +81,22 @@ public class ChattingDaoImpl implements ChattingDao {
 		System.out.println("다오 : "+param);
 		return session.selectOne("chatting.selectProfilechatOpen",param);
 	}
+
+	@Override
+	public List<Long> selectChatJoin(SqlSession session, Map<String ,Number> param) {
+		return session.selectList("chatting.selectChatJoin",param);
+	}
+
+	@Override
+	public int insertChatHistoryCount(SqlSession session, Map<String, Number> param) {
+		return session.insert("chatting.insertChatHistoryCount",param);
+	}
+
+	@Override
+	public int deleteChatHistoryCount(SqlSession session, Map<String, Number> param) {
+		return session.delete("chatting.deleteChatHistoryCount",param);
+	}
+	
 	
 	
 	
