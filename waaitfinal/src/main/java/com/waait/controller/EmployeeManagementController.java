@@ -88,6 +88,51 @@ public class EmployeeManagementController {
 		
 		return sb.toString();
 	}
+	
+	public static String paging(int totalData, int cPage, int numPerpage, int pageBarSize, String url,
+									String searchType, String searchValue) {
+		int totalPage = (int) Math.ceil((double) totalData/ numPerpage);
+		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
+		int pageEnd = pageNo + pageBarSize - 1;
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<ul class='pagination justify-content-center pagination-sm' style='margin-top : 50px;'>");
+		if(pageNo == 1) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>이전</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:ajaxPagingForSearch(" + (pageNo - 1) + ",\"" + url + "\", \"" + searchType + "\",\"" + searchValue + "\")'>이전</a>");
+			sb.append("</li>");
+		}
+		
+		while(!(pageNo > pageEnd || pageNo > totalPage)) {
+			if(pageNo == cPage) {
+				sb.append("<li class='page-item disabled'>");
+				sb.append("<a class='page-link' href='#'>" + pageNo + "</a>");
+				sb.append("</li>");
+			} else {
+				sb.append("<li class='page-item'>");
+				sb.append("<a class='page-link' href='javascript:ajaxPagingForSearch(" + pageNo + ",\"" + url + "\", \"" + searchType + "\",\"" + searchValue + "\")'>" + pageNo + "</a>");
+				sb.append("</li>");
+			}
+			pageNo++;
+		}
+		
+		if(pageNo > totalPage) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>다음</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:ajaxPagingForSearch(" + pageNo + ",\"" + url + "\", \"" + searchType + "\",\"" + searchValue + "\")'>이전</a>");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+		
+		return sb.toString();
+	}
 	//test
 	@GetMapping("/empmanagemain.do")
 	public String empManageMainView() {
@@ -170,19 +215,34 @@ public class EmployeeManagementController {
 	}
 	
 	@PostMapping("/searchemployee.do")
-	public String searchEmployee(@RequestBody Map<String, Object> param) {
+	public String searchEmployee(@RequestBody Map<String, Object> param, Model model) {
 		String searchType = (String) param.get("searchType");
-		String modifySearchType = searchType.substring(1, searchType.length());
-		param.put("searchType", modifySearchType);
+		String modifySearchType = "";
+		if(searchType.contains("[")) {
+			modifySearchType = searchType.substring(1, searchType.length() - 1);
+			param.put("searchType", modifySearchType);
+		} else {
+			modifySearchType = searchType;
+		}
 		
+		String searchValue = (String) param.get("searchValue");
 		int cPage = 1;
-		int numPerpage = (int) param.get("numPerpage");
-		//int totalData = service.getEmpListBySearchTotalData(param);
+		if(param.containsKey("cPage")) {
+			cPage = (int) param.get("cPage");
+		}
+		int numPerpage = Integer.parseInt((String) param.get("numPerpage")); 
+		int totalData = service.getEmpListBySearchTotalData(param);
 		int pageBarSize = 5;
 		String url = "/manage/searchemployee.do";
-		//String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url, modifySearchType, searchValue);
 		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
-		return null;
+		
+		List<Employee> searchEmpList = service.searchEmployee(param, pagingParam);
+		System.out.println("searchEmpList : " + searchEmpList);
+		model.addAttribute("employees", searchEmpList);
+		model.addAttribute("pageBar", pageBar);
+
+		return "empmanage/responsepage/empinfolist";
 	}
 	
 	@PostMapping("/enrollemployee.do")

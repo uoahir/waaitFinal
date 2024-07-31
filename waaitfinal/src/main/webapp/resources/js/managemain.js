@@ -29,6 +29,35 @@ function ajaxPaging(pageNo, url) {
 	});
 }
 
+function ajaxPagingForSearch(pageNo, url, searchType, searchValue) {
+	const numPerpage = document.getElementById("numPerpage").value;
+	const sortdata = document.getElementById("sortdata").value;
+	const sort = document.getElementById("sort").value;
+	
+	const data = {
+		searchType : searchType,
+		searchValue : searchValue,
+		numPerpage : numPerpage,
+		sortdata : sortdata,
+		sort : sort,
+		cPage : pageNo
+	}
+	
+	console.log("searchType : " + searchType + " searchValue : " + searchValue);
+	
+	fetch(path + url, {
+		method : "POST",
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(data)
+	})
+	.then(response => response.text())
+	.then(data => {
+		document.getElementById("mainView").innerHTML = data;
+	})
+}
+
 /*document.getElementById("numPerpage").addEventListener("change", e => {
 	const numPerpage = e.target.value;
 	const sortdata = document.getElementById("sortdata").value;
@@ -79,6 +108,24 @@ document.getElementById("searchInput").addEventListener("keyup", e => {
 	document.querySelectorAll(".contentSpan").forEach(e => {
 		e.innerHTML = searchValue;
 	})
+	
+	if(e.target.value.length > 0) {
+		document.getElementById("searchModal").style.display = "grid";
+	} else {
+		document.getElementById("searchModal").style.display = "none";
+	}
+})
+
+document.getElementById("searchInput").addEventListener("blur", e => {
+	document.getElementById("searchModal").style.display = "none";
+})
+
+document.getElementById("searchInput").addEventListener("click", e => {
+	if(e.target.value.length > 0) {
+		document.getElementById("searchModal").style.display = "grid";
+	} else {
+		document.getElementById("searchModal").style.display = "none";
+	}
 })
 
 const searchEmployee = (e) => {

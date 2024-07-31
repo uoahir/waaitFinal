@@ -3,7 +3,7 @@
 	display : flex;
 }
 .optionContainer {
-	padding-left : 100px;
+	padding-left : 64px;
 	width : 50%;
 }
 .form-select {
@@ -11,7 +11,7 @@
 	display : inline;
 }
 .headerTitle {
-	width : 20%;
+	width : 12%;
 }
 .search-container {
 	width : 30%;
@@ -19,7 +19,7 @@
 
 .modal {
 	position:absolute;
-	display:grid;
+	display:none;
 	border-radius : 10px;
 	
 	/* justify-content:center; */

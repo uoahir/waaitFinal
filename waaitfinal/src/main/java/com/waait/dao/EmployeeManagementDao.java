@@ -35,6 +35,16 @@ public class EmployeeManagementDao {
 		return session.selectOne("em.getEmployeesTotalData");
 	}
 	
+	public int getEmpListBySearchTotalData(SqlSession session, Map<String, Object> param) {
+		return session.selectOne("em.getEmpListBySearchTotalData", param);
+	}
+	
+	public List<Employee> searchEmployee(SqlSession session, Map<String, Object> sqlParam,
+			Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("em.searchEmployee", sqlParam, rb);
+	}
+	
 	public List<JobLevel> getJobLevel(SqlSession session) {
 		return session.selectList("em.getJobLevel");
 	}

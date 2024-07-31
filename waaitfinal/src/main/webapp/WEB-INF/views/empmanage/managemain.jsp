@@ -107,11 +107,14 @@
             		<a href="#" class="burger-btn d-block d-xl-none">
                     	<i class="bi bi-justify fs-3"></i>
                 	</a>
-                <h3>인사관리</h3>
+                <h3 style="width : 100%">인사관리</h3>
                 
             	</div>
             	<div class="search-container">
             		<input type="text" class="form-control" name="param" id="searchInput" placeholder="검색">
+            	</div>
+            	<div class="search-detail-container">
+            		<button class="btn btn-primary" onclick="showSearchDetailModal()">상세조회</button>
             	</div>
             	<div class="optionContainer">
             		
@@ -193,7 +196,7 @@
         </div>
     </div>
     <!-- modal -->
-	<div class="modal">
+	<div class="modal" id="searchModal">
 		<div class="button" id="searchTitleContainer">
 			<button id="searchNameButton" onclick="searchEmployee(event)">
 				<span class="searchType">[이름]</span>
