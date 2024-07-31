@@ -30,6 +30,8 @@
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>SCHEDULE</h3>
                 <p class="text-subtitle text-muted">일정관리</p>
+                <input type="text" class="form-control form-control-sm" id="shceShare" name="shceShare" style="width:200px;" required>
+                <button type="button" id="shareButton" class="btn btn-primary" onclick="empline();"chatuserlist>사원조회</button>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">

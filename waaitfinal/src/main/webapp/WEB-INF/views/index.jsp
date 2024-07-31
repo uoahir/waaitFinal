@@ -3,6 +3,8 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
+<c:set var="employee"
+	value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}" />
 <html lang="ko">
 
 <head>
@@ -832,7 +834,8 @@
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                     <h6 class="text-muted font-semibold">남은 연차</h6>
-                                    <h6 class="font-extrabold mb-0">${total.get(0).vacaLeft }일 / ${total.get(0).basicAnnualLeave }일</h6>
+                                    <%-- <h6 class="font-extrabold mb-0">${total.get(0).vacaLeft }일 / ${total.get(0).basicAnnualLeave }일</h6> --%>
+                                    <h6 class="font-extrabold mb-0">${employee.remainingAnnualLeave }일 / ${employee.basicAnnualLeave }일</h6>
                                 </div>
                             </div>
                         </div>
@@ -846,7 +849,7 @@
                         <div class="card-header">
                             <h4>전자결재 관련</h4>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="display: flex; flex-direction:row">
                             <div id="chart-profile-visit"></div>
                         </div>
                     </div>
@@ -1032,10 +1035,9 @@
                             <img src="${path}/resources/assets/compiled/jpg/1.jpg" alt="Face 1">
                         </div>
                         <div class="ms-3 name">
-                        	<%-- <c:forEach var="m" items="${total }"> --%>
                         	<br>
-                            <h5 class="font-bold">${total.get(0).empName }</h5>
-                            <h6 class="text-muted mb-0">${total.get(0).empEmail}</h6><br>
+                            <h5 class="font-bold">${employee.empName }</h5>
+                            <h6 class="text-muted mb-0">${employee.empEmail}</h6><br>
 								<c:if test="${work!=null}">
 								<button>${work.workStart.getHours()}:${work.workStart.getMinutes()} </button>
 								<c:if test="${work.workEnd == null }">
@@ -1049,7 +1051,6 @@
 								<button onclick="work()" class="btn btn-primary">출근</button> 
 								<button onclick="noWork()" class="btn btn-primary">퇴근</button><br>
 								</c:if>
-                            <%-- </c:forEach> --%>
                         </div>
                     </div>
                 </div>
