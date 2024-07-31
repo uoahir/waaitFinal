@@ -29,6 +29,6 @@ public class Schedule {
 	private String scheWriter;
 	private String scheReWriter;
 	private String scheType;
-	private String schePrivate="N";
+	private String schePrivate="false";
 	
 }
