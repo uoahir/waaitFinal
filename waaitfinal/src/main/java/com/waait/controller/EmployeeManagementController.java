@@ -3,6 +3,8 @@ package com.waait.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -165,6 +167,22 @@ public class EmployeeManagementController {
 		model.addAttribute("pageBar", pageBar);
 		
 		return "empmanage/responsepage/empinfolist";
+	}
+	
+	@PostMapping("/searchemployee.do")
+	public String searchEmployee(@RequestBody Map<String, Object> param) {
+		String searchType = (String) param.get("searchType");
+		String modifySearchType = searchType.substring(1, searchType.length());
+		param.put("searchType", modifySearchType);
+		
+		int cPage = 1;
+		int numPerpage = (int) param.get("numPerpage");
+		//int totalData = service.getEmpListBySearchTotalData(param);
+		int pageBarSize = 5;
+		String url = "/manage/searchemployee.do";
+		//String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		return null;
 	}
 	
 	@PostMapping("/enrollemployee.do")

@@ -72,3 +72,40 @@ document.querySelectorAll(".data-select").forEach(e => {
 		});
 	});
 });
+
+document.getElementById("searchInput").addEventListener("keyup", e => {
+	const searchValue = e.target.value;
+	console.log("searchValue : " + searchValue);
+	document.querySelectorAll(".contentSpan").forEach(e => {
+		e.innerHTML = searchValue;
+	})
+})
+
+const searchEmployee = (e) => {
+	const searchType = e.currentTarget.firstElementChild.innerText;
+	const searchValue = e.currentTarget.lastElementChild.innerText;
+	const numPerpage = document.getElementById("numPerpage").value;
+	const sortdata = document.getElementById("sortdata").value;
+	const sort = document.getElementById("sort").value;
+	
+	const data = {
+		searchType : searchType,
+		searchValue : searchValue,
+		numPerpage : numPerpage,
+		sortdata : sortdata,
+		sort : sort
+	}
+	console.log("searchType : " + searchType + " searchValue : " + searchValue);
+	
+	fetch(path + "/manage/searchemployee.do", {
+		method : "POST",
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(data)
+	})
+	.then(response => response.text())
+	.then(data => {
+		document.getElementById("mainView").innerHTML = data;
+	})
+}

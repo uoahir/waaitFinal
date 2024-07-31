@@ -111,7 +111,7 @@
                 
             	</div>
             	<div class="search-container">
-            		<input type="text" class="form-control" name="param" placeholder="검색">
+            		<input type="text" class="form-control" name="param" id="searchInput" placeholder="검색">
             	</div>
             	<div class="optionContainer">
             		
@@ -147,6 +147,7 @@
             				<th>핸드폰 번호</th>
             				<th>거주지 주소</th>
             				<th>성별</th>
+            				<th>입사일</th>
             				<th>퇴사여부</th>
             				<th>남은연차</th>
             			</tr>
@@ -168,6 +169,7 @@
 	            				<td>${emp.empPhone }</td>
 	            				<td>${emp.empAddress }</td>
 	            				<td>${emp.empGender }</td>
+	            				<td>${emp.empStartDate }</td>
 	            				<c:if test="${emp.leaveYN eq 'Y' }">
 	            					<td>퇴사</td>
 	            				</c:if>
@@ -193,20 +195,20 @@
     <!-- modal -->
 	<div class="modal">
 		<div class="button" id="searchTitleContainer">
-			<button id="searchTtitleButton" onclick="searchMail(event)">
-				<span class="searchType">[타이틀]</span>
+			<button id="searchNameButton" onclick="searchEmployee(event)">
+				<span class="searchType">[이름]</span>
 				<span class="contentSpan"></span>
 			</button>
 		</div>
 		<div class="button" id="searchContentContainer">
-			<button id="searchContentButton" onclick="searchMail(event)">
-				<span class="searchType">[내용]</span>
+			<button id="searchIdButton" onclick="searchEmployee(event)">
+				<span class="searchType">[아이디]</span>
 				<span class="contentSpan"></span>
 			</button>
 		</div>
 		<div class="button" id="searchSenderContainer">
-			<button id="searchSenderButton" onclick="searchMail(event)">
-				<span class="searchType">[보낸사람]</span>
+			<button id="searchAddressButton" onclick="searchEmployee(event)">
+				<span class="searchType">[주소]</span>
 				<span class="contentSpan"></span>
 			</button>
 		</div>
