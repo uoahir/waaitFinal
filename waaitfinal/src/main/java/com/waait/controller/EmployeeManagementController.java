@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +43,49 @@ public class EmployeeManagementController {
 	private final BCryptPasswordEncoder encoder;
 	//private final ObjectMapper mapper;
 	
+	public static String paging(int totalData, int cPage, int numPerpage, int pageBarSize, String url) {
+		int totalPage = (int) Math.ceil((double) totalData/ numPerpage);
+		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
+		int pageEnd = pageNo + pageBarSize - 1;
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<ul class='pagination justify-content-center pagination-sm' style='margin-top : 50px;'>");
+		if(pageNo == 1) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>이전</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:ajaxPaging(" + (pageNo - 1) + ",\"" + url + "\")'>이전</a>");
+			sb.append("</li>");
+		}
+		
+		while(!(pageNo > pageEnd || pageNo > totalPage)) {
+			if(pageNo == cPage) {
+				sb.append("<li class='page-item disabled'>");
+				sb.append("<a class='page-link' href='#'>" + pageNo + "</a>");
+				sb.append("</li>");
+			} else {
+				sb.append("<li class='page-item'>");
+				sb.append("<a class='page-link' href='javascript:ajaxPaging(" + pageNo + ",\"" + url + "\")'>" + pageNo + "</a>");
+				sb.append("</li>");
+			}
+			pageNo++;
+		}
+		
+		if(pageNo > totalPage) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>다음</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:ajaxPaging(" + pageNo + ",\"" + url + "\")'>다음</a>");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+		
+		return sb.toString();
+	}
 	//test
 	@GetMapping("/empmanagemain.do")
 	public String empManageMainView() {
@@ -78,15 +122,45 @@ public class EmployeeManagementController {
 	@GetMapping("/managemain.do")
 	public String manageMainView(Model model) {
 		List<Department> departmentList = getDepartmentList();
-		
 		System.out.println("departmentList : " + departmentList);
+				
+		int totalData = service.getEmployeesTotalData();
+		int pageBarSize = 5;
+		int cPage = 1;
+		int numPerpage = 5;
+		String url = "/manage/joinempInfo.do";
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
 		
-		List<Employee> employeeInfoList = service.getEmployees();
-		System.out.println("employeeList : " + employeeInfoList);
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		List<Employee> employeeInfoList = service.getEmployees(pagingParam);
+		employeeInfoList = setEmpFieldTeamName(setEmpFieldDeptName(employeeInfoList));
+		
+		System.out.println("setting후 employee : " + employeeInfoList);
 		
 		model.addAttribute("employees", employeeInfoList);
 		model.addAttribute("depts", departmentList);
+		model.addAttribute("pageBar", pageBar);
+		
 		return "empmanage/managemain";
+	}
+	
+	@GetMapping("/joinempInfo.do")
+	public String joinEmpInfo(Model model, 
+			@RequestParam(defaultValue = "1") int cPage, @RequestParam(defaultValue="5") int numPerpage) {
+		int totalData = service.getEmployeesTotalData();
+		int pageBarSize = 5;
+		String url = "/manage/joinempInfo.do";
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize, url);
+		
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		
+		List<Employee> employeeInfoList = service.getEmployees(pagingParam);
+		employeeInfoList = setEmpFieldTeamName(setEmpFieldDeptName(employeeInfoList));
+		
+		model.addAttribute("employees", employeeInfoList);
+		model.addAttribute("pageBar", pageBar);
+		
+		return "empmanage/responsepage/empinfolist";
 	}
 	
 	@PostMapping("/enrollemployee.do")
@@ -138,20 +212,12 @@ public class EmployeeManagementController {
 			emp.setEmpSignfile(rename);
 		}
 		
-		Date now = new Date(System.currentTimeMillis());
-		int randomNum = (int) (Math.random() * 1000) + 1;
-		String initialRandomPwd = new SimpleDateFormat("yyMMddHHmmss").format(now) + randomNum;
-		String userId = engName + new SimpleDateFormat("yyMMmmSS").format(now);
+		String initialPwd = "0000";
+		String userId = engName;
 		emp.setEmpId(userId);
-		try {
-			emailService.sendInitialIdAndPwd(usingEmail, userId, initialRandomPwd);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
 		
-		String encryptionPwd = encoder.encode("0000");
+		
+		String encryptionPwd = encoder.encode(initialPwd);
 		
 		String gender = "";
 		if(emp.getEmpGender().equals("m")) {
@@ -163,7 +229,9 @@ public class EmployeeManagementController {
 		emp.setEmpPwd(encryptionPwd);
 		emp.setEmpGender(gender);
 		
-		if(deptCode.equals("noDept")) {
+		if(deptCode.equals("noDept") && teamCode.equals("noTeam")) {
+			emp.setDeptCode("D1");
+		} else if(deptCode.equals("noDept")) {
 			emp.setDeptCode(teamCode);
 		} else if(teamCode.equals("noTeam")){
 			emp.setDeptCode(deptCode);
@@ -181,11 +249,19 @@ public class EmployeeManagementController {
 			case "L4" : emp.setBasicAnnualLeave(15);
 						emp.setRemainingAnnualLeave(15); break;
 		}
-		System.out.println("등록할 사원정보 : " + emp);
 		
 		int result = 0;
 		result = service.enrollEmployee(emp);
+		userId += emp.getEmpNo();
 		
+		try {
+			emailService.sendInitialIdAndPwd(usingEmail, userId, initialPwd);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		System.out.println("등록할 사원정보 : " + emp);
 		return null;
 	}
 	
@@ -334,7 +410,7 @@ public class EmployeeManagementController {
 		for(Employee e : employeeList) {
 			if(e.getDepartment().getDeptCode() != "D1"
 					&& e.getDepartment().getParentCode().equals("D1")) {
-				e.setDeptName(e.getDepartment().getDeptName());
+				e.setDeptName("부서없음");
 			}
 			
 			for(Department d : departmentList) {
@@ -370,6 +446,27 @@ public class EmployeeManagementController {
 		System.out.println("setFieldDeptName : " + emp);
 		
 		return emp;
+	}
+	
+	public List<Employee> setEmpFieldTeamName(List<Employee> employeeList) {
+		List<Department> departmentList = getDepartmentList();
+		
+		employeeList.forEach(emp -> {
+			departmentList.forEach(dept -> {
+				if(emp.getDepartment().getDeptCode().equals(dept.getDeptCode())) {
+					emp.setTeamName("팀 없음");
+				}
+			});
+			if(emp.getTeamName() == null) {
+				emp.setTeamName(emp.getDepartment().getDeptName());
+			}
+			if(emp.getDepartment().getDeptCode().equals("D1")) {
+				emp.setTeamName("팀 없음");
+			}
+			
+		});
+		
+		return employeeList;
 	}
 	
 	public List<Department> getDepartmentList() {

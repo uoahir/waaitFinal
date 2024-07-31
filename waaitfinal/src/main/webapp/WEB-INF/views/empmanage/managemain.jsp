@@ -21,6 +21,7 @@ var contextPath = "${path}";
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/app-dark.css">
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/iconly.css">
   <link rel="stylesheet" href="${path}/resources/css/ju/headerju.css">
+  <link rel="stylesheet" href="${path }/resources/css/sol/managemain.css">
   
 </head>
 
@@ -79,9 +80,14 @@ var contextPath = "${path}";
 			    <div class="sidebar-menu">
 			        <ul class="menu">
 			            <li class="sidebar-title">Menu</li>
-			            
+			             <li class="sidebar-item active">
+			                <a href="javascript:ajax()" class='sidebar-link' onclick="activeSideBar(event)">
+			                    <i class="bi bi-grid-fill"></i>
+			                    <span>인사조회</span>
+			                </a>
+			            </li>
 			            <li class="sidebar-item">
-			            	<a href="javascript:ajax()" class='sidebar-link' onclick="activeSideBar(event)">
+			            	<a href="${path }/manage/enrollemployeeview.do" class='sidebar-link' onclick="activeSideBar(event)">
 			                	<i class="bi bi-grid-fill"></i>
 			                    <span>인사등록</span>
 			                </a>
@@ -98,14 +104,89 @@ var contextPath = "${path}";
         </div>
         <div id="main">
             <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
+            	<div>
+            		<a href="#" class="burger-btn d-block d-xl-none">
+                    	<i class="bi bi-justify fs-3"></i>
+                	</a>
+                <h3>인사관리</h3>
+                
+            	</div>
+            	<div class="optionContainer" >
+            		<span>데이터수</span>
+            		<select id="numPerpage">
+	                	<option value="5">5</option>
+	                	<option value="10">10</option>
+	                	<option value="15">15</option>
+	                	<option value="20">20</option>
+                	</select>
+                	<span>정렬할 데이터</span>
+                	<select id="sortdata">
+                		<option value="name">이름</option>
+                		<option value="gender">성별</option>
+                		
+                	</select>
+            	</div>
             </header>
+            <div id="mainView">
+            	<table class="table mb-0">
+            		<thead class="thead-dark">
+            			<tr>
+            				<th>이름</th>
+            				<th>아이디</th>
+            				<th>출생일</th>
+            				<th>직급</th>
+            				<th>부서/팀</th>
+            				<th>핸드폰 번호</th>
+            				<th>거주지 주소</th>
+            				<th>성별</th>
+            				<th>퇴사여부</th>
+            				<th>남은연차</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            		<c:if test="${empty employees}">
+            			<tr>
+           					<td colspan="8">사원이 존재하지 않습니다.</td>
+            			</tr>
+            		</c:if>
+            		<c:if test="${not empty employees }">
+            			<c:forEach var="emp" items="${employees }">
+	            			<tr onclick="location.assign('${path }/manage/joinempdetail.do?empNo=${emp.empNo }')">
+	            				<td>${emp.empName }</td>
+	            				<td>${emp.empId }</td>
+	            				<td>${emp.empBirth }</td>
+	            				<td>${emp.jobLevel.levelName }</td>
+	            				<td>${emp.deptName } / ${emp.teamName }</td>
+	            				<td>${emp.empPhone }</td>
+	            				<td>${emp.empAddress }</td>
+	            				<td>${emp.empGender }</td>
+	            				<c:if test="${emp.leaveYN eq 'Y' }">
+	            					<td>퇴사</td>
+	            				</c:if>
+	            				<c:if test="${emp.leaveYN eq 'N' }">
+	            					<td>재직</td>
+	            				</c:if>
+	            				<c:if test="${emp.leaveYN ne 'Y' and emp.leaveYN ne 'N' }">
+	            					<td>왜 yn이 아닌데</td>
+	            				</c:if>
+	            				<td>${emp.remainingAnnualLeave }</td>
+	            			</tr>
+            			</c:forEach>
+            			
+            		</c:if>
+            		</tbody>
+            	</table>
+            	<div id="pageBarContainer">
+            		${pageBar }
+            	</div>
+            </div>
         </div>
     </div>
 <!-- Need: Apexcharts -->
 </body>
+<script>
+	var path = "${path }";
+</script>
 <script src="${path }/resources/js/managemain.js"></script>
 <script src="${path }/resources/assets/static/js/components/dark.js"></script>
 <script src="${path }/resources/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>

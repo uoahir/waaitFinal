@@ -14,3 +14,12 @@ const activeSideBar = (e) => {
 const ajax = (url) => {
 	console.log("ajax");
 }
+
+function ajaxPaging(pageNo, url) {
+	console.log('pageNo : ' + pageNo);
+	fetch(path + url + "?cPage=" + pageNo + "&numPerpage=5")
+	.then(response => response.text())
+	.then(data => {
+		document.getElementById('mainView').innerHTML = data;
+	});
+}

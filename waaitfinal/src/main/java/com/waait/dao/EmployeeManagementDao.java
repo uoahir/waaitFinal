@@ -3,6 +3,7 @@ package com.waait.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -13,13 +14,25 @@ import com.waait.dto.MovingDepartment;
 
 @Repository
 public class EmployeeManagementDao {
+	
+	public RowBounds getRowBounds(Map<String, Integer> pagingParam) {
+		int cPage = pagingParam.get("cPage");
+		int numPerpage = pagingParam.get("numPerpage");
+		RowBounds rb = new RowBounds((cPage - 1) * numPerpage, numPerpage);
+		return rb;
+	}
 
 	public List<Department> getDepartment(SqlSession session) {
 		return session.selectList("em.getDepartment");
 	}
 
-	public List<Employee> getEmployees(SqlSession session) {
-		return session.selectList("em.getEmployees");
+	public List<Employee> getEmployees(SqlSession session, Map<String, Integer> pagingParam) {
+		RowBounds rb = getRowBounds(pagingParam);
+		return session.selectList("em.getEmployees", null, rb);
+	}
+	
+	public int getEmployeesTotalData(SqlSession session) {
+		return session.selectOne("em.getEmployeesTotalData");
 	}
 	
 	public List<JobLevel> getJobLevel(SqlSession session) {
