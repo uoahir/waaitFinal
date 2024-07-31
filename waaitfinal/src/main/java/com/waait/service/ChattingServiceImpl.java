@@ -38,14 +38,14 @@ public class ChattingServiceImpl implements ChattingService {
 
 
 	@Override
-	public ChatRoom selectChatRoomName(Map<String, Integer> param) {
+	public ChatRoom selectChatRoomName(Map<String, Number> param) {
 		ChatRoom chatName = dao.selectChatRoomName(session, param);
 		return chatName;
 	}
 
 
 	@Override
-	public List<ChatHistory> selectChatRoomHistory(Map<String, Integer> param) {
+	public List<ChatHistory> selectChatRoomHistory(Map<String, Number> param) {
 		List<ChatHistory> chatHistorys = dao.selectChatRoomHistory(session, param);
 		return chatHistorys;
 	}
@@ -64,7 +64,6 @@ public class ChattingServiceImpl implements ChattingService {
 
 	@Override
 	public int insertChatRoom(Map<String, Object> chatRoomParam) {
-//		System.out.println("6");
 		int result = dao.insertChatRoom(session, chatRoomParam);
 		System.out.println("insertChatRoom - result : "+result);
 		return result;
@@ -124,6 +123,29 @@ public class ChattingServiceImpl implements ChattingService {
 	@Override
 	public void deleteChatJoin(Map<String, Object> param) {
 		dao.deleteChatJoin(session, param);
+	}
+
+
+	@Override
+	public Employee selectEmpProfile(Long empNo) {
+		Employee employee = dao.selectEmpProfile(session, empNo);
+		return employee;
+	}
+
+
+	@Override
+	public Integer selectProfilechatOpen(Map<String, Object> param) {
+		System.out.println("서비스 : "+param);
+		Integer chatRoomNo = dao.selectProfilechatOpen(session, param);
+		System.out.println("돌아오는 서비스 - chatRoomNo : "+chatRoomNo);
+		return chatRoomNo;
+	}
+
+
+	@Override
+	public int selectGetChatRoomNo() {
+		int chatRoomNo = dao.selectSEQ_ChatRoomNo(session);
+		return chatRoomNo;
 	}
 	
 	

@@ -25,12 +25,12 @@ public class ChattingDaoImpl implements ChattingDao {
 	}
 
 	@Override
-	public ChatRoom selectChatRoomName(SqlSession session, Map<String, Integer> param) {
+	public ChatRoom selectChatRoomName(SqlSession session, Map<String, Number> param) {
 		return session.selectOne("chatting.selectChatRoomName",param);
 	}
 
 	@Override
-	public List<ChatHistory> selectChatRoomHistory(SqlSession session, Map<String, Integer> param) {
+	public List<ChatHistory> selectChatRoomHistory(SqlSession session, Map<String, Number> param) {
 		return session.selectList("chatting.selectChatRoomHistory",param);
 	}
 
@@ -42,10 +42,10 @@ public class ChattingDaoImpl implements ChattingDao {
 
 	@Override
 	public int insertChatRoom(SqlSession session, Map<String, Object> chatRoomParam) {
-//		System.out.println("7");
 		return session.insert("chatting.insertChatRoom",chatRoomParam);
 	}
  
+	//최근 방 시퀀스값 가져오기
 	@Override
 	public int selectSEQ_ChatRoomNo(SqlSession session) {
 		return session.selectOne("chatting.selectSEQ_ChatRoomNo");
@@ -69,6 +69,17 @@ public class ChattingDaoImpl implements ChattingDao {
 	@Override
 	public int deleteChatJoin(SqlSession session, Map<String, Object> param) {
 		return session.delete("chatting.deleteChatJoin",param);
+	}
+
+	@Override
+	public Employee selectEmpProfile(SqlSession session, Long empNo) {
+		return session.selectOne("chatting.selectEmpProfile",empNo);
+	}
+
+	@Override
+	public Integer selectProfilechatOpen(SqlSession session, Map<String, Object> param) {
+		System.out.println("다오 : "+param);
+		return session.selectOne("chatting.selectProfilechatOpen",param);
 	}
 	
 	
