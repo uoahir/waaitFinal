@@ -33,6 +33,7 @@ public class ChattingServiceImpl implements ChattingService {
 	@Override
 	public List<ChatRoom> selectChatRoomlist(long loginEmpNo) {
 		List<ChatRoom> chatRooms = dao.selectChatRoomlist(session, loginEmpNo);
+		System.out.println("서비스 - 채팅방목록 : "+chatRooms);
 		return chatRooms;
 	}
 

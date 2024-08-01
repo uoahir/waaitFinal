@@ -3,6 +3,7 @@
 	//로그인된 객체 저장 중
 	console.log(loginId);
 	
+	//웹소켓 연결주소 유동적으로 만들기
 	const hostName = window.location.hostname;
 	let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 	let wsUrl;
@@ -14,21 +15,17 @@
 		wsUrl = wsProtocol+"://localhost:5731/chat";
 		console.log(wsUrl);
 	}else{
-		wsUrl = wsProtocol+"://14.36.141.71:15555/chat";
+		wsUrl = wsProtocol+"://14.36.141.71:15555/GDJ79_WAAIT_final/chat";
 		console.log(wsUrl);
 	}
 	
-	/**
-	 * 채팅서버 기능
-	 */
+	//채팅서버 기능
 	//ws : http
 	//wss : https
 	// 클라이언트에서 WebSocket 연결 설정
 	const server = new WebSocket(wsUrl);
-	//const server = new WebSocket("wss://14.36.141.71:15555/chat");
 
 	
-
 
 	//입장했을때 실행됨. // WebSocket 연결이 열렸을 때
 	server.onopen=(response)=>{
@@ -55,10 +52,11 @@
 		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo,"_blank","top=100, left=400, height=700, width=550");
 		chatserver.onload = function(){
 			chatserver.socket = new WebSocket(wsUrl);
-			//chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
+			
+			// 채팅방 새창열기 후 채팅방목록을 최신화하여 안읽은 수 최신화
+			chatroomlist();
 		}
 	}
-
 
 
 	//aside에 있는 사원목록 클릭헀을 때
@@ -88,7 +86,6 @@
 		}else{
 			modal.style.display = "block";
 		}
-		
 	}
 	
 	document.getElementById("modal_chatinvitation").addEventListener("click",function(){
@@ -99,7 +96,6 @@
 		}else{
 			modal.style.display = "block";
 		}
-		
 	})
 	// 채팅방추가 모달 끝
 	
@@ -110,8 +106,6 @@
 			type : "GET",
 			url : path+"/chat/chatinvitation.do",
 			data : {},
-			/* dataType : 'json', 
-			contentType : 'application/json; charset=utf-8', */
 			success : function(data){
 				//일반채팅 화면 넣기
 				document.querySelector("#chatting_main_content").innerHTML = data;
@@ -133,9 +127,8 @@
 						console.log("클릭된 사원번호 : "+empNo);
 					});
 				});
-			}
-		})
-		
+			} //success 닫
+		}); //Ajax 닫
 		
 	})
 	//채팅방추가 일반채팅 끝
@@ -157,7 +150,7 @@
 	/* 프로필 눌렀을떄 출려되는 모달 */
 	/* 나중에 프로필 생기면 꼭 주소 연결하기 */
 	
-	// 1:1대화를 클릭했을때 empNo값이 저장됨 하나의변수로 덮어씌우면서 사용함.
+	// 1:1대화를 클릭했을때 empNo값이 저장됨 -> 하나의변수로 덮어씌우면서 재사용함.
 	let lastEmpNo = null;
 	// 이벤트 핸들러 추가 여부를 확인하는 플래그
 	let isClickHandlerAdded = false; 

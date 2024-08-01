@@ -13,7 +13,7 @@ const hostName = window.location.hostname;
 		wsUrl = wsProtocol+"://localhost:5731/chat";
 		console.log(wsUrl);
 	}else{
-		wsUrl = wsProtocol+"://14.36.141.71:15555/chat";
+		wsUrl = wsProtocol+"://14.36.141.71:15555/GDJ79_WAAIT_final/chat";
 		console.log(wsUrl);
 	}
 
