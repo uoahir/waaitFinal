@@ -2,19 +2,24 @@
 
 	console.log("chatroom.js 오니?");
 
+const hostName = window.location.hostname;
+	let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+	let wsUrl;
+	
+	console.log(hostName);
+	console.log(wsProtocol);
+	
+	if(hostName === "localhost"){
+		wsUrl = wsProtocol+"://localhost:5731/chat";
+		console.log(wsUrl);
+	}else{
+		wsUrl = wsProtocol+"://14.36.141.71:15555/chat";
+		console.log(wsUrl);
+	}
+
 	
 document.addEventListener("DOMContentLoaded", function() {
     console.log("외부 스크립트 파일");
-    // 외부 스크립트 파일에서 전역 변수 사용
-   /* console.log("Accessing variables from external script:");
-    console.log("loginId: " + loginId);
-    console.log("loginEmpName: " + loginEmpName);
-    console.log("loginEmpNo: " + loginEmpNo);
-    console.log("path: " + path);
-    console.log("chatRoomNo: " + chatRoomNo);
-    console.log("chatJoinCount: " + chatJoinCount);
-    console.log("chatRoomType: " + chatRoomType);*/
-    
     //로딩 후 실행 웹 페이지를 스크롤 가장아래에 위치시킴
 	window.scrollTo(0, document.body.scrollHeight);
 });
@@ -23,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	console.log(loginId);
 	
 	//클라이언트에서 WebSocket 연결설정
-	const chatserver = new WebSocket("ws://localhost:5731/chat");
+	const chatserver = new WebSocket(wsUrl);
 	//const chatserver = new WebSocket("wss://14.36.141.71:15555/chat");
 	
 	//WebSocket이 연결됐을때 실행
