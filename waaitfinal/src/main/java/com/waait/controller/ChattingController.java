@@ -192,18 +192,24 @@ public class ChattingController {
 		service.insertChatJoinInvite(param);
 		
 		
-		
 		// 초대, 나가기 -> 문구 저장해서 채팅방에서 출력
 		//초대 : 로그인된사원 님이 선택된 사원 님, 사원 님, 사원 님을 초대했습니다 -> chatHistory에  chatcontent 테이블에 채팅내용으로 추가
-		// 시퀀스번호, 방번호, 로그인된사원번호, 내용, sysdate, 일반채팅과 구분할 무언가?
+		// 시퀀스번호, 방번호, chatType(10000-초대 20000-나가기), 내용, DEFAULT, 1
 		// 사원번호로 사원이름을 가져옴 .forEach돌려서 하나씩 꺼냄 String형태로 문구 만들어서 chatHistory에 저장함
 		// 컨트롤러 말고 서비스에서 바로 바로 구현할듯
+		Map<String, Object> chParam = new HashMap<>();
+		Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+		String loginEmpName = loginEmployee.getEmpName();
+		chParam.put("chatRoomNo", chatRoomNo);
+		chParam.put("chatEmpNo", chatEmpNo);
+		chParam.put("loginEmpName", loginEmpName);
+		service.insertChatHistoryInvitation(chParam);
 		
 		return ResponseEntity.ok("Success");
 	}
 	
 	
-	
+	// 채팅방 나가기
 	//방번호 사원번호
 	@PostMapping("/deletechatjoin.do")
 	@ResponseBody
@@ -221,6 +227,24 @@ public class ChattingController {
 		param.put("empNo", empNo);
 		
 		service.deleteChatJoin(param);
+		
+		
+		// 초대, 나가기 -> 문구 저장해서 채팅방에서 출력
+		// 나가기 : 로그인된사원 님이 나갔습니다 -> chatHistory 테이블에 추가
+		// 시퀀스번호, 방번호, chatType(10000-초대 20000-나가기), 내용, DEFAULT, 1
+		Map<String, Object> chParam = new HashMap<>();
+		String loginEmpName = loginEmployee.getEmpName();
+		String chatContent = loginEmpName +"님이 나갔습니다";
+		
+		chParam.put("chatRoomNo", chatRoomNo);
+		chParam.put("chatType", 20000);
+		chParam.put("chatContent", chatContent);
+		
+		service.insertChatHistoryLeave(chParam);
+		
+		
+		
+		
 		
 		return ResponseEntity.ok("Success");
 	}

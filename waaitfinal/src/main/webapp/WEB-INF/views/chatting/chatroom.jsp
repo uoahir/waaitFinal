@@ -93,6 +93,12 @@
            			나 : chatting_chattingroom_content_my
             	-->
             	<c:forEach var="chatHistory" items="${chatHistorys}">
+            		<!-- 
+            			음.... class 초대, 나가기 두개 만들어서 구현하기
+            			empNo = 10000초대
+            			empNo = 20000나가기
+            		 -->
+            	
             		<!-- 로그인된 사원 채팅 -->
 	            	<c:if test="${chatHistory.empNo eq employee.empNo }">
 	            		<div class="chatting_chattingroom_content_my">

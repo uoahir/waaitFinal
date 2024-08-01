@@ -2,7 +2,7 @@
 
 	console.log("chatroom.js 오니?");
 
-const hostName = window.location.hostname;
+	const hostName = window.location.hostname;
 	let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 	let wsUrl;
 	

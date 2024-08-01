@@ -96,6 +96,18 @@ public class ChattingDaoImpl implements ChattingDao {
 	public int deleteChatHistoryCount(SqlSession session, Map<String, Number> param) {
 		return session.delete("chatting.deleteChatHistoryCount",param);
 	}
+
+	//chatHistory 초대하기 할때 사원들 이름 불러오기
+	@Override
+	public String selectChatHistoryInvitation(SqlSession session, Long empNo) {
+		return session.selectOne("chatting.selectChatHistoryInvitation",empNo);
+	}
+	
+	//초대하기 chatHistory에 추가하기
+	@Override
+	public int insertChatHistoryLeaveInvitation(SqlSession session, Map<String, Object> param) {
+		return session.insert("chatting.insertChatHistoryLeaveInvitation",param);
+	}
 	
 	
 	
