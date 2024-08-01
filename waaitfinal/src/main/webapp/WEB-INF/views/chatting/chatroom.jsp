@@ -18,11 +18,19 @@
 <meta charset="UTF-8">
 <title>waait chat</title>
 
+
+
+		
+		
 <!-- 스타일 적용 -->
 <link rel="stylesheet" href="${path}/resources/css/ju/chatroom.css">
 
 <!-- jquery -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+
+
+
 
 
 </head>
@@ -120,7 +128,7 @@
             <!-- 채팅입력 칸 -->
             <div id="chatting_chattingroom_bottom">
                 <div>
-                    <textarea name="" id="msg"></textarea>
+                    <textarea name="" id="msg" placeholder="메시지를 입력하세요"></textarea>
                 </div>
                 <div>
                     <button onclick="sendMessage();">전송</button>
@@ -404,35 +412,45 @@
         
     </main>
 
-
-
-
-
-
-
-
-
-
-	<script>
-		const loginId = "${employee.empId}";
-		const loginEmpName = "${employee.empName}";
-		const loginEmpNo = "${employee.empNo}";
-		const path = "${pageContext.request.contextPath}";
-		const chatRoomNo = "${chatName.chatRoomNo}";
-		const chatJoinCount = "${chatName.chatJoinCount -1}";
-		const chatRoomType = "${chatName.chatRoomType}";
-		
-		
-		//나중에 삭제함
-		console.log("chatName : "+"${chatName}");
-		console.log("chatHistorys : "+"${chatHistorys}");
-		console.log("chatEmployees : "+"${employees}");
-		
-	</script>
+<script>
 	
-	<!-- script문 -->
-	<script type="text/javascript" src="${path}/resources/js/chatroom.js"></script>
+	console.log("jsp 변수선언한 스크립트");
+
+	var loginId = "${employee.empId}";
+	var loginEmpName = "${employee.empName}";
+	var loginEmpNo = "${employee.empNo}";
+	var path = "${pageContext.request.contextPath}";
+	var chatRoomNo = "${chatName.chatRoomNo}";
+	var chatJoinCount = "${chatName.chatJoinCount - 1}";
+	var chatRoomType = "${chatName.chatRoomType}";
+		
+	// 디버깅용 콘솔 로그 추가
+    console.log("loginId: " + loginId);
+    console.log("loginEmpName: " + loginEmpName);
+    console.log("loginEmpNo: " + loginEmpNo);
+    console.log("path: " + path);
+    console.log("chatRoomNo: " + chatRoomNo);
+    console.log("chatJoinCount: " + chatJoinCount);
+    console.log("chatRoomType: " + chatRoomType);
+	
+	//나중에 삭제함
+	/* console.log("chatName : "+"${chatName}");
+	console.log("chatHistorys : "+"${chatHistorys}");
+	console.log("chatEmployees : "+"${employees}"); */
+	
+	// 특정 조건이 충족될 때 외부 스크립트를 비동기로 로드
+    /* var script = document.createElement("script");
+    script.src = "${path}/resources/js/chatroom.js";
+    script.async = true;
+    document.body.appendChild(script); */
+	
+</script>
+
+<script type="text/javascript" src="${path}/resources/js/chatroom.js" defer></script>
+	
 	
 </body>
+
+
 </html>
 

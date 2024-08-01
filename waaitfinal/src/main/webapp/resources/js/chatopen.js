@@ -3,14 +3,31 @@
 	//로그인된 객체 저장 중
 	console.log(loginId);
 	
+	const hostName = window.location.hostname;
+	let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+	let wsUrl;
+	
+	console.log(hostName);
+	console.log(wsProtocol);
+	
+	if(hostName === "localhost"){
+		wsUrl = wsProtocol+"://localhost:5731/chat";
+		console.log(wsUrl);
+	}else{
+		wsUrl = wsProtocol+"://14.36.141.71:15555/chat";
+		console.log(wsUrl);
+	}
+	
 	/**
 	 * 채팅서버 기능
 	 */
 	//ws : http
 	//wss : https
 	// 클라이언트에서 WebSocket 연결 설정
-	const server = new WebSocket("ws://localhost:5731/chat");
+	const server = new WebSocket(wsUrl);
 	//const server = new WebSocket("wss://14.36.141.71:15555/chat");
+
+	
 
 
 	//입장했을때 실행됨. // WebSocket 연결이 열렸을 때
@@ -37,7 +54,7 @@
 	function openChatRoom(chatRoomNo){
 		let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo,"_blank","top=100, left=400, height=700, width=550");
 		chatserver.onload = function(){
-			chatserver.socket = new WebSocket("ws://localhost:5731/chat");
+			chatserver.socket = new WebSocket(wsUrl);
 			//chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
 		}
 	}
@@ -474,8 +491,8 @@
 				$userprofileimg.setAttribute("alt","프로필");
 				$userprofileimg.setAttribute("width","50px");
 				$userprofileimg.setAttribute("height","50px");
-				$userprofilebutton.setAttribute("dblclick", "profile(event);");
-				
+				$userprofilebutton.setAttribute("onclick", "empprofile("+chatuser.empNo+")");
+							
 				$userprofilediv.classList.add("chatting_userlist_printarea_profile");
 				$userprofileimg.classList.add("chatting_userlist_printarea_profile_img_green");
 				

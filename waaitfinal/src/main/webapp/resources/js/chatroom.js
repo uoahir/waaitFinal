@@ -1,10 +1,34 @@
 
 
+	console.log("chatroom.js 오니?");
+
+const hostName = window.location.hostname;
+	let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+	let wsUrl;
+	
+	console.log(hostName);
+	console.log(wsProtocol);
+	
+	if(hostName === "localhost"){
+		wsUrl = wsProtocol+"://localhost:5731/chat";
+		console.log(wsUrl);
+	}else{
+		wsUrl = wsProtocol+"://14.36.141.71:15555/chat";
+		console.log(wsUrl);
+	}
+
+	
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("외부 스크립트 파일");
+    //로딩 후 실행 웹 페이지를 스크롤 가장아래에 위치시킴
+	window.scrollTo(0, document.body.scrollHeight);
+});
+	
 	//로그인된 객체 저장 중
 	console.log(loginId);
 	
 	//클라이언트에서 WebSocket 연결설정
-	const chatserver = new WebSocket("ws://localhost:5731/chat");
+	const chatserver = new WebSocket(wsUrl);
 	//const chatserver = new WebSocket("wss://14.36.141.71:15555/chat");
 	
 	//WebSocket이 연결됐을때 실행
@@ -97,6 +121,16 @@
 		}				
 	}
 	
+
+	
+	//채팅방 메세지작성 칸 키업이벤트부여 엔터
+	document.querySelector("#msg").addEventListener("keyup",function(event){
+		if(event.key === "Enter" && !event.shiftKey){
+			// 엔터 키의 기본 동작(줄바꿈) 막음
+			event.preventDefault();
+			sendMessage();
+		}
+	});
 	
 	
 	//채팅방에서 전송버튼 눌렀을때 작동하는 js 
@@ -256,8 +290,6 @@
 		}else{
 			alert("1:1 방은 나갈수 없습니다.");
 		}
-		
-		
 	}
 	
 	// 채팅방 나가기 모달 끝
