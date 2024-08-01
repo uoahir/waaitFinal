@@ -55,8 +55,8 @@
                          <label for="schePrivate" class="form-label">개인일정</label>
                         <input type="checkbox" name="schePrivate" value="Y" id="schePrivate">
                         <input type="hidden" name="scheNo" id="modalScheNo" value="0"/>
-					<select id="shareSchedule" name="scheShare">
-					  <option value="">공유캘린더 선택</option>
+					<select id="deptCode" name="deptCode">
+					  <option value="deptCode">공유캘린더 선택</option>
 					  <option value="D1">대표실</option>
 					  <option value="D5">경영관리부</option>
 					  <option value="D7">인사팀</option>
