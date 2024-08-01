@@ -17,7 +17,8 @@ public interface ScheduleService {
 	int deleteSchedule(int num);
 	//그룹일정 리스트에 출력 받아오기
 //	List<ShareSchedule> shareScheduleList(long empNumber); 
-	
+	//팀캘린더 출력하기 
+	List<Schedule> teamSchedule(String deptCode);
 	
 
 	

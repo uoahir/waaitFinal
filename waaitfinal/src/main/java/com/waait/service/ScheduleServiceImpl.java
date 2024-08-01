@@ -37,6 +37,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 	public int deleteSchedule(int num) {
 		return dao.deleteSchedule(session,num);
 	}
+
+	@Override
+	public List<Schedule> teamSchedule(String deptCode) {
+		return dao.teamSchedule(session,deptCode);
+	}
+	
 	
 	
 	
