@@ -20,6 +20,7 @@ import com.waait.dto.TeamProject;
 import com.waait.service.EmployeeService;
 import com.waait.service.TeamProjectService;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -102,7 +103,8 @@ public class TeamProjectController {
 	public ResponseEntity<Map<String,String>> inprogressupdate(
 			@RequestBody Allocation allocation){
 		int result  = projectService.inprogressupdate(allocation);
-		return ResponseEntity.ok(null);
+		Map<String, String> param = new HashMap<>();
+		return ResponseEntity.ok(param);
 	}
 	@GetMapping("/project{projectNo}/update")
 	public String projectUpdate(@PathVariable int projectNo,Model model) {
@@ -122,5 +124,27 @@ public class TeamProjectController {
 		 
 		
 	}
+	@ResponseBody
+	@PostMapping("/function/approve")
+	public ResponseEntity<Map<String,String>> functionStatusUpdate(
+			@RequestBody Allocation allocation){
+		int result = projectService.functionStatusUpdate(allocation);
+		System.out.println("asdasdsadasdad"+result);
+		
+		Map<String, String> rs = new HashMap<>();
+		return ResponseEntity.ok(rs);
+	}
+	
+	@ResponseBody
+	@PostMapping("/function/Noapprove")
+	public ResponseEntity<Map<String,String>> functionNoStatusUpdate(
+			@RequestBody Allocation allocation){
+		int result = projectService.functionNoStatusUpdate(allocation);
+		System.out.println("asdasdsadasdad"+result);
+		
+		Map<String, String> rs = new HashMap<>();
+		return ResponseEntity.ok(rs);
+	}
+	
 
 }

@@ -65,6 +65,18 @@ public class TeamProjectDaoImpl implements TeamProjectDao {
 		return sqlSession.selectOne("teamProject.selectByProjectNoTeamproject",projectNo);
 	}
 
+	@Override
+	public int functionStatusUpdate(SqlSession sqlSession, Allocation allocation) { //승인
+		
+		return sqlSession.update("teamProject.functionStatusUpdate",allocation);
+	}
+
+	@Override
+	public int functionNoStatusUpdate(SqlSession sqlSession, Allocation allocation) {
+		// TODO Auto-generated method stub
+		return sqlSession.update("teamProject.functionNoStatusUpdate" ,allocation);
+	}
+
 	
 	
 }

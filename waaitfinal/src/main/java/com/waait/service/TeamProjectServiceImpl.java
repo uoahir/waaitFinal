@@ -17,8 +17,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TeamProjectServiceImpl implements TeamProjectService {
 	
+
 	private final SqlSession sqlSession;
 	private final TeamProjectDao projectDao; //project부분 dao 
+	
+	
+	@Override
+	public int functionNoStatusUpdate(Allocation allocation) {
+		int rs = projectDao.functionNoStatusUpdate(sqlSession,allocation);
+		return rs;
+	}
+	
 	
 	@Override
 	public int projectInsertData(TeamProject teamProject) {
@@ -67,5 +76,10 @@ public class TeamProjectServiceImpl implements TeamProjectService {
 		TeamProject teamProject = projectDao.selectByProjectNoTeamproject(sqlSession,projectNo);
 		teamProject.setAllocationList(allocation);
 		return teamProject;
+	}
+	@Override
+	public int functionStatusUpdate(Allocation allocation) {
+		int rs = projectDao.functionStatusUpdate(sqlSession,allocation);
+		return rs;
 	}
 }
