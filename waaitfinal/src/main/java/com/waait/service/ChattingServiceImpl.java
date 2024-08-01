@@ -1,6 +1,5 @@
 package com.waait.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,14 +51,10 @@ public class ChattingServiceImpl implements ChattingService {
 		return chatHistorys;
 	}
 
-
+	//채팅내역 저장하기
 	@Override
 	public int insertChatHistory(Message msg) {
-//		int result = dao.insertChatHistory(session, messages);
-		int result = 0;
-		//for(Message message : messages) {
-		result = dao.insertChatHistory(session, msg);
-		//}
+		int result = dao.insertChatHistory(session, msg);
 		return result;
 	}
 
@@ -190,7 +185,7 @@ public class ChattingServiceImpl implements ChattingService {
 		String chatEmpName = "";
 		
 		for(Long empNo : chatEmpNos) {
-			chatEmpName += dao.selectChatHistoryInvitation(session, empNo)+"님 ";
+			chatEmpName += " "+dao.selectChatHistoryInvitation(session, empNo)+"님";
 		}
 		
 		System.out.println("서비스 채팅방초대된 사원이름 : "+chatEmpName);
@@ -200,7 +195,7 @@ public class ChattingServiceImpl implements ChattingService {
 		int chatRoomNo = (int) chParam.get("chatRoomNo");
 		String loginEmpName = (String) chParam.get("loginEmpName");
 		//초대 : 로그인된사원 님이 선택된 사원 님, 사원 님, 사원 님을 초대했습니다 -> chatHistory에  chatcontent 테이블에 채팅내용으로 추가
-		String chatContent = loginEmpName +"님이 "+chatEmpName+"을 초대했습니다";
+		String chatContent = loginEmpName +"님이"+chatEmpName+"을 초대했습니다";
 		
 		param.put("chatRoomNo", chatRoomNo);
 		param.put("chatType", 10000);
