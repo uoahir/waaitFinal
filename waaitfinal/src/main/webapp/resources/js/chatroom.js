@@ -1,11 +1,34 @@
 
 
+	console.log("chatroom.js 오니?");
+
+	const hostName = window.location.hostname;
+	let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+	let wsUrl;
+	
+	console.log(hostName);
+	console.log(wsProtocol);
+	
+	if(hostName === "localhost"){
+		wsUrl = wsProtocol+"://localhost:5731/chat";
+		console.log(wsUrl);
+	}else{
+		wsUrl = wsProtocol+"://14.36.141.71:15555/GDJ79_WAAIT_final/chat";
+		console.log(wsUrl);
+	}
+
+	
+document.addEventListener("DOMContentLoaded", function() {
+    console.log("외부 스크립트 파일");
+    //로딩 후 실행 웹 페이지를 스크롤 가장아래에 위치시킴
+	window.scrollTo(0, document.body.scrollHeight);
+});
+	
 	//로그인된 객체 저장 중
 	console.log(loginId);
 	
 	//클라이언트에서 WebSocket 연결설정
-	const chatserver = new WebSocket("ws://localhost:5731/chat");
-	//const chatserver = new WebSocket("wss://14.36.141.71:15555/chat");
+	const chatserver = new WebSocket(wsUrl);
 	
 	//WebSocket이 연결됐을때 실행
 	chatserver.onopen = (response) =>{
@@ -97,6 +120,16 @@
 		}				
 	}
 	
+
+	
+	//채팅방 메세지작성 칸 키업이벤트부여 엔터
+	document.querySelector("#msg").addEventListener("keyup",function(event){
+		if(event.key === "Enter" && !event.shiftKey){
+			// 엔터 키의 기본 동작(줄바꿈) 막음
+			event.preventDefault();
+			sendMessage();
+		}
+	});
 	
 	
 	//채팅방에서 전송버튼 눌렀을때 작동하는 js 
@@ -140,7 +173,7 @@
 			modal.style.display = "block";
 		}
 	}
-	
+	// 채팅방참여 사원리스트 모달창 닫기
 	document.getElementById("modal_chatemplist").addEventListener("click",function(){
 		const modal = document.getElementById("modal_chatemplist");
 		if(modal.style.display === "block"){
@@ -148,9 +181,9 @@
 		}else{
 			modal.style.display = "block";
 		}
-		
 	})
 	
+	// 사원초대 모달창
 	const chatinvitationemplist=()=>{
 		const modal2 = document.getElementById("modal_chatinvitation");
 		if(modal2.style.display === "block"){
@@ -160,6 +193,7 @@
 		}
 	}
 	
+	//사원초대 모달창 닫기
 	document.getElementById("modal_chatinvite_cancel").addEventListener("click",function(){
 		const modal2 = document.getElementById("modal_chatinvitation");
 		if(modal2.style.display === "block"){
@@ -169,7 +203,7 @@
 		}
 	});
 	
-	
+	//채팅방 사원초대하기
 	const insertchatjoin=()=>{
 		const chatEmpNo = [];
 		const checkboxes = document.querySelectorAll('input[name="chatemps"]:checked');
@@ -190,7 +224,6 @@
 			type : "POST",
 			url : path+"/chat/insertchatjoin.do",
 			traditional: true, // 배열을 전송할 때 필요
-			/*contentType : 'application/json; charset=utf-8',*/
 			data: {
 	            chatRoomNo: chatRoomNo,
 	            chatEmpNo: chatEmpNo
@@ -216,7 +249,7 @@
 	// 채팅방초대 모달 끝
 	
 	
-	// 채팅방 나가기 모달창
+	// 채팅방 나가기 모달창 열기
 	const setting=()=>{
 		const modal = document.getElementById("modal_chat_exit");
 		if(modal.style.display === "block"){
@@ -226,6 +259,7 @@
 		}
 	}
 	
+	//채팅방 나가기 모달창 닫기
 	document.getElementById("modal_chat_exit").addEventListener("click",function(){
 		const modal = document.getElementById("modal_chat_exit");
 		if(modal.style.display === "block"){
@@ -236,6 +270,7 @@
 	});
 	
 	// 방번호, 사원번호(서버에서 로그인된 사원번호) 넘겨서 처리하기
+	// 채팅방 나가기
 	const deletechatjoin=()=>{
 		console.log("채팅방 번호 : "+chatRoomNo);
 		//1:1방은 나갈수없게 분기처리
@@ -256,8 +291,6 @@
 		}else{
 			alert("1:1 방은 나갈수 없습니다.");
 		}
-		
-		
 	}
 	
 	// 채팅방 나가기 모달 끝
@@ -288,5 +321,8 @@
 		static deconvert(data){
 			return JSON.parse(data);
 		}
-		
 	}
+	
+	
+	
+	

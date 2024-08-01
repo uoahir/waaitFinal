@@ -16,6 +16,8 @@ public interface ScheduleDao {
 	int updateSchedule(SqlSession session,Schedule s);
 	//일정 삭제하기
 	int deleteSchedule(SqlSession session, int num);
+	//팀캘린더 출력
+	List<Schedule> teamSchedule(SqlSession session,String deptCode);
 	
 }
 
