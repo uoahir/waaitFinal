@@ -2,18 +2,14 @@
  * managemain.jsp의 javascript
  */
 
-const activeSideBar = (e) => {
+/*const activeSideBar = (e) => {
 	const targetLi = e.currentTarget.parentElement;
 	document.querySelectorAll(".sidebar-item").forEach(e => {
 		e.setAttribute("class", "sidebar-item")
 	})
 	
 	targetLi.setAttribute("class", "sidebar-item active");
-}
-
-const ajax = (url) => {
-	console.log("ajax");
-}
+}*/
 
 function ajaxPaging(pageNo, url) {
 	const numPerpage = document.getElementById("numPerpage").value;
@@ -116,7 +112,11 @@ document.getElementById("searchInput").addEventListener("keyup", e => {
 	}
 })
 
-document.getElementById("searchInput").addEventListener("blur", e => {
+/*document.getElementById("searchInput").addEventListener("blur", e => {
+	document.getElementById("searchModal").style.display = "none";
+})*/
+
+document.getElementById("deleteSearchModal").addEventListener("click", e => {
 	document.getElementById("searchModal").style.display = "none";
 })
 
@@ -154,5 +154,81 @@ const searchEmployee = (e) => {
 	.then(response => response.text())
 	.then(data => {
 		document.getElementById("mainView").innerHTML = data;
+		document.getElementById("searchModal").style.display = "none";
 	})
+}
+
+document.querySelectorAll("input[name='dateUserChoice']").forEach(e => {
+	e.addEventListener("click", e => {
+		if(e.target.value == 'period') {
+			document.querySelector("input[name='startEmpStartDate']").hidden = false;
+			document.getElementById("periodTextSpan").hidden = false;
+			document.querySelector("input[name='endEmpStartDate']").hidden = false;
+		} else {
+			document.getElementById("periodTextSpan").hidden = true;
+			document.querySelector("input[name='endEmpStartDate']").hidden = true;
+		}
+	})
+})
+
+const cancelDetailAction = () => {
+	document.getElementById("searchDetailModal").style.display = "none";
+}
+
+const searchDetailAction = (pageNo) => {
+	const numPerpage = document.getElementById("numPerpage").value;
+	const sortdata = document.getElementById("sortdata").value;
+	const sort = document.getElementById("sort").value;
+	const empName = document.querySelector("input[name='empName']").value;
+	const empBirth = document.querySelector("input[name='empBirth']").value;
+	const empId = document.querySelector("input[name='empId']").value;
+	const jobLevelName = document.querySelector("input[name='jobLevel']").value;
+	const deptName = document.querySelector("input[name='deptName']").value;
+	const startEmpStartDate = document.querySelector("input[name='startEmpStartDate']").value;
+	const endEmpStartDate = document.querySelector("input[name='endEmpStartDate']").value;
+	console.log("pageNo : " + pageNo);
+	console.log(typeof pageNo);
+	console.log("empBirth : " + empBirth + "typeof : " + typeof empBirth);
+	const data = {
+		cPage : pageNo,
+		numPerpage : numPerpage,
+		sortdata : sortdata,
+		sort : sort,
+		empName : empName,
+		empBirth : empBirth,
+		empId : empId,
+		levelName : jobLevelName,
+		deptName : deptName,
+		startEmpStartDate : startEmpStartDate,
+		endEmpStartDate : endEmpStartDate
+	}
+	console.log("typeofdata : " + typeof data.cPage);
+	fetch(path + "/manage/detailempsearch.do", {
+		method : "POST",
+		headers : {
+			"Content-Type" : "application/json"
+		},
+		body : JSON.stringify(data)
+	})
+	.then(response => response.text())
+	.then(data => {
+		document.getElementById("mainView").innerHTML = data;
+	})
+	
+}
+
+const showSearchDetailModal = () => {
+	const modal = document.getElementById("searchDetailModal");
+	if(modal.style.display == 'none') modal.style.display = "inline"
+	else modal.style.display = 'none'
+}
+
+const emptyInputValue = () => {
+	document.querySelector("input[name='empName']").value = "";
+	document.querySelector("input[name='empBirth']").value = "";
+	document.querySelector("input[name='empId']").value = "";
+	document.querySelector("input[name='jobLevel']").value = "";
+	document.querySelector("input[name='deptName']").value = "";
+	document.querySelector("input[name='startEmpStartDate']").value = "";
+	document.querySelector("input[name='endEmpStartDate']").value = "";
 }

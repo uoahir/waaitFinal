@@ -43,6 +43,10 @@ public class EmployeeManagementService {
 		return dao.searchEmployee(session, sqlParam, pagingParam);
 	}
 	
+	public int empDetailSearchTotalData(Map<String, Object> sqlParam) {
+		return dao.empDetailSearchTotalData(session, sqlParam);
+	}
+	
 	public List<JobLevel> getJobLevel() {
 		return dao.getJobLevel(session);
 	}

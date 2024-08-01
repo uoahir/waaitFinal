@@ -97,6 +97,20 @@
 			                    <span>부서/팀 관리</span>
 			                </a>
 			            </li>
+			            <li class="sidebar-item has-sub">
+			            	<a href="#" class="sidebar-link">
+			            		<i class="bi bi-stack"></i>
+			            		<span>Components</span>
+			            	</a>
+			            	<ul class="submenu submenu-closed">
+			            		<li class="submenu-item">
+			            			<a href="#" class="submenu-link">부서 등록/수정/삭제</a>
+			            		</li>
+			            		<li class="submenu-item">
+			            			<a href="#" class="submenu-link">팀 등록/수정/삭제</a>
+			            		</li>
+			            	</ul>
+			            </li>
 					</ul>
 				</div>
 			</div>
@@ -197,6 +211,9 @@
     </div>
     <!-- modal -->
 	<div class="modal" id="searchModal">
+		<div class="headLine">
+			<i class="bi bi-x" id="deleteSearchModal"></i>
+		</div>
 		<div class="button" id="searchTitleContainer">
 			<button id="searchNameButton" onclick="searchEmployee(event)">
 				<span class="searchType">[이름]</span>
@@ -216,6 +233,51 @@
 			</button>
 		</div>
 	</div>
+	<!-- searchDetailModal -->
+	<div id="searchDetailModal">
+        <div class="header bd-bottom">
+            <p class="header-title">상세조회</p>
+        </div>
+        <div class="search-option-container bd-bottom">
+            <div class="input-container top">
+                <span>이름</span>
+                <input type="text" class="form-control wd-70" name="empName" placeholder="이름입력">
+            </div>
+            <div class="input-container">
+                <span>출생일</span>
+                <input type="date" class="form-control wd-70" name="empBirth">
+            </div>
+            <div class="input-container">
+                <span>아이디</span>
+                <input type="text" class="form-control wd-70" name="empId" placeholder="아이디입력">
+            </div>
+            <div class="input-container">
+                <span>직책</span>
+                <input type="text" class="form-control wd-70" name="jobLevel" placeholder="직책입력">
+            </div>
+            <div class="input-container">
+                <span>부서</span>
+                <input type="text" class="form-control wd-70" name="deptName" placeholder="부서입력">
+            </div>
+            <div class="input-container">
+                <div>
+                    <span>입사일</span>
+                    <input type="radio" name="dateUserChoice" value="period">기간조회
+                    <input type="radio" name="dateUserChoice" value="date">날짜조회
+                </div>
+                <div>
+                    <input type="date" class="form-control small-input-date" name="startEmpStartDate" hidden="true">
+                    <span id="periodTextSpan" hidden="true">~</span>
+                    <input type="date" class="form-control small-input-date" name="endEmpStartDate" hidden="true">
+                </div>
+            </div>
+        </div>
+        <div class="action-container">
+        		<button class="btn btn-sm btn-outline-success" onclick="emptyInputValue()">비우기</button>
+            <button class="btn btn-sm btn-success" onclick="searchDetailAction(1)">검색</button>
+            <button class="btn btn-sm btn-danger" onclick="cancelDetailAction()">취소</button>
+        </div>
+    </div>
 </body>
 <script>
 	var path = "${path }";

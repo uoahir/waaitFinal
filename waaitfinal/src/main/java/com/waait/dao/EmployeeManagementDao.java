@@ -45,6 +45,10 @@ public class EmployeeManagementDao {
 		return session.selectList("em.searchEmployee", sqlParam, rb);
 	}
 	
+	public int empDetailSearchTotalData(SqlSession session, Map<String, Object> sqlParam) {
+		return session.selectOne("em.empDetailSearchTotalData", sqlParam);
+	}
+	
 	public List<JobLevel> getJobLevel(SqlSession session) {
 		return session.selectList("em.getJobLevel");
 	}

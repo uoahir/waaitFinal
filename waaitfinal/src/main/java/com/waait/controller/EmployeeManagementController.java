@@ -133,6 +133,52 @@ public class EmployeeManagementController {
 		
 		return sb.toString();
 	}
+	
+	public static String paging(int totalData, int cPage, int numPerpage, int pageBarSize) {
+		int totalPage = (int) Math.ceil((double) totalData/ numPerpage);
+		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
+		int pageEnd = pageNo + pageBarSize - 1;
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("<ul class='pagination justify-content-center pagination-sm' style='margin-top : 50px;'>");
+		if(pageNo == 1) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>이전</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:searchDetailAction(" + (pageNo - 1) + ")>이전</a>");
+			sb.append("</li>");
+		}
+		
+		while(!(pageNo > pageEnd || pageNo > totalPage)) {
+			if(pageNo == cPage) {
+				sb.append("<li class='page-item disabled'>");
+				sb.append("<a class='page-link' href='#'>" + pageNo + "</a>");
+				sb.append("</li>");
+			} else {
+				sb.append("<li class='page-item'>");
+				sb.append("<a class='page-link' href='javascript:searchDetailAction(" + pageNo + ")'>" + pageNo + "</a>");
+				sb.append("</li>");
+			}
+			pageNo++;
+		}
+		
+		if(pageNo > totalPage) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>다음</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:searchDetailAction(" + pageNo + ")'>다음</a>");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+		
+		return sb.toString();
+	}
+	
+	
 	//test
 	@GetMapping("/empmanagemain.do")
 	public String empManageMainView() {
@@ -243,6 +289,23 @@ public class EmployeeManagementController {
 		model.addAttribute("pageBar", pageBar);
 
 		return "empmanage/responsepage/empinfolist";
+	}
+	
+	@PostMapping("/detailempsearch.do")
+	public String empDetailSearch(@RequestBody Map<String, Object> param) {
+		int cPage = (int) param.get("cPage");
+		int numPerpage = Integer.parseInt((String) param.get("numPerpage"));
+		int totalData = service.empDetailSearchTotalData(param);
+		int pageBarSize = 5;
+		String pageBar = paging(totalData, cPage, numPerpage, pageBarSize);
+		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
+		
+		//List<Employee> searchEmpList = service.empDetailSearch(param, pagingParam);
+		if(((String) param.get("empName")).equals("")) {
+			System.out.println("이게맞아용~");
+		}
+		
+		return null;
 	}
 	
 	@PostMapping("/enrollemployee.do")
