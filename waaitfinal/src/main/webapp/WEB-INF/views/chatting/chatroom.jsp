@@ -412,14 +412,10 @@
         
     </main>
 
-<script defer>
-	console.log("jsp 변수선언한 스크립트");
-	//var scriptNum = 0; 
+<script>
 	
-	// 전역변수 선언
-	//let loginId, loginEmpName, loginEmpNo, path, chatRoomNo, chatJoinCount, chatRoomType;
+	console.log("jsp 변수선언한 스크립트");
 
-	//document.addEventListener("DOMContentLoaded", function() {
 	var loginId = "${employee.empId}";
 	var loginEmpName = "${employee.empName}";
 	var loginEmpNo = "${employee.empNo}";
@@ -438,29 +434,23 @@
     console.log("chatRoomType: " + chatRoomType);
 	
 	//나중에 삭제함
-	console.log("chatName : "+"${chatName}");
+	/* console.log("chatName : "+"${chatName}");
 	console.log("chatHistorys : "+"${chatHistorys}");
-	console.log("chatEmployees : "+"${employees}");
-		
-	
-	//scriptNum = 1;
+	console.log("chatEmployees : "+"${employees}"); */
 	
 	// 특정 조건이 충족될 때 외부 스크립트를 비동기로 로드
-    var script = document.createElement("script");
+    /* var script = document.createElement("script");
     script.src = "${path}/resources/js/chatroom.js";
     script.async = true;
-    document.head.appendChild(script);
+    document.body.appendChild(script); */
 	
 </script>
 
-<!-- script문 -->
-<%-- <script type="text/javascript" src="${path}/resources/js/chatroom.js" defer></script> --%>
-<%-- <c:if test="${scriptNum == 1 }">
-	<script type="text/javascript" src="${path}/resources/js/chatroom.js" defer></script>
-</c:if> --%>
-<!-- defer는 5버전 이후 부터 생긴 속성 html로딩이 다 된 후 script실행시킴 -->
+<script type="text/javascript" src="${path}/resources/js/chatroom.js" defer></script>
 	
 	
 </body>
+
+
 </html>
 
