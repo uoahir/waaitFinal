@@ -25,6 +25,13 @@ public class MypageDaoImpl implements MypageDao {
 	public List<Mypage> myVacation(SqlSession session, long empNumber) {
 		return session.selectList("mypage.myVacation",empNumber);
 	}
+
+	@Override
+	public List<Mypage> myTodayWork(SqlSession session, long empNumber) {
+		return session.selectList("myapge.myTodayWork",empNumber);
+	}
+	
+	
 	
 	
 

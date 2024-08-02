@@ -11,5 +11,5 @@ public interface MypageDao {
 
 	List<Mypage>myInfoList(SqlSession session, long empNumber);
 	List<Mypage>myVacation(SqlSession session,long empNumber);
-	
+	List<Mypage>myTodayWork(SqlSession session,long empNumber);
 }

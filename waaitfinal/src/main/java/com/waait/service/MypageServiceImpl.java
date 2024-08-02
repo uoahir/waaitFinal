@@ -26,8 +26,14 @@ public class MypageServiceImpl implements MypageService {
 	@Override
 	public List<Mypage> myVacation(Long empNumber) {
 		return dao.myVacation(session,empNumber);
+	}
+
+	@Override
+	public List<Mypage> myTodayWork(Long empNumber) {
+		return dao.myTodayWork(session,empNumber);
 	}	
 
+	
 	
 	
 	
