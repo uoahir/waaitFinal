@@ -29,6 +29,10 @@ public interface TeamProjectDao {
 
 	TeamProject selectByProjectNoTeamproject(SqlSession sqlSession, int projectNo);
 
+	int functionStatusUpdate(SqlSession sqlSession, Allocation allocation);
+
+	int functionNoStatusUpdate(SqlSession sqlSession, Allocation allocation);
+
 	
 		
 		

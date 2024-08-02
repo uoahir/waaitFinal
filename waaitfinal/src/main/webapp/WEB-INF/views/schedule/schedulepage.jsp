@@ -29,10 +29,8 @@
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
                 <h3>SCHEDULE</h3>
-                <p class="text-subtitle text-muted">일정관리</p>
-                <input type="text" class="form-control form-control-sm" id="shceShare" name="shceShare" style="width:200px;" required>
-                <button type="button" id="shareButton" class="btn btn-primary" onclick="empline();"chatuserlist>사원조회</button>
-            </div>
+                <p class="text-subtitle text-muted">일정관리</p>               
+            </div>                        
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
@@ -40,11 +38,38 @@
                         <li class="breadcrumb-item active" aria-current="page">Calendar</li>
                     </ol>
                 </nav>
-            </div>
+            </div>            
         </div>
     </div>
-	   
-	
+   <div>
+  	 <form method="post" style="display:flex; align-items: center;">	
+       <select id="deptCode" name="deptCode">
+		  <option value="null">공유캘린더 선택</option>
+		  <option value="D1" ${param.deptCode!=null&&param.deptCode=='D1'?"selected":"" }>대표실</option>
+		  <option value="D5" ${param.deptCode!=null&&param.deptCode=='D5'?"selected":"" }>경영관리부</option>
+		  <option value="D7" ${param.deptCode!=null&&param.deptCode=='D7'?"selected":"" }>인사팀</option>
+		  <option value="D6" ${param.deptCode!=null&&param.deptCode=='D6'?"selected":"" }>재정팀</option>
+		  <option value="D2" ${param.deptCode!=null&&param.deptCode=='D2'?"selected":"" }>개발부</option>
+		  <option value="D3" ${param.deptCode!=null&&param.deptCode=='D3'?"selected":"" }>개발1팀</option>
+		  <option value="D4" ${param.deptCode!=null&&param.deptCode=='D4'?"selected":"" }>개발2팀</option>
+		  <option value="D8" ${param.deptCode!=null&&param.deptCode=='D8'?"selected":"" }>영업부</option>
+		</select>
+       <button type="button" id="teamSchedule" name="teamSchedule" class="btn btn-primary"
+       ${param.deptCode!=null?"checked":""} 
+       style="margin-left:7px;">확인</button>
+   	 <label for="mySchedulebox" style="margin-left:50px; margin-right:5px;">내캘린더</label>
+   	 <input type="checkbox" id="mySchedulebox" name="mySchedulebox" 
+   	 onchange="sendMySchedule()"
+   	 class="form-check-input form-check-primary form-check-glow" style="margin-bottom:5px;">
+	</form>
+   </div>
+	<div>
+		<div style="display:flex; align-items:center;">
+			<input type="text" class="form-control form-control-sm" id="shceShare" name="shceShare" style="width:180px;" required>
+			<button type="button" id="shareButton" class="btn btn-primary" onclick="empline();"chatuserlist
+			style="margin-left:7px;">사원조회</button>
+		</div>                
+	</div>
 	<!-- FullCalendar CDN -->
 	<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
 	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
@@ -92,6 +117,7 @@
 		  		editable:true,
 		  		extendedProps:{"content":"${event.scheContent}","schePrivate":"${event.schePrivate}",
 		  					"scheNo":"${event.scheNo}","color":"${event.scheColor}"},
+		  					"deptCode":"${event.deptCode}"
 		  	},
 		  </c:forEach>
 /* 			{
@@ -102,8 +128,8 @@
 			}  */ 
 	  ];
 	  successCallback(events); 	  
-  }                                                                                                       
-    
+  }
+         
   var calendar;
   (function(){	 
 	  
@@ -199,7 +225,7 @@
           $('#addEventModal').modal('show'); //일정 추가하는 모달창 띄움
           $('#start').val(info.startStr); 
           $('#end').val(info.endStr);                    
-          
+           
           $("#addEventModal").find("#subject").val("");
           $("#addEventModal").find("#title").val("");
           $("#addEventModal").find("#addEventModalLabel").text("일정 등록");
@@ -243,7 +269,6 @@
 	    const seconds = String(date.getSeconds()).padStart(2, '0');
 	    
 	    return `\${year}-\${month}-\${day}T\${hours}:\${minutes}:\${seconds}`; 
-	    /* return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`; */
 	    
   }
   
@@ -253,7 +278,7 @@
 		const choiceEvent=object.event;
 		console.log(choiceEvent);
 		const {title,allDay,start,end}=choiceEvent;
-		const {content,schePrivate,scheNo,color}=choiceEvent.extendedProps;			
+		const {content,schePrivate,scheNo,color,deptCode}=choiceEvent.extendedProps;			
 		console.log(start,end, typeof start);
 	    
 		document.getElementById('modalScheNo').value=scheNo;
@@ -263,7 +288,8 @@
 		document.getElementById('end').value=end;
 		document.getElementById('scheAllDay').checked=allDay;
 		document.getElementById('schePrivate').checked=schePrivate;
-		document.getElementById('color').value=color;
+		document.getElementById('color').value=color; 
+		document.getElementById('deptCode').value=deptCode;
 		
 		$("#addEventModal").find("#addEventModalLabel").text("일정 수정");
 		$("#addEventModal").find("#submitButton").text("수정");				
@@ -311,10 +337,65 @@
         //일정수정 이벤트
 		$("#submitButton").click(e=>{
 			if(e.target.innerText==='수정'){
+				console.log(e);
 				$(e.target).parents("form").attr("action","${path}/schedule/updateSchedule.do");
 			}
 			$(e.target).parents("form").submit();
 		});
+        //팀캘린더 
+		/* $("#teamSchedule").on("click", function(e) {
+			var form=$(e.target).closest("form");
+			form.attr("action","${path}/schedule/teamSchedule.do");
+			form.submit();		    
+		}); */
+        
+        //팀캘린더 ajax요청하기
+        /* $("teamScheduleFunction").on("click",function(e){
+        	e.preventDefault();
+        	
+        	var form=$(e.target).closest("form");
+        	var formData=form.serialize(); 
+        	
+        	$.ajax({
+        		url:"${path}/schedule/teamSchedule.do",
+        		type:"POST",
+        		data:formData        		
+        	});
+        }); */
+        document.getElementById("teamSchedule").addEventListener("click", e => {
+        	const deptCode = document.getElementById("deptCode").value;
+        	console.log("deptCode : " + deptCode);
+        	fetch("${path }/schedule/teamSchedule.do", {
+        		method : "POST",
+        		headers : {
+        			"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+        		},
+        		body : "deptCode=" + deptCode
+        	})
+        	.then(response => response.json())
+        	.then(data => {
+        		console.log("ScheduleData : " + data);
+        		for(let key in data) {
+        			console.log(data[key]);
+        			const schedule = data[key];
+        			console.log("empNo : " + schedule["empNo"])
+        			calendar.addEvent( 
+        					{
+        				  		color: schedule['scheColor'],
+        				  		title: schedule['scheTitle'],
+        				  		start: schedule['scheTime'],
+        				  		end: schedule['scheEnd'],
+        				  		allDay: schedule['scheAllDay'],
+        				  		editable:true,
+         				  		extendedProps: {'scheContent':schedule['scheContent'], 'schePrivate':schedule['schePrivate'], 'scheNo':schedule['scheNo'],
+        				  					'scheColor':schedule['scheColor'],'deptCode':schedule['deptCode']   	
+        				  		} 
+        				  		
+        				  	})
+        		}
+        	})
+        });
+        
   //}) 
   //일정삭제 성공여부 alert창 띄우기
   document.addEventListener("DOMContentLoaded",function(){
@@ -356,6 +437,30 @@
   	if(htmlTag.getAttribute("data-bs-theme") == "dark") {
   		document.getElementById("main").style.backgroundColor = "white";	
   	} */
+  	
+  	/* 팀캘린더 일정 가져오기 */
+/*   	function teamSchedule(){
+  		var checkbox=document.getElementById('teamSchedule');
+  		if(checkbox.checked){
+  			var form=checkbox.closest('form');
+  			form.action="${path}/schedule/teamSchedule.do"
+  			form.submit();
+  		}
+  	} */
+  	
+/*   	function teamScheduleFunction(){
+  		var button=document.getElementById('teamSchedule');
+  		var form=button.closest('form');
+  		form.action="${path}/schedule/teamSchedule.do";
+  		form.submit();
+  		
+  	} */
+  	
+  	function sendMySchedule(){
+  		var request=new XMLHpptRequest();
+  		request.open('GET','${path}/myschedule/schedule',true);
+  		request.send();
+  	}
   	
 </script>  
 

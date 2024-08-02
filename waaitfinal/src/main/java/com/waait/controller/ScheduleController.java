@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Schedule;
@@ -69,13 +70,17 @@ public class ScheduleController {
 		Employee loginEmp=(Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		s.setEmpNo(loginEmp.getEmpNo());
 		s.setScheWriter(loginEmp.getEmpName());
+		
+		if(s.getDeptCode().equals("deptCode")) {
+			s.setDeptCode(null);
+		}				
 //		if(s.getScheAllDay()==null) {
 //			s.setScheAllDay("false");
 //		}
 //		if(s.getSchePrivate()==null) {
 //			s.setSchePrivate("N");
 //		}       
-		
+		System.out.println(s);
 		int result=service.insertSchedule(s);
 		return "redirect:/schedule/myschedule";
 		
@@ -94,14 +99,25 @@ public class ScheduleController {
 		Employee loginEmp=(Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		s.setEmpNo(loginEmp.getEmpNo());
 		s.setScheWriter(loginEmp.getEmpName());
-		int result=service.updateSchedule(s);
-		if(result>0) {
-			model.addAttribute("msg","수정 성공");
-		}else {
-			model.addAttribute("msg", "수정 실패");
-		}
 		
-	return "redirect:/schedule/myschedule";
+		//deptCode란을 아무것도 선택 안하면 deptCode=deptCode로 들어오는데 
+		//이럴 경우에 deptCode가 null로 들어오게 하기
+		if(s.getDeptCode().equals("deptCode")) { //문자열은 equals로 비교해주는거 까먹고 있었음ㅋ
+			s.setDeptCode(null);
+		}
+		int result=service.updateSchedule(s);
+		System.out.println("어디가 문제"+s);
+		
+		String msg,loc;		
+		if(result>0) {
+			msg="일정 수정 성공";
+		}else {
+			msg="일정 수정 실패. 다시 시도하세요.";
+		}
+		loc="/schedule/myschedule";
+		model.addAttribute("msg", msg);
+		model.addAttribute("loc", loc);		
+		return "common/msg";
 	}
 	
 	//삭제하기
@@ -111,20 +127,26 @@ public class ScheduleController {
 		String msg,loc;
 		
 		int result=service.deleteSchedule(scheNo);	
-//		if(result>0) {
-//			msg="일정 삭제 성공"; 
-//			loc="/schedule/schedulepage";
-//		}
-//		else {
-//			msg="삭제 실패. 다시 시도하세요";
-//			loc="/schedule/deleteSchedule.do";					
-//		}		
-//		model.addAttribute("msg",msg);
-//		model.addAttribute("loc",loc);
-		
-		return "redirect:/schedule/myschedule";
+		if(result>0) {
+			msg="일정 삭제 성공"; 
+		}
+		else {
+			msg="삭제 실패. 다시 시도하세요";
+		}		
+		loc="/schedule/myschedule";					
+		model.addAttribute("msg",msg);
+		model.addAttribute("loc",loc);		
+		return "common/msg";
 	}
-	
+	//팀캘린더 뽑아오기
+	@PostMapping("/teamSchedule.do")
+	public @ResponseBody List<Schedule> teamSchedule(Model model,String deptCode) {
+		System.out.println("deptCode : " + deptCode);
+		List<Schedule> deptTotal=service.teamSchedule(deptCode);
+		//model.addAttribute("total",deptTotal);
+		System.out.println("teamSchedule : " + deptTotal);
+		return deptTotal;
+	}
 	
 	
 	

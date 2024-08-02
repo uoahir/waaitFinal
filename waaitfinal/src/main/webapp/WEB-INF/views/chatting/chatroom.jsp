@@ -93,35 +93,55 @@
            			나 : chatting_chattingroom_content_my
             	-->
             	<c:forEach var="chatHistory" items="${chatHistorys}">
-            		<!-- 로그인된 사원 채팅 -->
-	            	<c:if test="${chatHistory.empNo eq employee.empNo }">
-	            		<div class="chatting_chattingroom_content_my">
-		                    <div>
-		                        <p>${chatHistory.chatReadCount}</p>
-		                        <p>${chatHistory.chatCreationDate}</p>
-		                    </div>
-		                    <div>
-		                        <p>${chatHistory.chatContent}</p>
-		                    </div>
-		                </div>
-					</c:if>
-					
-					<!-- 로그인되지 않은 다른 사원 채팅 -->
-					<c:if test="${chatHistory.empNo ne employee.empNo }">
-	            		<div class="chatting_chattingroom_content_user">
-	            			<div>
-	            				<img src="${path}/chatHistory.empProfile" alt="프로필" width="50" height="50">
-	            			</div>
-	            			<div>
-	            				<p>${chatHistory.empName}</p>
-	            				<p>${chatHistory.chatContent}</p>
-	            			</div>
-	            			<div>
-	            				<p>${chatHistory.chatReadCount}</p>
-	            				<p>${chatHistory.chatCreationDate}</p>
-	            			</div>
-	            		</div>
- 					</c:if>                	
+            		<!-- 
+            			empNo = 10000 초대
+            			empNo = 20000 나가기
+            		 -->
+            		<!-- empNo가 10000일 때 -->
+				    <c:if test="${chatHistory.empNo == 10000}">
+				        <div class="chatting_chattingroom_content_invitation_leave">
+				            <p>${chatHistory.chatContent}</p>
+				        </div>
+				    </c:if>
+				
+				    <!-- empNo가 20000일 때 -->
+				    <c:if test="${chatHistory.empNo == 20000}">
+				        <div class="chatting_chattingroom_content_invitation_leave">
+				            <p>${chatHistory.chatContent}</p>
+				        </div>
+				    </c:if>
+            	
+            		<c:if test="${chatHistory.empNo != 10000 && chatHistory.empNo != 20000}">
+	            		<!-- 로그인된 사원 채팅 -->
+		            	<c:if test="${chatHistory.empNo eq employee.empNo }">
+		            		<div class="chatting_chattingroom_content_my">
+			                    <div>
+			                        <p>${chatHistory.chatReadCount}</p>
+			                        <p>${chatHistory.chatCreationDate}</p>
+			                    </div>
+			                    <div>
+			                        <p>${chatHistory.chatContent}</p>
+			                    </div>
+			                </div>
+						</c:if>
+						
+						<!-- 로그인되지 않은 다른 사원 채팅 -->
+						<c:if test="${chatHistory.empNo ne employee.empNo }">
+		            		<div class="chatting_chattingroom_content_user">
+		            			<div>
+		            				<img src="${path}/chatHistory.empProfile" alt="프로필" width="50" height="50">
+		            			</div>
+		            			<div>
+		            				<p>${chatHistory.empName}</p>
+		            				<p>${chatHistory.chatContent}</p>
+		            			</div>
+		            			<div>
+		            				<p>${chatHistory.chatReadCount}</p>
+		            				<p>${chatHistory.chatCreationDate}</p>
+		            			</div>
+		            		</div>
+						</c:if>
+					</c:if>        	
             	</c:forEach>
             </div>	<!-- 채팅내역 출력 끝 -->
 

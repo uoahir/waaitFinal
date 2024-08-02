@@ -65,7 +65,7 @@
                 	<c:if test="${not empty allocations }">
                 			<c:forEach var="al" items="${allocations }">
                 				<c:if test="${al.functionStatus eq 'complete-check' }">
-                				<div class="d-flex mt-2" style="justify-content: space-around;"> <p class="mr-3">${al.functionName }</p> <button class="btn btn-outline-info mr-3" onclick="modelopen('${al.functionName}','${al.functionSummary}','${al.empName}')">상세 정보</button></div>
+                				<div class="d-flex mt-2" style="justify-content: space-around;"> <p class="mr-3">${al.functionName }</p> <button class="btn btn-outline-info mr-3" onclick="modelopen2('${al.functionName}','${al.functionSummary}','${al.empName}','${al.functionStartDate }','${al.projectNo }')">상세 정보</button></div>
                 				</c:if>
                 			</c:forEach>
                 		</c:if>
@@ -77,7 +77,7 @@
                 	<c:if test="${not empty allocations }">
                 			<c:forEach var="al" items="${allocations }">
                 				<c:if test="${al.functionStatus eq 'done' }">
-                				<div class="d-flex mt-2" style="justify-content: space-around;"> <p class="mr-3">${al.functionName }</p> <button class="btn btn-outline-info mr-3" onclick="modelopen('${al.functionName}','${al.functionSummary}','${al.empName}')">상세 정보</button></div>
+                				<div class="d-flex mt-2" style="justify-content: space-around;"> <p class="mr-3">${al.functionName }</p> <button class="btn btn-outline-info mr-3" onclick="modelopen3('${al.functionName}','${al.functionSummary}','${al.empName}','${al.functionStartDate }','${al.functionEndDate }')">상세 정보</button></div>
                 				</c:if>
                 			</c:forEach>
                 		</c:if>
@@ -95,14 +95,18 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h2 id="modalTitle"></h2>
-        <p id="functionSummary"></p>                             
+        <p id="functionSummary" style="width: 400px; height: 400px; text-align: center;"></p>                             
         <p id="empName"></p>
         <p id="startDate"></p>
-        <p id="startEnd"></p>
-        <button id="functionapproval">승인</button>
-        <button id="functionreject">반려</button>
+        <p id="endDate"></p>
+        <div class="d-flex">
+        <button class="btn btn-outline-success" id="functionapproval">승인</button>
+        <button class="btn btn-outline-danger" id="functionreject">반려</button>
+        </div>
+        
     </div>
 </div>
+
  	<script type="text/javascript">
  // teamprojectUpdate.js 파일에 추가
 

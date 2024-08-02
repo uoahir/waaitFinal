@@ -3,6 +3,7 @@
   //로그인된 객체 저장 중
   console.log(loginId);
   
+  //웹소켓 연결주소 유동적으로 만들기
   const hostName = window.location.hostname;
   let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
   let wsUrl;
@@ -14,21 +15,17 @@
      wsUrl = wsProtocol+"://localhost:5731/chat";
      console.log(wsUrl);
   }else{
-     wsUrl = wsProtocol+"://14.36.141.71:15555/chat";
+     wsUrl = wsProtocol+"://14.36.141.71:15555/GDJ79_WAAIT_final/chat";
      console.log(wsUrl);
   }
   
-  /**
-   * 채팅서버 기능
-   */
+  //채팅서버 기능
   //ws : http
   //wss : https
   // 클라이언트에서 WebSocket 연결 설정
   const server = new WebSocket(wsUrl);
-  //const server = new WebSocket("wss://14.36.141.71:15555/chat");
 
   
-
 
   //입장했을때 실행됨. // WebSocket 연결이 열렸을 때
   server.onopen=(response)=>{
@@ -55,10 +52,11 @@
      let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo,"_blank","top=100, left=400, height=700, width=550");
      chatserver.onload = function(){
         chatserver.socket = new WebSocket(wsUrl);
-        //chatserver.socket = new WebSocket("wss://14.36.141.71:15555/chat");
+        
+        // 채팅방 새창열기 후 채팅방목록을 최신화하여 안읽은 수 최신화
+        chatroomlist();
      }
   }
-
 
 
   //aside에 있는 사원목록 클릭헀을 때
@@ -88,7 +86,6 @@
      }else{
         modal.style.display = "block";
      }
-     
   }
   
   document.getElementById("modal_chatinvitation").addEventListener("click",function(){
@@ -99,7 +96,6 @@
      }else{
         modal.style.display = "block";
      }
-     
   })
   // 채팅방추가 모달 끝
   
@@ -110,8 +106,6 @@
         type : "GET",
         url : path+"/chat/chatinvitation.do",
         data : {},
-        /* dataType : 'json', 
-        contentType : 'application/json; charset=utf-8', */
         success : function(data){
            //일반채팅 화면 넣기
            document.querySelector("#chatting_main_content").innerHTML = data;
@@ -133,9 +127,8 @@
                  console.log("클릭된 사원번호 : "+empNo);
               });
            });
-        }
-     })
-     
+        } //success 닫
+     }); //Ajax 닫
      
   })
   //채팅방추가 일반채팅 끝
@@ -157,7 +150,7 @@
   /* 프로필 눌렀을떄 출려되는 모달 */
   /* 나중에 프로필 생기면 꼭 주소 연결하기 */
   
-  // 1:1대화를 클릭했을때 empNo값이 저장됨 하나의변수로 덮어씌우면서 사용함.
+  // 1:1대화를 클릭했을때 empNo값이 저장됨 -> 하나의변수로 덮어씌우면서 재사용함.
   let lastEmpNo = null;
   // 이벤트 핸들러 추가 여부를 확인하는 플래그
   let isClickHandlerAdded = false; 
@@ -255,7 +248,6 @@
               chatEmpNo: lastEmpNo
           },
         success : function(data){
-           /*alert(data);*/
            console.log(data);
 
            switch(data.type){
@@ -264,7 +256,7 @@
                  openChatRoom(data.chatRoomNo);
                  
               case "방없음" :
-                 // 1: 방이 없는 경우 채팅방 생성 후 열기
+                 // 1:1 방이 없는 경우 채팅방 생성 후 열기
                  console.log(data.chatemps);
                  
                  $.ajax({
@@ -275,7 +267,7 @@
                           chatemps: data.chatemps
                       },
                     success : function(){
-                        // 1. Ajax로 방번호 가져오는 컨트롤러 만들어서 가져옴
+                        // 1. Ajax로 방번호 가져오는 컨트롤러 만들어서 가져옴 -> 나중에 재사용가능함
                         // 2. 기존 방 생성 컨트롤러랑 리턴값을 다르게 만들어 가져옴
                         $.ajax({
                           type : "POST",
@@ -303,6 +295,7 @@
   /* 프로필 모달 채팅바로가기 끝 */
 
 
+
   // 현재는 메세지를 저장할 때 한번에 5개씩 리스트형태로 담아서 저장하기 떄문에 아래 기능을 구현하기에 어려움이 있어 한개씩 바로바로 insert되게 변경해서 구현해야됨.
   
   // 채팅 목록에서 자신이 채팅방 별로 안읽은 숫자 표시
@@ -312,8 +305,6 @@
   //CHATHISTORYCOUNT
   // 추가 : 채팅기록 테이블에 저장시킬때 COUNT테이블에 채팅방에 속한 사원 수 만큼 ROW 추가
   // 삭제 : 채팅방을 들어가는 기준으로 해당채팅방번호 + 로그인된 사원번호 ROW 삭제
-
-
 
 
   //response는 응답 전부 필요한 데이터가 response.data data안에 들어가 있어서 접근한 값들을 Message객체로 저장 시킴
@@ -336,35 +327,10 @@
      }
   }
 
-  //사람이 입장할때 작동? msg에 참가자들 담겨져있음
-  //msg가 그냥 문자열이라서 JSON.parse를 해서 리스트형식으로 변경해야함
-  /*const addAttend=(msg)=>{
-     const clients = JSON.parse(msg.msg);
-     const $attendContainer = document.querySelector("#attendContainer");
-     $attendContainer.innerHTML = "";
-     const $ul = document.createElement("ul");
-     $ul.classList.add("listcontainer");
-     clients.map(e=>{
-        const $li = document.createElement("li");
-        $li.innerText=e;
-        $li.classList.add("listfont");
-        return $li;
-     }).forEach(e=>{
-        $ul.appendChild(e);
-     });
-     $attendContainer.appendChild($ul);
-  } */
-
-
-
-
-
-
-
 
   //유저목록 출력하기
   
-  //프로필 클릭했을 때 상세정보 띄우기 나중에
+  //프로필 클릭했을 때 상세정보 띄우기 해결
   //출 퇴근 해서 프로필사진 주변에 테두리 초록 회색 표시   //chatting_userlist_printarea_profile_img_green
   
   //목록을 클릭한 사원만 화면 전환하기 프론트에서 로그인된사원번호 == 컨트롤러에서보내는 사원번호가 일치할때 작동? //해결
@@ -527,13 +493,11 @@
 
 
 
-
-
   
-  //채팅목록 출력하기
+  // 채팅방목록 출력하기
   
   //페이징 처리 나중에
-  //프로필 눌렀을때 작동하는 script 나중에 구현하기 -> 사원목록에서 프로필눌렀을때 뜨는 창이랑 같은거 사용해도 됨
+  //프로필 눌렀을때 작동하는 script  -> 사원목록에서 프로필눌렀을때 뜨는 창이랑 같은거 사용해도 됨
   
   //개인채팅방은 상대방이름을 출력해야됨
   //그룹채팅일때 몇명인지 표시 -> p태그 만들어서 count? //해결
@@ -543,251 +507,166 @@
   const chatroomPrint=(msg)=>{
      //로그인된 사원에서만 작동하도록 분기처리
      if(msg.loginEmpNo == loginEmpNo){
-        console.log("chatroomPrint : "+msg);
-        console.log(msg);
-        
-        //전체 감싸기
-        const $chatroomlistdiv = document.createElement("div");
-        $chatroomlistdiv.id="chatting_chattingroomlist";
-        
-        
-        //검색창
-        const $div10 = document.createElement("div");
-        $div10.id="chatting_chattingroomlist_search";
-        const $div20 = document.createElement("div");
-        
-        const $img10 = document.createElement("img");
-        const $input10 = document.createElement("input");
-        const $p10 = document.createElement("p");
-        
-        //데이터 대입
-        $img10.setAttribute("src","https://i.pinimg.com/564x/95/ee/40/95ee408c19f2c9d10629b70c4cea3e51.jpg");
-        $img10.setAttribute("alt","검색창");
-        $img10.setAttribute("width","34px");
-        $img10.setAttribute("height","34px");
-        
-        $input10.setAttribute("type","text");
-        $input10.setAttribute("placeholder","채팅방이름, 참가자 검색");
-        
-        $p10.setAttribute("onclick", "searchdelete();");
-        $p10.innerText="X";
-        
-        //합치기
-        $div20.appendChild($img10);
-        $div20.appendChild($input10);
-        $div20.appendChild($p10);
-        
-        $div10.appendChild($div20);
-        //합치기 끝
-        //검색창 끝
-  
-  
-        //목록 감싸는 div
-        const $chatlistdiv = document.createElement("div");
-        $chatlistdiv.id ="chatting_chattingroomlist_printarea_all";
-        
-        //div하나씩 생성
-        msg.chatRoomlist.forEach(chatroom=>{
-           //element 생성
-           const $div = document.createElement("div");
+        //채팅방이 1개 이상일때 작동
+        if(msg.chatRoomlist.length > 0){
+           console.log("chatroomPrint : "+msg);
+           console.log(msg);
            
-           const $div1 = document.createElement("div");
-           const $div2 = document.createElement("div");
-           const $div3 = document.createElement("div");
+           //전체 감싸기
+           const $chatroomlistdiv = document.createElement("div");
+           $chatroomlistdiv.id="chatting_chattingroomlist";
            
-           const $div21 = document.createElement("div");
            
-           const $button = document.createElement("button");
+           //검색창
+           const $div10 = document.createElement("div");
+           $div10.id="chatting_chattingroomlist_search";
+           const $div20 = document.createElement("div");
            
-           const $img = document.createElement("img");
-           
-           const $p1 = document.createElement("p");
-           const $p2 = document.createElement("p");
-           const $p3 = document.createElement("p");
-           const $p4 = document.createElement("p");
-           const $p5 = document.createElement("p");
-           
+           const $img10 = document.createElement("img");
+           const $input10 = document.createElement("input");
+           const $p10 = document.createElement("p");
            
            //데이터 대입
-           if(chatroom.chatRoomName!=null){
-              $p1.innerText=chatroom.chatRoomName;
-           }else if(chatroom.chatEmpName != null){
-              $p1.innerText=chatroom.chatEmpName;
-           }else{
-              $p1.innerText = chatroom.chatHistory.empName;
-           }
+           $img10.setAttribute("src","https://i.pinimg.com/564x/95/ee/40/95ee408c19f2c9d10629b70c4cea3e51.jpg");
+           $img10.setAttribute("alt","검색창");
+           $img10.setAttribute("width","34px");
+           $img10.setAttribute("height","34px");
            
+           $input10.setAttribute("type","text");
+           $input10.setAttribute("placeholder","채팅방이름, 참가자 검색");
            
-           
-           $p2.innerText=chatroom.chatHistory.chatContent;
-           
-           $p3.innerText=chatroom.chatHistory.chatCreationDate;
-           
-           $p4.innerText=chatroom.chatJoinCount;
-           
-           $p5.innerText = chatroom.chatCount;
-           
-           $img.setAttribute("src", "${path}/"+chatroom.empProfile); // chatroom 객체의 프로필 이미지 URL 사용
-             $img.setAttribute("alt", "프로필");
-             $img.setAttribute("width", "50");
-             $img.setAttribute("height", "50");
-           
-           $button.setAttribute("onclick", "profile(event);");
-           
-           
-           //class부여
-           $img.classList.add("chatting_chattingroomlist_printarea_profile_img");
-           
-           $div1.classList.add("chatting_chattingroomlist_printarea_profile");
-           
-           $div.classList.add("chatting_chattingroomlist_printarea");
-           
-           
-           //채팅방번호 각자 부여
-           $div.setAttribute("data-chatroom-no",chatroom.chatRoomNo);
-           
+           $p10.setAttribute("onclick", "searchdelete();");
+           $p10.innerText="X";
            
            //합치기
-           $button.appendChild($img);
+           $div20.appendChild($img10);
+           $div20.appendChild($input10);
+           $div20.appendChild($p10);
            
-           $div1.appendChild($button);
+           $div10.appendChild($div20);
+           //합치기 끝
+           //검색창 끝
+     
+     
+           //목록 감싸는 div
+           const $chatlistdiv = document.createElement("div");
+           $chatlistdiv.id ="chatting_chattingroomlist_printarea_all";
            
-           $div21.appendChild($p1);
+           //div하나씩 생성
+           msg.chatRoomlist.forEach(chatroom=>{
+              //element 생성
+              const $div = document.createElement("div");
+              
+              const $div1 = document.createElement("div");
+              const $div2 = document.createElement("div");
+              const $div3 = document.createElement("div");
+              
+              const $div21 = document.createElement("div");
+              
+              const $button = document.createElement("button");
+              
+              const $img = document.createElement("img");
+              
+              const $p1 = document.createElement("p");
+              const $p2 = document.createElement("p");
+              const $p3 = document.createElement("p");
+              const $p4 = document.createElement("p");
+              const $p5 = document.createElement("p");
+              
+              
+              
+              //데이터 대입
+              if(chatroom.chatRoomName!=null){
+                 $p1.innerText=chatroom.chatRoomName;
+              }else if(chatroom.chatEmpName != null){
+                 $p1.innerText=chatroom.chatEmpName;
+              }else{
+                 $p1.innerText = chatroom.chatHistory.empName;
+              }
+              
+              $p2.innerText=chatroom.chatHistory.chatContent;
+              
+              $p3.innerText=chatroom.chatHistory.chatCreationDate;
+              
+              $p4.innerText=chatroom.chatJoinCount;
+              
+              $p5.innerText = chatroom.chatCount;
+              
+              $img.setAttribute("src", "${path}/"+chatroom.empProfile); // chatroom 객체의 프로필 이미지 URL 사용
+                $img.setAttribute("alt", "프로필");
+                $img.setAttribute("width", "50");
+                $img.setAttribute("height", "50");
+              
+              $button.setAttribute("onclick", "profile(event);");
+              
+              
+              //class부여
+              $img.classList.add("chatting_chattingroomlist_printarea_profile_img");
+              
+              $div1.classList.add("chatting_chattingroomlist_printarea_profile");
+              
+              $div.classList.add("chatting_chattingroomlist_printarea");
+              
+              
+              //채팅방번호 각자 부여
+              $div.setAttribute("data-chatroom-no",chatroom.chatRoomNo);
+              
+              
+              //합치기
+              $button.appendChild($img);
+              
+              $div1.appendChild($button);
+              
+              $div21.appendChild($p1);
+              
+              if(chatroom.chatJoinCount>2){
+                 $div21.appendChild($p4);
+              }
+              
+              $div2.appendChild($div21);
+              
+              $div2.appendChild($p2);
+              
+              $div3.appendChild($p3);
+              if(chatroom.chatCount>0){
+                 $div3.appendChild($p5);               
+              }
+              
+              $div.appendChild($div1);
+              $div.appendChild($div2);
+              $div.appendChild($div3);
+              
+              $chatlistdiv.appendChild($div);
+           })
+           //오픈 오른쪽 공간에 대입
+           $chatroomlistdiv.appendChild($div10);
+           $chatroomlistdiv.appendChild($chatlistdiv);
+           //document.querySelector("#chatting_main_content").appendChild($chatlistdiv);
            
-           if(chatroom.chatJoinCount>2){
-              $div21.appendChild($p4);
-           }
+           document.querySelector("#chatting_main_content").innerHTML=$chatroomlistdiv.innerHTML;
            
-           $div2.appendChild($div21);
+           //채팅방한테 더블 클릭이벤트 부여
+           const chatroomarea = document.querySelectorAll(".chatting_chattingroomlist_printarea");
+           chatroomarea.forEach(chatroom=>{
+              chatroom.addEventListener("dblclick", chatroomopen);
+           });
+        }else{
+           console.log("참여한 채팅방없음");
+           // 참여한 채팅목록이 없습니다 출력하기
+           const $div = document.createElement("div");
+           const $p = document.createElement("p");
            
-           $div2.appendChild($p2);
+           $p.innerText = "참여한 채팅방이 없습니다";
+           $div.appendChild($p);
            
-           $div3.appendChild($p3);
-           if(chatroom.chatCount>0){
-              $div3.appendChild($p5);               
-           }
+           $div.classList.add("chatting_chattingroomlist_printarea_nochatroom");
            
-           $div.appendChild($div1);
-           $div.appendChild($div2);
-           $div.appendChild($div3);
-           
-           $chatlistdiv.appendChild($div);
-        })
-        //오픈 오른쪽 공간에 대입
-        $chatroomlistdiv.appendChild($div10);
-        $chatroomlistdiv.appendChild($chatlistdiv);
-        //document.querySelector("#chatting_main_content").appendChild($chatlistdiv);
-        
-        document.querySelector("#chatting_main_content").innerHTML=$chatroomlistdiv.innerHTML;
-        
-        //채팅방한테 더블 클릭이벤트 부여
-        const chatroomarea = document.querySelectorAll(".chatting_chattingroomlist_printarea");
-        chatroomarea.forEach(chatroom=>{
-           chatroom.addEventListener("dblclick", chatroomopen);
-        });
+           document.querySelector("#chatting_main_content").innerText = "";
+           document.querySelector("#chatting_main_content").appendChild($div);
+        }
      }
   };
   //채팅목록 출력하기 끝
-
-
-
-
-
-
-  //메세지 출력
-  /*const messagePrint=(msg)=>{
-     console.log("messagePrint : "+msg);
-     console.log(msg);
-     
-     if(msg.empName == loginId){
-        //로그인된 사람 메세지 출력
-        const $div = document.createElement("div");
-        const $div1 = document.createElement("div");
-        const $div2 = document.createElement("div");
-        
-        const $p1 = document.createElement("p");
-        const $p2 = document.createElement("p");
-        const $p3 = document.createElement("p");
-        
-        $p1.innerText = "안읽은 숫자";
-        $p2.innerText = "보낸 시간";
-        $p3.innerText = msg.chatContent;
-        
-        $div1.appendChild($p1);
-        $div1.appendChild($p2);
-        $div2.appendChild($p3);
-        
-        $div.appendChild($div1);
-        $div.appendChild($div2);
-        
-        $div.classList.add("chatting_chattingroom_content_my");
-        
-        document.querySelector("#chatting_chattingroom_content").appendChild($div);
-     }else{
-        //로그인된 사람이 아닌 다른 사용자 메세지 출력
-        const $div = document.createElement("div");
-        const $div1 = document.createElement("div");
-        const $div2 = document.createElement("div");
-        const $div3 = document.createElement("div");
-        
-        const $profile = document.createElement("img");
-        
-        $profile.style.width="50px";
-        $profile.style.height="50px";
-        $profile.style.borderRadius="100%";
-        $profile.setAttribute("src","${path}/resources/images/joyee.png");   // 사원번호를 이용해 프로필사진 가져오기
-        
-        const $p1 = document.createElement("p");
-        const $p2 = document.createElement("p");
-        const $p3 = document.createElement("p");
-        const $p4 = document.createElement("p");
-        
-        $p1.innerText = msg.empName;
-        $p2.innerText = msg.chatContent;
-        $p3.innerText = "안읽은 숫자";
-        $p4.innerText = "보낸 시간";
-        
-        $div1.appendChild($profile);
-        $div2.appendChild($p1);
-        $div2.appendChild($p2);
-        $div3.appendChild($p3);
-        $div3.appendChild($p4);
-        
-        $div.appendChild($div1);
-        $div.appendChild($div2);
-        $div.appendChild($div3);
-        
-        $div.classList.add("chatting_chattingroom_content_user");
-        
-        document.querySelector("#chatting_chattingroom_content").appendChild($div);
-     }            
-  }*/
-
-
-
-  //채팅방에서 전송버튼 눌렀을때 작동하는 js 
-  /*const sendMessage=()=>{
-     const inputData = document.querySelector("#msg").value;
-     console.log("sendMessage : "+inputData);
-     if(inputData.length > 0){
-        const msgObj = new Message("msg",loginId,"",inputData,"","").convert();
-        server.send(msgObj);
-        console.log("server.send : "+msgObj);
-        document.querySelector("#msg").value = "";
-     }else{
-        alert("메세지를 입력하세요!");
-        document.querySelector("#msg").focus();
-     }
-  }*/
-
-
-  /*const alertMessage=(msg)=>{
-     const $container = $("<div>").addClass("alertContainer");
-     const status = msg.type=="open"?"접속":"퇴장";
-     const $content = $("<h4>").text(`${msg.sender}님이 ${status}하셨습니다`);
-     $container.append($content);
-     $("#chattingcontent").append($container);
-  }*/
 
 
 
@@ -815,25 +694,5 @@
      
   } 
   
-  
-  
-  
-  /*class ChatRoom{
-     constructor(chatRoomNo="",chatRoomType="",chatRoomEmpNo="",chatRoomCreationDate="",chatRoomName="",chatRoomPassword="",chatRoomIntroduction=""){
-        this.chatRoomNo=chatRoomNo;
-        this.chatRoomType=chatRoomType;
-        this.chatRoomEmpNo=chatRoomEmpNo;
-        this.chatRoomCreationDate=chatRoomCreationDate;
-        this.chatRoomName=chatRoomName;
-        this.chatRoomPassword=chatRoomPassword;
-        this.chatRoomIntroduction=chatRoomIntroduction;
-     }
-  }*/
-  
-  
-     
-     
-     
-     
      
      

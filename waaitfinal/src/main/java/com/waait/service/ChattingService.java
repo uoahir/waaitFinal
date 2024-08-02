@@ -39,4 +39,8 @@ public interface ChattingService {
 	void insertChatHistoryCount(Map<String ,Number> param);
 	
 	void deleteChatHistoryCount(Map<String, Number> param);
+	
+	void insertChatHistoryInvitation(Map<String, Object> chParam);
+	
+	void insertChatHistoryLeave(Map<String, Object> chParam);
 }

@@ -42,4 +42,8 @@ public interface ChattingDao {
 	int insertChatHistoryCount(SqlSession session, Map<String, Number> param);
 	
 	int deleteChatHistoryCount(SqlSession session, Map<String, Number> param);
+	
+	String selectChatHistoryInvitation(SqlSession session, Long empNo);
+	
+	int insertChatHistoryLeaveInvitation(SqlSession session, Map<String, Object> param);
 }
