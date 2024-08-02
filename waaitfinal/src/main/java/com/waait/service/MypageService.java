@@ -11,6 +11,7 @@ public interface MypageService {
 	List<Mypage> myInfoList(Long empNumber);
 	//총 연차,잔여연차 출력
 	List<Mypage> myVacation(Long empNumber);
-	
+	//사원 출퇴근시간 불러오기 
+	List<Mypage> myTodayWork(Long empNumber);
 	
 }
