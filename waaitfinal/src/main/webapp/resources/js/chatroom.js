@@ -152,6 +152,9 @@ document.addEventListener("DOMContentLoaded", function() {
          const seconds = now.getSeconds().toString().padStart(2,"0");
          const msgTime = year+"/"+month+"/"+day+" "+hours+":"+minutes+":"+seconds;
          
+         console.log("메세지가 담고있는 시간 msgTime : "+msgTime);
+         console.log(msgTime);
+         
          //타입 , 방번호, 전송자사원번호, 채팅내용
          const msgObj = new Message("메세지",loginEmpNo,loginEmpName,chatRoomNo,inputData,msgTime,chatJoinCount).convert();
          

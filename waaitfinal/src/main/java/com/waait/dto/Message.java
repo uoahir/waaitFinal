@@ -15,7 +15,7 @@ public class Message {
 	
 	private int empNo;	// 전송한 사원 사원번호
 	private String empName;	//전송한 사원이름
-
+	
 	private int chatRoomNo;	// 채팅방 번호
 	private String chatContent;		// 전송한 메세지
 	private String chatCreationDate;	//채팅작성 시간	String으로 변경함
