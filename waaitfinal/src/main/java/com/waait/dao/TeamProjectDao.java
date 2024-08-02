@@ -33,6 +33,8 @@ public interface TeamProjectDao {
 
 	int functionNoStatusUpdate(SqlSession sqlSession, Allocation allocation);
 
+	int projectUpdateStatus(SqlSession sqlSession, String today);
+
 	
 		
 		

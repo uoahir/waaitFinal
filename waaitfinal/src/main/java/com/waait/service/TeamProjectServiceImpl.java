@@ -82,4 +82,11 @@ public class TeamProjectServiceImpl implements TeamProjectService {
 		int rs = projectDao.functionStatusUpdate(sqlSession,allocation);
 		return rs;
 	}
+
+
+	@Override
+	public int projectUpdateStatus(String today) {
+		int rs = projectDao.projectUpdateStatus(sqlSession,today);
+		return rs;
+	}
 }

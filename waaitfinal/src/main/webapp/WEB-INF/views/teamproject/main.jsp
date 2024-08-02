@@ -10,7 +10,7 @@ var empNo = "${employee.empNo}";
 </script>
 
 
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
   
 <section class="section">
      <div class="card-title d-flex mt-4">
@@ -70,7 +70,7 @@ var empNo = "${employee.empNo}";
 
 </section>
 
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 
 
