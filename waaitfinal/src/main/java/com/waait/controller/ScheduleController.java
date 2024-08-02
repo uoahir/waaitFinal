@@ -11,12 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Schedule;
 import com.waait.service.ScheduleService;
 
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -73,9 +73,7 @@ public class ScheduleController {
 		
 		if(s.getDeptCode().equals("deptCode")) {
 			s.setDeptCode(null);
-		}
-			
-		
+		}				
 //		if(s.getScheAllDay()==null) {
 //			s.setScheAllDay("false");
 //		}
@@ -141,13 +139,13 @@ public class ScheduleController {
 		return "common/msg";
 	}
 	//팀캘린더 뽑아오기
-	@RequestMapping("/teamSchedule.do")
-	public String teamSchedule(Model model,String deptCode) {
-		
+	@PostMapping("/teamSchedule.do")
+	public @ResponseBody List<Schedule> teamSchedule(Model model,String deptCode) {
+		System.out.println("deptCode : " + deptCode);
 		List<Schedule> deptTotal=service.teamSchedule(deptCode);
-		model.addAttribute("total",deptTotal);
-		
-		return "schedule/schedulepage"; 
+		//model.addAttribute("total",deptTotal);
+		System.out.println("teamSchedule : " + deptTotal);
+		return deptTotal;
 	}
 	
 	

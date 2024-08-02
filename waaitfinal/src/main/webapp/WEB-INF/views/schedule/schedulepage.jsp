@@ -44,7 +44,7 @@
    <div>
   	 <form method="post" style="display:flex; align-items: center;">	
        <select id="deptCode" name="deptCode">
-		  <option value="">공유캘린더 선택</option>
+		  <option value="null">공유캘린더 선택</option>
 		  <option value="D1" ${param.deptCode!=null&&param.deptCode=='D1'?"selected":"" }>대표실</option>
 		  <option value="D5" ${param.deptCode!=null&&param.deptCode=='D5'?"selected":"" }>경영관리부</option>
 		  <option value="D7" ${param.deptCode!=null&&param.deptCode=='D7'?"selected":"" }>인사팀</option>
@@ -55,10 +55,11 @@
 		  <option value="D8" ${param.deptCode!=null&&param.deptCode=='D8'?"selected":"" }>영업부</option>
 		</select>
        <button type="button" id="teamSchedule" name="teamSchedule" class="btn btn-primary"
-       ${param.deptCode!=null?"checked":""} onclick="teamSchedule()" 
+       ${param.deptCode!=null?"checked":""} 
        style="margin-left:7px;">확인</button>
    	 <label for="mySchedulebox" style="margin-left:50px; margin-right:5px;">내캘린더</label>
    	 <input type="checkbox" id="mySchedulebox" name="mySchedulebox" 
+   	 onchange="sendMySchedule()"
    	 class="form-check-input form-check-primary form-check-glow" style="margin-bottom:5px;">
 	</form>
    </div>
@@ -342,12 +343,58 @@
 			$(e.target).parents("form").submit();
 		});
         //팀캘린더 
-		$("#teamSchedule").on("click", function(e) {
+		/* $("#teamSchedule").on("click", function(e) {
 			var form=$(e.target).closest("form");
 			form.attr("action","${path}/schedule/teamSchedule.do");
 			form.submit();		    
-		});
+		}); */
         
+        //팀캘린더 ajax요청하기
+        /* $("teamScheduleFunction").on("click",function(e){
+        	e.preventDefault();
+        	
+        	var form=$(e.target).closest("form");
+        	var formData=form.serialize(); 
+        	
+        	$.ajax({
+        		url:"${path}/schedule/teamSchedule.do",
+        		type:"POST",
+        		data:formData        		
+        	});
+        }); */
+        document.getElementById("teamSchedule").addEventListener("click", e => {
+        	const deptCode = document.getElementById("deptCode").value;
+        	console.log("deptCode : " + deptCode);
+        	fetch("${path }/schedule/teamSchedule.do", {
+        		method : "POST",
+        		headers : {
+        			"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+        		},
+        		body : "deptCode=" + deptCode
+        	})
+        	.then(response => response.json())
+        	.then(data => {
+        		console.log("ScheduleData : " + data);
+        		for(let key in data) {
+        			console.log(data[key]);
+        			const schedule = data[key];
+        			console.log("empNo : " + schedule["empNo"])
+        			calendar.addEvent( 
+        					{
+        				  		color: schedule['scheColor'],
+        				  		title: schedule['scheTitle'],
+        				  		start: schedule['scheTime'],
+        				  		end: schedule['scheEnd'],
+        				  		allDay: schedule['scheAllDay'],
+        				  		editable:true,
+         				  		extendedProps: {'scheContent':schedule['scheContent'], 'schePrivate':schedule['schePrivate'], 'scheNo':schedule['scheNo'],
+        				  					'scheColor':schedule['scheColor'],'deptCode':schedule['deptCode']   	
+        				  		} 
+        				  		
+        				  	})
+        		}
+        	})
+        });
         
   //}) 
   //일정삭제 성공여부 alert창 띄우기
@@ -401,15 +448,19 @@
   		}
   	} */
   	
-  	function teamSchedule(){
+/*   	function teamScheduleFunction(){
   		var button=document.getElementById('teamSchedule');
   		var form=button.closest('form');
   		form.action="${path}/schedule/teamSchedule.do";
   		form.submit();
   		
+  	} */
+  	
+  	function sendMySchedule(){
+  		var request=new XMLHpptRequest();
+  		request.open('GET','${path}/myschedule/schedule',true);
+  		request.send();
   	}
-  	
-  	
   	
 </script>  
 
