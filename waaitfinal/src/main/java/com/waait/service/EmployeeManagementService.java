@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.waait.dao.EmployeeManagementDao;
 import com.waait.dto.Department;
 import com.waait.dto.Employee;
+import com.waait.dto.JobLevel;
 import com.waait.dto.MovingDepartment;
 
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,28 @@ public class EmployeeManagementService {
 		return dao.getDepartment(session);
 	}
 
-	public List<Employee> getEmployees() {
-		return dao.getEmployees(session);
+	public List<Employee> getEmployees(Map<String, Integer> pagingParam, Map<String, String> sqlParam) {
+		return dao.getEmployees(session, pagingParam, sqlParam);
+	}
+	
+	public int getEmpListBySearchTotalData(Map<String, Object> param) {
+		return dao.getEmpListBySearchTotalData(session, param);
+	}
+	
+	public int getEmployeesTotalData() {
+		return dao.getEmployeesTotalData(session);
+	}
+	
+	public List<Employee> searchEmployee(Map<String, Object> sqlParam, Map<String, Integer> pagingParam) {
+		return dao.searchEmployee(session, sqlParam, pagingParam);
+	}
+	
+	public int empDetailSearchTotalData(Map<String, Object> sqlParam) {
+		return dao.empDetailSearchTotalData(session, sqlParam);
+	}
+	
+	public List<JobLevel> getJobLevel() {
+		return dao.getJobLevel(session);
 	}
 	
 	public Employee getEmployeeById(String empId) {
@@ -92,6 +113,25 @@ public class EmployeeManagementService {
 		}
 		return result;
 	}
+	
+	@Transactional
+	public int modifyDeptName(Map<String, String> sqlParam) {
+		return dao.modifyDeptName(session, sqlParam);
+	}
 
+	public int enrollTeam(Map<String, Object> jsonParam) {
+		int result = 0;
+		jsonParam.put("teamName", jsonParam.get("teamName") + "팀");
+		if(jsonParam.containsKey("parentDeptCode")) {
+			result = dao.enrollTeamWithParentDept(session, jsonParam);
+		} else {
+			result = dao.enrollTeamNoParentDept(session, jsonParam);
+		}
+		return result;
+	}
+
+	public int enrollEmployee(Employee employee) {
+		return dao.enrollEmployee(session, employee);
+	}
 
 }

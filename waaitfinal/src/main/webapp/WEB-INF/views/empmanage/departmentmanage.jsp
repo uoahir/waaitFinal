@@ -17,8 +17,7 @@
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/app.css">
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/app-dark.css">
   <link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/iconly.css">
-  <link rel="stylesheet" href="${path}/resources/css/ju/headerju.css">
-  <link rel="stylesheet" href="${path }/resources/css/sol/managemain.css">
+  <link rel="stylesheet" href="${path }/resources/css/sol/departmentmanage.css">
   <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
   
@@ -107,7 +106,7 @@
 			            			<a href="${path }/manage/departmentview.do" class="submenu-link">부서 등록/수정/삭제</a>
 			            		</li>
 			            		<li class="submenu-item">
-			            			<a href="#" class="submenu-link">팀 등록/수정/삭제</a>
+			            			<a href="${path }/manage/teammanageview.do" class="submenu-link">팀 등록/수정/삭제</a>
 			            		</li>
 			            	</ul>
 			            </li>
@@ -121,171 +120,140 @@
             		<a href="#" class="burger-btn d-block d-xl-none">
                     	<i class="bi bi-justify fs-3"></i>
                 	</a>
-                <h3 style="width : 100%">인사조회</h3>
+                <h3 style="width : 100%">부서관리</h3>
                 
-            	</div>
-            	<div class="search-container">
-            		<input type="text" class="form-control" name="param" id="searchInput" placeholder="검색">
-            	</div>
-            	<div class="search-detail-container">
-            		<button class="btn btn-primary" onclick="showSearchDetailModal()">상세조회</button>
-            	</div>
-            	<div class="optionContainer">
-            		<span>데이터수</span>
-            		<select id="numPerpage" class="form-select data-select">
-	                	<option value="5">5</option>
-	                	<option value="10">10</option>
-	                	<option value="15">15</option>
-	                	<option value="20">20</option>
-                	</select>
-                	<span style="margin-left : 10px;">정렬</span>
-                	<select id="sortdata" class="form-select data-select">
-                		<option value="name">이름</option>
-                		<option value="gender">성별</option>
-                		<option value="birthday">출생일</option>
-                		<option value="jobLevel">직급</option>
-                	</select>
-                	<select id="sort" class="form-select data-select">
-                		<option value="asc">오름차순</option>
-                		<option value="desc">내림차순</option>
-                	</select>
             	</div>
             </header>
             <div id="mainView">
-            	<table class="table mb-0">
-            		<thead class="thead-dark">
-            			<tr>
-            				<th>이름</th>
-            				<th>아이디</th>
-            				<th>출생일</th>
-            				<th>직급</th>
-            				<th>부서/팀</th>
-            				<th>핸드폰 번호</th>
-            				<th>거주지 주소</th>
-            				<th>성별</th>
-            				<th>입사일</th>
-            				<th>퇴사여부</th>
-            				<th>남은연차</th>
-            			</tr>
-            		</thead>
-            		<tbody>
-            		<c:if test="${empty employees}">
-            			<tr>
-           					<td colspan="8">사원이 존재하지 않습니다.</td>
-            			</tr>
-            		</c:if>
-            		<c:if test="${not empty employees }">
-            			<c:forEach var="emp" items="${employees }">
-	            			<tr onclick="location.assign('${path }/manage/joinempdetail.do?empNo=${emp.empNo }')">
-	            				<td>${emp.empName }</td>
-	            				<td>${emp.empId }</td>
-	            				<td>${emp.empBirth }</td>
-	            				<td>${emp.jobLevel.levelName }</td>
-	            				<td>${emp.deptName } / ${emp.teamName }</td>
-	            				<td>${emp.empPhone }</td>
-	            				<td>${emp.empAddress }</td>
-	            				<td>${emp.empGender }</td>
-	            				<td>${emp.empStartDate }</td>
-	            				<c:if test="${emp.leaveYN eq 'Y' }">
-	            					<td>퇴사</td>
-	            				</c:if>
-	            				<c:if test="${emp.leaveYN eq 'N' }">
-	            					<td>재직</td>
-	            				</c:if>
-	            				<c:if test="${emp.leaveYN ne 'Y' and emp.leaveYN ne 'N' }">
-	            					<td>왜 yn이 아닌데</td>
-	            				</c:if>
-	            				<td>${emp.remainingAnnualLeave }</td>
+            	<div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">부서조회</h4>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-12 col-md-4">
+                                	<p>부서명</p>
+                                    <div class="list-group" role="tablist">
+                                    	<c:if test="${not empty depts }">
+	                                        <c:forEach var="dept" items="${depts }">
+	                                        	<a class="list-group-item list-group-item-action" id="${dept.deptCode }"
+	                                            data-bs-toggle="list" href="#${dept.deptName }" role="tab">${dept.deptName }</a>
+	                                        </c:forEach>
+                                        </c:if>
+                                        <c:if test="${empty depts }">
+                                        	<p>부서가 없습니다</p>
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <c:if test="${not empty depts }">
+	                                <div class="col-12 col-sm-12 col-md-8 mt-1">
+	                                    <div class="tab-content text-justify padding-top-33" id="nav-tabContent">
+	                                    	<c:forEach var="dept" items="${depts }">
+		                                        <div class="tab-pane" id="${dept.deptName }" role="tabpanel"
+		                                            aria-labelledby="${dept.deptCode }">
+		                                            <c:if test="${not empty teams }">
+			                                            <ul class="li-nonestyle">
+			                                            <c:forEach var="team" items="${teams }">
+			                                            	<c:if test="${dept.deptCode eq team.parentCode }">
+			                                            		<li>${team.deptName }</li>
+			                                            	</c:if>
+			                                            </c:forEach>
+			                                            </ul>
+		                                            </c:if>
+		                                            <c:if test="${empty teams }">
+		                                            	<p>팀이 없습니다.</p>
+		                                            </c:if>
+		                                        </div>
+	                                        </c:forEach>
+	                                    </div>
+	                                </div>
+                                </c:if>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /enrolldepartment.do 팀등록 주소Get-->
+                <div class="card">
+		            <div class="card-header">
+		                <h4 class="card-title">부서등록</h4>
+		                <p>부서와 팀을 동시에 등록하려면 +버튼을 눌러 팀 입력란을 추가하시면 됩니다.</p>
+		            </div>
+					<div class="card-body">
+		                <div class="row">
+		                    <div class="col-md-6">
+		                        <div class="form-group">
+		                            부서명
+		                            <div>
+		                            	<input type="text" class="form-control" id="deptNameInput" placeholder="ex)개발 o 개발부 x 뒤에 부는 빼고입력하세요">
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="col-md-6">
+		                        <div class="form-group teamInputContainer">
+		                        	<div id="teamOptionContainer">
+		                            	<span>상속 팀</span>
+		                            	<button class="btn btn-outline-success btn-sm" id="addTeamInputButton" onclick="addTeamInput()">+</button>
+		                            	<button class="btn btn-outline-danger btn-sm" id="delTeamInputButton" onclick="deleteTeamInput()">-</button>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		            <div class="actionContainer">
+		            	<button class="btn btn-outline-success" onclick="enrollDeptWithTeam()">등록</button>
+		            </div>
+		        </div>
+		        <div class="card">
+		            <div class="card-header">
+		                <h4 class="card-title">부서 수정/삭제</h4>
+		                <p>부서와 팀을 동시에 등록하려면 +버튼을 눌러 팀 입력란을 추가하시면 됩니다.</p>
+		            </div>
+					<table class="table mb-0" style="margin-left : 30px;">
+	            		<thead class="thead-dark">
+	            			<tr>
+	            				<th>부서명</th>
+	            				<th>동작</th>
+	            				<th></th>
 	            			</tr>
-            			</c:forEach>
-            			
-            		</c:if>
-            		</tbody>
-            	</table>
-            	<div id="pageBarContainer">
-            		${pageBar }
-            	</div>
+	            		</thead>
+	            		<tbody>
+	            			<c:if test="${not empty depts }">
+	            				<c:forEach var="dept" items="${depts }">
+			            			<tr id="${dept.deptCode }">
+			            				<td>${dept.deptName }</td>
+			            				<td>
+			            					<button class="btn btn-primary" onclick="showModifyDeptInput(event)">수정</button>
+			            					<button class="btn btn-danger" onclick="deleteDept()">삭제</button>
+			            				</td>
+			            				<td>
+			            					<input type="text" name="modifyDeptInput" class="form-control my-input" placeholder="변경할 이름을 입력하세요" hidden="true">
+			            					<button class="btn btn-success" onclick="applyModifyDept(event)" name="applyModifyDeptBtn" hidden="true">적용</button>
+			            					<button class="btn btn-danger" onclick="cancelModifyDept(event)" name="cancelModifyDeptBtn" hidden="true">취소</button>
+			            				</td>
+			            			</tr>
+		            			</c:forEach>
+	            			</c:if>
+	            			<c:if test="${empty depts }">
+	            				<tr colspan="3">
+	            					<td>부서가 없습니다.</td>
+	            				</tr>
+	            			</c:if>
+	            		</tbody>
+            		</table>
+		        </div>
             </div>
-        </div>
-    </div>
-    <!-- modal -->
-	<div class="modal" id="searchModal">
-		<div class="headLine">
-			<i class="bi bi-x" id="deleteSearchModal"></i>
-		</div>
-		<div class="button" id="searchTitleContainer">
-			<button id="searchNameButton" onclick="searchEmployee(event)">
-				<span class="searchType">[이름]</span>
-				<span class="contentSpan"></span>
-			</button>
-		</div>
-		<div class="button" id="searchContentContainer">
-			<button id="searchIdButton" onclick="searchEmployee(event)">
-				<span class="searchType">[아이디]</span>
-				<span class="contentSpan"></span>
-			</button>
-		</div>
-		<div class="button" id="searchSenderContainer">
-			<button id="searchAddressButton" onclick="searchEmployee(event)">
-				<span class="searchType">[주소]</span>
-				<span class="contentSpan"></span>
-			</button>
-		</div>
-	</div>
-	<!-- searchDetailModal -->
-	<div id="searchDetailModal">
-        <div class="header bd-bottom">
-            <p class="header-title">상세조회</p>
-        </div>
-        <div class="search-option-container bd-bottom">
-            <div class="input-container top">
-                <span>이름</span>
-                <input type="text" class="form-control wd-70" name="empName" placeholder="이름입력">
-            </div>
-            <div class="input-container">
-                <span>출생일</span>
-                <input type="date" class="form-control wd-70" name="empBirth">
-            </div>
-            <div class="input-container">
-                <span>아이디</span>
-                <input type="text" class="form-control wd-70" name="empId" placeholder="아이디입력">
-            </div>
-            <div class="input-container">
-                <span>직책</span>
-                <input type="text" class="form-control wd-70" name="jobLevel" placeholder="직책입력">
-            </div>
-            <div class="input-container">
-                <span>부서</span>
-                <input type="text" class="form-control wd-70" name="deptName" placeholder="부서입력">
-            </div>
-            <div class="input-container">
-                <div>
-                    <span>입사일</span>
-                    <input type="radio" name="dateUserChoice" value="period">기간조회
-                    <input type="radio" name="dateUserChoice" value="date">날짜조회
-                </div>
-                <div>
-                    <input type="date" class="form-control small-input-date" name="startEmpStartDate" hidden="true">
-                    <span id="periodTextSpan" hidden="true">~</span>
-                    <input type="date" class="form-control small-input-date" name="endEmpStartDate" hidden="true">
-                </div>
-            </div>
-        </div>
-        <div class="action-container">
-        		<button class="btn btn-sm btn-outline-success" onclick="emptyInputValue()">비우기</button>
-            <button class="btn btn-sm btn-success" onclick="searchDetailAction(1)">검색</button>
-            <button class="btn btn-sm btn-danger" onclick="cancelDetailAction()">취소</button>
         </div>
     </div>
 </body>
 <script>
 	var path = "${path }";
 </script>
-<script src="${path }/resources/js/managemain.js"></script>
+
 <script src="${path }/resources/assets/static/js/components/dark.js"></script>
 <script src="${path }/resources/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="${path }/resources/assets/compiled/js/app.js"></script>
-<%-- <script src="${path }/resources/assets/extensions/apexcharts/apexcharts.min.js"></script> --%>
-<%-- <script src="${path }/resources/assets/static/js/pages/dashboard.js"></script> --%>
 <script src="${path }/resources/waait/index.js"></script>
+<script src="${path }/resources/js/departmentmanage.js"></script>
 </html>

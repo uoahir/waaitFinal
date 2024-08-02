@@ -83,8 +83,16 @@
                 </a>
                 
             </li>
+            <li class="sidebar-item active ">
+                <a href="${path }/manage/empmanagemain.do" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>솔민</span>
+                </a>
+                
+
+            </li>
             <li
-                class="sidebar-item ">
+                class="sidebar-item "> 
                 <a href="${path }/manage/managemain.do" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>인사관리</span>
