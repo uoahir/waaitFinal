@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 <section class="section">
 	<div class="card">
@@ -79,4 +79,4 @@
 	</script>
 	
 </section>
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
