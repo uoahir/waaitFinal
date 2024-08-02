@@ -41,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeManagementController {
 	
 	private final EmployeeManagementService service;
-	private final EmailService emailService;
+	//private final EmailService emailService;
 	private final BCryptPasswordEncoder encoder;
 	//private final ObjectMapper mapper;
 	
@@ -422,13 +422,13 @@ public class EmployeeManagementController {
 		result = service.enrollEmployee(emp);
 		userId += emp.getEmpNo();
 		
-		try {
-			emailService.sendInitialIdAndPwd(usingEmail, userId, initialPwd);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			//emailService.sendInitialIdAndPwd(usingEmail, userId, initialPwd);
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		} catch (MessagingException e) {
+//			e.printStackTrace();
+//		}
 		System.out.println("등록할 사원정보 : " + emp);
 		return null;
 	}
