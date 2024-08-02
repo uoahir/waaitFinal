@@ -2,20 +2,23 @@
 
    console.log("chatroom.js 오니?");
 
+   //웹소켓 연결주소 유동적으로 만들기
    const hostName = window.location.hostname;
+   const port = window.location.port;
    let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
    let wsUrl;
    
-   console.log(hostName);
-   console.log(wsProtocol);
+   console.log("port : "+port);
+   console.log("hostName : "+hostName);
+   console.log("wsProtocol : "+wsProtocol);
    
    if(hostName === "localhost"){
-      wsUrl = wsProtocol+"://localhost:5731/chat";
-      console.log(wsUrl);
+      wsUrl = wsProtocol+"://"+hostName+":"+port+"/chat";
    }else{
-      wsUrl = wsProtocol+"://14.36.141.71:15555/GDJ79_WAAIT_final/chat";
-      console.log(wsUrl);
+      wsUrl = wsProtocol+"://"+hostName+":"+port+"/GDJ79_WAAIT_final/chat";
    }
+   
+   console.log("웹소켓 url : "+wsUrl);
 
    
 document.addEventListener("DOMContentLoaded", function() {
@@ -34,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
    chatserver.onopen = (response) =>{
       const msg = new Message("open","",loginId);
       console.log(msg);
+      console.log("웹소켓 연결");
       chatserver.send(msg.convert());
    }
    
@@ -147,6 +151,9 @@ document.addEventListener("DOMContentLoaded", function() {
          const minutes = now.getMinutes().toString().padStart(2,"0");
          const seconds = now.getSeconds().toString().padStart(2,"0");
          const msgTime = year+"/"+month+"/"+day+" "+hours+":"+minutes+":"+seconds;
+         
+         console.log("메세지가 담고있는 시간 msgTime : "+msgTime);
+         console.log(msgTime);
          
          //타입 , 방번호, 전송자사원번호, 채팅내용
          const msgObj = new Message("메세지",loginEmpNo,loginEmpName,chatRoomNo,inputData,msgTime,chatJoinCount).convert();
