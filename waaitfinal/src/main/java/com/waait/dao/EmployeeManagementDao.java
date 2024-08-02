@@ -92,6 +92,10 @@ public class EmployeeManagementDao {
 	public int enrollDepartmentWithTeam(SqlSession session, Map<String, String> teamSqlParam) {
 		return session.insert("em.enrollDepartmentWithTeam", teamSqlParam);
 	}
+	
+	public int modifyDeptName(SqlSession session, Map<String, String> sqlParam) {
+		return session.update("em.modifyDeptName", sqlParam);
+	}
 
 	public int enrollTeamWithParentDept(SqlSession session, Map<String, Object> sqlParam) {
 		return session.insert("em.enrollTeamWithParentDept", sqlParam);

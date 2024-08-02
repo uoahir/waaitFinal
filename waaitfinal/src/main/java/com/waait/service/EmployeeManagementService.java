@@ -113,6 +113,11 @@ public class EmployeeManagementService {
 		}
 		return result;
 	}
+	
+	@Transactional
+	public int modifyDeptName(Map<String, String> sqlParam) {
+		return dao.modifyDeptName(session, sqlParam);
+	}
 
 	public int enrollTeam(Map<String, Object> jsonParam) {
 		int result = 0;

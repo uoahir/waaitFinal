@@ -148,12 +148,12 @@
                                 </div>
                                 <c:if test="${not empty depts }">
 	                                <div class="col-12 col-sm-12 col-md-8 mt-1">
-	                                    <div class="tab-content text-justify" id="nav-tabContent">
+	                                    <div class="tab-content text-justify padding-top-33" id="nav-tabContent">
 	                                    	<c:forEach var="dept" items="${depts }">
 		                                        <div class="tab-pane" id="${dept.deptName }" role="tabpanel"
 		                                            aria-labelledby="${dept.deptCode }">
 		                                            <c:if test="${not empty teams }">
-			                                            <ul>
+			                                            <ul class="li-nonestyle">
 			                                            <c:forEach var="team" items="${teams }">
 			                                            	<c:if test="${dept.deptCode eq team.parentCode }">
 			                                            		<li>${team.deptName }</li>
@@ -210,39 +210,38 @@
 		                <h4 class="card-title">부서 수정/삭제</h4>
 		                <p>부서와 팀을 동시에 등록하려면 +버튼을 눌러 팀 입력란을 추가하시면 됩니다.</p>
 		            </div>
-					<div class="card-body">
-		                <div class="row">
-		                    <div class="col-md-6">
-		                        <div class="form-group">
-		                            부서명
-		                            <div>
-			                            <c:if test="${not empty depts }">
-			                            	<select id="selectDeptForEnrollTeam" class="form-control">
-			                            		<c:forEach var="dept" items="${depts }">
-			                            			<option value="${dept.deptCode }">${dept.deptName }</option>
-			                            		</c:forEach>
-			                            	</select>
-			                            </c:if>
-			                            <c:if test="${empty depts }">
-		                            		<p>부서가 존재하지 않습니다.</p>
-		                            	</c:if>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-6">
-		                        <div class="form-group" id="inheritTeamInputContainer">
-		                        	<div>
-		                            	<span>상속 팀</span>
-		                            	<button class="btn btn-outline-success btn-sm" id="addTeamInputButton-2" onclick="addInheritTeamInput()">+</button>
-		                            	<button class="btn btn-outline-danger btn-sm" id="delTeamInputButton" onclick="delInheritTeamInput()">-</button>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		            </div>
-		            <div class="actionContainer">
-		            	<button class="btn btn-outline-success" onclick="enrollTeamByDept()">등록</button>
-		            </div>
+					<table class="table mb-0" style="margin-left : 30px;">
+	            		<thead class="thead-dark">
+	            			<tr>
+	            				<th>부서명</th>
+	            				<th>동작</th>
+	            				<th></th>
+	            			</tr>
+	            		</thead>
+	            		<tbody>
+	            			<c:if test="${not empty depts }">
+	            				<c:forEach var="dept" items="${depts }">
+			            			<tr id="${dept.deptCode }">
+			            				<td>${dept.deptName }</td>
+			            				<td>
+			            					<button class="btn btn-primary" onclick="showModifyDeptInput(event)">수정</button>
+			            					<button class="btn btn-danger" onclick="deleteDept()">삭제</button>
+			            				</td>
+			            				<td>
+			            					<input type="text" name="modifyDeptInput" class="form-control my-input" placeholder="변경할 이름을 입력하세요" hidden="true">
+			            					<button class="btn btn-success" onclick="applyModifyDept(event)" name="applyModifyDeptBtn" hidden="true">적용</button>
+			            					<button class="btn btn-danger" onclick="cancelModifyDept(event)" name="cancelModifyDeptBtn" hidden="true">취소</button>
+			            				</td>
+			            			</tr>
+		            			</c:forEach>
+	            			</c:if>
+	            			<c:if test="${empty depts }">
+	            				<tr colspan="3">
+	            					<td>부서가 없습니다.</td>
+	            				</tr>
+	            			</c:if>
+	            		</tbody>
+            		</table>
 		        </div>
             </div>
         </div>

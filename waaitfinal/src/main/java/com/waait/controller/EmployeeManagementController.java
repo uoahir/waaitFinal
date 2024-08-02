@@ -551,6 +551,14 @@ public class EmployeeManagementController {
 		return result;
 	}
 	
+	@PostMapping("/modifydeptname.do")
+	public String modifyDeptName(String deptCode, String deptName, Model model) {
+		int result = 0;
+		Map<String, String> sqlParam = Map.of("deptCode", deptCode, "deptName", deptName);
+		result = service.modifyDeptName(sqlParam);
+		return "empmanage/responsepage/deptlist";
+	}
+	
 	@PostMapping("/enrollteam.do")
 	public @ResponseBody int enrollTeam(@RequestBody Map<String, Object> jsonParam) {
 		int result = 0;

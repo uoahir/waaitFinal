@@ -96,35 +96,44 @@ const enrollDeptWithTeam = () => {
 	})
 }
 
-const addInheritTeamInput = () => {
-	const inputCount = document.querySelectorAll("input[name='inheritTeamInput']").length;
-	if(inputCount > 4) {
-		alert("입력란은 5개까지만 생성 가능합니다.");
-	} else {
-		const $input = document.createElement("input");
-		const $div = document.createElement("div");
-		
-		$input.setAttribute("type", "text");
-		$input.setAttribute("name", "inheritTeamInput");
-		$input.setAttribute("class", "form-control");
-		$input.setAttribute("placeholder", "ex)개발1 o 개발1팀 x 뒤에 팀은 빼고입력하세요");
-		
-		
-		const div = document.getElementById("inheritTeamInputContainer");
-		$div.appendChild($input);
-		div.appendChild($div);
-	}
+const showModifyDeptInput = (e) => {
+	const modifyInput = e.target.parentElement.nextElementSibling.firstElementChild;
+	const applyBtn = e.target.parentElement.nextElementSibling.firstElementChild.nextElementSibling;
+	const cancelBtn = e.target.parentElement.nextElementSibling.lastElementChild;
+	
+	modifyInput.hidden = false;
+	applyBtn.hidden = false;
+	cancelBtn.hidden = false;
 }
 
-const delInheritTeamInput = () => {
-	const inputCount = document.querySelectorAll("input[name='inheritTeamInput']").length;
-	
-	if(inputCount > 0) {
-		const teamInputContainer = document.getElementById("inheritTeamInputContainer");
-		teamInputContainer.lastElementChild.remove();
-	}
+const cancelModifyDept = (e) => {
+		const modifyInput = e.target.previousElementSibling.previousElementSibling;
+		const applyBtn = e.target.previousElementSibling;
+		const cancelBtn = e.target;
+		
+		modifyInput.hidden = true;
+		applyBtn.hidden = true;
+		cancelBtn.hidden = true;
 }
 
-const enrollTeamByDept = () => {
+const applyModifyDept = (e) => {
+	const deptCode = e.target.parentElement.parentElement.id;
+	const modifyDeptInput = e.target.previousElementSibling;
+	const modifyDeptName = modifyDeptInput.value;
+	if(modifyDeptName.length == 0) {
+		alert("변경하고자 하는 부서명은 빈칸일 수 없습니다.");
+		return;
+	}
 	
+	fetch("${path }/manage/modifydeptname.do", {
+		method : "POST",
+		headers : {
+			"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+ 		},
+		body : "deptCode=" + deptCode + "&deptName=" + modifyDeptName
+	})
+	.then(response => response.text())
+	.then(data => {
+		console.log(data);
+	})
 }

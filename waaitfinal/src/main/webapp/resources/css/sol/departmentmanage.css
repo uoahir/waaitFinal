@@ -16,3 +16,9 @@
 .actionContainer>button {
 	margin-right : 50px;
 }
+.padding-top-33 {
+	padding-top : 33px;
+}
+.li-nonestyle {
+	list-style : none;
+}
