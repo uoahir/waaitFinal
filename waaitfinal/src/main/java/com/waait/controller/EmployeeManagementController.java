@@ -178,6 +178,28 @@ public class EmployeeManagementController {
 		return sb.toString();
 	}
 	
+	//부서관리 뷰
+	@GetMapping("/departmentview.do")
+	public String departmentManageView(Model model) {
+		List<Department> departmentList = getDepartmentList();
+		List<Department> teamList = getTeamList();
+		
+		System.out.println("departmentList : " + departmentList);
+		System.out.println("teamList : " + teamList);
+		
+		Department noDept = new Department("D1", "D1", "부서없음");
+		departmentList.add(noDept);
+		System.out.println("newDepartmentList : " + departmentList);
+		model.addAttribute("depts", departmentList);
+		model.addAttribute("teams", teamList);
+		
+		return "empmanage/departmentmanage";
+	}
+	
+	@GetMapping("/teammanageview.do")
+	public String teamManageView(Model model) {
+		return "empmanage/teammanage";
+	}
 	
 	//test
 	@GetMapping("/empmanagemain.do")
@@ -291,6 +313,7 @@ public class EmployeeManagementController {
 		return "empmanage/responsepage/empinfolist";
 	}
 	
+	//살려줘유
 	@PostMapping("/detailempsearch.do")
 	public String empDetailSearch(@RequestBody Map<String, Object> param) {
 		int cPage = (int) param.get("cPage");
@@ -496,7 +519,7 @@ public class EmployeeManagementController {
 		return returnMap;
 	}
 	
-	@GetMapping("/enrolldepartment.do")
+	@PostMapping("/enrolldepartment.do")
 	public @ResponseBody int enrollDepartment(String deptName, String teamName) {
 		int result = 0;
 		System.out.println("deptName : " + deptName + " teamNameStr : " + teamName);
