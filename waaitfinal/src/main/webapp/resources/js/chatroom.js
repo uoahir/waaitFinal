@@ -2,20 +2,24 @@
 
 	console.log("chatroom.js 오니?");
 
+	//웹소켓 연결주소 유동적으로 만들기
 	const hostName = window.location.hostname;
+	const port = window.location.port;
 	let wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
 	let wsUrl;
 	
-	console.log(hostName);
-	console.log(wsProtocol);
+	console.log("port : "+port);
+	console.log("hostName : "+hostName);
+	console.log("wsProtocol : "+wsProtocol);
 	
 	if(hostName === "localhost"){
-		wsUrl = wsProtocol+"://localhost:5731/chat";
-		console.log(wsUrl);
+		wsUrl = wsProtocol+"://"+hostName+":"+port+"/chat";
 	}else{
-		wsUrl = wsProtocol+"://14.36.141.71:15555/GDJ79_WAAIT_final/chat";
-		console.log(wsUrl);
+		wsUrl = wsProtocol+"://"+hostName+":"+port+"/GDJ79_WAAIT_final/chat";
 	}
+	
+	console.log("웹소켓 url : "+wsUrl);
+	
 
 	
 document.addEventListener("DOMContentLoaded", function() {
@@ -34,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	chatserver.onopen = (response) =>{
 		const msg = new Message("open","",loginId);
 		console.log(msg);
+		console.log("웹소켓 연결");
 		chatserver.send(msg.convert());
 	}
 	
