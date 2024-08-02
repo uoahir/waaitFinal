@@ -15,7 +15,7 @@
  var contextPath = "${path}";
  var employees = JSON.parse('<%= employeesJson %>');
 </script>
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 <section class="section" style="">
     	<div class="card-title d-flex mb-4">
@@ -74,4 +74,4 @@
 
 	
 
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />

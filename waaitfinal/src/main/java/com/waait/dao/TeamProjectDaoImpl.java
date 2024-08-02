@@ -12,6 +12,12 @@ import com.waait.dto.TeamProject;
 @Repository
 public class TeamProjectDaoImpl implements TeamProjectDao {
 
+	@Override 		//스케줄러로 업데이트함
+	public int projectUpdateStatus(SqlSession sqlSession, String today) {
+		
+		return sqlSession.update("teamProject.projectUpdateStatus",today);
+	}
+
 	@Override
 	public int inprogressupdate(SqlSession sqlSession, Allocation allocation) {
 		return sqlSession.update("teamProject.inprogressupdate",allocation);

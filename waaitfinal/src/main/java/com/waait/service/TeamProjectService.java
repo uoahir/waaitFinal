@@ -26,6 +26,8 @@ public interface TeamProjectService {
 
 	int functionNoStatusUpdate(Allocation allocation);
 
+	int projectUpdateStatus(String today);
+
 
 
 	

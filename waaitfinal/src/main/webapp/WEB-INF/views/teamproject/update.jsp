@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script>
     var contextPath = "${path}";
 </script>
@@ -154,4 +154,4 @@
 </style>
 <script src="${path}/resources/waait/yohan/js/teamprojectUpdate.js"></script>
 
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />

@@ -14,6 +14,8 @@ import com.waait.dto.CodeReviewBoardFile;
 @Repository
 public class CodeReviewDaoImpl implements CodeReviewDao{
 
+	
+
 	@Override
 	public int insertCodeR(SqlSession session, CodeReviewBoard b) {
 		return session.insert("codeReview.insertCodeR",b);
@@ -50,6 +52,11 @@ public class CodeReviewDaoImpl implements CodeReviewDao{
 	@Override
 	public int selectAllCodeReviewBoard(SqlSession session) {
 		return session.selectList("codeReview.selectAllCodeReviewBoard").size();
+	}
+	@Override
+	public List<CodeReviewBoard> selectAll(SqlSession session) {
+		
+		return session.selectList("codeReview.selectAll");
 	}
 
 }
