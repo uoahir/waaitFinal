@@ -81,24 +81,29 @@
 		<input type="text" name="codeReviewContent" style=" height: 100px; margin: auto; width: 100%;">
 			<div class="d-flex" style="margin: auto;">
 			<input value="${c.codeBoardNo}" name="no" type="hidden">
-			<button class="btn btn-outline-info" style="float: right;">하이~~</button>
+			
+			<div></div>
+			<%-- <button class="btn btn-outline-info" onclick="insertCodeComment('${c.codeBoardNo}')" style="float: right;">작성</button> --%>
 			</div>
 		</form>
-			
+			<textarea rows="2" cols="4" id="codeComment"></textarea>
+			<button class="btn btn-outline-info" onclick="insertCodeComment('${c.codeBoardNo}')" style="float: right;">작성Test</button>
 		</div>
 		<div class="card mt-4" style="width: 90%; margin: auto;">
-			<div class="mt-1">
-			<p><c:if test="${not empty reviewComments }">
+			<div class="mt-1 card" >
+			<c:if test="${not empty reviewComments }">
 				<c:forEach var="rc" items="${reviewComments}" >
-					${rc.codeReviewName }	 
+						<div class="d-flex" style="justify-content: space-between;">
+						 <p> 작성자:${rc.codeReviewName }</p> <p>작성 날짜:${rc.codeReviewDate }</p> <button class="btn btn-primary">코드 보기</button> 
+						</div>
 				</c:forEach>
-			</c:if></p>
+			</c:if>
 			
 			</div>
 		</div>
 	</div>
 </section>
-
+<script src="${path }/resources/waait/yohan/js/codeDetail.js"></script>
 <jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
 <style>
 pre {

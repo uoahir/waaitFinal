@@ -150,19 +150,12 @@ public class ChattingController {
 
 		int result = service.insertChatRoom(chatRoomParam);
 
-		
-		
 		System.out.println("컨트롤러 - insertChatRoom 결과 : "+result);
-		
-//		Map<String, Object> chatJoinParam = new HashMap<>();
+
 		System.out.println("컨트롤러 - chatEmpNo : "+chatEmpNo);
 		chatEmpNo.add(loginEmployee.getEmpNo());
-//		chatJoinParam.put("채팅방번호", chatJoinParam); //service에서 시퀀스번호 가져와 저장하기?
-//		chatJoinParam.put("chatEmpNo", chatEmpNo);
 		
-//		System.out.println("컨트롤러 chatJoinParam : "+chatJoinParam);
-		
-		//chatRoomNo에 방번호가 담겨져있음
+		//chatRoomNo에 방금생성한 방번호가 담겨져있음
 		int chatRoomNo = service.insertChatJoin(chatEmpNo);
 		
 		System.out.println("컨트롤러 insertChatJoin : "+chatRoomNo);
@@ -191,11 +184,25 @@ public class ChattingController {
 		
 		service.insertChatJoinInvite(param);
 		
+		
+		// 초대, 나가기 -> 문구 저장해서 채팅방에서 출력
+		//초대 : 로그인된사원 님이 선택된 사원 님, 사원 님, 사원 님을 초대했습니다 -> chatHistory에  chatcontent 테이블에 채팅내용으로 추가
+		// 시퀀스번호, 방번호, chatType(10000-초대 20000-나가기), 내용, DEFAULT, 1
+		// 사원번호로 사원이름을 가져옴 .forEach돌려서 하나씩 꺼냄 String형태로 문구 만들어서 chatHistory에 저장함
+		// 컨트롤러 말고 서비스에서 바로 바로 구현할듯
+		Map<String, Object> chParam = new HashMap<>();
+		Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+		String loginEmpName = loginEmployee.getEmpName();
+		chParam.put("chatRoomNo", chatRoomNo);
+		chParam.put("chatEmpNo", chatEmpNo);
+		chParam.put("loginEmpName", loginEmpName);
+		service.insertChatHistoryInvitation(chParam);
+		
 		return ResponseEntity.ok("Success");
 	}
 	
 	
-	
+	// 채팅방 나가기
 	//방번호 사원번호
 	@PostMapping("/deletechatjoin.do")
 	@ResponseBody
@@ -213,6 +220,20 @@ public class ChattingController {
 		param.put("empNo", empNo);
 		
 		service.deleteChatJoin(param);
+		
+		
+		// 초대, 나가기 -> 문구 저장해서 채팅방에서 출력
+		// 나가기 : 로그인된사원 님이 나갔습니다 -> chatHistory 테이블에 추가
+		// 시퀀스번호, 방번호, chatType(10000-초대 20000-나가기), 내용, DEFAULT, 1
+		Map<String, Object> chParam = new HashMap<>();
+		String loginEmpName = loginEmployee.getEmpName();
+		String chatContent = loginEmpName +"님이 나갔습니다";
+		
+		chParam.put("chatRoomNo", chatRoomNo);
+		chParam.put("chatType", 20000);
+		chParam.put("chatContent", chatContent);
+		
+		service.insertChatHistoryLeave(chParam);
 		
 		return ResponseEntity.ok("Success");
 	}
@@ -232,7 +253,6 @@ public class ChattingController {
 	
 	
 	// 1:1 채팅 방이있으면 방 열기 -> chatRoomOpen (@RequestParam int chatroomNo)
-	
 	// 없으면 방생성해서 열기 -> insertChatRoom (@RequestParam(value = "chatRoomName", defaultValue = "") String chatRoomName,
 	//										@RequestParam("chatemps") List<Long> chatEmpNo)
 	
@@ -312,47 +332,6 @@ public class ChattingController {
 	// 웹소켓 메세지 전송했을때 리스너 이용해서 Ajax실행시켜서 채팅방 목록 다시 불러오게 만들어서 최신화 
 	
 	
-	
-	
-	
-	
-	//채팅방 유저리스트 페이지 
-	/*
-	 * @GetMapping("/userlist.do") public String chatUserlist(Model model) { //로그인된
-	 * 사원 가져오기 Employee loginEmployee =
-	 * (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal
-	 * (); System.out.println("채팅 유저리스트");
-	 * System.out.println("controller-chatUserlist login : "+loginEmployee);
-	 * 
-	 * List<Employee> employees = service.selectEmployeelist();
-	 * System.out.println("controller-chatUserlist : "+employees);
-	 * 
-	 * model.addAttribute("employees",employees);
-	 * 
-	 * return "chatting/chatuserlist"; }
-	 */
-	
-	
-	//채팅방 채팅방목록 페이지
-//	@GetMapping("/roomlist.do")
-//	public String chatRoomlist() {
-//		System.out.println("채팅 채팅방목록");
-//		
-//		 
-//		
-//		return "chatting/chatroomlist";
-//	}
-//	
-//	
-//	//채팅방 오픈채팅방목록 페이지
-//	@GetMapping("/openroomlist.do")
-//	public String chatOpenRoomlist() {
-//		System.out.println("채팅 오픈채팅방목록");
-//		
-//		return "chatting/chatopenroomlist";
-//	}
-//	
-//	
-	
+
 	
 }

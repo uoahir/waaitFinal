@@ -59,7 +59,48 @@ function connect1(functionSummary,projectNo,functionName){
 	  })
 	  .catch((error)=>{
 		console.log(error);
-		location.assign(`${contextPath}/teamproject/error`);
+		location.assign(`${contextPath}/teamproject/errsor`);
 	  });
 }
 
+function modelopen(functionSummary,projectNo,functionName) {
+	var modal = document.getElementById("myModal");
+	//var modalTitle = document.getElementById("modalTitle");
+	const modalTitle = document.getElementById("modalTitle");
+	const summary = document.getElementById("functionSummary");
+	modalTitle.innerText = functionName;
+	summary.innerText = functionSummary;
+	const functionapproval = document.getElementById("functionapproval");
+	functionapproval.innerText="시작";
+	functionapproval.onclick = () => connect(functionSummary,projectNo,functionName);
+	
+	modal.style.display = "block";
+	
+}
+function modelopen1(functionStartDate,functionSummary,projectNo,functionName) {
+	var modal = document.getElementById("myModal");
+	//var modalTitle = document.getElementById("modalTitle");
+	const modalTitle = document.getElementById("modalTitle");
+	const summary = document.getElementById("functionSummary");
+	modalTitle.innerText = functionName;
+	summary.innerText = functionSummary;
+	const functionapproval = document.getElementById("functionapproval");
+	functionapproval.innerText="git-requestPush";
+	functionapproval.onclick = () => connect1(functionSummary,projectNo,functionName);
+	
+	modal.style.display = "block";
+	
+}
+
+function closeModal() {
+	var modal = document.getElementById("myModal");
+	modal.style.display = "none";
+}
+
+// 모달 창 바깥을 클릭하면 창 닫기
+window.onclick = function(event) {
+	var modal = document.getElementById("myModal");
+	if (event.target == modal) {
+		modal.style.display = "none";
+	}
+}

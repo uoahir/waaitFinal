@@ -55,7 +55,7 @@ var empNo = "${employee.empNo}";
     			<td><button class="btn btn-info" onclick="location.assign('${path}/teamproject${tp.projectNo}/info')">Info</button></td>
     			<td><button class="btn btn-secondary" onclick="location.assign('${path}/project${tp.projectNo}/update');">Update</button></td>
     			</tr>
-    				
+    					
     		</c:forEach>
     	</table>	
     	</c:if>

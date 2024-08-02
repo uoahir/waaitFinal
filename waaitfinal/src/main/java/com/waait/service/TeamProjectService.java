@@ -22,6 +22,10 @@ public interface TeamProjectService {
 
 	TeamProject selectUpdate(int projectNo);
 
+	int functionStatusUpdate(Allocation allocation);
+
+	int functionNoStatusUpdate(Allocation allocation);
+
 
 
 	

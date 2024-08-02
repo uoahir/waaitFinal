@@ -1,6 +1,5 @@
 package com.waait.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -195,7 +194,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 		chatRoomtotal.put("type", msg.getType());
 		chatRoomtotal.put("chatRoomlist", chatRoomlist);
 		chatRoomtotal.put("loginEmpNo", loginEmpNo);
-		System.out.println("chatRoomlist - chatRoomtotal : "+chatRoomtotal);
+		System.out.println("소켓컨트롤러 - chatRoomlist - chatRoomtotal : "+chatRoomtotal);
 		
 		for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {
 			WebSocketSession cSession = client.getValue();
