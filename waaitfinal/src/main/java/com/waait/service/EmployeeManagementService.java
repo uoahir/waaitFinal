@@ -118,6 +118,15 @@ public class EmployeeManagementService {
 	public int modifyDeptName(Map<String, String> sqlParam) {
 		return dao.modifyDeptName(session, sqlParam);
 	}
+	
+	public int getEmpCountByDeptCode(String deptCode) {
+		return dao.getEmpCountByDeptCode(session, deptCode);
+	}
+	
+	@Transactional
+	public int deleteDept(String deptCode) {
+		return dao.deleteDept(session, deptCode);
+	}
 
 	public int enrollTeam(Map<String, Object> jsonParam) {
 		int result = 0;
@@ -133,5 +142,6 @@ public class EmployeeManagementService {
 	public int enrollEmployee(Employee employee) {
 		return dao.enrollEmployee(session, employee);
 	}
+
 
 }
