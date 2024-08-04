@@ -139,13 +139,13 @@ public class EmployeeManagementService {
 			for(int i = 0; i < teamNameArr.length; i++) {
 				teamSqlParam.put("newTeamCode", "D" + (newTeamSeq + i));
 				teamSqlParam.put("teamName", teamNameArr[i] + "팀");
-				teamSqlParam.put("parentDeptcode", (String) sqlParam.get("parentDeptCode"));
+				teamSqlParam.put("parentDeptCode", (String) sqlParam.get("parentDeptCode"));
 				result = dao.enrollTeamWithParentDept(session, teamSqlParam);
 			}
 		} else {
 			teamSqlParam.put("newTeamCode", "D" + newTeamSeq);
 			teamSqlParam.put("teamName", teamNameStr + "팀");
-			teamSqlParam.put("parentDeptcode", (String) sqlParam.get("parentDeptCode"));
+			teamSqlParam.put("parentDeptCode", (String) sqlParam.get("parentDeptCode"));
 			result = dao.enrollTeamWithParentDept(session, teamSqlParam);
 		}
 		
