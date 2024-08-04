@@ -113,3 +113,8 @@ const cancelModify = (e) => {
 	cancelBtn.hidden = true;
 	modifyInput.hidden = true;
 }
+
+const modifyApply = (e) => {
+	const id = e.target.parentElement.parentElement.id;
+	consol.log("id : " + id);
+}

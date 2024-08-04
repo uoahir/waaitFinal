@@ -243,7 +243,7 @@
 		           								</td>
 		           								<td>
 		           									<input type="text" name="modifyTeamNameInput" class="form-control" id="modifyInput" placeholder="팀은 빼고 입력하세요 ex)개발1o 개발1팀x" hidden="true">
-		           									<button class="btn btn-success" onclick="modifyApply()" hidden="true">적용</button>
+		           									<button class="btn btn-success" onclick="modifyApply(event)" hidden="true">적용</button>
 		           									<button class="btn btn-danger" onclick="cancelModify(event)" hidden="true">취소</button>
 		           								</td>
 		           							</tr>
