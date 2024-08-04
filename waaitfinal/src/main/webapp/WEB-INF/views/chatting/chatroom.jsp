@@ -153,33 +153,29 @@
         
         
         <!-- 모달 채팅방 사원수 눌렀을때 사원리스트 출력 -->
-        <div id="modal_chatemplist" class="modal">
+        <div id="modal_chatemplist">
 			<div>
 				<div>
 					<div id="modal_chatinvitation_groupchat">
 						<c:if test="${not empty employees}">
 							<c:forEach var="emp" items="${employees}">
 								<c:if test="${emp.empNo eq employee.empNo }">
-									<div class="chatting_userlist_printarea_profile">
-				                        <button onclick="asd(event);">
-				                            <img class="chatting_userlist_printarea_profile_img_green" 
-				                            	src="${path}/resources/프로필들어가있는폴더/${emp.empProfile}" alt="프로필" width="50" height="50">
-				                        </button>
-										<h4>나</h4>
-				                        <p>${emp.jobLevel.levelName}</p>
-				                        <p>${emp.empName}</p>
-				                    </div>
+									<div class="chatting_userlist_printarea_profile" onclick="empprofile(${emp.empNo});">
+					                        <img class="chatting_userlist_printarea_profile_img_green" 
+					                            src="${path}/resources/프로필들어가있는폴더/${emp.empProfile}" alt="프로필" width="50" height="50">
+					                        <h4>나</h4>
+					                        <p>${emp.jobLevel.levelName}</p>
+					                        <p>${emp.empName}</p>
+					                    </div>
 								</c:if>
 							</c:forEach>
 							<c:forEach var="emp" items="${employees}">
 								<c:if test="${emp.empNo ne employee.empNo }">
-									<div class="chatting_userlist_printarea_profile">
-				                        <button onclick="asd(event);">
-				                            <img class="chatting_userlist_printarea_profile_img_green" 
-				                            	src="${path}/resources/프로필들어가있는폴더/${emp.empProfile}" alt="프로필" width="50" height="50">
-				                        </button>
+									<div class="chatting_userlist_printarea_profile" onclick="empprofile(${emp.empNo});">
+				                        <img class="chatting_userlist_printarea_profile_img_green" 
+				                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 				                        <p>${emp.jobLevel.levelName}</p>
-				                        <p>${emp.empName}</p>
+			                        	<p>${emp.empName}</p>
 				                    </div>
 			                    </c:if>
 							</c:forEach>
@@ -197,7 +193,7 @@
         
         
         <!-- 모달창 사원리스트아래에 초대하기 버튼 누르면 출력되는 모달창 -->
-        <div id="modal_chatinvitation" class="modal">
+        <div id="modal_chatinvitation">
 	        
 				<div>
 					<div>
@@ -397,7 +393,7 @@
 
 		        <button class="create_chatjoin" onclick="insertchatjoin();">채팅상대 초대하기</button>
 		        <button class="create_chatjoin" id="modal_chatinvite_cancel">취소</button>
-		        </div>
+	        </div>
 		</div>
 		<!-- 모달창 사원리스트아래에 초대하기 버튼 누르면 출력되는 모달창 닫음-->
 		
@@ -406,9 +402,9 @@
 		<!-- 나가기를 누르면 ajax로 방번호, 로그인된 사원번호를 보내서 chatjoin테이블에서 해당하는 row delete하기 -->
 		<div id="modal_chat_exit">
 			<div>
-				<div id="modal_chat_exit_content">	<!-- 공간 만들어두고 나중에 사용 -->
+				<!-- <div id="modal_chat_exit_content">	공간 만들어두고 나중에 사용
 					<p>다른 기능넣을 공간</p>
-				</div>
+				</div> -->
 				<div id="modal_chat_exit_button">
 					<button onclick="deletechatjoin();">
 						<img src="https://i.pinimg.com/564x/86/a4/e6/86a4e6c3faabedd34bb8229fd5eb8b04.jpg" alt="나가기이미지" width="40px" height="40px">

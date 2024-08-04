@@ -344,6 +344,7 @@
             /* margin-left: auto;
             margin-right: 10px; */
             color: #888282;
+            margin: 0;
         }
         
         .chatting_chattingroomlist_printarea>div:nth-child(3)>p:nth-child(2){
@@ -354,7 +355,7 @@
             background-color: #ff0000b3;
             /* background-color: #E56C6C; */
             /* border: 1px solid black;  */
-            margin-top: 5px;
+            margin-top: 10px;
             padding: 0 4px 0 4px;
             float: right;
             border-radius: 100%;

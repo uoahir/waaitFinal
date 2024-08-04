@@ -225,7 +225,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" onclick="empprofile(${emp.empNo});">
 					                        <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="${path}/resources/프로필들어가있는폴더/${emp.empProfile}" alt="프로필" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 					                    </div>
