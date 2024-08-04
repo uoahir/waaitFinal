@@ -41,7 +41,6 @@ public class Employee implements UserDetails{
     private String empBirth;
     private String empPhone;
     private String empAddress;
-
     private String empSignfile;
 	private int basicAnnualLeave; // 기본연차
 	private int remainingAnnualLeave; // 잔여연차

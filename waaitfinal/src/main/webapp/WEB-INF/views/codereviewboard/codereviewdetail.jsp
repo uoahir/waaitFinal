@@ -65,7 +65,7 @@
     });
 </script>
 
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 <section class="section">
 	<div class="d-flex">
@@ -76,18 +76,9 @@
 			  <pre class="line-numbers"><code id="codeBlock" class="lang-${c.codeType}">${fn:escapeXml(c.codeContent)}</code></pre>
 				</div>
 
-		<div class="mt-3 d-flex">
-		<form action="${path }/codereview/comment/insert" method="post" style="margin: auto; width: 90%" >
-		<input type="text" name="codeReviewContent" style=" height: 100px; margin: auto; width: 100%;">
-			<div class="d-flex" style="margin: auto;">
-			<input value="${c.codeBoardNo}" name="no" type="hidden">
-			
-			<div></div>
-			<%-- <button class="btn btn-outline-info" onclick="insertCodeComment('${c.codeBoardNo}')" style="float: right;">작성</button> --%>
-			</div>
-		</form>
-			<textarea rows="2" cols="4" id="codeComment"></textarea>
-			<button class="btn btn-outline-info" onclick="insertCodeComment('${c.codeBoardNo}')" style="float: right;">작성Test</button>
+		<div class="mt-3 " style="width: 90%; margin: auto;">
+			<textarea rows="3" style="width: 90%" id="codeComment"></textarea>
+			<button class="btn btn-outline-info"  onclick="insertCodeComment('${c.codeBoardNo}')" style="float: right; height: 77px">작성</button>
 		</div>
 		<div class="card mt-4" style="width: 90%; margin: auto;">
 			<div class="mt-1 card" >
@@ -104,7 +95,7 @@
 	</div>
 </section>
 <script src="${path }/resources/waait/yohan/js/codeDetail.js"></script>
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 <style>
 pre {
     white-space: pre-wrap;

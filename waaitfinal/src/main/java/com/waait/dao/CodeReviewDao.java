@@ -17,4 +17,5 @@ public interface CodeReviewDao{
 		int insertCodeReviewR(SqlSession session, CodeReviewBoardComment codeReviewC); //코드작성부분
 		List<CodeReviewBoardComment> selectCodeReviewBoardsComment(SqlSession session,int no);
 		int selectAllCodeReviewBoard(SqlSession session);
+		List<CodeReviewBoard> selectAll(SqlSession session);
 }

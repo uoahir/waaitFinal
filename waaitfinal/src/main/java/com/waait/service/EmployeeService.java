@@ -9,6 +9,7 @@ public interface EmployeeService {
 	int insertEmployee(Employee employee);
 	Employee selectEmployee(String empId);
 	List<Employee> selectAllEmployees();
+	Employee selectByEmpNo(int no);
 	
 
 }

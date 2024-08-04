@@ -163,7 +163,6 @@
     		empNo : "${employee.empNo}"
     	}
     </script>
-    <script src="${path }/resouces/"></script>
 	<script>	
 	window.onload = function(){
 		
@@ -172,6 +171,7 @@
 		.then(data => {
 			console.log(data);
 			document.querySelector("#hasVacation").value = data.remainingAnnualLeave;
+			document.querySelector("#deptName").value = data.department.deptName;
 		})
 	}
 	
@@ -204,7 +204,7 @@
 		$inputDiv3.classList.add('col-lg-2', 'col-5');
 		
 		console.log(type);
-		if(type==='연차'){ 
+		if(type!=='조퇴'){ 
 			const label = document.createElement("label");
 			label.innerText = 'Start Date';
 			label.classList.add('col-form-label');
@@ -492,7 +492,7 @@
     
 
 	const appline = () => {
-		window.open("${path}/edoc/appline", "appline", "height=500, width=500");
+		window.open("${path}/edoc/applinelist", "appline", "height=500, width=500");
 	};
 
     </script>

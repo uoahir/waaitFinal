@@ -61,8 +61,6 @@
                         </div>
                         <input type="hidden" name="basicContent" id="basicContent">
                     </div>			
-
-					<!-- <textarea name="basicConent" id="basicContent"></textarea> -->
 				</div>
 				<div class="card-body">
 					<div id="life" class = "d-flex ">

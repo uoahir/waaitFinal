@@ -23,8 +23,8 @@ public class MypageController {
 	
 	private final MypageService service;
 	
-	// 마이페이지 데모창으로 보냄
-	@GetMapping("/mypagemain")
+	// 마이페이지 데모창으로 보냄 -> HomeController로 이동
+	@GetMapping("/mypagemain") 
 	public String mypageMain(Mypage empNo,Model model) {
 		
 		Mypage mypage=new Mypage();
@@ -42,7 +42,7 @@ public class MypageController {
 		return "mypage/mypageindex";
 	}
 	
-	//사용자 로그인 시큐리티로 데이터 가져오기
+	//사용자 로그인 시큐리티로 데이터 가져오기 -> HomeController로 이동
 	private Employee getLoginEmpInfo() {
 		return (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
@@ -66,7 +66,14 @@ public class MypageController {
 //		return "mypage/mypageindex";
 //	}
 	
-	
+	//출퇴근시간 가져오기(근무시간) 
+//	@RequestMapping("/mypagemain")
+//	public String myTodayWork(Long empNo,Model model) {
+//		
+//		String todayWork=service.myTodayWork(empNo);
+//		model.addAttribute("total", todayWork);		
+//		return "mypage/mypageindex";
+//	}
 	
 
 }

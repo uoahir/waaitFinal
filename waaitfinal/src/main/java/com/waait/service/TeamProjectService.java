@@ -26,6 +26,14 @@ public interface TeamProjectService {
 
 	int functionNoStatusUpdate(Allocation allocation);
 
+	int projectUpdateStatus(String today);
+
+	List<TeamProject> projectPage(Map<String, Integer> param);
+
+	List<Allocation> selectByEmpNo(int no);
+
+
+
 
 
 	

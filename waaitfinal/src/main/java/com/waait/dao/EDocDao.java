@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
+import com.waait.dto.AttatchFile;
 import com.waait.dto.BasicDocument;
 import com.waait.dto.Department;
 import com.waait.dto.Employee;
@@ -70,6 +71,16 @@ public interface EDocDao {
 //	휴가신청서 
 	int updateVacation(SqlSession session, Map<String, Object> param);
 	
+//	반려로직
+	int updateAppStatToReject(SqlSession session, Map<String, Object> param);
+	int updateDocStatToReject(SqlSession session, Map<String, Object> param);
+
+//	휴가신청서 반려로직인 경우 잔여연차 되돌려주는 로직
+	int returnEmployeeRemainingAnnualLeave(SqlSession session, Map<String, Object> param);
+	
+//	반려문서 뽑아오기
+	List<AbstractDocument> rejectedDocument(SqlSession session, Long empNo, Map<String,Integer> page);
+	
 //	사원의 연차정보 뽑아오기
 	List<OffDocument> getOffDocumentList(SqlSession session, Long empNo);
 	
@@ -78,5 +89,8 @@ public interface EDocDao {
 	
 //	작성자 정보 뽑아오기
 	Employee getWriter(SqlSession session, Long empNo);
+	
+//	파일업로드로직
+	int uploadFile(SqlSession session, Map<String,Object> param);
 	
 }

@@ -11,5 +11,6 @@ public interface EmployeeDao {
 	int insertEmployee(SqlSession session,Employee employee);
 	Employee selectEmployee(SqlSession session,String empId);
 	List<Employee> selectAllEmployees(SqlSession session);
+	Employee selectByEmpNo(SqlSession session, int no);
 	
 }

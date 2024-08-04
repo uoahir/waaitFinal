@@ -10,8 +10,12 @@ var empNo = "${employee.empNo}";
 </script>
 
 
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
-  
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
+  <style>
+    .custom-select {
+        background-color: white !important;
+    }
+</style>
 <section class="section">
      <div class="card-title d-flex mt-4">
     	<h1 style="margin: auto; font-size: 50px">WAAIT PROJECT</h1>
@@ -19,11 +23,13 @@ var empNo = "${employee.empNo}";
     
     <div class="card mt-4" style="height:800px; width: 95%;">
     	<div class="mt-1 d-flex"  style="height: 100px;">
-    	<div></div>
     	<button class="btn btn-Success" style="width: 250px; height: 50px; margin: auto;"
 		onclick="location.assign('${path}/teamproject/create')"	>Create Project</button>
+    	
     	</div>
-    	<div>
+    	
+    	
+    	<div style="height: 700px">
     	
     	<c:if test="${not empty teamProjects}">
     	<table class="table">
@@ -33,11 +39,11 @@ var empNo = "${employee.empNo}";
     		<th>시작일</th>
     		<th>종료일</th>
     		<th>PM</th>
-    		<th>진행 상황</th> 
+    		<th>상태</th> 
     		<th>상세정보</th>
-    		<th>프로젝트 변경</th>
+    		<th>진행 사항</th>
     		</tr>
-    		
+    	
     		<c:forEach var="tp" items="${teamProjects }">
     			<tr>
     			<td>${tp.projectNo }</td>
@@ -60,8 +66,10 @@ var empNo = "${employee.empNo}";
     	</table>	
     	</c:if>
    		 	
+   		 	
+   		 	
     	</div>
-   	
+   	<div>${pageBar }</div>
    
     </div>
 		
@@ -70,7 +78,7 @@ var empNo = "${employee.empNo}";
 
 </section>
 
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 
 

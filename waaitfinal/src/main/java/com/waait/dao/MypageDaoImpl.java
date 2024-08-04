@@ -5,8 +5,8 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.waait.dto.Employee;
 import com.waait.dto.Mypage;
+import com.waait.dto.Work;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MypageDaoImpl implements MypageDao {
 	
+
 	private SqlSession session;
 	
 	@Override
@@ -25,6 +26,14 @@ public class MypageDaoImpl implements MypageDao {
 	public List<Mypage> myVacation(SqlSession session, long empNumber) {
 		return session.selectList("mypage.myVacation",empNumber);
 	}
+
+	@Override
+	public Work myTodayWork(SqlSession session, long empNumber) {
+		return session.selectOne("mypage.myTodayWork",empNumber);
+	}
+	
+	
+	
 	
 	
 

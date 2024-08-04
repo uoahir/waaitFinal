@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
+import com.waait.dto.AttatchFile;
 import com.waait.dto.BasicDocument;
 import com.waait.dto.Department;
 import com.waait.dto.Document;
@@ -188,19 +189,38 @@ public class EDocDaoImpl implements EDocDao {
 	public Employee getWriter(SqlSession session, Long empNo) {
 		// TODO Auto-generated method stub
 		return session.selectOne("edoc.getWriter", empNo);
+	}
+
+	@Override
+	public int uploadFile(SqlSession session, Map<String,Object> param) {
+		// TODO Auto-generated method stub
+		return session.insert("edoc.uploadFile", param);
+	}
+
+	@Override
+	public int updateAppStatToReject(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateAppStatToReject", param);
+	}
+
+	@Override
+	public int updateDocStatToReject(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateDocStatToReject",param);
+	}
+
+	@Override
+	public int returnEmployeeRemainingAnnualLeave(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.returnEmployeeRemainingAnnualLeave", param);
+	}
+
+	@Override
+	public List<AbstractDocument> rejectedDocument(SqlSession session, Long empNo, Map<String, Integer> page) {
+		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
+		return session.selectList("edoc.rejectedDocument", empNo , rb);
 	}	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	
 	
 	

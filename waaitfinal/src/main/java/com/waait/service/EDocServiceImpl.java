@@ -10,12 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.waait.dao.EDocDao;
 import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
+import com.waait.dto.AttatchFile;
 import com.waait.dto.BasicDocument;
 import com.waait.dto.Department;
-import com.waait.dto.Document;
 import com.waait.dto.Employee;
 import com.waait.dto.OffDocument;
-import com.waait.dto.TripDocument;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,7 +42,7 @@ public class EDocServiceImpl implements EDocService {
 //	휴가신청서 insert 로직 (트랜잭셔널 ~ )
 	@Transactional
 	@Override
-	public int insertOffEdoc(AbstractDocument document, int[] approval, Map<String,Object> param) {
+	public int insertOffEdoc(AbstractDocument document, int[] approval, Map<String,Object> param, List<AttatchFile> files) {
 		
 		int successCount = 0;
 		
@@ -61,6 +60,14 @@ public class EDocServiceImpl implements EDocService {
 			
 			edocDao.updateEmployeeRemainingLeave(session, param);
 			successCount ++;
+			//순서가 부모저장 된다음 파일 저장되면,파일 이있고,  0
+			
+			
+			for(AttatchFile att : files) {
+				param.put("originalFilename", att.getOriginalFilename());
+				param.put("renamedFilename", att.getRenamedFilename());
+				edocDao.uploadFile(session, param);
+			}
 			
 			
 			for(int i = 0; i < approval.length; i++) {
@@ -77,32 +84,38 @@ public class EDocServiceImpl implements EDocService {
 			edocDao.updateFirstApprover(session, appId);
 			successCount++;
 			
+			
+			
 		} catch(Exception e) {
 			throw new RuntimeException("One of the tasks failed", e);
 		}
 		return successCount;
 	}
-	
-	
-//	내부보고서 insert 로직 ( 트랜잭셔널 ~ )
+//	기본보고서 insert 로직 (트랜잭셔널 ~ )
 	@Transactional
 	@Override
-	public int insertBasicEdoc(AbstractDocument document, int[] approval) {
+	public int insertBasicEdoc(AbstractDocument document, int[] approval, Map<String,Object> param, List<AttatchFile> files) {
 		
 		int successCount = 0;
 		
 		try {
+			edocDao.insertDoc(session, (BasicDocument)document);
+			successCount ++;
+			edocDao.insertEdocContent(session, (BasicDocument)document);
+			successCount ++;
 			
-			edocDao.insertDoc(session, (BasicDocument) document);
-			successCount++;
-			int result1=edocDao.insertEdocContent(session, (BasicDocument)document);
-			successCount++;
-		
 			int appId = document.getDocId();
+			param.put("docId", appId);
 			
-
+			for(AttatchFile att : files) {
+				param.put("originalFilename", att.getOriginalFilename());
+				param.put("renamedFilename", att.getRenamedFilename());
+				edocDao.uploadFile(session, param);
+			}
+			
+			
 			for(int i = 0; i < approval.length; i++) {
-					
+				
 				Approval app = Approval.builder().appEmp(approval[i]).docId(appId).appOrder(i+1).build();
 				System.out.println(app);
 				edocDao.insertApproval(session, app);
@@ -115,11 +128,51 @@ public class EDocServiceImpl implements EDocService {
 			edocDao.updateFirstApprover(session, appId);
 			successCount++;
 			
+			
+			
 		} catch(Exception e) {
 			throw new RuntimeException("One of the tasks failed", e);
 		}
 		return successCount;
 	}
+	
+//	
+////	내부보고서 insert 로직 ( 트랜잭셔널 ~ )
+//	@Transactional
+//	@Override
+//	public int insertBasicEdoc(AbstractDocument document, int[] approval) {
+//		
+//		int successCount = 0;
+//		
+//		try {
+//			
+//			edocDao.insertDoc(session, (BasicDocument) document);
+//			successCount++;
+//			int result1=edocDao.insertEdocContent(session, (BasicDocument)document);
+//			successCount++;
+//		
+//			int appId = document.getDocId();
+//			
+//
+//			for(int i = 0; i < approval.length; i++) {
+//					
+//				Approval app = Approval.builder().appEmp(approval[i]).docId(appId).appOrder(i+1).build();
+//				System.out.println(app);
+//				edocDao.insertApproval(session, app);
+//			}	
+//			
+//			successCount++;
+//			// approval line 데이터가 생성됨. -> 결재라인에 결재자들이 순서대로 들어가있음
+//			// Document에 있는 현재결재자 컬럼값을 바로 업데이트 해줘야 함. 
+//			
+//			edocDao.updateFirstApprover(session, appId);
+//			successCount++;
+//			
+//		} catch(Exception e) {
+//			throw new RuntimeException("One of the tasks failed", e);
+//		}
+//		return successCount;
+//	}
 
 
 //	승인대기문서 출력
@@ -237,6 +290,40 @@ public class EDocServiceImpl implements EDocService {
 		// TODO Auto-generated method stub
 		return edocDao.getWriter(session, empNo);
 	}
+
+//	반려로직
+	@Transactional
+	@Override
+	public int rejectDocument(Map<String, Object> param) {
+		int result=0;
+		String docType = (String)param.get("docType");
+		if(docType.equals("T04")) {
+			edocDao.updateAppStatToReject(session, param);
+			result++;
+			edocDao.updateDocStatToReject(session, param);
+			result++;
+			edocDao.returnEmployeeRemainingAnnualLeave(session, param);
+			result++;
+		} else {
+			edocDao.updateAppStatToReject(session, param);
+			result++;
+			edocDao.updateDocStatToReject(session, param);
+			result++;
+		}
+		System.out.println("여기에서 휴가신청이면 3, 걍 기본이면 2" + result);
+		
+		return result;
+	}
+
+	@Override
+	public List<AbstractDocument> rejectedDocument(Long empNo, Map<String, Integer> page) {
+		// TODO Auto-generated method stub
+		return edocDao.rejectedDocument(session, empNo, page);
+	}
+
+	
+
+	
 	
 	
 	
