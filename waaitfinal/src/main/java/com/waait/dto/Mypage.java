@@ -27,7 +27,10 @@ public class Mypage {
 	private String startDate; //연차시작일  -> off_form
 	private String endDate; //연차종료일 -> off_form
 	private int vacaLeft; //신청하고 남은 보유 연차 -> vacation
-	private int basicAnnualLeave; //기본연차 -> employee
+	private int basicAnnualLeave; //기본연차 -> employee	
+	//근태관련
+	private String workStart;
+	private String workEnd; 
 		
 }
 

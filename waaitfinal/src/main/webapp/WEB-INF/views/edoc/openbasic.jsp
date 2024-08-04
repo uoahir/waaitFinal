@@ -21,14 +21,14 @@
     <script src="${path }/resources/assets/static/js/initTheme.js"></script>
     
     <nav class="navbar navbar-light">
-    	<div class="d-flex">
-	        <div class="container d-block" style="width:1095px">
+    	<div class="d-flex" style="width:100%">
+	        <div class="container d-block" >
 	            <a href="index.html"><i class="bi bi-chevron-left"></i></a>
 	            <a class="navbar-brand ms-4" href="index.html">
 	                <img src="${path }/resources/images/logo.png" style="width:110px; height:80px;">
 	            </a>
 	        </div>
-	        <div class="mt-4">
+	        <div class="mt-4" style="margin-right:100px;">
 	        	<a href="#" class="btn icon btn-primary" onclick="window.close();"><i class="bi bi-x"></i></a>
 	        </div>
         </div>
@@ -44,7 +44,7 @@
 			</c:choose>
 	    </div>
 	
-		<div class="col-sm-2 mb-3 float-end" style="float: right; margin-left: auto; margin-right: 40px;">
+		<div class="col-sm-3 mb-3 float-end" style="float: right; margin-left: auto; margin-right: 40px;">
 			<table class="table table-bordered">
 				<tr>
 					<td rowspan="3" style="width: 100px; font-size: 15px;">
@@ -70,7 +70,7 @@
 								<c:when test="${a.appStat eq '승인전' and a.appEmp eq employee.empNo }">
 									<c:set var="currentApprovalNo" value="${document.approver }"/>
 									<div class="d-flex flex-column">
-										<button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modal_approval">
+										<button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#modal_approval" onclick="approval();">
 											결재
 										</button>
 										<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal_approval">

@@ -118,7 +118,7 @@
 		
 	}
 	
-	const approval = (id, endNo, type, writer, reason) => {
+	const approval = (id, endNo, type, writer) => {
 		// size == 최종결재자의 appOrder를 back에 전달
 		// size 와, 자기 자신의 appOrder 를 비교해서, 일치하지 않으면 중간결재자, 일치하면 최종결재자임 !!! 
 		// 중간결재자 or 최종결재자 임.
@@ -155,7 +155,7 @@
 				docId : id,
 				rnum : endNo,
 				docType : type,
-				docWriter : writer
+				docWriter : writer 
 				
 			})
 		})

@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <c:set var="employee"
 	value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}" />
@@ -104,6 +105,53 @@
                     <i class="bi bi-grid-fill"></i>
                     <span>캘린더</span>
                 </a>                
+            </li>
+            <li
+                class="sidebar-item ">
+                <a href="${path }/edoc/inprogress" class='sidebar-link'>
+                    <i class="bi bi-file-text"></i>
+                    <span>전자결재</span>
+                </a>                
+            </li>
+            <li
+                class="sidebar-item  has-sub">
+                <a href="#" class='sidebar-link'>
+                    <i class="bi bi-three-dots"></i>
+                    <span>워크플로우</span>
+                </a>
+                
+                <ul class="submenu ">
+                    
+                    <li class="submenu-item  has-sub">
+                        <a href="#" class="submenu-link">내문서함</a>
+                        
+                        <ul class="submenu submenu-level-2 ">
+                            
+                            <li class="submenu-item">
+                                <a href="${path }/edoc/inprogress" class="submenu-link">진행중인문서함</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="${path }/edoc/approved" class="submenu-link">완료문서함</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="${path }/edoc/saved" class="submenu-link">임시저장함</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="${path }/edoc/rejected" class="submenu-link">반려문서함</a>
+                            </li>
+                            
+
+                        </ul>
+                        
+                    </li>
+                    
+                    <li class="submenu-item">
+                        <a href="#" class="submenu-link">전체 문서함</a>
+                    </li>
+                    
+                </ul>
+                
+
             </li>
             
             <li
@@ -791,7 +839,7 @@
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                     <h6 class="text-muted font-semibold">근무시간</h6>
-                                    <h6 class="font-extrabold mb-0">요한이가</h6>
+                                    <h6 class="font-extrabold mb-0">${workStart}</h6>
                                 </div>
                             </div> 
                         </div>
@@ -855,10 +903,10 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>전자결재 관련</h4>
+                            <h4>전자결재 관련</h4>                            
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row">
-                            <div id="chart-profile-visit"></div>
+                            <div id="chart-profile-visit"></div>                            
                         </div>
                     </div>
                 </div>
@@ -1105,7 +1153,7 @@
                     <h4>이번주 일정</h4>
                 </div>
                 <div class="card-body">
-                    <div id="chart-visitors-profile"></div>
+                    <div id="chart-visitors-profile"></div>                                                                              
                 </div>
             </div>
         </div>

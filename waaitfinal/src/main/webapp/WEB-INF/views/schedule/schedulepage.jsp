@@ -280,7 +280,7 @@
 		const {title,allDay,start,end}=choiceEvent;
 		const {content,schePrivate,scheNo,color,deptCode}=choiceEvent.extendedProps;			
 		console.log(start,end, typeof start);
-	    
+		
 		document.getElementById('modalScheNo').value=scheNo;
 		document.getElementById('subject').value=title;
 		document.getElementById('title').value=content;  
@@ -289,8 +289,15 @@
 		document.getElementById('scheAllDay').checked=allDay;
 		document.getElementById('schePrivate').checked=schePrivate;
 		document.getElementById('color').value=color; 
-		document.getElementById('deptCode').value=deptCode;
-		
+		//console.log(document.getElementById('deptCode').children);
+		const $modalSelect=document.querySelectorAll('#deptCode')[1];
+		for(let e of $modalSelect.children){
+			if(e.value==deptCode){
+				console.log(e);			
+				e.setAttribute("selected",true);
+			}
+		}
+		$($modalSelect).change();
 		$("#addEventModal").find("#addEventModalLabel").text("일정 수정");
 		$("#addEventModal").find("#submitButton").text("수정");				
 		$("#addEventModal").find("#start").val(getFullyearDate(start)); 	
@@ -379,6 +386,7 @@
         			console.log(data[key]);
         			const schedule = data[key];
         			console.log("empNo : " + schedule["empNo"])
+        			console.log("팀스케줄"+schedule['scheContent'])
         			calendar.addEvent( 
         					{
         				  		color: schedule['scheColor'],
@@ -387,8 +395,9 @@
         				  		end: schedule['scheEnd'],
         				  		allDay: schedule['scheAllDay'],
         				  		editable:true,
-         				  		extendedProps: {'scheContent':schedule['scheContent'], 'schePrivate':schedule['schePrivate'], 'scheNo':schedule['scheNo'],
-        				  					'scheColor':schedule['scheColor'],'deptCode':schedule['deptCode']   	
+         				  		extendedProps: {content:schedule['scheContent'], schePrivate:schedule['schePrivate'], 
+         				  			scheNo:schedule['scheNo'],color:schedule['scheColor'],
+         				  			deptCode:schedule['deptCode']   
         				  		} 
         				  		
         				  	})
