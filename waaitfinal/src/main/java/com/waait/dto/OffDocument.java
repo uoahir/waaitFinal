@@ -19,7 +19,6 @@ public class OffDocument extends AbstractDocument {
 	private Timestamp endDate;
 	private int vacaUsed;
 	private String reason;
-	private int[] empNo;
 	
 	@Override
 	public String getDocument() {
@@ -51,7 +50,7 @@ public class OffDocument extends AbstractDocument {
 	@Override
 	public String toString() {
 		return "OffDocument [vacaType=" + vacaType + ", startDate=" + startDate + ", endDate=" + endDate + ", vacaUsed="
-				+ vacaUsed + ", empNo=" + Arrays.toString(empNo) + ", toString()=" + super.toString() + "]";
+				+ vacaUsed + ", empNo=" + ", toString()=" + super.toString() + "]";
 	}
 	
 	

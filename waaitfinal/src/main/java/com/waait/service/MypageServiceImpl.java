@@ -6,8 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
 import com.waait.dao.MypageDao;
-import com.waait.dto.Employee;
 import com.waait.dto.Mypage;
+import com.waait.dto.Work;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class MypageServiceImpl implements MypageService {
 	
+
 	private final MypageDao dao;
 	private final SqlSession session;
 			
@@ -29,9 +30,10 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public List<Mypage> myTodayWork(Long empNumber) {
+	public Work myTodayWork(Long empNumber) {
 		return dao.myTodayWork(session,empNumber);
-	}	
+	}
+	
 
 	
 	

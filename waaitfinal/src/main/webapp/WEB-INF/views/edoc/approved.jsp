@@ -16,7 +16,7 @@
 		<div class="card-body ">
 			<div class="d-flex">
 				<div style="width: 90%; margin-left:5px;">
-					<h5>Approved Document</h5>
+					<h5>완료문서함</h5>
 				</div>
 				<div style="float: right; width:10%;" class="mb-5">
 					<div class="dropdown">
@@ -32,7 +32,7 @@
 						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style>
 							<div class="dropdown-item" onclick="window.open('${path}/edoc/basicedoc?type=T01','_blank','width=1200, height=1000')">내부보고서</div>
 							<div class="dropdown-item" onclick="window.open('${path}/edoc/basicedoc?type=T02','_blank','width=1200, height=1000')">지출결의서</div>
-							<div class="dropdown-item" onclick="window.open('${path}/edoc/tripedoc?type=T03','_blank','width=1200, height=1000')">출장신청서</div>
+							<div class="dropdown-item" onclick="window.open('${path}/edoc/write2?type=T03','_blank','width=1200, height=1000')">출장신청서</div>
 							<div class="dropdown-item" onclick="window.open('${path}/edoc/offedoc?type=T04','_blank','width=1200, height=1000')">휴가신청서</div>
 						</div>
 					</div>
@@ -42,11 +42,11 @@
 	        	<table class="table" id="table1">
 					<thead>
 						<tr>
-							<th>Document Number</th>
-							<th>Type</th>
-							<th>Title</th>
-							<th>Submission Date</th>
-							<th>Approved Date</th>
+							<th>문서번호</th>
+							<th>문서종류</th>
+							<th>문서제목</th>
+							<th>상신일</th>
+							<th>결재일</th>
 						</tr>
 					</thead>
 					<tbody>

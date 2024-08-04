@@ -35,6 +35,12 @@ public interface TeamProjectDao {
 
 	int projectUpdateStatus(SqlSession sqlSession, String today);
 
+	List<TeamProject> projectPage(SqlSession sqlSession, Map<String, Integer> param);
+
+	List<Allocation> selectByEmpNo(SqlSession sqlSession, int no);
+
+
+
 	
 		
 		

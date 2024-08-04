@@ -166,7 +166,7 @@ body{
 #chatting_chattingroom_bottom>div:nth-child(1){
     /* background-color: red; */
     /* border: 1px solid red; */
-    flex-grow : 2;
+    flex-grow : 4;
     height: 100%;
     /* width: 100%; */
 }
@@ -179,7 +179,7 @@ body{
     flex-direction: column;
     justify-content: space-between;
     padding: 10px 10px 10px 0;
-    width: 50px;
+    width: auto;
 }
 
 #chatting_chattingroom_bottom>div:nth-child(1)>textarea{
@@ -188,9 +188,19 @@ body{
     margin: 10px 5% 10px 5%;
 }
 
+/* 전송버튼 */
 #chatting_chattingroom_bottom>div:nth-child(2)>button{
     /* overflow: auto; */
     text-overflow: ellipsis;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: transparent;
+    height: 40%;
+}
+
+
+#chatting_chattingroom_bottom>div:nth-child(2)>button:hover{
+	background-color: #e3f3ff;
 }
 
 /* 채팅 입력칸 끝 */
@@ -199,7 +209,7 @@ body{
 
 
 /* 모달창 */
-	.modal {
+	#modal_chatemplist {
 	    display: none;  /* 기본적으로 숨김 */
 	    position: fixed;
 	    z-index: 1;
@@ -214,37 +224,66 @@ body{
 	}
 	
 	#modal_chatemplist>div{
-		/* background-color: #fefefe; */
+		/* background-color: #ffffff; */
 	    margin: 70px auto auto 30px; 
 	    padding: 0px;
 	    border: 1px solid #888;
 	    width: 300px; /* 너비를 조절하여 적절하게 설정 */
 	    height: auto;
-	    max-height: 300px;
-	    overflow: auto;
-	    
+	    max-height: 350px;
+	    /* overflow: auto; */
+	    /* position: absolute; */
+	    display: flex;
+	    flex-direction: column;
 	}
+	
+	/* 모달 내 상단 컨텐츠 */
+	#modal_chatemplist > div > div:not(:last-child) {
+	    display: flex;
+	    flex-direction: column;
+	    flex: 1; /* 상단 컨텐츠가 나머지 공간을 차지하도록 */
+	    overflow: auto;
+	}
+	
+	
+	/* 채팅 상대 초대하기 버튼 */
+	#modal_chatemplist > div > div:last-child {
+	    /* background-color: red; */
+	    border-top: 1px solid black;
+	    text-align: center;
+	    padding: 10px 0;
+	    cursor: pointer;
+	    /* 버튼을 하단에 고정시키기 위해 position을 사용 */
+	    position: sticky;
+	    bottom: 0;
+	}
+	
 	
 	#modal_chatemplist>div>div{
 		display: flex;
    		
-   		
  		cursor: pointer;
-	    background-color: #f1f1f1;
-	    /* border-radius: 5px; */
-	    /* border: 1px solid #888; */
+	    background-color: #ffffff;
+	    border-radius: 5px;
+	    border: 1px solid #888;
 	    text-align: center;
 	    width: 100%;
 	}
 	
-	#modal_chatemplist>div>div:nth-child(2){
+	/* #modal_chatemplist>div>div:nth-child(2){
 		justify-content: space-around;
-		border-top: 1px solid black;  
-	}
+		border-top: 1px solid black;
+		background-color: red;
+		position: fixed;
+	} */
 	
 	#modal_chatemplist>div>div:nth-child(2):hover{
-		background-color: #ddd;
+		background-color: #e3f3ff;;
 	}
+	
+	/* #modal_chatinvitation_button{
+		background-color: red;
+	} */
 	
 	
 	.chatting_userlist_printarea_profile{
@@ -292,6 +331,20 @@ body{
 	
 	/* + 채팅상대 초대하기 */
 	/* 2번째 모달 */
+	#modal_chatinvitation {
+	    display: none;  /* 기본적으로 숨김 */
+	    position: fixed;
+	    z-index: 1;
+	    left: 0;
+	    top: 0;
+	    width: 100%;
+	    height: 100%;
+	    overflow: auto;
+	    
+	    /* background-color: rgb(0, 0, 0); Fallback 색상
+	    background-color: rgba(0, 0, 0, 0.4); 불투명 배경 */
+	}
+	
 	
 	#modal_chatinvitation>div {
 	    background-color: #fefefe;
@@ -482,7 +535,7 @@ body{
 	    padding: 0px;
 	    border: 1px solid #888;
 	    width: 300px; 
-	    height: 300px;
+	    height: 200px;
 	    max-height: 300px;
 	    
 	    position: relative;
@@ -491,7 +544,7 @@ body{
 	}
 	
 	
-	#modal_chat_exit_content{
+	/* #modal_chat_exit_content{
 		padding: 10px -10px 0 0;
 		margin-bottom:50px;
 		width: 100%;
@@ -499,15 +552,15 @@ body{
     	flex-grow: 1;
     	overflow-y: auto;
     	
-    	/* 스크롤 */
+    	스크롤
     	-ms-overflow-style: none;
     	scrollbar-width: none;
 	}
 	
-	/* 스크롤 */
+	스크롤
 	#modal_chat_exit_content::-webkit-scrollbar {
 	    display: none;
-	}
+	} */
 	
 	
 	#modal_chat_exit_button{

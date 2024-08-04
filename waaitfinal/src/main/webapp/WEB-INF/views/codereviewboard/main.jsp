@@ -137,7 +137,7 @@
 			</tr>
 			<c:if test="${not empty codeReviewBoards }">
 				<c:forEach var="c" items="${codeReviewBoards}">
-					<tr onclick="location.assign('${contextPath}/codereviewboard/codereview${c.codeBoardNo}');">
+					<tr onclick="location.assign('${path}/codereviewboard/codereview${c.codeBoardNo}');">
 					  <td>NO.${c.codeBoardNo }</td>
 					  <td>${c.codeBoardTitle }</td>
 					  <td>${c.codeType }</td>

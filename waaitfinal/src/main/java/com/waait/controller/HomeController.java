@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Mypage;
@@ -91,8 +92,24 @@ public class HomeController {
 					
 		return "index";
 	}
+	
+	//출퇴근시간 가져오기(근무시간) 
+//		@GetMapping("/")
+//		public String myTodayWork(Long empNo,Model model) {
+//			
+//			Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//			
+//			Work work=service.myTodayWork(empNo);
+//			model.addAttribute("workStart", work.getWorkStart());
+//			
+//			return "index";
+//		}
+		
+		
+		
 	//----------------------------------------------------------------------------------
 	@GetMapping("/accountprofile")
+	
 	public String accountProfile() {
 		System.out.println("dd");
 		return "account-profile";
