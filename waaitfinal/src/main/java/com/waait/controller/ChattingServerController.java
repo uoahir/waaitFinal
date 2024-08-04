@@ -1,6 +1,5 @@
 package com.waait.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,11 +26,10 @@ public class ChattingServerController extends TextWebSocketHandler{
 	private Map<String,WebSocketSession> clients = new HashMap<>();
 	
 	// Message 저장 공간 만들어서 한번에 여러개 저장하기
-	private List<Message> messages = new ArrayList<>();
+	//private List<Message> messages = new ArrayList<>();
 	
 	//bean선언때 기본생성자로 선언해서 이렇게 불러와서 사용해야 함.
 	//jackson 라이브러리의 클래스 JSON데이터를 java객체로 변환, java객체를 JSON데이터로 변환 하는데 사용함. 
-	
 	private final ObjectMapper mapper;
 	
 	//service
@@ -148,27 +146,37 @@ public class ChattingServerController extends TextWebSocketHandler{
 	}
 	
 	
+	// CHATHISTORYCOUNT
+	// 사원번호, 채팅방번호
+	// 추가 : 채팅기록 테이블에 저장시킬때 COUNT테이블에 채팅방에 속한 사원 수 만큼 ROW 추가
+	// 삭제 : 채팅방을 들어가는 기준으로 해당채팅방번호 + 로그인된 사원번호 ROW 삭제
+	
+	// 채팅방을 들어가면 그 해당 채팅방번호 + 로그인된 사원번호 이용해서 chatHistoryCount 테이블에서 두개가 같은 row를 delete함
+	
 	//DB에 메세지 내역 저장
 	private void insertChatHistory(Message msg) {
 		if(msg.getType().equals("메세지")) {
-			System.out.println("insertChatHistory - msg : "+msg);
-			messages.add(msg);
+			System.out.println("소켓컨트롤러 - insertChatHistory - msg : "+msg);
 			
-			messages.forEach(message->{
-				System.out.println("list에 저장된거 : "+message);
-			});
-			
-			if(messages.size() >= 5) {
-				//서버닫힐때 DB에 저장해야됨
-				int result = service.insertChatHistory(messages);	
-				//한번 저장시키고 list안에 내용물 비우기
-				messages.clear();
-				if(result > 0) {
-					System.out.println("채팅내역 저장됨?");
-				}else {
-					System.out.println("채팅내역 저장안됨?");
-				}
+			// 메세지 저장을 리스트에서 1개 씩 바로바로 저장하는 형식으로 변경
+			int result = service.insertChatHistory(msg);
+			if(result > 0) {
+				System.out.println("채팅내역 저장됨?");
+			}else {
+				System.out.println("채팅내역 저장안됨?");
 			}
+			
+			// 메세지에 해당하는 채팅방 번호를 이용해서 참여된 사원번호를 가져와
+			// chatHistoryCount 테이블에 사원번호를 forEach돌려서 Map으로 사원번호, 방번호 가지고 insert SQL문 실행시켜서 채팅방에 참여한 사원 수 만큼 row추가
+			Map<String ,Number> param = new HashMap<>();
+			Long empNo = (long) msg.getEmpNo();
+			int chatRoomNo = msg.getChatRoomNo();
+			param.put("empNo", empNo);
+			param.put("chatRoomNo", chatRoomNo);
+			System.out.println("소켓컨트롤러 - insertChatHistory - param : "+param);
+			
+			service.insertChatHistoryCount(param);
+
 		}
 	
 	}
@@ -178,10 +186,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 	//채팅목록 출력
 	private void chatRoomlist(Message msg) {
 		System.out.println("chatRoomlist 실행");
-		//이거왜 안뒈...
-//			Employee loginEmployee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
-//			long loginEmpNo = loginEmployee.getEmpNo();
-		
+		System.out.println("chatRoomlist - msg : "+msg);
 		long loginEmpNo = msg.getEmpNo();
 		List<ChatRoom> chatRoomlist = service.selectChatRoomlist(loginEmpNo);
 //			System.out.println("chatRoomlist : "+chatRoomlist);
@@ -189,7 +194,7 @@ public class ChattingServerController extends TextWebSocketHandler{
 		chatRoomtotal.put("type", msg.getType());
 		chatRoomtotal.put("chatRoomlist", chatRoomlist);
 		chatRoomtotal.put("loginEmpNo", loginEmpNo);
-		System.out.println("chatRoomlist - chatRoomtotal : "+chatRoomtotal);
+		System.out.println("소켓컨트롤러 - chatRoomlist - chatRoomtotal : "+chatRoomtotal);
 		
 		for(Map.Entry<String,WebSocketSession> client : clients.entrySet()) {
 			WebSocketSession cSession = client.getValue();

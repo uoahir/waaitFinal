@@ -1,0 +1,24 @@
+@charset "UTF-8";
+.card .card-body{
+	padding-top : 0px;
+}
+.form-control {
+	display : inline;
+	width : 70%;
+}
+#addTeamInputButton {
+	margin-left : 251px;
+}
+.actionContainer {
+	display : flex;
+	justify-content : right;
+}
+.actionContainer>button {
+	margin-right : 50px;
+}
+.padding-top-33 {
+	padding-top : 33px;
+}
+.li-nonestyle {
+	list-style : none;
+}

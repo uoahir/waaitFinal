@@ -1,5 +1,6 @@
 package com.waait.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.waait.common.EmpAuthority;
 import com.waait.security.controller.UserPasswordAuthenticationProvider;
+
+import jakarta.servlet.DispatcherType;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +24,7 @@ public class SecurityConfig {
 			throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
+							.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
 						  .requestMatchers("/logininfo","/login", "/WEB-INF/views/**","/resources/**").permitAll()
 						 .requestMatchers("/admin").hasAnyAuthority(EmpAuthority.ADMIN.name())
 						.anyRequest().authenticated()

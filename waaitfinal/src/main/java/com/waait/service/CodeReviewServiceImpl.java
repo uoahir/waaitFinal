@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CodeReviewServiceImpl implements CodeReviewService {
+	
+
 	private final CodeReviewDao codeReviewDao;
 	private final SqlSession session;
 
@@ -64,5 +66,9 @@ public class CodeReviewServiceImpl implements CodeReviewService {
 	cr.setCodeReviewFile(crf); return cr; 
 	}
 	*/
-
+	@Override
+	public List<CodeReviewBoard> selectAll() {
+		List<CodeReviewBoard> rs = codeReviewDao.selectAll(session);
+		return rs;
+	}
 }

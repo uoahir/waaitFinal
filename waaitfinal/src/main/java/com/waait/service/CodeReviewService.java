@@ -18,6 +18,8 @@ public interface CodeReviewService {
 	List<CodeReviewBoardComment> selectCodeReviewBoardsComment(int no);
 
 	int selectAllCodeReviewBoard();
+
+	List<CodeReviewBoard> selectAll();
 	
 
 }

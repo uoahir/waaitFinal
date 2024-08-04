@@ -19,7 +19,7 @@ public interface ChattingDao {
 	
 	List<ChatHistory> selectChatRoomHistory(SqlSession session, Map<String, Number> param);
 	
-	int insertChatHistory(SqlSession session, Message message);
+	int insertChatHistory(SqlSession session, Message msg);
 	
 	int insertChatRoom(SqlSession session, Map<String, Object> chatRoomParam);
 	
@@ -36,4 +36,14 @@ public interface ChattingDao {
 	Employee selectEmpProfile(SqlSession session, Long empNo);
 	
 	Integer selectProfilechatOpen(SqlSession session, Map<String, Object> param);
+	
+	List<Long> selectChatJoin(SqlSession session, Map<String ,Number> param);
+	
+	int insertChatHistoryCount(SqlSession session, Map<String, Number> param);
+	
+	int deleteChatHistoryCount(SqlSession session, Map<String, Number> param);
+	
+	String selectChatHistoryInvitation(SqlSession session, Long empNo);
+	
+	int insertChatHistoryLeaveInvitation(SqlSession session, Map<String, Object> param);
 }

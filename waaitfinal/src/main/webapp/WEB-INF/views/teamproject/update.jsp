@@ -1,132 +1,157 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
-<script >
-var contextPath = "${path}";
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
+<script>
+    var contextPath = "${path}";
 </script>
 
-
 <section class="section">
-	<div class="card-title d-flex mt-4">
-		<h1 style="margin: auto; font-size: 50px">No.${teamProject.projectNo}
-			${teamProject.projectName}</h1>
+    <div>
+        <div>
+            <h4 style="text-align: center;">진행률</h4>
+            <c:set var="todo" value="0" />
+            <c:set var="inProgress" value="0" />
+            <c:set var="complete_check" value="0" />
+            <c:set var="done" value="0" />
 
-	</div>
-	<div class="card mt-3" style="height: 800px;">
-		<div class="accordion accordion-flush" style="width: 400px">
-			<!-- 첫번째 -->
-			<div class="accordion-item">
-				<h1 class="accordion-header" id="flush-headingOne">
-					<button class="accordion-button collapsed" type="button"
-						data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
-						aria-expanded="false" aria-controls="flush-collapseOne">
-						ProjectSummary</button>
-				</h1>
-				<div id="flush-collapseOne" class="accordion-collapse collapse"
-					aria-labelledby="flush-headingOne"
-					data-bs-parent="#accordionFlushExample" style="">
-					<div class="accordion-body">${teamProject.projectSummary }</div>
-				</div>
-			</div>
-			<!-- 두번째 -->
-			<div class="accordion-item">
-				<h1 class="accordion-header" id="flush-headingTwo">
-					<button class="accordion-button collapsed" type="button"
-						data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo"
-						aria-expanded="false" aria-controls="flush-collapseTwo">
-						Project-EmployeeList</button>
-				</h1>
-				<div id="flush-collapseTwo" class="accordion-collapse collapse"
-					aria-labelledby="flush-headingTwo"
-					data-bs-parent="#accordionFlushExample" style="">
-					<div class="accordion-body">
-						<c:if test="${not empty teamProject.projectEmployee}">
-							<c:forEach var="tpel" items="${teamProject.projectEmployee }">
-								<div class="d-flex">
-									<p>${tpel.empName}</p>
-									<p id="deptCode">${tpel.deptCode }</p>
-									<p id="levelCode">${tpel.levelCode}</p>
-								</div>
-							</c:forEach>
-						</c:if>
-					</div>
-				</div>
-			</div>
-			<!-- 세 번째 -->
-			<div class="accordion-item">
-				<h2 class="accordion-header" id="flush-headingThree">
-					<button class="accordion-button collapsed" type="button"
-						data-bs-toggle="collapse" data-bs-target="#flush-collapseThree"
-						aria-expanded="false" aria-controls="flush-collapseThree">
-						project-Function-List</button>
-				</h2>
-				<div id="flush-collapseThree" class="accordion-collapse collapse"
-					aria-labelledby="flush-headingThree"
-					data-bs-parent="#accordionFlushExample" style="">
-					<div class="accordion-body">
-						<c:if test="${not empty teamProject.projectFunctionList}">
-							<div class="card">
-								<h2>TO-DO</h2>
-								<c:forEach var="tpfl"
-									items="${teamProject.projectFunctionList }">
-									<c:if test='${tpfl.functionStatus eq "To Do"}'>
-										<p>${tpfl.functionName}</p>
-
-									</c:if>
-
-								</c:forEach>
-							</div>
-							<div class="card">
-								<h2>In-Progress</h2>
-								<c:forEach var="tpfl"
-									items="${teamProject.projectFunctionList }">
-									<c:if test='${tpfl.functionStatus eq "In Progress"}'>
-										<p>${tpfl.functionName}</p>
-
-									</c:if>
-
-								</c:forEach>
-							</div>
-							<div class="card">
-								<h2>Complete-check</h2>
-								<c:forEach var="tpfl"
-									items="${teamProject.projectFunctionList }">
-								<div class="d-flex" style="flex-direction: row;">	
-									<c:if test='${tpfl.functionStatus eq "complete-check"}'>
-										<p style="width: 120px">${tpfl.functionName}</p>
-										<button class="btn btn-success" onclick='functionApprove(${tpfl.projectNo},"${tpfl.functionName}");'>승인</button>
-										<button class="btn btn-danger" onclick='functionReject(${tpfl.projectNo},"${tpfl.functionName}");'>반려</button>
-									</c:if>
-								</div>
-								</c:forEach>
-							</div>
-							<div clas  s="card">
-								<h2>Done</h2>
-								<c:forEach var="tpfl"
-									items="${teamProject.projectFunctionList }">
-									<c:if test='${tpfl.functionStatus eq "Done"}'>
-										<p>${tpfl.functionName}</p>
-										
-									</c:if>
-									
-								</c:forEach>
-							</div>
-
-						</c:if>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-	</div>
-
-
-
+            <c:if test="${not empty allocations}">
+                <c:forEach var="al" items="${allocations}">
+                    <c:choose>
+                        <c:when test="${al.functionStatus eq 'ToDo'}">
+                            <c:set var="todo" value="${todo + 1}" />
+                        </c:when>
+                        <c:when test="${al.functionStatus eq 'inProgress'}">
+                            <c:set var="inProgress" value="${inProgress + 1}" />
+                        </c:when>
+                        <c:when test="${al.functionStatus eq 'complete-check'}">
+                            <c:set var="complete_check" value="${complete_check + 1}" />
+                        </c:when>
+                        <c:when test="${al.functionStatus eq 'done'}">
+                            <c:set var="done" value="${done + 1}" />
+                        </c:when>
+                    </c:choose>
+                </c:forEach>
+            </c:if>
+            <div class="mt-4" style="display: flex; justify-content: space-around;">
+                <div><p style="text-align: center;"> ToDo : ${todo}</p>
+                	<div class="card mt-4" style="width: 250px; height: 700px">
+                		<c:if test="${not empty allocations }">
+                			<c:forEach var="al" items="${allocations }">
+                				<c:if test="${al.functionStatus eq 'ToDo' }">
+                				<div class="d-flex mt-2" style="justify-content: space-around;"> <p class="mr-3">${al.functionName }</p> <button class="btn btn-outline-info mr-3" onclick="modelopen('${al.functionName}','${al.functionSummary}','${al.empName}')">상세 정보</button></div>
+                				</c:if>
+                			</c:forEach>
+                		</c:if>
+                	</div>
+                
+                
+                </div>
+               	<div><p style="text-align: center;">InProgress:  ${inProgress}</p>
+               		<div class="card mt-4" style="width: 250px; height: 700px">
+                	<c:if test="${not empty allocations }">
+                			<c:forEach var="al" items="${allocations }">
+                				<c:if test="${al.functionStatus eq 'inProgress' }">
+                				<div class="d-flex mt-2" style="justify-content: space-around;"> <p class="mr-3">${al.functionName }</p> <button class="btn btn-outline-info mr-3" onclick="modelopen1('${al.functionName}','${al.functionSummary}','${al.empName}','${al.functionStartDate }')">상세 정보</button></div>
+                				</c:if>
+                			</c:forEach>
+                		</c:if>
+                	
+                	</div></div>
+                <div><p style="text-align: center;">Request-Check : ${complete_check}</p>
+                	<div class="card mt-4" style="width: 250px; height: 700px">
+                	<c:if test="${not empty allocations }">
+                			<c:forEach var="al" items="${allocations }">
+                				<c:if test="${al.functionStatus eq 'complete-check' }">
+                				<div class="d-flex mt-2" style="justify-content: space-around;"> <p class="mr-3">${al.functionName }</p> <button class="btn btn-outline-info mr-3" onclick="modelopen2('${al.functionName}','${al.functionSummary}','${al.empName}','${al.functionStartDate }','${al.projectNo }')">상세 정보</button></div>
+                				</c:if>
+                			</c:forEach>
+                		</c:if>
+                	
+                	</div>
+                </div>
+                <div><p style="text-align: center;">Done : ${done}</p>
+                	<div class="card mt-4" style="width: 250px; height: 700px">
+                	<c:if test="${not empty allocations }">
+                			<c:forEach var="al" items="${allocations }">
+                				<c:if test="${al.functionStatus eq 'done' }">
+                				<div class="d-flex mt-2" style="justify-content: space-around;"> <p class="mr-3">${al.functionName }</p> <button class="btn btn-outline-info mr-3" onclick="modelopen3('${al.functionName}','${al.functionSummary}','${al.empName}','${al.functionStartDate }','${al.functionEndDate }')">상세 정보</button></div>
+                				</c:if>
+                			</c:forEach>
+                		</c:if>
+                	
+                	</div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+    
 </section>
-<script src="${path }/resources/waait/yohan/js/teamprojectUpdate.js"></script>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p id="functionSummary" style="width: 400px; height: 400px; text-align: center;"></p>                             
+        <p id="empName"></p>
+        <p id="startDate"></p>
+        <p id="endDate"></p>
+        <div class="d-flex">
+        <button class="btn btn-outline-success" id="functionapproval">승인</button>
+        <button class="btn btn-outline-danger" id="functionreject">반려</button>
+        </div>
+        
+    </div>
+</div>
 
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+ 	<script type="text/javascript">
+ // teamprojectUpdate.js 파일에 추가
+
+</script>
+<style>
+/* teamprojectUpdate.js 파일에 추가 */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+</style>
+<script src="${path}/resources/waait/yohan/js/teamprojectUpdate.js"></script>
+
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />

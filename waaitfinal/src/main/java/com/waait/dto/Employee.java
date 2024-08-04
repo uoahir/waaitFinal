@@ -42,9 +42,10 @@ public class Employee implements UserDetails{
     private String empPhone;
     private String empAddress;
     private String empSignfile;
-    private String deptName;
 	private int basicAnnualLeave; // 기본연차
 	private int remainingAnnualLeave; // 잔여연차
+    private String deptName;
+    private String teamName;
 	
 
 	@Override

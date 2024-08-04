@@ -20,6 +20,7 @@ import com.waait.dto.TeamProject;
 import com.waait.service.EmployeeService;
 import com.waait.service.TeamProjectService;
 
+import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -30,8 +31,7 @@ public class TeamProjectController {
 	private final TeamProjectService projectService;
 	@GetMapping("/teamproject/main")
 	public String projectMain(Model model) {
-	List<TeamProject> teamProjects = projectService.selectProjectAll();
-		//System.out.println("리스트 값"+teamProjects);
+		List<TeamProject> teamProjects =  projectService.selectAllTeamProject();
 		model.addAttribute("teamProjects",teamProjects);
 		return "teamproject/main";
 	}//첫 메인 화면
@@ -44,90 +44,105 @@ public class TeamProjectController {
 		return "teamproject/create";
 
 	}
-		
 	@ResponseBody
-	@PostMapping("/teamproject/data/check")
-	public ResponseEntity<Map<String, String>> ProjectDataTest(@RequestBody TeamProject teamProject
-	) {
-		System.out.println(teamProject);
-		System.out.println("통신했음");
-		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
+	@PostMapping("/teamproject/data")
+	public ResponseEntity<Map<String,String>> projectInsertData(
+			@RequestBody TeamProject teamProject ){
+		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		teamProject.setEmployee(employee);
-		int result =projectService.insertTeamProject(teamProject);
-		System.out.println(result);
-		Map<String, String> rs = new HashMap<>();
-		rs.put("status", "success");
-		rs.put("message", "프로젝트가 정상적으로 전송되었습니다");
-		return ResponseEntity.ok(rs);
+		int result =projectService.projectInsertData(teamProject);
+		String msg=  "";
+		System.out.println(teamProject);
+		if(result >0) {
+			msg = "Success";
+		}
+		return ResponseEntity.ok(Map.of("message",msg));
+		
 	}
-	@GetMapping("/project{projectNo}/update") // 프로젝트매니저가 보여지는페이지
-	public String projectUpdatePage(@PathVariable int projectNo,Model model) {
-		TeamProject teamProject = projectService.selectByNoProject(projectNo);
-		//System.out.println(teamProject);
-		model.addAttribute("teamProject",teamProject);
-		return "teamproject/update";
-	}
+	
 	@GetMapping("/teamproject{projectNo}/info")
-	public String projectInfoPage(@PathVariable int projectNo
-			,Model model) {
-		System.out.println("프로젝트"+projectNo);
-		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal(); 
-		Long empNo = employee.getEmpNo();
-		int result = 0;
-		List<Integer> employees = projectService.selectProjectEmployeeList(projectNo);
-		for(int i=0; i<employees.size(); i++) {
-			System.out.println(employees.get(i));
-			if((long)(employees.get(i)) == empNo) {
-				result +=1;
+	public String projectInfo(@PathVariable int projectNo,Model model) {
+		int rs = 0;
+		
+		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		List<Integer> empList = projectService.checkEmpList(projectNo);  
+		System.out.println(empList);
+		for(int i = 0; i<empList.size(); i++) {
+			if(((long)(empList.get(i))) == employee.getEmpNo()) {
+				rs = 1;
 			}
 		}
-		
-		//-----------------여기까지가 권한 체크 하는파트---------------------
-		if(result == 1) { //해당되는 사원이라면 
-			// 데이터 값 저장
-			Map<String, Long> projectInfo = new HashMap<>();
-			projectInfo.put("empNo", empNo);
-			projectInfo.put("projectNo",(long)(projectNo));
-			TeamProject teamProject = projectService.allocationByProject(projectInfo);
-			
-			//System.out.println(teamProject);
-			model.addAttribute("teamProject",teamProject);
-			
+		if(rs ==1) {
+			Map<String, String> param =  new HashMap<>();
+			param.put("projectNo", ""+projectNo);
+			param.put("empNo", ""+employee.getEmpNo());
+			List<Allocation> allocations = projectService.selectByEmpAlloc(param);
+			System.out.println(allocations);
+			model.addAttribute("allocations",allocations);
 			return "teamproject/kanbanBoard";
+		}else {
+			return "common/403Error";
 		}
-		return "redirect:/error/403Page";
 	}
-	
-	@ResponseBody                                                    
-	@PostMapping("/canban/todoupdate") //프로젝트를 todo에서 inprogress로 넘겨줌
-	public ResponseEntity<Map<String, String>> canbanTodoUpdate(@RequestBody Allocation allocation){
-		//System.out.println("값 확인하는거임"+allocation);
-		int result = projectService.canbanTodoUpdate(allocation);
-		if(result !=0) {
-				
+	@ResponseBody
+	@PostMapping("/canban/todoupdate")
+	public ResponseEntity<Map<String,String>> todoUpdate(
+			@RequestBody Allocation allocation
+			){
+		System.out.println(allocation);
+		int result = projectService.todoUpdate(allocation);
+		Map<String,String> rs = new HashMap<>();
+		if(result ==1) {
+			rs.put("message", "ok");
 		}
-		Map<String,String> rs = new HashMap<String, String>();
+		
 		return ResponseEntity.ok(rs);
+	}
+	@ResponseBody
+	@PostMapping("/canban/inprogressupdate")
+	public ResponseEntity<Map<String,String>> inprogressupdate(
+			@RequestBody Allocation allocation){
+		int result  = projectService.inprogressupdate(allocation);
+		Map<String, String> param = new HashMap<>();
+		return ResponseEntity.ok(param);
+	}
+	@GetMapping("/project{projectNo}/update")
+	public String projectUpdate(@PathVariable int projectNo,Model model) {
+		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		TeamProject teamProject = projectService.selectUpdate(projectNo);
+		 System.out.println("프로젝트 매니저 번호"+teamProject.getEmployee().getEmpNo());
+		 System.out.println("접속한 번호"+employee.getEmpNo());
+		 if(!teamProject.getEmployee().getEmpNo().equals(employee.getEmpNo())) {
+			 
+			 return "common/403Error";	 
+		 }else {
+			 model.addAttribute("teamProject",teamProject);
+			 model.addAttribute("allocations",teamProject.getAllocationList());
+			 System.out.println(teamProject.getAllocationList());
+			 return "teamproject/update";
+		 }
+		 
 		
 	}
-	@ResponseBody                                                    
-	@PostMapping("/canban/inprogressupdate") //프로젝트를 todo에서 inprogress로 넘겨줌
-	public ResponseEntity<Map<String, String>> canbanInprogressUpdate(@RequestBody Allocation allocation){
-		System.out.println("값 확인하는거임"+allocation); // 값들어오겠지 
-		int result = projectService.canbanInprogressUpdate(allocation);
-	
-		Map<String,String> rs = new HashMap<String, String>();
-		return ResponseEntity.ok(rs);
+	@ResponseBody
+	@PostMapping("/function/approve")
+	public ResponseEntity<Map<String,String>> functionStatusUpdate(
+			@RequestBody Allocation allocation){
+		int result = projectService.functionStatusUpdate(allocation);
+		System.out.println("asdasdsadasdad"+result);
 		
+		Map<String, String> rs = new HashMap<>();
+		return ResponseEntity.ok(rs);
 	}
 	
 	@ResponseBody
-	@PostMapping("/function/approve")
-	public ResponseEntity<Map<String,String>> functionApprove(@RequestBody Allocation allocation){
-		System.out.println("로케이션값"+allocation);
-		int result =  projectService.functionApprove(allocation);
-		System.out.println(result);
-		Map<String, String>rs = new HashMap<>();
+	@PostMapping("/function/Noapprove")
+	public ResponseEntity<Map<String,String>> functionNoStatusUpdate(
+			@RequestBody Allocation allocation){
+		int result = projectService.functionNoStatusUpdate(allocation);
+		System.out.println("asdasdsadasdad"+result);
+		
+		Map<String, String> rs = new HashMap<>();
 		return ResponseEntity.ok(rs);
 	}
 	

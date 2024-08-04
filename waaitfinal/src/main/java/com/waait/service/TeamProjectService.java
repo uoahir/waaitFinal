@@ -8,21 +8,27 @@ import com.waait.dto.TeamProject;
 
 public interface TeamProjectService {
 
-	int insertTeamProject(TeamProject teamProject);
+	int projectInsertData(TeamProject teamProject);
 
-	List<TeamProject> selectProjectAll();
+	List<TeamProject> selectAllTeamProject();
 
-	List<Integer> selectProjectEmployeeList(int projectNo);
+	List<Integer> checkEmpList(int projectNo);
 
-	TeamProject allocationByProject(Map<String, Long> projectInfo);
+	List<Allocation> selectByEmpAlloc(Map<String, String> param);
 
-	int canbanTodoUpdate(Allocation allocation);
+	int todoUpdate(Allocation allocation);
 
-	TeamProject selectByNoProject(int projectNo);
+	int inprogressupdate(Allocation allocation);
 
-	int canbanInprogressUpdate(Allocation allocation);
+	TeamProject selectUpdate(int projectNo);
 
-	int functionApprove(Allocation allocation); 
+	int functionStatusUpdate(Allocation allocation);
+
+	int functionNoStatusUpdate(Allocation allocation);
+
+	int projectUpdateStatus(String today);
+
+
 
 	
 	

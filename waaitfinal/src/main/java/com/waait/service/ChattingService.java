@@ -18,7 +18,7 @@ public interface ChattingService {
 	
 	List<ChatHistory> selectChatRoomHistory(Map<String, Number> param);
 	
-	int insertChatHistory(List<Message> messages);
+	int insertChatHistory(Message msg);
 	
 	int insertChatRoom(Map<String, Object> chatRoomParam);
 	
@@ -35,4 +35,12 @@ public interface ChattingService {
 	Integer selectProfilechatOpen(Map<String, Object> param);
 	
 	int selectGetChatRoomNo();
+	
+	void insertChatHistoryCount(Map<String ,Number> param);
+	
+	void deleteChatHistoryCount(Map<String, Number> param);
+	
+	void insertChatHistoryInvitation(Map<String, Object> chParam);
+	
+	void insertChatHistoryLeave(Map<String, Object> chParam);
 }

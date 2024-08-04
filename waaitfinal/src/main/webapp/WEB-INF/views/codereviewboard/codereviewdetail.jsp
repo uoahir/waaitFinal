@@ -65,7 +65,7 @@
     });
 </script>
 
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 <section class="section">
 	<div class="d-flex">
@@ -76,30 +76,26 @@
 			  <pre class="line-numbers"><code id="codeBlock" class="lang-${c.codeType}">${fn:escapeXml(c.codeContent)}</code></pre>
 				</div>
 
-		<div class="mt-3 d-flex">
-		<form action="${path }/codereview/comment/insert" method="post" style="margin: auto; width: 90%" >
-		<input type="text" name="codeReviewContent" style=" height: 100px; margin: auto; width: 100%;">
-			<div class="d-flex" style="margin: auto;">
-			<input value="${c.codeBoardNo}" name="no" type="hidden">
-			<button class="btn btn-outline-info" style="float: right;">하이~~</button>
-			</div>
-		</form>
-			
+		<div class="mt-3 " style="width: 90%; margin: auto;">
+			<textarea rows="3" style="width: 90%" id="codeComment"></textarea>
+			<button class="btn btn-outline-info"  onclick="insertCodeComment('${c.codeBoardNo}')" style="float: right; height: 77px">작성</button>
 		</div>
 		<div class="card mt-4" style="width: 90%; margin: auto;">
-			<div class="mt-1">
-			<p><c:if test="${not empty reviewComments }">
+			<div class="mt-1 card" >
+			<c:if test="${not empty reviewComments }">
 				<c:forEach var="rc" items="${reviewComments}" >
-					${rc.codeReviewName }	 
+						<div class="d-flex" style="justify-content: space-between;">
+						 <p> 작성자:${rc.codeReviewName }</p> <p>작성 날짜:${rc.codeReviewDate }</p> <button class="btn btn-primary">코드 보기</button> 
+						</div>
 				</c:forEach>
-			</c:if></p>
+			</c:if>
 			
 			</div>
 		</div>
 	</div>
 </section>
-
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<script src="${path }/resources/waait/yohan/js/codeDetail.js"></script>
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 <style>
 pre {
     white-space: pre-wrap;

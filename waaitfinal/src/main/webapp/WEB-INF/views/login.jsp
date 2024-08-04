@@ -23,7 +23,7 @@
 					<input type="password" placeholder="Password" id="password" name="password">
 					<input type="submit" value="log in" id="login">
 				</form>
-				<a href="">ForggetPassword</a>
+				<a href="">Forgot Password</a>
 			</div>
 		</div>
 		<div id="leftPage">

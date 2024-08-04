@@ -2,7 +2,10 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
+<c:set var="employee"
+	value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}" />
 <html lang="ko">
 
 <head>
@@ -27,7 +30,7 @@
     
     <!-- script문 JU -->
     <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
-    
+    <script>const path = "${path}";</script>
     
     <div id="app">
         <div id="sidebar">
@@ -81,8 +84,16 @@
                 </a>
                 
             </li>
+            <li class="sidebar-item active ">
+                <a href="${path }/manage/empmanagemain.do" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>솔민</span>
+                </a>
+                
+
+            </li>
             <li
-                class="sidebar-item ">
+                class="sidebar-item "> 
                 <a href="${path }/manage/managemain.do" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>인사관리</span>
@@ -828,7 +839,7 @@
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                     <h6 class="text-muted font-semibold">근무시간</h6>
-                                    <h6 class="font-extrabold mb-0">요한이가</h6>
+                                    <h6 class="font-extrabold mb-0">${workStart}</h6>
                                 </div>
                             </div> 
                         </div>
@@ -879,7 +890,8 @@
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                     <h6 class="text-muted font-semibold">남은 연차</h6>
-                                    <h6 class="font-extrabold mb-0">${total.get(0).vacaLeft }일 / ${total.get(0).basicAnnualLeave }일</h6>
+                                    <%-- <h6 class="font-extrabold mb-0">${total.get(0).vacaLeft }일 / ${total.get(0).basicAnnualLeave }일</h6> --%>
+                                    <h6 class="font-extrabold mb-0">${employee.remainingAnnualLeave }일 / ${employee.basicAnnualLeave }일</h6>
                                 </div>
                             </div>
                         </div>
@@ -891,10 +903,10 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>전자결재 관련</h4>
+                            <h4>전자결재 관련</h4>                            
                         </div>
-                        <div class="card-body">
-                            <div id="chart-profile-visit"></div>
+                        <div class="card-body" style="display: flex; flex-direction:row">
+                            <div id="chart-profile-visit"></div>                            
                         </div>
                     </div>
                 </div>
@@ -1079,10 +1091,9 @@
                             <img src="${path}/resources/assets/compiled/jpg/1.jpg" alt="Face 1">
                         </div>
                         <div class="ms-3 name">
-                        	<%-- <c:forEach var="m" items="${total }"> --%>
                         	<br>
-                            <h5 class="font-bold">${total.get(0).empName }</h5>
-                            <h6 class="text-muted mb-0">${total.get(0).empEmail}</h6><br>
+                            <h5 class="font-bold">${employee.empName }</h5>
+                            <h6 class="text-muted mb-0">${employee.empEmail}</h6><br>
 								<c:if test="${work!=null}">
 								<button>${work.workStart.getHours()}:${work.workStart.getMinutes()} </button>
 								<c:if test="${work.workEnd == null }">
@@ -1096,7 +1107,6 @@
 								<button onclick="work()" class="btn btn-primary">출근</button> 
 								<button onclick="noWork()" class="btn btn-primary">퇴근</button><br>
 								</c:if>
-                            <%-- </c:forEach> --%>
                         </div>
                     </div>
                 </div>
@@ -1143,7 +1153,7 @@
                     <h4>이번주 일정</h4>
                 </div>
                 <div class="card-body">
-                    <div id="chart-visitors-profile"></div>
+                    <div id="chart-visitors-profile"></div>                                                                              
                 </div>
             </div>
         </div>
