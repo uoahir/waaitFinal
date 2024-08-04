@@ -57,9 +57,11 @@ const firstStep = () => {
 	divEmpSelectList.style.height = "90%";
 	divEmpSelectList.className = "card";
 	divEmpSelectList.id = "divEmpSelectList";
+	divEmpSelectList.style.overflow="scroll"
 	divEmpList.style.height = "90%";
 	divEmpList.className = "card";
 	divEmpList.id = "divEmpList";
+	divEmpList.style.overflow = "scroll";
 	employees.map(m => {
 		//const windowFeatures = "left=33%,top=33%,width=700px,height=700px";
 		const empOne = document.createElement("div");
@@ -76,7 +78,7 @@ const firstStep = () => {
 		no.innerText = `${m.empNo}`;
 		no.setAttribute('hidden', true);
 		no.className = 'empNo';
-
+		
 		const employeeDetail = document.createElement("button");
 		employeeDetail.innerText = "프로젝트 내역";
 		employeeDetail.id = "employeeDetail";
@@ -165,6 +167,8 @@ const firstStep = () => {
 
 	//-----------------------변환---------------------------------
 	document.getElementById("firstStep").onclick = secondStep;
+	document.getElementById("persentBar").setAttribute("aria-valuenow",66);
+	document.getElementById("persentBar").style.width="66%";
 
 };
 const secondStep = () => {
@@ -185,6 +189,8 @@ const secondStep = () => {
 	// Further actions with selectEmpList
 	//----------화면 생성부분-------------------------------------
 	const $div = document.createElement("div");
+	$div.style.overflow="scroll";
+	
 	$div.style.height = "800px";
 	$div.className = "card";
 	const $table = document.createElement("table");
@@ -262,6 +268,7 @@ const secondStep = () => {
 		$trFun.appendChild($tdFun4);
 		
 		$table.appendChild($trFun);
+		$div.scrollTop = $div.scrollHeight;
 	}
 	$div.appendChild($table);
 	const $funButton = document.createElement("button");
@@ -269,7 +276,8 @@ const secondStep = () => {
 	$funButton.innerText="추가 버튼";
 	$div.appendChild($funButton);
 	projectInfo.appendChild($div);
-	
+	document.getElementById("persentBar").setAttribute("aria-valuenow",100);
+	document.getElementById("persentBar").style.width="100%";
 	document.getElementById("firstStep").onclick = thirdStep;
 	
 };

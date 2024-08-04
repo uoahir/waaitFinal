@@ -31,6 +31,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 		List<Employee> employees = employeeDao.selectAllEmployees(session); 
 		return employees;
 	}
+	@Override
+	public Employee selectByEmpNo(int no) {
+		Employee employee =employeeDao.selectByEmpNo(session,no);
+		return employee;
+	}
 
 	
 }
