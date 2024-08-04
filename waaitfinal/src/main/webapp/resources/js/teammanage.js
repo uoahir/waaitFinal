@@ -93,3 +93,22 @@ const enrollTeamWithDeptCode = () => {
 		}
 	})
 }
+
+const showModifyInput = (e) => {
+	const modifyInput = e.target.parentElement.nextElementSibling.firstElementChild;
+	const modifyAppBtn = e.target.parentElement.nextElementSibling.lastElementChild.previousElementSibling;
+	const cancelBtn = e.target.parentElement.nextElementSibling.lastElementChild;
+	modifyInput.hidden = false;
+	cancelBtn.hidden = false;
+	modifyAppBtn.hidden = false;
+}
+
+const cancelModify = (e) => {
+	const appBtn = e.target.previousElementSibling
+	const cancelBtn = e.target;
+	const modifyInput = e.target.previousElementSibling.previousElementSibling;
+	
+	appBtn.hidden = true;
+	cancelBtn.hidden = true;
+	modifyInput.hidden = true;
+}

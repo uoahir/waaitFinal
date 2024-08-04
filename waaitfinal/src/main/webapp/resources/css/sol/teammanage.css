@@ -31,3 +31,7 @@
 	display : flex;
 	margin-left : 10px;
 }
+#modifyInput {
+	display : inline;
+	width : 50%;
+}
