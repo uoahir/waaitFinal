@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="path" value="${pageContext.request.contextPath }"/>
 <c:set var="employee"
 	value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}" />
@@ -791,7 +792,7 @@
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                     <h6 class="text-muted font-semibold">근무시간</h6>
-                                    <h6 class="font-extrabold mb-0">요한이가</h6>
+                                    <h6 class="font-extrabold mb-0">${workStart}</h6>
                                 </div>
                             </div> 
                         </div>
@@ -855,10 +856,10 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>전자결재 관련</h4>
+                            <h4>전자결재 관련</h4>                            
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row">
-                            <div id="chart-profile-visit"></div>
+                            <div id="chart-profile-visit"></div>                            
                         </div>
                     </div>
                 </div>
@@ -1105,7 +1106,7 @@
                     <h4>이번주 일정</h4>
                 </div>
                 <div class="card-body">
-                    <div id="chart-visitors-profile"></div>
+                    <div id="chart-visitors-profile"></div>                                                                              
                 </div>
             </div>
         </div>
