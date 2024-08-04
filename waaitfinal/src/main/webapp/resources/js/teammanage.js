@@ -61,6 +61,7 @@ const enrollTeamWithDeptCode = () => {
 	});
 	
 	if(validationBool == false) return;
+	
 	else if(deptCode == 0) {
 		alert("부서를 선택해주세요.");
 		return;
