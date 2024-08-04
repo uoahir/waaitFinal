@@ -1,1 +1,37 @@
 @charset "UTF-8";
+.li-nonestyle{
+	list-style : none;
+}
+.actionContainer {
+	display : flex;
+	justify-content : right;
+	margin-right : 10px;
+}
+.margin-bottom-0 {
+	margin-bottom : 0px;
+}
+#deptSelect {
+	width : 60%;
+}
+#teamInputExplain {
+	display : inline;
+}
+.btn-size {
+	width : 20px;
+	height : 20px;
+	display : flex;
+	align-items : center;
+	justify-content : center;
+}
+#addcancelbtn-container {
+	display : flex;
+	
+}
+#btn-container {
+	display : flex;
+	margin-left : 10px;
+}
+#modifyInput {
+	display : inline;
+	width : 50%;
+}

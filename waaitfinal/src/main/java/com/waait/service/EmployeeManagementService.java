@@ -118,20 +118,43 @@ public class EmployeeManagementService {
 	public int modifyDeptName(Map<String, String> sqlParam) {
 		return dao.modifyDeptName(session, sqlParam);
 	}
+	
+	public int getEmpCountByDeptCode(String deptCode) {
+		return dao.getEmpCountByDeptCode(session, deptCode);
+	}
+	
+	@Transactional
+	public int deleteDept(String deptCode) {
+		return dao.deleteDept(session, deptCode);
+	}
 
-	public int enrollTeam(Map<String, Object> jsonParam) {
+	public int enrollTeam(Map<String, Object> sqlParam) {
 		int result = 0;
-		jsonParam.put("teamName", jsonParam.get("teamName") + "팀");
-		if(jsonParam.containsKey("parentDeptCode")) {
-			result = dao.enrollTeamWithParentDept(session, jsonParam);
+		Map<String, Object> teamSqlParam = new HashMap<String, Object>();
+		String teamNameStr = (String) sqlParam.get("teamNameStr");
+		int newTeamSeq = (int) sqlParam.get("newTeamCodeNumber");
+		
+		if(teamNameStr.contains(",")) {
+			String[] teamNameArr = teamNameStr.split(",");
+			for(int i = 0; i < teamNameArr.length; i++) {
+				teamSqlParam.put("newTeamCode", "D" + (newTeamSeq + i));
+				teamSqlParam.put("teamName", teamNameArr[i] + "팀");
+				teamSqlParam.put("parentDeptCode", (String) sqlParam.get("parentDeptCode"));
+				result = dao.enrollTeamWithParentDept(session, teamSqlParam);
+			}
 		} else {
-			result = dao.enrollTeamNoParentDept(session, jsonParam);
+			teamSqlParam.put("newTeamCode", "D" + newTeamSeq);
+			teamSqlParam.put("teamName", teamNameStr + "팀");
+			teamSqlParam.put("parentDeptCode", (String) sqlParam.get("parentDeptCode"));
+			result = dao.enrollTeamWithParentDept(session, teamSqlParam);
 		}
+		
 		return result;
 	}
 
 	public int enrollEmployee(Employee employee) {
 		return dao.enrollEmployee(session, employee);
 	}
+
 
 }
