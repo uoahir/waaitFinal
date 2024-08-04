@@ -56,6 +56,7 @@
                         <div class="dropdown-item" onclick="window.open('${path}/edoc/basicedoc?type=T02','_blank','width=1200, height=1000')">지출결의서</div>
                         <div class="dropdown-item" onclick="window.open('${path}/edoc/write2?type=T03','_blank','width=1200, height=1000')">출장신청서</div>
                         <div class="dropdown-item" onclick="window.open('${path}/edoc/write2?type=T04','_blank','width=1200, height=1000')">휴가신청서</div>
+                        <div class="dropdown-item" onclick="window.open('${path}/edoc/nodelist','_blank','width=1200, height=1000')">조직도 ? </div>
                     </div>
                 </div>
             </div>

@@ -93,4 +93,7 @@ public interface EDocDao {
 //	파일업로드로직
 	int uploadFile(SqlSession session, Map<String,Object> param);
 	
+//	진행 중인 문서 개수 뽑아오기
+	int inprogressCount(SqlSession session, Long empNo);
+	
 }
