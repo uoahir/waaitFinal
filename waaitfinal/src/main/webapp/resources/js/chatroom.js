@@ -65,15 +65,15 @@ document.addEventListener("DOMContentLoaded", function() {
             const $div1 = document.createElement("div");
             const $div2 = document.createElement("div");
             
-            const $p1 = document.createElement("p");
+            //const $p1 = document.createElement("p");
             const $p2 = document.createElement("p");
             const $p3 = document.createElement("p");
             
-            $p1.innerText = msg.chatReadCount;
+            //$p1.innerText = msg.chatReadCount;
             $p2.innerText = msg.chatCreationDate;
             $p3.innerText = msg.chatContent;
             
-            $div1.appendChild($p1);
+            //$div1.appendChild($p1);
             $div1.appendChild($p2);
             $div2.appendChild($p3);
             
@@ -95,22 +95,25 @@ document.addEventListener("DOMContentLoaded", function() {
             $profile.style.width="50px";
             $profile.style.height="50px";
             $profile.style.borderRadius="100%";
-            $profile.setAttribute("src","${path}/resources/images/joyee.png");   // 사원번호를 이용해 프로필사진 가져오기
+            // 메세지에 프로필을 안담고있어서 사고났는디...?
+           $profile.setAttribute("src",path+"/resources/프로필들어가있는폴더/"+msg.empProfile);
+            
+            
             
             const $p1 = document.createElement("p");
             const $p2 = document.createElement("p");
-            const $p3 = document.createElement("p");
+            //const $p3 = document.createElement("p");
             const $p4 = document.createElement("p");
             
             $p1.innerText = msg.empName;
             $p2.innerText = msg.chatContent;
-            $p3.innerText = msg.chatReadCount;
+           // $p3.innerText = msg.chatReadCount;
             $p4.innerText = msg.chatCreationDate;
             
             $div1.appendChild($profile);
             $div2.appendChild($p1);
             $div2.appendChild($p2);
-            $div3.appendChild($p3);
+            //$div3.appendChild($p3);
             $div3.appendChild($p4);
             
             $div.appendChild($div1);

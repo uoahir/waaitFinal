@@ -25,4 +25,10 @@ public class EmployeeDaoImpl implements EmployeeDao{
 		return session.selectList("employee.selectAllEmployees");
 	}
 
+	@Override
+	public Employee selectByEmpNo(SqlSession session, int no) {
+		
+		return session.selectOne("employee.selectByEmpNo",no);
+	}
+
 }

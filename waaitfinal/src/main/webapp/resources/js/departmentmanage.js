@@ -137,3 +137,32 @@ const applyModifyDept = (e) => {
 		console.log(data);
 	})
 }
+
+const deleteDept = (e) => {
+	const deptCode = e.target.parentElement.parentElement.id;
+	console.log("deptCode : " + deptCode);
+	
+	fetch(path + "/manage/deletedept.do", {
+		method : "POST",
+		headers : {
+			"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+		},
+		body : "deptCode=" + deptCode
+	})
+	.then(response => {
+		if(response.ok) {
+			return response.text();
+		} else {
+			return response.text().then(text => {
+				alert(text);
+				throw new Error(text);
+			})
+		}
+	})
+	.then(data => {
+		console.log(data);
+	})
+	.catch(error => {
+		
+	})
+}

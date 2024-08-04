@@ -36,11 +36,11 @@
     		<h2 class="card-title">Git Repository Create</h2>
     	</div>
         <div class="d-flex" style="justify-content: center; width: 500px">
-        <label for="name">Repository Name : </label>
+        <label for="name" style="width: 150px">Repository Name : </label>
         <input class="form-control" style="margin: auto; width: 300px" type="text" id="name" name="name" required>
         </div>
         <div class="d-flex" style="justify-content: center; width: 500px">
-        <label for="description">Description:</label>
+        <label for="description" style="width: 150px">Description:</label>
         <input class="form-control" style="margin: auto; width: 300px" type="text" id="description" name="description">
         </div>
         <label for="isPrivate">Private</label>
@@ -51,8 +51,11 @@
     </div>
     
     <div class="card mt-4 ml-4" style="width: 15%">   	
+       	<div class="d-flex" style="justify-content: space-around;"> <p>시작 기간 </p>  <p>종료 기간</p></div>
+       	<div class="d-flex">
        	<input type="date" name ="projectStartDate" id="projectStartDate">
-       	<input type="date" name ="projectEndDate" id="projectEndDate">
+       	<p>~</p>  <input type="date" name ="projectEndDate" id="projectEndDate">
+      	</div>
       </div> 		  
     </div>
     </div>	
@@ -61,7 +64,7 @@
     	<div class="d-flex mb-3">
     	<div><button onclick="firstStep()" id="firstStep">다음단계</button></div>
     	<div class="progress progress-primary" style="width: 90%; margin: auto;">
-                    <div class="progress-bar progress-label" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" 
+                    <div class="progress-bar progress-label" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" 
                     id="persentBar"></div>
                 </div>
     		
