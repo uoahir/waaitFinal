@@ -248,7 +248,7 @@ body{
 	
 	/* 채팅 상대 초대하기 버튼 */
 	#modal_chatemplist > div > div:last-child {
-	    /* background-color: red; */
+	    /* background-color: white; */
 	    border-top: 1px solid black;
 	    text-align: center;
 	    padding: 10px 0;
@@ -256,10 +256,28 @@ body{
 	    /* 버튼을 하단에 고정시키기 위해 position을 사용 */
 	    position: sticky;
 	    bottom: 0;
+	   height: auto;
+	   
 	}
 	
 	
+	#modal_chatemplist > div > div:last-child>p {
+	   margin: 5px 0 5px 0 ;
+	   /* height: 30px; */
+	}
+	
 	#modal_chatemplist>div>div{
+	    background-color: #ffffff;
+		/* display: flex;
+   		
+ 		cursor: pointer;
+	    border-radius: 5px;
+	    border: 1px solid #888;
+	    text-align: center;
+	    width: 100%; */
+	}
+	
+	/* #modal_chatemplist>div>div{
 		display: flex;
    		
  		cursor: pointer;
@@ -268,7 +286,7 @@ body{
 	    border: 1px solid #888;
 	    text-align: center;
 	    width: 100%;
-	}
+	} */
 	
 	/* #modal_chatemplist>div>div:nth-child(2){
 		justify-content: space-around;
@@ -316,7 +334,7 @@ body{
     /* 출근 중 직원 */
     .chatting_userlist_printarea_profile_img_green{
         border-radius: 100%;
-        border: 3px solid #46EA4D;
+        border: 1px solid #AEAEAE;
     }
 
     /* 출근 안한 직원 */
