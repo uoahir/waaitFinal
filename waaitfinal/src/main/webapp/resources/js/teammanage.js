@@ -81,6 +81,14 @@ const enrollTeamWithDeptCode = () => {
 	})
 	.then(response => response.text())
 	.then(data => {
-		console.log(data);
+		if(data > 0) {
+			alert("팀이 성공적으로 등록되었습니다.");
+			document.querySelectorAll("input[name='teamAddInput']").forEach(e => {
+				e.value = "";
+			});
+			document.getElementById("teaminput-container").hidden = true;
+			document.getElementById("btn-container").hidden = true;
+			document.getElementById("teamInputExplain").hidden = true;
+		}
 	})
 }
