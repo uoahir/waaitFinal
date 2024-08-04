@@ -193,8 +193,21 @@ public class EmployeeManagementController {
 		return "empmanage/departmentmanage";
 	}
 	
+	//팀관리 뷰
 	@GetMapping("/teammanageview.do")
 	public String teamManageView(Model model) {
+		List<Department> departmentList = getDepartmentList();
+		List<Department> teamList = getTeamList();
+		
+		Department noDept = new Department("D1", "D1", "부서없음");
+		departmentList.add(noDept);
+		
+		System.out.println("newDepartmentList : " + departmentList);
+		System.out.println("teamList : " + teamList);
+		
+		model.addAttribute("depts", departmentList);
+		model.addAttribute("teams", teamList);
+		
 		return "empmanage/teammanage";
 	}
 	
@@ -582,6 +595,7 @@ public class EmployeeManagementController {
 		String newTeamCode = "D" + (existDeptCode.get(0) + 1);
 		
 		jsonParam.put("newTeamCode", newTeamCode);
+		jsonParam.put("newTeamCodeNumber", existDeptCode.get(0) + 1);
 		
 		result = service.enrollTeam(jsonParam);
 		
