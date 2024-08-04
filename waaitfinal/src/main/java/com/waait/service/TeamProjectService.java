@@ -28,6 +28,12 @@ public interface TeamProjectService {
 
 	int projectUpdateStatus(String today);
 
+	List<TeamProject> projectPage(Map<String, Integer> param);
+
+	List<Allocation> selectByEmpNo(int no);
+
+
+
 
 
 	

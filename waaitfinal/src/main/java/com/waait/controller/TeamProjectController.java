@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.waait.dto.Allocation;
@@ -20,7 +21,6 @@ import com.waait.dto.TeamProject;
 import com.waait.service.EmployeeService;
 import com.waait.service.TeamProjectService;
 
-import ch.qos.logback.core.recovery.ResilientSyslogOutputStream;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -29,12 +29,92 @@ public class TeamProjectController {
 	 
 	private final EmployeeService employeeService;
 	private final TeamProjectService projectService;
+	
+	
+	@GetMapping("/employee{no}/projects")
+	public String projectInfoEmpNo(@PathVariable int no, Model model) {
+		System.out.println("no값"+no);
+		Employee emp = employeeService.selectByEmpNo(no); //사원 정도 
+		List<Allocation> allocations = projectService.selectByEmpNo(no);
+		model.addAttribute("emp",emp);
+		model.addAttribute("allocations",allocations);
+		return "teamproject/empInfo";
+	}
+	
+	
+	
 	@GetMapping("/teamproject/main")
-	public String projectMain(Model model) {
-		List<TeamProject> teamProjects =  projectService.selectAllTeamProject();
-		model.addAttribute("teamProjects",teamProjects);
-		return "teamproject/main";
+	public String projectMain(Model model, @RequestParam(defaultValue = "1") int cPage,
+			@RequestParam(defaultValue = "10") int numPerpage) {
+		Map<String, Integer> param = new HashMap<>();
+		param.put("cPage", cPage);
+		param.put("numPerpage", numPerpage);
+
+		List<TeamProject> teamProjectsSize =  projectService.selectAllTeamProject(); // 크기 구함 model
+		List<TeamProject> teamProjects = projectService.projectPage(param);
+		int totalData = teamProjectsSize.size();
+		int totalPage = (int) Math.ceil((double) totalData / numPerpage);
+		int pageBarSize = 5;
+		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
+		int pageEnd = pageNo + pageBarSize - 1;
+		String url = "main";
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
+		if (pageNo == 1) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>이전</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + (pageNo - 1) + ")'>이전</a>");
+			sb.append("</li>");
+		}
+
+		while (!(pageNo > pageEnd || pageNo > totalPage)) {
+			if (pageNo == cPage) {
+				sb.append("<li class='page-item disabled'>");
+				sb.append("<a class='page-link' href='#'>" + pageNo + "</a>");
+				sb.append("</li>");
+			} else {
+				sb.append("<li class='page-item'>");
+				sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>" + pageNo + "</a>");
+				sb.append("</li>");
+			}
+			pageNo++;
+		}
+
+		if (pageNo > totalPage) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>다음</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>다음</a>");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+
+		sb.append("<script>");
+		sb.append("function fn_paging(pageNo) {");
+		sb.append("location.assign('" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage + "')");
+		sb.append("}");
+		sb.append("</script>");
+
+		model.addAttribute("pageBar", sb.toString());
+			
+		
+ 		model.addAttribute("teamProjects",teamProjects);
+ 		return "teamproject/main";
+		
+		
+				
 	}//첫 메인 화면
+	
+	// 검색 했을땐 해당 사원 
+	
+
+	
 
 	@GetMapping("/teamproject/create")
 	public String projectCreate(Model model) {
@@ -145,6 +225,7 @@ public class TeamProjectController {
 		Map<String, String> rs = new HashMap<>();
 		return ResponseEntity.ok(rs);
 	}
-	
 
+	
+	
 }

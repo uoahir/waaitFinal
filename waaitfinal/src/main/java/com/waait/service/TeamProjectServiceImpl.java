@@ -89,4 +89,18 @@ public class TeamProjectServiceImpl implements TeamProjectService {
 		int rs = projectDao.projectUpdateStatus(sqlSession,today);
 		return rs;
 	}
+
+
+	@Override
+	public List<TeamProject> projectPage(Map<String, Integer> param) {
+		List<TeamProject> rs = projectDao.projectPage(sqlSession, param);
+		return rs;
+	}
+
+
+	@Override
+	public List<Allocation> selectByEmpNo(int no) {
+		List<Allocation> rs = projectDao.selectByEmpNo(sqlSession,no);
+		return rs;
+	}
 }
