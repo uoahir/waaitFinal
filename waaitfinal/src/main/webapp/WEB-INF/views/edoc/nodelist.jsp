@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<c:set var="path" value="${pageContext.request.contextPath}" />
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,6 +29,18 @@
             background: #fff;
         }
     </style>
+<!-- <style>
+	.employee {
+	    font-family: Arial, sans-serif;
+	    font-size: 14px;
+	}
+	.name {
+	    font-weight: bold;
+	}
+	.employees {
+	    white-space: pre-line; /* 줄 바꿈을 지원하도록 설정 */
+	}
+</style> -->
 </head>
 <body>
 <div id="tree"></div>
@@ -42,6 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(response => response.json())
         .then(data => {
         	console.log(data);
+        	
             var chart = new OrgChart(document.getElementById("tree"), {
             	nodeBinding: {
                     field_0: "name"
@@ -54,5 +71,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 </script>
+
+
+<!-- <script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch('/api/nodeData')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            
+            // 각 사원 정보를 여러 줄로 변환
+            data.forEach(node => {
+                if (node.employees) {
+                    // 텍스트를 여러 줄로 나누기
+                    node.employees = node.employees.join('\n');
+                }
+            });
+
+            // OrgChart 설정
+            var chart = new OrgChart(document.getElementById("tree"), {
+                nodeBinding: {
+                    field_0: "name",
+                    field_1: "employees" // employees를 줄 바꿈으로 처리
+                },
+                templates: {
+                    employee: `
+                        <div class='employee'>
+                            <div class='name'>{{name}}</div>
+                            <div class='employees'>{{employees}}</div>
+                        </div>`
+                },
+                nodes: data
+            });
+        })
+        .catch(error => console.error('Error fetching org chart data:', error));
+});
+</script> -->
 </body>
 </html>
