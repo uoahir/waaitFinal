@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<c:set var="path" value="${pageContext.request.contextPath }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -95,6 +97,169 @@
 		            </li>
 				</ul>
 			</div>
+		</div>
+	</div>
+	<div id="main">
+		<header class="mb-3" style="width: 100%;">
+			<div class="headerTitle">
+				<a href="#" class="burger-btn d-block d-xl-none"> <i
+					class="bi bi-justify fs-3"></i>
+				</a>
+				<h3 style="width: 100%">부서관리</h3>
+
+			</div>
+		</header>
+		<div id="mainView">
+			<div class="card">
+				<div class="card-header">
+					<h4 class="card-title">팀 조회</h4>
+				</div>
+				<div class="card-content">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-12 col-sm-12 col-md-4">
+								<p>부서명</p>
+								<div class="list-group" role="tablist">
+									<c:if test="${not empty depts }">
+										<c:forEach var="dept" items="${depts }">
+											<a class="list-group-item list-group-item-action"
+												id="${dept.deptCode }" data-bs-toggle="list"
+												href="#${dept.deptName }" role="tab">${dept.deptName }</a>
+										</c:forEach>
+									</c:if>
+									<c:if test="${empty depts }">
+										<p>부서가 없습니다</p>
+									</c:if>
+								</div>
+							</div>
+							<c:if test="${not empty depts }">
+								<div class="col-12 col-sm-12 col-md-8 mt-1">
+									<div class="tab-content text-justify padding-top-33"
+										id="nav-tabContent">
+										<c:forEach var="dept" items="${depts }">
+											<div class="tab-pane" id="${dept.deptName }" role="tabpanel"
+												aria-labelledby="${dept.deptCode }">
+												<c:if test="${not empty teams }">
+													<ul class="li-nonestyle">
+														<c:forEach var="team" items="${teams }">
+															<c:if test="${dept.deptCode eq team.parentCode }">
+																<li>${team.deptName }</li>
+															</c:if>
+														</c:forEach>
+													</ul>
+												</c:if>
+												<c:if test="${empty teams }">
+													<p>팀이 없습니다.</p>
+												</c:if>
+											</div>
+										</c:forEach>
+									</div>
+								</div>
+							</c:if>
+		
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title">팀등록</h4>
+	                <p style="margin-bottom : 0px;">부서를 선택해서 팀을 추가하시면 됩니다.</p>
+	                <p>부서없는 팀을 추가하시려면 부서선택에서 부서없음을 선택하시면 됩니다.</p>
+	            </div>
+				<div class="card-body">
+	                <div class="row">
+	                    <div class="col-md-6">
+	                        <div class="form-group">
+	                            부서선택
+	                            <div>
+	                            	<select id="deptSelect" class="form-control">
+	                            		<c:if test="${not empty depts }">
+		                            		<option value="0" disabled selected>선택하세요</option>
+	                            			<c:forEach var="dept" items="${depts }">
+	                            				<option value="${dept.deptCode }">${dept.deptName }</option>
+	                            			</c:forEach>
+	                            		</c:if>
+	                            		<c:if test="${empty depts }">
+	                            			<option value="0" disabled>부서가 없습니다</option>
+	                            		</c:if>
+	                            	</select>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    <div class="col-md-6">
+	                        <div class="form-group" id="teamAddContainer">
+	                        	<div id="addcancelbtn-container">
+		                        	<p style="margin-bottom : 0px;" id="teamInputExplain" hidden="true">추가할 팀명 입력</p>
+		                        	<div id="btn-container" hidden="true">
+			                        	<button class="btn btn-outline-success btn-sm btn-size" onclick="addTeamInput()">+</button>
+			                        	<button class="btn btn-outline-danger btn-sm btn-size" onclick="deleteTeamInput()">-</button>
+		                        	</div>	                        	
+	                        	</div>
+	                        	<div id="teaminput-container">
+		                        	<input type="text" class="form-control" name="teamAddInput" 
+		                        		placeholder="팀을 빼고 입력하세요 ex) 개발1 o, 개발1팀 x" hidden="true">
+	                        	</div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	            <div class="actionContainer">
+	            	<button class="btn btn-outline-success" onclick="enrollTeamWithDeptCode()">등록</button>
+	            </div>
+	        </div>
+	        <div>
+	        	<table class="table mb-0">
+            		<thead class="thead-dark">
+            			<tr>
+            				<th>
+								<input type="checkbox" name="checkAll">									
+							</th>
+            				<th>부서명</th>
+            				<th>팀명</th>
+            				<th>동작</th>
+            				<th></th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<c:if test="${not empty depts }">
+	           				<c:forEach var="dept" items="${depts }">
+	           					<tr id="${dept.deptCode }">
+	           						<td></td>
+	           						<td colspan="3">${dept.deptName }</td>
+	           					</tr>
+	           					<c:if test="${not empty teams }">
+	           						<c:forEach var="team" items="${teams }">
+	           							<c:if test="${dept.deptCode eq team.parentCode }">
+		           							<tr id="${team.deptCode }">
+		           								<td>
+		           									<input type="checkbox" name="checkTeam">
+		           								</td>
+		           								<td></td>
+		           								<td>${team.deptName }</td>
+		           								<td>
+		           									<button class="btn btn-primary" onclick="showModifyInput(event)">수정</button>
+		           									<button class="btn btn-danger" onclick="deleteTeam()">삭제</button>
+		           								</td>
+		           								<td>
+		           									<input type="text" name="modifyTeamNameInput" class="form-control" id="modifyInput" placeholder="팀은 빼고 입력하세요 ex)개발1o 개발1팀x" hidden="true">
+		           									<button class="btn btn-success" onclick="modifyApply(event)" hidden="true">적용</button>
+		           									<button class="btn btn-danger" onclick="cancelModify(event)" hidden="true">취소</button>
+		           								</td>
+		           							</tr>
+	           							</c:if>
+	           						</c:forEach>
+	           					</c:if>
+	           					<c:if test="${empty teams }">
+	           						<tr>
+	           							<td colspan="3">팀이 없습니다.
+	           						</tr>
+	           					</c:if>
+	           				</c:forEach>
+            			</c:if>
+            		</tbody>
+            	</table>
+	        </div>
 		</div>
 	</div>
 </div>

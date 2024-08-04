@@ -225,7 +225,7 @@
 			            				<td>${dept.deptName }</td>
 			            				<td>
 			            					<button class="btn btn-primary" onclick="showModifyDeptInput(event)">수정</button>
-			            					<button class="btn btn-danger" onclick="deleteDept()">삭제</button>
+			            					<button class="btn btn-danger" onclick="deleteDept(event)">삭제</button>
 			            				</td>
 			            				<td>
 			            					<input type="text" name="modifyDeptInput" class="form-control my-input" placeholder="변경할 이름을 입력하세요" hidden="true">

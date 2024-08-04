@@ -2,9 +2,6 @@ package com.waait.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,10 +27,8 @@ import com.waait.dto.Department;
 import com.waait.dto.Employee;
 import com.waait.dto.JobLevel;
 import com.waait.dto.MovingDepartment;
-import com.waait.service.EmailService;
 import com.waait.service.EmployeeManagementService;
 
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -196,8 +193,21 @@ public class EmployeeManagementController {
 		return "empmanage/departmentmanage";
 	}
 	
+	//팀관리 뷰
 	@GetMapping("/teammanageview.do")
 	public String teamManageView(Model model) {
+		List<Department> departmentList = getDepartmentList();
+		List<Department> teamList = getTeamList();
+		
+		Department noDept = new Department("D1", "D1", "부서없음");
+		departmentList.add(noDept);
+		
+		System.out.println("newDepartmentList : " + departmentList);
+		System.out.println("teamList : " + teamList);
+		
+		model.addAttribute("depts", departmentList);
+		model.addAttribute("teams", teamList);
+		
 		return "empmanage/teammanage";
 	}
 	
@@ -559,6 +569,19 @@ public class EmployeeManagementController {
 		return "empmanage/responsepage/deptlist";
 	}
 	
+	@PostMapping("/deletedept.do")
+	public ResponseEntity<String> deleteDept(String deptCode) {
+		int empCountByDeptCode = service.getEmpCountByDeptCode(deptCode);
+		if(empCountByDeptCode > 0) {
+			return new ResponseEntity<String>("해당 부서의 사원이 없어야 삭제가 가능합니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		} else {
+			int result = 0;
+			result = service.deleteDept(deptCode);
+			if(result > 0) return new ResponseEntity<String>("부서가 성공적으로 삭제되었습니다.", HttpStatus.OK);
+			else return new ResponseEntity<String>("알 수 없는 오류로 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	@PostMapping("/enrollteam.do")
 	public @ResponseBody int enrollTeam(@RequestBody Map<String, Object> jsonParam) {
 		int result = 0;
@@ -572,6 +595,7 @@ public class EmployeeManagementController {
 		String newTeamCode = "D" + (existDeptCode.get(0) + 1);
 		
 		jsonParam.put("newTeamCode", newTeamCode);
+		jsonParam.put("newTeamCodeNumber", existDeptCode.get(0) + 1);
 		
 		result = service.enrollTeam(jsonParam);
 		

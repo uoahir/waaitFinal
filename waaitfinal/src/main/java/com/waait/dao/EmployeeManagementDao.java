@@ -96,6 +96,14 @@ public class EmployeeManagementDao {
 	public int modifyDeptName(SqlSession session, Map<String, String> sqlParam) {
 		return session.update("em.modifyDeptName", sqlParam);
 	}
+	
+	public int getEmpCountByDeptCode(SqlSession session, String deptCode) {
+		return session.selectOne("em.getEmpCountByDeptCode", deptCode);
+	}
+	
+	public int deleteDept(SqlSession session, String deptCode) {
+		return session.delete("em.deleteDept", deptCode);
+	}
 
 	public int enrollTeamWithParentDept(SqlSession session, Map<String, Object> sqlParam) {
 		return session.insert("em.enrollTeamWithParentDept", sqlParam);
