@@ -95,6 +95,53 @@
                     <span>캘린더</span>
                 </a>                
             </li>
+            <li
+                class="sidebar-item ">
+                <a href="${path }/edoc/inprogress" class='sidebar-link'>
+                    <i class="bi bi-file-text"></i>
+                    <span>전자결재</span>
+                </a>                
+            </li>
+            <li
+                class="sidebar-item  has-sub">
+                <a href="#" class='sidebar-link'>
+                    <i class="bi bi-three-dots"></i>
+                    <span>워크플로우</span>
+                </a>
+                
+                <ul class="submenu ">
+                    
+                    <li class="submenu-item  has-sub">
+                        <a href="#" class="submenu-link">내문서함</a>
+                        
+                        <ul class="submenu submenu-level-2 ">
+                            
+                            <li class="submenu-item">
+                                <a href="${path }/edoc/inprogress" class="submenu-link">진행중인문서함</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="${path }/edoc/approved" class="submenu-link">완료문서함</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="${path }/edoc/saved" class="submenu-link">임시저장함</a>
+                            </li>
+                            <li class="submenu-item ">
+                                <a href="${path }/edoc/rejected" class="submenu-link">반려문서함</a>
+                            </li>
+                            
+
+                        </ul>
+                        
+                    </li>
+                    
+                    <li class="submenu-item">
+                        <a href="#" class="submenu-link">전체 문서함</a>
+                    </li>
+                    
+                </ul>
+                
+
+            </li>
             
             <li
                 class="sidebar-item  has-sub">

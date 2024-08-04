@@ -29,10 +29,11 @@ public abstract class AbstractDocument implements DocumentInter {
 	// list는 작성자 기준으로 결재자 확인용
 	private Approval approvalOne; 
 	// approval 객체는 결재자 기준 화면출력용
-	private List<AttatchFile> attachFiles;
+	private List<AttatchFile> attachFiles = new ArrayList<>();
 	private String oriFilename;
 	private String renamedFilename;
 	private String docNumber; // 최종 승인 시 문서번호
+	private int[] empNo;
 	
 	
 	public String getDocNumber() {
