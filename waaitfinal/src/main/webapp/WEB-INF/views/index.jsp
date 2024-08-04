@@ -839,7 +839,8 @@
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                     <h6 class="text-muted font-semibold">근무시간</h6>
-                                    <h6 class="font-extrabold mb-0">${workStart}</h6>
+                                    <h6>${workTotal.get(0).workStart}</h6>
+                                    <h6>${workTotal.get(0).workEnd}</h6>
                                 </div>
                             </div> 
                         </div>

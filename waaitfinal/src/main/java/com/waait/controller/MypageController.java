@@ -66,14 +66,6 @@ public class MypageController {
 //		return "mypage/mypageindex";
 //	}
 	
-	//출퇴근시간 가져오기(근무시간) 
-//	@RequestMapping("/mypagemain")
-//	public String myTodayWork(Long empNo,Model model) {
-//		
-//		String todayWork=service.myTodayWork(empNo);
-//		model.addAttribute("total", todayWork);		
-//		return "mypage/mypageindex";
-//	}
-	
+
 
 }

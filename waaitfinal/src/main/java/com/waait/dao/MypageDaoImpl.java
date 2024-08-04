@@ -28,8 +28,8 @@ public class MypageDaoImpl implements MypageDao {
 	}
 
 	@Override
-	public Work myTodayWork(SqlSession session, long empNumber) {
-		return session.selectOne("mypage.myTodayWork",empNumber);
+	public List<Work> myTodayWork(SqlSession session, long empNumber) {
+		return session.selectList("mypage.myTodayWork",empNumber);
 	}
 	
 	
