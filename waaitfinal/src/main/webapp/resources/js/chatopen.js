@@ -46,6 +46,8 @@
          
          //채팅방 열기
          openChatRoom(chatRoomNo);
+         
+         //let chatRoomNo = 0;
       }      
    }
 
@@ -53,6 +55,7 @@
    // 채팅방 새창 여는 함수 // 매개변수 방번호 꼭! 넘겨주기
    function openChatRoom(chatRoomNo){
       let chatserver = window.open(path+"/chat/chatroomopen.do?chatroomNo="+chatRoomNo,"_blank","top=100, left=400, height=700, width=550");
+      //chatRoomNo = 0;
       chatserver.onload = function(){
          chatserver.socket = new WebSocket(wsUrl);
          
@@ -130,6 +133,12 @@
                   console.log("클릭된 사원번호 : "+empNo);
                });
             });
+            
+            // 채팅방이름 input태그 지우기
+            document.getElementById("delete_chatroomname").addEventListener("click",function(){
+				document.getElementsByName("chatRoomName")[0].value = "";
+			})
+            
          } //success 닫
       }); //Ajax 닫
       
@@ -180,7 +189,7 @@
             //프로필 사진
             //나중에 프로필 생기면 꼭 주소 연결하기
             const empProfile = document.querySelector("#modal_empprofile_top>div:nth-of-type(2)>img");
-            //empProfile.src = path+"/${data.empProfile}";
+            empProfile.src = path+"/resources/프로필들어가있는폴더/${data.empProfile}";
             
             //이름 직급
             const empNameLevelName = document.querySelector("#modal_empprofile_top>div:nth-of-type(3)>h2");
@@ -331,13 +340,12 @@
    }
 
 
-   //유저목록 출력하기
+   // 사원목록 출력하기
    
    //프로필 클릭했을 때 상세정보 띄우기 해결
    //출 퇴근 해서 프로필사진 주변에 테두리 초록 회색 표시   //chatting_userlist_printarea_profile_img_green
    
    //목록을 클릭한 사원만 화면 전환하기 프론트에서 로그인된사원번호 == 컨트롤러에서보내는 사원번호가 일치할때 작동? //해결
-   
    const chatuserPrint=(msg)=>{
       //로그인된 사원에서만 작동하도록 분기처리
       if(msg.loginEmpNo == loginEmpNo){
@@ -350,7 +358,7 @@
          $chatuserlistdiv.id="chatting_userlist";
          
          //검색창
-         const $div1 = document.createElement("div");
+        /* const $div1 = document.createElement("div");
          $div1.id="chatting_userlist_search";
          const $div2 = document.createElement("div");
          const $img = document.createElement("img");
@@ -374,8 +382,19 @@
          
          $div1.appendChild($div2);
          
-         $chatuserlistdiv.appendChild($div1);
+         $chatuserlistdiv.appendChild($div1);*/
          //검색창 끝
+         
+         //사원 목록 상단
+         const $div1 = document.createElement("div");
+         $div1.id = "chatting_userlist_printarea_all_headline";
+         const $h2 = document.createElement("h2");
+         $h2.innerText = "사원 목록";
+         
+         $div1.appendChild($h2);
+         
+         $chatuserlistdiv.appendChild($div1);
+         //사원 목록 상단 끝
          
          
          //유저목록 전체 감싸기
@@ -448,7 +467,7 @@
          msg.chatUserlist.forEach(chatuser=>{
             //만들고 대입할떄 D1 인지 D2 인지 따져서 appendChild해주면 되나?
             const $userprofilediv = document.createElement("div");
-            const $userprofilebutton = document.createElement("button");
+            //const $userprofilebutton = document.createElement("button");
             const $userprofileimg = document.createElement("img");
             const $userprofilep1 = document.createElement("p");
             const $userprofilep2 = document.createElement("p");
@@ -456,17 +475,18 @@
             $userprofilep1.innerText = chatuser.jobLevel.levelName;
             $userprofilep2.innerText = chatuser.empName;
             
-            $userprofileimg.setAttribute("src","${path}/"+chatuser.empProfile);
+            $userprofileimg.setAttribute("src",path+"/resources/프로필들어가있는폴더/"+chatuser.empProfile);
             $userprofileimg.setAttribute("alt","프로필");
             $userprofileimg.setAttribute("width","50px");
             $userprofileimg.setAttribute("height","50px");
-            $userprofilebutton.setAttribute("onclick", "empprofile("+chatuser.empNo+")");
+            //$userprofilebutton.setAttribute("onclick", "empprofile("+chatuser.empNo+")");
+			$userprofilediv.setAttribute("onclick", "empprofile("+chatuser.empNo+")");
                      
             $userprofilediv.classList.add("chatting_userlist_printarea_profile");
             $userprofileimg.classList.add("chatting_userlist_printarea_profile_img_green");
             
-            $userprofilebutton.appendChild($userprofileimg);
-            $userprofilediv.appendChild($userprofilebutton);
+            //$userprofilebutton.appendChild($userprofileimg);
+            $userprofilediv.appendChild($userprofileimg);
             $userprofilediv.appendChild($userprofilep1);
             $userprofilediv.appendChild($userprofilep2);
             
@@ -521,7 +541,7 @@
             
             
             //검색창
-            const $div10 = document.createElement("div");
+            /*const $div10 = document.createElement("div");
             $div10.id="chatting_chattingroomlist_search";
             const $div20 = document.createElement("div");
             
@@ -546,10 +566,21 @@
             $div20.appendChild($input10);
             $div20.appendChild($p10);
             
-            $div10.appendChild($div20);
+            $div10.appendChild($div20);*/
             //합치기 끝
             //검색창 끝
       
+      		// 채팅 목록 상단
+	         const $div1 = document.createElement("div");
+	         $div1.id = "chatting_userlist_printarea_all_headline";
+	         const $h2 = document.createElement("h2");
+	         $h2.innerText = "채팅 목록";
+	         
+	         $div1.appendChild($h2);
+	         
+	         $chatroomlistdiv.appendChild($div1);
+	         // 채팅 목록 상단 끝
+      		
       
             //목록 감싸는 div
             const $chatlistdiv = document.createElement("div");
@@ -566,7 +597,7 @@
                
                const $div21 = document.createElement("div");
                
-               const $button = document.createElement("button");
+               //const $button = document.createElement("button");
                
                const $img = document.createElement("img");
                
@@ -595,12 +626,13 @@
                
                $p5.innerText = chatroom.chatCount;
                
-               $img.setAttribute("src", "${path}/"+chatroom.empProfile); // chatroom 객체의 프로필 이미지 URL 사용
-                 $img.setAttribute("alt", "프로필");
-                 $img.setAttribute("width", "50");
-                 $img.setAttribute("height", "50");
+               // chatroom 객체의 프로필 이미지 URL 사용
+               $img.setAttribute("src",path+"/resources/프로필들어가있는폴더/"+chatroom.empProfile);
+			   $img.setAttribute("alt", "프로필");
+			   $img.setAttribute("width", "50");
+			   $img.setAttribute("height", "50");
                
-               $button.setAttribute("onclick", "profile(event);");
+               //$button.setAttribute("onclick", "profile(event);");
                
                
                //class부여
@@ -616,9 +648,9 @@
                
                
                //합치기
-               $button.appendChild($img);
-               
-               $div1.appendChild($button);
+               //$button.appendChild($img);
+               //$div1.appendChild($button);
+               $div1.appendChild($img);
                
                $div21.appendChild($p1);
                
@@ -642,7 +674,7 @@
                $chatlistdiv.appendChild($div);
             })
             //오픈 오른쪽 공간에 대입
-            $chatroomlistdiv.appendChild($div10);
+            //$chatroomlistdiv.appendChild($div10);
             $chatroomlistdiv.appendChild($chatlistdiv);
             //document.querySelector("#chatting_main_content").appendChild($chatlistdiv);
             

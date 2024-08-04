@@ -9,16 +9,11 @@
 
 
 
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>waait chat</title>
-
-
 
 		
 		
@@ -27,9 +22,6 @@
 
 <!-- jquery -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-
-
 
 
 
@@ -76,9 +68,9 @@
                     
                 </div>
                 <div>
-                    <button onclick="search();">
+                    <!-- <button onclick="search();">
                         <img src="https://i.pinimg.com/564x/95/ee/40/95ee408c19f2c9d10629b70c4cea3e51.jpg" alt="검색" width="40" height="40">
-                    </button>
+                    </button> -->
                     <button onclick="setting();">
                         <img src="https://i.pinimg.com/564x/23/8b/7f/238b7f2849994039b217c3eeb3706001.jpg" alt="파일 모아보기 and 채팅방 나가기" width="40" height="40">
                     </button>
@@ -116,7 +108,7 @@
 		            	<c:if test="${chatHistory.empNo eq employee.empNo }">
 		            		<div class="chatting_chattingroom_content_my">
 			                    <div>
-			                        <p>${chatHistory.chatReadCount}</p>
+			                        <%-- <p>${chatHistory.chatReadCount}</p> --%>
 			                        <p>${chatHistory.chatCreationDate}</p>
 			                    </div>
 			                    <div>
@@ -129,14 +121,14 @@
 						<c:if test="${chatHistory.empNo ne employee.empNo }">
 		            		<div class="chatting_chattingroom_content_user">
 		            			<div>
-		            				<img src="${path}/chatHistory.empProfile" alt="프로필" width="50" height="50">
+		            				<img src="${path}/resources/프로필들어가있는폴더/${chatHistory.empProfile}" alt="프로필" width="50" height="50">
 		            			</div>
 		            			<div>
 		            				<p>${chatHistory.empName}</p>
 		            				<p>${chatHistory.chatContent}</p>
 		            			</div>
 		            			<div>
-		            				<p>${chatHistory.chatReadCount}</p>
+		            				<%-- <p>${chatHistory.chatReadCount}</p> --%>
 		            				<p>${chatHistory.chatCreationDate}</p>
 		            			</div>
 		            		</div>
@@ -152,8 +144,8 @@
                 </div>
                 <div>
                     <button onclick="sendMessage();">전송</button>
-                    <button>파일전송</button>
-                    <input type="file" class="multiple-files-filepond" value="파일전송" multiple>
+                    <!-- <button>파일전송</button>
+                    <input type="file" class="multiple-files-filepond" value="파일전송" multiple> -->
                 </div>
             </div>
 
@@ -171,7 +163,7 @@
 									<div class="chatting_userlist_printarea_profile">
 				                        <button onclick="asd(event);">
 				                            <img class="chatting_userlist_printarea_profile_img_green" 
-				                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+				                            	src="${path}/resources/프로필들어가있는폴더/${emp.empProfile}" alt="프로필" width="50" height="50">
 				                        </button>
 										<h4>나</h4>
 				                        <p>${emp.jobLevel.levelName}</p>
@@ -184,7 +176,7 @@
 									<div class="chatting_userlist_printarea_profile">
 				                        <button onclick="asd(event);">
 				                            <img class="chatting_userlist_printarea_profile_img_green" 
-				                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+				                            	src="${path}/resources/프로필들어가있는폴더/${emp.empProfile}" alt="프로필" width="50" height="50">
 				                        </button>
 				                        <p>${emp.jobLevel.levelName}</p>
 				                        <p>${emp.empName}</p>
@@ -214,7 +206,7 @@
 			                <div>
 			                    <img src="https://i.pinimg.com/564x/95/ee/40/95ee408c19f2c9d10629b70c4cea3e51.jpg" alt="" width="34px" height="34px">
 			                    <input type="text" placeholder="사용자이름, 부서명 검색">
-			                    <p onclick="">X</p>
+			                    <p onclick="">✕</p>
 			                </div>
 			            </div>
 					</div>
@@ -406,7 +398,6 @@
 		        <button class="create_chatjoin" onclick="insertchatjoin();">채팅상대 초대하기</button>
 		        <button class="create_chatjoin" id="modal_chatinvite_cancel">취소</button>
 		        </div>
-			
 		</div>
 		<!-- 모달창 사원리스트아래에 초대하기 버튼 누르면 출력되는 모달창 닫음-->
 		

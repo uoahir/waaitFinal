@@ -166,7 +166,7 @@ body{
 #chatting_chattingroom_bottom>div:nth-child(1){
     /* background-color: red; */
     /* border: 1px solid red; */
-    flex-grow : 2;
+    flex-grow : 4;
     height: 100%;
     /* width: 100%; */
 }
@@ -179,7 +179,7 @@ body{
     flex-direction: column;
     justify-content: space-between;
     padding: 10px 10px 10px 0;
-    width: 50px;
+    width: auto;
 }
 
 #chatting_chattingroom_bottom>div:nth-child(1)>textarea{
@@ -188,9 +188,19 @@ body{
     margin: 10px 5% 10px 5%;
 }
 
+/* 전송버튼 */
 #chatting_chattingroom_bottom>div:nth-child(2)>button{
     /* overflow: auto; */
     text-overflow: ellipsis;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: transparent;
+    height: 40%;
+}
+
+
+#chatting_chattingroom_bottom>div:nth-child(2)>button:hover{
+	background-color: #e3f3ff;
 }
 
 /* 채팅 입력칸 끝 */
