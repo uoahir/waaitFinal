@@ -87,6 +87,7 @@ const enrollTeamWithDeptCode = () => {
 			document.querySelectorAll("input[name='teamAddInput']").forEach(e => {
 				e.value = "";
 			});
+			
 			document.getElementById("teaminput-container").hidden = true;
 			document.getElementById("btn-container").hidden = true;
 			document.getElementById("teamInputExplain").hidden = true;
