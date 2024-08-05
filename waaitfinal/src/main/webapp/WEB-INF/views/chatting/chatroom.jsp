@@ -108,7 +108,7 @@
 		            	<c:if test="${chatHistory.empNo eq employee.empNo }">
 		            		<div class="chatting_chattingroom_content_my">
 			                    <div>
-			                        <%-- <p>${chatHistory.chatReadCount}</p> --%>
+			                        <!-- <p>${chatHistory.chatReadCount}</p> -->
 			                        <p>${chatHistory.chatCreationDate}</p>
 			                    </div>
 			                    <div>
@@ -121,14 +121,14 @@
 						<c:if test="${chatHistory.empNo ne employee.empNo }">
 		            		<div class="chatting_chattingroom_content_user">
 		            			<div>
-		            				<img src="${path}/resources/프로필들어가있는폴더/${chatHistory.empProfile}" alt="프로필" width="50" height="50">
+		            				<img src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 		            			</div>
 		            			<div>
 		            				<p>${chatHistory.empName}</p>
 		            				<p>${chatHistory.chatContent}</p>
 		            			</div>
 		            			<div>
-		            				<%-- <p>${chatHistory.chatReadCount}</p> --%>
+		            				<!-- <p>${chatHistory.chatReadCount}</p> -->
 		            				<p>${chatHistory.chatCreationDate}</p>
 		            			</div>
 		            		</div>
@@ -162,7 +162,7 @@
 								<c:if test="${emp.empNo eq employee.empNo }">
 									<div class="chatting_userlist_printarea_profile" onclick="empprofile(${emp.empNo});">
 					                        <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="${path}/resources/프로필들어가있는폴더/${emp.empProfile}" alt="프로필" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <h4>나</h4>
 					                        <p>${emp.jobLevel.levelName}</p>
 					                        <p>${emp.empName}</p>
@@ -200,9 +200,11 @@
 						<div id="modal_chatinvite_search">
 			    			<h3>채팅상대 초대하기</h3>
 			                <div>
-			                    <img src="https://i.pinimg.com/564x/95/ee/40/95ee408c19f2c9d10629b70c4cea3e51.jpg" alt="" width="34px" height="34px">
+			                    <!-- <img src="https://i.pinimg.com/564x/95/ee/40/95ee408c19f2c9d10629b70c4cea3e51.jpg" alt="" width="34px" height="34px">
 			                    <input type="text" placeholder="사용자이름, 부서명 검색">
-			                    <p onclick="">✕</p>
+			                    <p onclick="">✕</p> -->
+			                    <button class="create_chatjoin" onclick="insertchatjoin();">채팅상대 초대하기</button>
+		        				<button class="create_chatjoin" id="modal_chatinvite_cancel">취소</button>
 			                </div>
 			            </div>
 					</div>
@@ -213,14 +215,14 @@
 
 		               		<!-- 부서 출력 D1 -->
 		               		<div class="chatting_userlist_printarea">
-			               		<p>대표실 (1/2)</p>
+			               		<p>대표실</p>
 			               		<c:forEach var="emp" items="${employeesnot}">
 				               		<c:if test="${'D1' eq emp.deptCode}">
 				               			<c:if test="${emp.empNo ne employee.empNo }">
 					               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 						                        <button onclick="asd(event);">
 						                            <img class="chatting_userlist_printarea_profile_img_green" 
-						                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+						                            	src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 						                        </button>
 						                        <p>${emp.jobLevel.levelName}</p>
 					                        	<p>${emp.empName}</p>
@@ -235,14 +237,14 @@
 		               		
 		               		<!-- 부서 출력 D2 -->
 		       				<div class="chatting_userlist_printarea">
-		               		<p>개발부 (1/2)</p>
+		               		<p>개발부</p>
 		               		<c:forEach var="emp" items="${employeesnot}">
 			               		<c:if test="${'D2' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
 					                        <button onclick="asd(event);">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                           		src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        </button>
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
@@ -256,14 +258,14 @@
 		               		
 		               		<!-- 부서 출력 D3 -->
 		       				<div class="chatting_userlist_printarea">
-		               		<p>개발 1팀 (1/2)</p>
+		               		<p>개발 1팀</p>
 		               		<c:forEach var="emp" items="${employeesnot}">
 			               		<c:if test="${'D3' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
 					                        <button onclick="asd(event);">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            	src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        </button>
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
@@ -277,14 +279,14 @@
 			               		
 		               		<!-- 부서 출력 D4 -->
 		       				<div class="chatting_userlist_printarea">
-		               		<p>개발 2팀 (1/2)</p>
+		               		<p>개발 2팀</p>
 		               		<c:forEach var="emp" items="${employeesnot}">
 			               		<c:if test="${'D4' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
 					                        <button onclick="asd(event);">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            	src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        </button>
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
@@ -298,14 +300,14 @@
 		               		
 		               		<!-- 부서 출력 D5 -->
 		       				<div class="chatting_userlist_printarea">
-		               		<p>경영관리부 (1/2)</p>
+		               		<p>경영관리부</p>
 		               		<c:forEach var="emp" items="${employeesnot}">
 			               		<c:if test="${'D5' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
 					                        <button onclick="asd(event);">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            	src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        </button>
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
@@ -320,14 +322,14 @@
 		               		
 		               		<!-- 부서 출력 D6 -->
 		       				<div class="chatting_userlist_printarea">
-		               		<p>재정팀 (1/2)</p>
+		               		<p>재정팀</p>
 		               		<c:forEach var="emp" items="${employeesnot}">
 			               		<c:if test="${'D6' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
 					                        <button onclick="asd(event);">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            	src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        </button>
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
@@ -342,14 +344,14 @@
 		               		
 		               		<!-- 부서 출력 D7 -->
 		       				<div class="chatting_userlist_printarea">
-		               		<p>인사팀 (1/2)</p>
+		               		<p>인사팀</p>
 		               		<c:forEach var="emp" items="${employeesnot}">
 			               		<c:if test="${'D7' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
 					                        <button onclick="asd(event);">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            	src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        </button>
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
@@ -365,14 +367,14 @@
 		               		
 		               		<!-- 부서 출력 D8 -->
 		       				<div class="chatting_userlist_printarea">
-		               		<p>영업팀 (1/2)</p>
+		               		<p>영업팀</p>
 		               		<c:forEach var="emp" items="${employeesnot}">
 			               		<c:if test="${'D8' eq emp.deptCode}">
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}">
 					                        <button onclick="asd(event);">
 					                            <img class="chatting_userlist_printarea_profile_img_green" 
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                           		src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        </button>
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
@@ -391,8 +393,7 @@
 		                </div>
 		            </div>
 
-		        <button class="create_chatjoin" onclick="insertchatjoin();">채팅상대 초대하기</button>
-		        <button class="create_chatjoin" id="modal_chatinvite_cancel">취소</button>
+		        
 	        </div>
 		</div>
 		<!-- 모달창 사원리스트아래에 초대하기 버튼 누르면 출력되는 모달창 닫음-->

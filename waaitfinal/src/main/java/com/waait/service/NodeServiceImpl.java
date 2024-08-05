@@ -35,11 +35,8 @@ public class NodeServiceImpl implements NodeService {
 		for(Department d : dept) {
 			// JU 여기 수정했어요
 			// # -> null처리 안해야 정상적으로 들어가요
-			// Node DTO List<Employee> employee 만들고,
-			// service에서 for문 돌릴때 selectEmployee(d.getDeptCode())해서 해당 부서에 어느 사원이 있나 select해서 담아오기
-			// 그 값을 Node객체빌드 해서 한번에 담아서 컨트롤러넘겨서 값 보냄
 			
-			// 직급 JobLevel -> levelName -> 이걸그냥 teamName으로 가져와도 되나
+			// 직급 JobLevel -> levelName
 			// 이름 empName
 			String deptCode = d.getDeptCode();
 			System.out.println("node - deptCode : "+deptCode);
@@ -47,14 +44,12 @@ public class NodeServiceImpl implements NodeService {
 			//List<String> empNames = nodeDao.selectEmpNameLevelName(session, deptCode);
 			List<Map<String, Object>> empNames = nodeDao.selectEmpNameLevelName(session, deptCode);
 			System.out.println("node - employees :"+empNames);
-//			System.out.println("0 : "+empNames.get(0));
-//			System.out.println("1 : "+empNames.get(1));
 
-			List<String> emp = new ArrayList<>();
+			List<String> employees = new ArrayList<>();
 			empNames.forEach(e->{
 				String levelName = (String) e.get("LEVELNAME");
 				String empName = (String) e.get("EMPNAME");
-				emp.add(" "+levelName+" "+empName);
+				employees.add(" "+levelName+" "+empName);
 			});
 //			StringBuilder empBuilder = new StringBuilder();
 //	        for (Map<String, Object> e : empNames) {
@@ -74,11 +69,10 @@ public class NodeServiceImpl implements NodeService {
 					.id(d.getDeptCode())
 					.pid(d.getParentCode())
 					.name(d.getDeptName())
-					.employees(emp)
+					.employees(employees)
 					.build());
 			
 			System.out.println("for문 node : "+node);
-			
 			//employees.clear();
 		}
 //		List<Employee> emp = jsTreeDao.getTreeEmpData(session);

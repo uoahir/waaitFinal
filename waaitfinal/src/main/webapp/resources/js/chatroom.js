@@ -96,7 +96,8 @@ document.addEventListener("DOMContentLoaded", function() {
             $profile.style.height="50px";
             $profile.style.borderRadius="100%";
             // 메세지에 프로필을 안담고있어서 사고났는디...?
-           $profile.setAttribute("src",path+"/resources/프로필들어가있는폴더/"+msg.empProfile);
+       		// 추후 수정사항 Message가 프로필을 담고있지않아서 새로 생성안됨 // msg.profile
+           	$profile.setAttribute("src",path+"/resources/upload/emp/profile/"+"profile1.jpg");
             
             
             
