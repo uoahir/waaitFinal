@@ -26,7 +26,7 @@ public class NodeController {
 		try {
 			// DB에서 트리 데이터 조회
 			List<Node> nodeData = nodeService.getNodeData();
-			System.out.println(nodeData);
+			System.out.println("반환하는 nodeData : "+nodeData);
 			//데이터만 보내주는거라서 호출한곳 js에서 값 처리해서 출력해야됨
 			return ResponseEntity.ok(nodeData);
 			

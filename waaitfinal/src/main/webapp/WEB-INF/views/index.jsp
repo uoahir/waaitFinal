@@ -40,9 +40,7 @@
 <body>
     <script src="${path }/resources/assets/static/js/initTheme.js"></script>
     
-    <!-- script문 JU -->
-    <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
-    <script>const path = "${path}";</script>
+    
     
     <div id="app">
         <div id="sidebar">
@@ -545,7 +543,10 @@
  <!-- 전자결재관련 차트 -->
 <%-- <script src="${path }/resources/assets/extensions/apexcharts/apexcharts.min.js"></script> --%>
 <%-- <script src="${path }/resources/assets/static/js/pages/dashboard.js"></script> --%>
-
+	
+	<!-- script문 JU -->
+    <script>const path = "${path}";</script>
+    <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
 </body>
 
 </html>
