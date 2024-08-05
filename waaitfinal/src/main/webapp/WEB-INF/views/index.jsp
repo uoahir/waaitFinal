@@ -23,6 +23,18 @@
 	<link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/iconly.css"> 
 	<link rel="stylesheet" href="${path}/resources/css/ju/headerju.css">
   
+	<!-- 조직도 -->
+	<script src="https://balkan.app/js/orgchart.js"></script>
+  	<style>
+  		#chart-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .orgchart {
+            background: #fff;
+        }
+  	</style>
 </head>
 
 <body>
@@ -100,17 +112,24 @@
                     <span>캘린더</span>
                 </a>                
             </li>
+<li
+                class="sidebar-item ">
+                <a href="${path }/codereviewboard/main" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>코드리뷰</span>
+                </a>                
+            </li>
             <li
                 class="sidebar-item ">
-                <a href="${path }/edoc/inprogress" class='sidebar-link'>
-                    <i class="bi bi-file-text"></i>
-                    <span>전자결재</span>
+                <a href="${path }/teamproject/main" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>팀프로젝트</span>
                 </a>                
             </li>
             <li
                 class="sidebar-item  has-sub">
                 <a href="#" class='sidebar-link'>
-                    <i class="bi bi-three-dots"></i>
+                    <i class="bi bi-file-text"></i>
                     <span>워크플로우</span>
                 </a>
                 
@@ -140,12 +159,10 @@
                     </li>
                     
                     <li class="submenu-item">
-                        <a href="#" class="submenu-link">전체 문서함</a>
+                        <a href="${path }/edoc/approvedall" class="submenu-link">전체 문서함</a>
                     </li>
                     
                 </ul>
-                
-
             </li>
             <li class="sidebar-item  ">
                 <a href="${path }/mail/mailmain.do" class='sidebar-link'>
@@ -207,8 +224,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">안읽은 메일</h6>
-                                    <h6 class="font-extrabold mb-0">${notReadReceiveMailCount }</h6>
+                                	<a href="${path}/mail/mailmain.do">
+	                                    <h6 class="text-muted font-semibold">안읽은 메일</h6>
+	                                    <h6 class="font-extrabold mb-0">${notReadReceiveMailCount }</h6>
+	                                </a>                                    
                                 </div>
                             </div>
                         </div>
@@ -259,7 +278,11 @@
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row;" >
                             <div style="width: 1100px;">
+<<<<<<< HEAD
                             	<jsp:include page="/WEB-INF/views/edoc/nodelist.jsp" /> 
+=======
+                            	<div id="tree"></div>
+>>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
                             </div>                            
                         </div>
                     </div>

@@ -51,7 +51,7 @@ input[name='senderMailAddress'] {
 .finishing-receiver-input {
     border-radius : 10px;
     text-align : center;
-    border : none;
+    border : 1px solid black;
     background-color : white;
     margin-bottom : 3px;
 }

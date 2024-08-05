@@ -628,7 +628,7 @@
                
                // chatroom 객체의 프로필 이미지 URL 사용
                
-               $img.setAttribute("src",path+"/resources/upload/emp/profile/"+chatroom.empProfile);
+               $img.setAttribute("src",path+"/resources/upload/emp/profile/"+chatroom.chatHistory.empProfile);
 			   $img.setAttribute("alt", "프로필");
 			   $img.setAttribute("width", "50");
 			   $img.setAttribute("height", "50");

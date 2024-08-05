@@ -213,7 +213,8 @@
 	    	    $input.setAttribute("onblur", "changeInputView(event)");
 	
 	    	    receiverInput.setAttribute("class", "finishing-receiver-input");
-	    	    receiverInput.setAttribute("disabled", "true");
+	    	    receiverInput.setAttribute("readOnly", "true");
+	    	    receiverInput.style.backgroundColor = "white";
 	
 	    	    inputDiv.appendChild($button);
 	

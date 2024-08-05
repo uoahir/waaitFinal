@@ -8,7 +8,7 @@
 <c:set var="employee"
 	value="${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal}" />
 
-<jsp:include page="${path}/WEB-INF/views/common/header.jsp" />
+<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 
 <style>
@@ -53,10 +53,8 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <div class="dropdown-item" onclick="window.open('${path}/edoc/write3?type=T01','_blank','width=1200, height=1000')">기본보고서</div>
-                        <div class="dropdown-item" onclick="window.open('${path}/edoc/basicedoc?type=T02','_blank','width=1200, height=1000')">지출결의서</div>
-                        <div class="dropdown-item" onclick="window.open('${path}/edoc/write2?type=T03','_blank','width=1200, height=1000')">출장신청서</div>
+                        <div class="dropdown-item" onclick="window.open('${path}/edoc/write4?type=T03','_blank','width=1200, height=1000')">출장신청서</div>
                         <div class="dropdown-item" onclick="window.open('${path}/edoc/write2?type=T04','_blank','width=1200, height=1000')">휴가신청서</div>
-                        <div class="dropdown-item" onclick="window.open('${path}/edoc/nodelist','_blank','width=1200, height=1000')">조직도 ? </div>
                     </div>
                 </div>
             </div>
@@ -91,7 +89,7 @@
                                     <td>${d.docTitle }</td>
                                     <td>
                                     	<div class="avatar avatar-sm">
-											<img src="${path }/resources/images/${d.employee.empProfile}">
+											<img src="${path }/resources/upload/emp/profile/${d.employee.empProfile}">
 										</div>
                                     	${d.employee.empName }
                                     </td>
@@ -104,6 +102,7 @@
                         </c:if>
                     </tbody>
                 </table>
+                ${pageBar1 }
             </div>
         </div>
     </div>
@@ -136,7 +135,7 @@
                                     <td>${w.docTitle }</td>
                                     <td>
                                     	<div class="avatar avatar-sm">
-											<img src="${path }/resources/images/${w.employee.empProfile}">
+											<img src="${path }/resources/upload/emp/profile/${w.employee.empProfile}">
 										</div>
                                     ${w.employee.empName }</td>
                                     <td>${w.docDate }</td>
@@ -150,6 +149,7 @@
                         </c:if>
                     </tbody>
                 </table>
+                ${pageBar2 }
             </div>
         </div>
     </div>
@@ -159,4 +159,4 @@
         }
     </script>
 </section>
-<jsp:include page="${path}/WEB-INF/views/common/footer.jsp" />
+<jsp:include page="/WEB-INF/views/common/footer.jsp" />

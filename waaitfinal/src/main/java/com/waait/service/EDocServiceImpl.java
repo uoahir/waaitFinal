@@ -327,6 +327,73 @@ public class EDocServiceImpl implements EDocService {
 		return edocDao.inprogressCount(session, empNo);
 	}
 
+	@Override
+	public int awaitingApprovalTotal(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.awaitingApprovalTotal(session, empNo);
+	}
+
+	@Override
+	public List<AbstractDocument> savedDocument(Long empNo, Map<String, Integer> page) {
+		// TODO Auto-generated method stub
+		return edocDao.savedDocument(session, empNo, page);
+	}
+
+	@Override
+	public int updateDocStatToSave(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.updateDocStatToSave(session, empNo);
+	}
+
+	@Override
+	public int updateDocStatToReturn(Map<String, Object> param) {
+		
+		int result=0;
+		String docType = (String)param.get("docType");
+		if(docType.equals("T04")) {
+			edocDao.returnEmployeeRemainingAnnualLeave(session, param);
+			result++;
+			edocDao.updateDocStatToReturn(session, param);
+			result++;
+		} else {
+			edocDao.updateDocStatToReturn(session, param);
+			result++;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int savedDocumentCount(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.saveDocumentCount(session, empNo);
+	}
+
+	@Override
+	public List<AbstractDocument> approvedAllDocument(Map<String, Integer> page) {
+		// TODO Auto-generated method stub
+		return edocDao.approvedAllDocument(session, page);
+	}
+
+	@Override
+	public int approvedCount(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.approvedCount(session, empNo);
+	}
+
+	@Override
+	public int approvedAllCount() {
+		// TODO Auto-generated method stub
+		return edocDao.approvedAllCount(session);
+	}
+	
+	
+	
+	
+	
+	
+	
+
 	
 	
 

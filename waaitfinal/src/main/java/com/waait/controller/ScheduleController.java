@@ -93,6 +93,7 @@ public class ScheduleController {
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"); //Timestamp로 들어가서 파싱해주기
 			s.setScheTime(new Timestamp(sdf.parse(scheTimeData).getTime())); // sdf.parse(scheTimeData): scheTimeData 문자열을 SimpleDateFormat을 사용하여 Date 객체로 변환
 			s.setScheEnd(new Timestamp(sdf.parse(scheEndData).getTime()));
+			
 		}catch(ParseException e){
 			e.printStackTrace();
 		}
@@ -117,6 +118,7 @@ public class ScheduleController {
 		loc="/schedule/myschedule";
 		model.addAttribute("msg", msg);
 		model.addAttribute("loc", loc);		
+		System.out.println(" -----"+scheEndData);
 		return "common/msg";
 	}
 	
