@@ -278,11 +278,11 @@
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row;" >
                             <div style="width: 1100px;">
-<<<<<<< HEAD
+
                             	<jsp:include page="/WEB-INF/views/edoc/nodelist.jsp" /> 
-=======
+
                             	<div id="tree"></div>
->>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
+
                             </div>                            
                         </div>
                     </div>
