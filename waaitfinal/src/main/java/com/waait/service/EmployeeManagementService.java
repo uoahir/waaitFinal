@@ -151,10 +151,21 @@ public class EmployeeManagementService {
 		
 		return result;
 	}
-
+	
+	public int checkDuplication(String modifyName) {
+		return dao.checkDuplication(session, modifyName);
+	}
+	
+	@Transactional
+	public int modifyTeamName(Map<String, String> sqlParam) {
+		return dao.modifyTeamName(session, sqlParam);
+	}
+	
 	public int enrollEmployee(Employee employee) {
 		return dao.enrollEmployee(session, employee);
 	}
+
+
 
 
 }

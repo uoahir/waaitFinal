@@ -218,6 +218,10 @@ public class MailDao {
 	public void enrollRecentSearchKeyword(SqlSession session, RecentSearch recentSearch) {
 		session.insert("mail.enrollRecentSearchKeyword", recentSearch);
 	}
+	
+	public int deleteRecentSearchHistory(SqlSession session, String no) {
+		return session.delete("mail.deleteRecentSearchHistory", no);
+	}
 
 	public int joinSendingMailBoxData(SqlSession session, long empNo) {
 		return session.selectOne("mail.joinSendingMailBoxTotalData", empNo);
@@ -250,12 +254,6 @@ public class MailDao {
 	public List<RecentSearch> getRecentSearch(SqlSession session, long empNo) {
 		return session.selectList("mail.getRecentSearch", empNo);
 	}
-
-	
-
-
-
-
 
 
 }

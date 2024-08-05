@@ -24,7 +24,6 @@
 <link rel="stylesheet" href="${path }/resources/waait/mail/writemail_css.css">
 </head>
 <body>
-	<h1>헤더</h1>
 	<c:if test="${not empty mails }">
 		<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="mailContentInputHidden()">
 			<section class="section">
@@ -75,43 +74,60 @@
     </c:if>
     <c:if test="${empty mails }">
     	<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="mailContentInputHidden()">
-			<section class="section">
-				<div class="sectionHeaderContainer">
-					<div class="senderContainer">
-						<span>작성자 : </span><input type="text" name="senderMailAddress" value="${emp.empEmail }" disabled>
-					</div>
-					<div class="receiverContainer">
-						<span>받는사람 : </span>
-						<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
-						<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
-					</div>
-					<div class="matilTitleContainer">
-						<span>제목 : </span><input type="text" name="mailTitle" placeholder="제목입력">
-					</div>
-					<p>파일 업로드 : </p>
-					<div class="fileContainer">
-						<input type="file" class="multiple-files-filepond" name="upFile" multiple>
-					</div>
-				</div>
-		        <div class="row">
-		            <div class="col-12">
-		                <div class="card">
-		                    <!-- <div class="card-header">
-		                        <h4 class="card-title">Default Editor</h4>
-		                    </div> -->
-		                    <div class="card-body">
-		                        <div id="summernote"></div>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-		    </section>
-		    <div class="actionButtonContainer">
-			    <input type="text" name="mailContent" hidden="true">
-			    <input type="text" name="mailReceiver" hidden="true">
-			    <input type="submit" name="mailStatus" class="btn btn-outline-primary" value="임시저장">
-			    <input type="submit" name="mailStatus" class="btn btn-outline-success" value="전송">
-		    </div>
+    	<section>
+    	<div class="sectionHeaderContainer">
+	        <div class="senderContainer flex-divcontainer">
+	            <div class="padding-top3">
+	                <span class="boldtext">보내는 사람</span>
+	            </div>
+	            <div class="senderInputContainer">
+	                <input type="text" class="inherit-input" name="senderMailAddress">
+	            </div>
+	        </div>
+	        <div class="receiverContainer flex-divcontainer">
+	            <div class="padding-top3">
+	                <span class="boldtext">받는사람</span>
+	            </div>
+	            <div class="myborder-bottom width90">
+	                <input type="text" name="mailReceiverAddress" class="nonestyle-input inherit-input" placeholder="받는사람 입력">
+	            </div>
+	        </div>
+	        <div class="mailTitleContainer flex-divcontainer">
+	            <div class="padding-top3">
+	                <span class="boldtext">제목</span>
+	            </div>
+	            <div class="myborder-bottom width90">
+	                <input type="text" name="mailTitle" class="nonestyle-input inherit-input" placeholder="제목입력">
+	            </div>
+	        </div>
+	        <div class="fileContainer flex-divcontainer">
+	        	<div class="padding-top3">
+	                <span class="boldtext">파일 첨부</span>
+	            </div>
+	            <div class="width90 fileinput-container">
+	                <input type="file" class="multiple-files-filepond" name="upFile" multiple>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="border-bottom border-top">
+			<div class="row">
+	            <div class="col-12">
+	                <div class="card">
+	                    <div class="card-body">
+	                        <div id="summernote"></div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div>
+			<input type="text" name="mailContent" hidden="true">
+			<input type="text" name="mailReceiver" hidden="true">
+			<input type="submit" class="btn btn-success" name="mailStatus" value="전송">
+			<input type="submit" class="btn btn-primary" name="mailStatus" value="임시저장">
+		</div>
+	    </section>
+
 	    </form>
     </c:if>
     

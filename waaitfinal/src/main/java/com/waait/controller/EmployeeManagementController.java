@@ -316,7 +316,9 @@ public class EmployeeManagementController {
 		Map<String, Integer> pagingParam = Map.of("cPage", cPage, "numPerpage", numPerpage);
 		
 		List<Employee> searchEmpList = service.searchEmployee(param, pagingParam);
+		searchEmpList = setEmpFieldTeamName(setEmpFieldDeptName(searchEmpList));
 		System.out.println("searchEmpList : " + searchEmpList);
+		
 		model.addAttribute("employees", searchEmpList);
 		model.addAttribute("pageBar", pageBar);
 
@@ -600,6 +602,32 @@ public class EmployeeManagementController {
 		result = service.enrollTeam(jsonParam);
 		
 		return result;
+	}
+	
+	@PostMapping("/checkduplicateteamname.do")
+	public int checkDuplicateTeamName(String modifyName) {
+		int checkDuplicationNum = service.checkDuplication(modifyName + "팀");
+		System.out.println("check중복 : " + checkDuplicationNum);
+		return checkDuplicationNum;
+	}
+	
+	@PostMapping("/modifyteamname.do")
+	public String modifyTeamName(String teamCode, String modifyName, Model model) {
+		int result = 0;
+		
+		Map<String, String> sqlParam = Map.of("teamCode", teamCode, "modifyName", modifyName + "팀");
+		result = service.modifyTeamName(sqlParam);
+		
+		List<Department> departmentList = getDepartmentList();
+		List<Department> teamList = getTeamList();
+		
+		Department noDept = new Department("D1", "D1", "부서없음");
+		departmentList.add(noDept);
+		
+		model.addAttribute("depts", departmentList);
+		model.addAttribute("teams", teamList);
+		
+		return "empmanage/responsepage/newdeptteamtable";
 	}
 	
 	

@@ -1,9 +1,68 @@
 @charset "UTF-8";
 
-.senderContainer {
+/* .senderContainer {
 	border-bottom : 1px solid black;
-}
+} */
 .actionButtonContainer {
 	display : flex;
 	justify-content : right;
+}
+
+
+
+.senderContainer {
+    display : flex;
+    margin-bottom : 10px;
+}
+input[name='senderMailAddress'] {
+    border : none;
+}
+.inherit-input {
+	background-color : inherit;
+}
+.senderInputContainer {
+    border-bottom : 1px solid black;
+    width:90%;
+}
+.width90{
+    width : 90%;
+}
+.senderContainer>div:first-child {
+    width:7%;
+}
+.receiverContainer>div:first-child {
+    width:7%;
+}
+.mailTitleContainer>div:first-child {
+    width:7%;
+}
+.myborder-bottom{
+    border-bottom : 1px solid black;
+}
+.border-top {
+	border-top : 1px solid black;
+}
+.receiverContainer {
+    display : flex;
+    margin-bottom : 10px;
+}
+.mailTitleContainer {
+	margin-bottom : 10px;
+}
+.nonestyle-input {
+    border : none;
+}
+.flex-divcontainer {
+    display:flex;
+    width : 80%
+}
+.boldtext {
+    font-weight : bold;
+}
+.padding-top3{
+    padding-top : 3px;
+}
+.fileinput-container {
+	margin-left : 18px;
+	margin-top : 10px;
 }
