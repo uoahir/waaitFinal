@@ -66,15 +66,15 @@
 <section class="container">
 	<div class="card d-flex align-items-center">
 		<div class="card-header d-flex" style="width:100%;">
-			<div style="width:60%;">
+			<div style="width:80%;">
 				<h2 class="card-title">OFF APPLICATION</h2>
 			</div>
-			<div style="width:40%;" class="d-flex gap-2">
+			<div style="width:20%;" class="d-flex gap-2">
 				<button class="btn btn-outline-secondary" id="submitBtn">기안</button>
 				<button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#approverModal">결재선</button>
-				<button class="btn btn-outline-secondary">임시저장</button>
-				<button class="btn btn-outline-secondary">인쇄미리보기</button>
-				<button class="btn btn-outline-secondary">닫기</button>
+				<!-- <button class="btn btn-outline-secondary">임시저장</button> -->
+				<!-- <button class="btn btn-outline-secondary">인쇄미리보기</button> -->
+				<button class="btn btn-outline-secondary" onclick="window.close();">닫기</button>
 			</div>
 	    </div>
 	    <div class="card-body d-flex mt-3" style="width:100%">

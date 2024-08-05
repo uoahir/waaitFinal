@@ -3,6 +3,8 @@ package com.waait.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+
 import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
 import com.waait.dto.AttatchFile;
@@ -22,6 +24,7 @@ public interface EDocService {
 	List<AbstractDocument> awaitingApproval(Long empNo, Map<String,Integer> page); // 승인대기문서 출력(결재자)
 	List<AbstractDocument> inprogressDocument(Long empNo, Map<String,Integer> page); // 진행중인문서 출력(상신자)
 	List<AbstractDocument> approvedDocument(Long empNo, Map<String,Integer> page); // 승인완료된 문서 출력(내가올린문서 중 승인완료된 건 !)
+	List<AbstractDocument> approvedAllDocument(Map<String,Integer> page); // 승인완료된 문서 출력(내가올린문서 중 승인완료된 건 !)
 	AbstractDocument selectDocumentById(int docId); // 문서 조회 
 	AbstractDocument selectDocumentDetail(Map<String, Object> param); // 결재자가 해당 문서 클릭 시 실행되는 로직 ~ ! ~ ! 
 	// update 는 언제해죠야하지 ?
@@ -56,5 +59,25 @@ public interface EDocService {
 	
 //	진행중인 문서 개수 뽑아오기 ! ! !
 	int inprogressCount(Long empNo);
+	
+//	승인대기 중인 문서 개수 뽑아오기 !!! 
+	int awaitingApprovalTotal(Long empNo);
+	
+//	승인대기 중인 문서 개수 뽑아오기 !!! 
+	int approvedCount(Long empNo);
+	
+//	승인대기 중인 문서 개수 뽑아오기 !!! 
+	int approvedAllCount();
+	
+//	임시저장 문서 select
+	List<AbstractDocument> savedDocument(Long empNo, Map<String,Integer> page);
+	
+//	임시저장
+	int updateDocStatToSave(Long empNo);
+	
+//	회수
+	int updateDocStatToReturn(Map<String, Object> param);
+	
+	int savedDocumentCount(Long empNo);
 	
 }

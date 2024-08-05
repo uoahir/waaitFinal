@@ -84,6 +84,16 @@ public class EDocController {
 		m.addAttribute("employees", employees);
 		
 	}
+	@GetMapping("/write4")
+	public void writeTrip(@RequestParam String type, Model m) {
+		System.out.println(type);
+		m.addAttribute("type", type);
+		List<Department> depts = service.deptList();
+		m.addAttribute("depts", depts);
+		List<Employee> employees = service.employeeList();
+		m.addAttribute("employees", employees);
+		
+	}
 	
 	@PostMapping(value = "/offedocend",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public String insertOff(@RequestPart String data, @RequestPart(value = "files", required = false) List<MultipartFile> files, HttpSession session) throws JsonMappingException, JsonProcessingException {
@@ -300,14 +310,14 @@ public class EDocController {
 	
 	@RequestMapping("/inprogress")
 	public String inprogress(Model m
-					, @RequestParam(defaultValue ="1") int cPage1
+					, @RequestParam(defaultValue ="1") int cPage1 // 진행중인문서	
 					, @RequestParam(defaultValue="10") int numPerpage1
 					, @RequestParam(defaultValue="1") int cPage2
 					, @RequestParam(defaultValue="10") int numPerpage2) {
 		Long no = getEmployeeH().getEmpNo();
 		
 //		진행 중인 문서 출력
-		List<AbstractDocument> documents = service.inprogressDocument(no, Map.of("cPage", cPage1, "numPerpage", numPerpage1));
+		List<AbstractDocument> documents = service.inprogressDocument(no, Map.of("cPage1", cPage1, "numPerpage1", numPerpage1));
 		m.addAttribute("documents", documents);
 		
 		int totalData = service.inprogressCount(no); // 진행중인 문서 개수 뽑아오기 !!! 
@@ -315,7 +325,7 @@ public class EDocController {
 		int pageBarSize = 5;
 		int pageNo = ((cPage1 - 1) / pageBarSize) * pageBarSize + 1;
 		int pageEnd = pageNo + pageBarSize - 1;
-		String url = "main";
+		String url = "/edoc/inprogress";
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
@@ -355,14 +365,67 @@ public class EDocController {
 
 		sb.append("<script>");
 		sb.append("function fn_paging(pageNo) {");
-		sb.append("location.assign('" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage1 + "')");
+		sb.append("location.assign('" + url + "?cPage1='+pageNo+'&numPerpage1=" + numPerpage1 + "')");
 		sb.append("}");
 		sb.append("</script>");
 
-		m.addAttribute("pageBar", sb.toString());
+		m.addAttribute("pageBar1", sb.toString());
+		
+//		승인대기중인 문서 	
+
+		int totalData1 = service.awaitingApprovalTotal(no); // 승인대기중인 문서 개수 뽑아오기 !!! 
+		int totalPage1 = (int) Math.ceil((double) totalData1 / numPerpage2);
+		int pageBarSize1 = 5;
+		int pageNo1 = ((cPage2 - 1) / pageBarSize1) * pageBarSize1 + 1;
+		int pageEnd1 = pageNo1 + pageBarSize1 - 1;
+		String url1 = "/edoc/inprogress";
+		
+		StringBuffer sb1 = new StringBuffer();
+		sb1.append("<ul class='pagination justify-content-center pagination-sm'>");
+		if (pageNo1 == 1) {
+			sb1.append("<li class='page-item disabled'>");
+			sb1.append("<a class='page-link' href='#'>이전</a>");
+			sb1.append("</li>");
+		} else {
+			sb1.append("<li class='page-item'>");
+			sb1.append("<a class='page-link' href='javascript:fn_paging1(" + (pageNo1 - 1) + ")'>이전</a>");
+			sb1.append("</li>");
+		}
+		
+		while (!(pageNo1 > pageEnd1 || pageNo1 > totalPage1)) {
+			if (pageNo1 == cPage1) {
+				sb1.append("<li class='page-item disabled'>");
+				sb1.append("<a class='page-link' href='#'>" + pageNo1 + "</a>");
+				sb1.append("</li>");
+			} else {
+				sb1.append("<li class='page-item'>");
+				sb1.append("<a class='page-link' href='javascript:fn_paging1(" + pageNo1 + ")'>" + pageNo1 + "</a>");
+				sb1.append("</li>");
+			}
+			pageNo1++;
+		}
+		
+		if (pageNo1 > totalPage1) {
+			sb1.append("<li class='page-item disabled'>");
+			sb1.append("<a class='page-link' href='#'>다음</a>");
+			sb1.append("</li>");
+		} else {
+			sb1.append("<li class='page-item'>");
+			sb1.append("<a class='page-link' href='javascript:fn_paging1(" + pageNo1 + ")'>다음</a>");
+			sb1.append("</li>");
+		}
+		sb1.append("</ul>");
+		
+		sb1.append("<script>");
+		sb1.append("function fn_paging1(pageNo1) {");
+		sb1.append("location.assign('" + url + "?cPage2='+pageNo1+'&numPerpage2=" + numPerpage2 + "')");
+		sb1.append("}");
+		sb1.append("</script>");
+		
+		m.addAttribute("pageBar2", sb1.toString());
 		
 		
-		List<AbstractDocument> waitdocuments = service.awaitingApproval(no, Map.of("cPage", cPage2, "numPerpage", numPerpage2));
+		List<AbstractDocument> waitdocuments = service.awaitingApproval(no, Map.of("cPage2", cPage2, "numPerpage2", numPerpage2));
 		m.addAttribute("waitdocuments", waitdocuments);
 		
 		
@@ -394,7 +457,185 @@ public class EDocController {
 		List<AbstractDocument> documents = service.approvedDocument(no, Map.of("cPage", cPage, "numPerpage", numPerpage));
 		m.addAttribute("documents", documents);
 		
+		int totalData = service.approvedCount(no); // 진행중인 문서 개수 뽑아오기 !!! 
+		int totalPage = (int) Math.ceil((double) totalData / numPerpage);
+		int pageBarSize = 5;
+		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
+		int pageEnd = pageNo + pageBarSize - 1;
+		String url = "/edoc/inprogress";
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
+		if (pageNo == 1) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>이전</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + (pageNo - 1) + ")'>이전</a>");
+			sb.append("</li>");
+		}
+
+		while (!(pageNo > pageEnd || pageNo > totalPage)) {
+			if (pageNo == cPage) {
+				sb.append("<li class='page-item disabled'>");
+				sb.append("<a class='page-link' href='#'>" + pageNo + "</a>");
+				sb.append("</li>");
+			} else {
+				sb.append("<li class='page-item'>");
+				sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>" + pageNo + "</a>");
+				sb.append("</li>");
+			}
+			pageNo++;
+		}
+
+		if (pageNo > totalPage) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>다음</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>다음</a>");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+
+		sb.append("<script>");
+		sb.append("function fn_paging(pageNo) {");
+		sb.append("location.assign('" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage + "')");
+		sb.append("}");
+		sb.append("</script>");
+
+		m.addAttribute("pageBar1", sb.toString());
+		
+		
+		
 		return "edoc/approved";
+	}
+	@RequestMapping("/approvedall")
+	public String approvedall(Model m
+			, @RequestParam(defaultValue ="1") int cPage
+			, @RequestParam(defaultValue="10") int numPerpage) {
+		
+//		승인완료된 문서 출력 (docWriter 가 로그인된 empNo와 같고, docStatus 가 '승인')
+		List<AbstractDocument> documents = service.approvedAllDocument(Map.of("cPage", cPage, "numPerpage", numPerpage));
+		m.addAttribute("documents", documents);
+		
+		int totalData = service.approvedAllCount(); // 완료된 문서 !!! 
+		int totalPage = (int) Math.ceil((double) totalData / numPerpage);
+		int pageBarSize = 5;
+		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
+		int pageEnd = pageNo + pageBarSize - 1;
+		String url = "/edoc/inprogress";
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
+		if (pageNo == 1) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>이전</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + (pageNo - 1) + ")'>이전</a>");
+			sb.append("</li>");
+		}
+
+		while (!(pageNo > pageEnd || pageNo > totalPage)) {
+			if (pageNo == cPage) {
+				sb.append("<li class='page-item disabled'>");
+				sb.append("<a class='page-link' href='#'>" + pageNo + "</a>");
+				sb.append("</li>");
+			} else {
+				sb.append("<li class='page-item'>");
+				sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>" + pageNo + "</a>");
+				sb.append("</li>");
+			}
+			pageNo++;
+		}
+
+		if (pageNo > totalPage) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>다음</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>다음</a>");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+
+		sb.append("<script>");
+		sb.append("function fn_paging(pageNo) {");
+		sb.append("location.assign('" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage + "')");
+		sb.append("}");
+		sb.append("</script>");
+
+		m.addAttribute("pageBar1", sb.toString());
+		
+		return "edoc/approvedall";
+	}
+	
+	@RequestMapping("/saved")
+	public String saved(Model m
+			, @RequestParam(defaultValue ="1") int cPage
+			, @RequestParam(defaultValue="10") int numPerpage) {
+		Long no = getEmployeeH().getEmpNo();
+		
+		List<AbstractDocument> documents = service.savedDocument(no, Map.of("cPage", cPage, "numPerpage", numPerpage));
+		m.addAttribute("documents", documents);
+		
+		int totalData = service.savedDocumentCount(no); // 진행중인 문서 개수 뽑아오기 !!! 
+		int totalPage = (int) Math.ceil((double) totalData / numPerpage);
+		int pageBarSize = 5;
+		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
+		int pageEnd = pageNo + pageBarSize - 1;
+		String url = "/edoc/inprogress";
+
+		StringBuffer sb = new StringBuffer();
+		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
+		if (pageNo == 1) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>이전</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + (pageNo - 1) + ")'>이전</a>");
+			sb.append("</li>");
+		}
+
+		while (!(pageNo > pageEnd || pageNo > totalPage)) {
+			if (pageNo == cPage) {
+				sb.append("<li class='page-item disabled'>");
+				sb.append("<a class='page-link' href='#'>" + pageNo + "</a>");
+				sb.append("</li>");
+			} else {
+				sb.append("<li class='page-item'>");
+				sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>" + pageNo + "</a>");
+				sb.append("</li>");
+			}
+			pageNo++;
+		}
+
+		if (pageNo > totalPage) {
+			sb.append("<li class='page-item disabled'>");
+			sb.append("<a class='page-link' href='#'>다음</a>");
+			sb.append("</li>");
+		} else {
+			sb.append("<li class='page-item'>");
+			sb.append("<a class='page-link' href='javascript:fn_paging(" + pageNo + ")'>다음</a>");
+			sb.append("</li>");
+		}
+		sb.append("</ul>");
+
+		sb.append("<script>");
+		sb.append("function fn_paging(pageNo) {");
+		sb.append("location.assign('" + url + "?cPage='+pageNo+'&numPerpage=" + numPerpage + "')");
+		sb.append("}");
+		sb.append("</script>");
+
+		m.addAttribute("pageBar1", sb.toString());
+		
+		return "edoc/saved";
 	}
 	
 	@GetMapping("/selectdoc")
@@ -503,6 +744,7 @@ public class EDocController {
 		return ResponseEntity.ok(service.selectApprovalByDocId(doc.getDocId()));
 	}
 	
+
 	@ResponseBody
 	@PostMapping("/reject")  // 반려를 구분해줘야 함 -> 기본보고서는 중간반려, 최종반려 모두 같고 || 휴가신청은 반려 시, 신청한 사용일수를 모두 되돌려줘야한다 !!  
 	public String reject(@RequestBody BasicDocument doc) throws JsonMappingException, JsonProcessingException {
@@ -537,6 +779,43 @@ public class EDocController {
 		} else {
 			int result = service.rejectDocument(param);
 			if(result==2) {
+				resultString = "성공";
+			} else {
+				resultString = "실패";
+			}
+		}
+		return resultString;
+	}
+	@ResponseBody
+	@PostMapping("/returndoc")  // 반려를 구분해줘야 함 -> 기본보고서는 중간반려, 최종반려 모두 같고 || 휴가신청은 반려 시, 신청한 사용일수를 모두 되돌려줘야한다 !!  
+	public String returnDoc(@RequestBody BasicDocument doc) throws JsonMappingException, JsonProcessingException {
+		String resultString = null;
+		int docId = doc.getDocId();
+		String docType = doc.getDocType();
+		int writer = doc.getDocWriter();
+		int approver = doc.getApprover(); // 연차 사용신청일수
+		
+		// document 랑 approval 이랑 join where docId = #{docId} and  했을 때, appOrder 가지고와서 비교 !   
+		// login 한 아이디가 필요함 !!!! appEmp == loginedEmpNo -> getAppOrder 
+		long empNo = getEmployeeH().getEmpNo();
+		
+		Map<String,Object> param = new HashMap<>();
+		param.put("docId", docId);
+		param.put("docType", docType);
+		param.put("writer", writer);
+		param.put("vacaUsed", approver);
+		
+		if(docType.equals("T04")) {
+//			휴가회수의 경우, employee 의 remainingAnnualLeave 를 remainingAnnualLeave + vacaUsed
+			int result = service.updateDocStatToReturn(param);
+			if(result == 2) {
+				resultString = "성공";
+			} else {
+				resultString = "실패";
+			}
+		} else {
+			int result = service.updateDocStatToReturn(param);
+			if(result > 0) {
 				resultString = "성공";
 			} else {
 				resultString = "실패";
