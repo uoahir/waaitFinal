@@ -522,7 +522,7 @@ public class MailController {
 	public String continueWriteMail(int mailNo, Model model) {
 		Mail temporarySaveMail = service.joinTempoSaveMailByMailNo(mailNo);
 		System.out.println("tempSaveMailContinue : " + temporarySaveMail);
-		model.addAttribute("mails", temporarySaveMail);
+		model.addAttribute("mail", temporarySaveMail);
 		
 		return "mail/writemail";
 	}

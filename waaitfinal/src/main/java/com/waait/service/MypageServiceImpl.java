@@ -1,12 +1,14 @@
 package com.waait.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Service;
 
 import com.waait.dao.MypageDao;
 import com.waait.dto.Mypage;
+import com.waait.dto.SpamDomain;
 import com.waait.dto.Work;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,16 @@ public class MypageServiceImpl implements MypageService {
 	@Override
 	public List<Work> myTodayWork(Long empNumber) {
 		return dao.myTodayWork(session,empNumber);
+	}
+
+	@Override
+	public List<SpamDomain> getSpamDomain(long empNo) {
+		return dao.getSpamDomain(session, empNo);
+	}
+
+	@Override
+	public int getNotReadMailCount(Map<String, Object> sqlParam) {
+		return dao.getNotReadMailCount(session, sqlParam);
 	}
 	
 

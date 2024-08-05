@@ -24,61 +24,13 @@
 <link rel="stylesheet" href="${path }/resources/waait/mail/writemail_css.css">
 </head>
 <body>
-	<c:if test="${not empty mails }">
-		<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="mailContentInputHidden()">
+	<c:if test="${not empty mail }">
+		<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="return mailContentInputHidden()">
 			<section class="section">
 				<div class="sectionHeaderContainer">
-					<div class="senderContainer">
-						<span>작성자 : </span><input type="text" name="senderMailAddress" value="${emp.empEmail }" disabled>
-					</div>
-					<div class="receiverContainer">
-						<span>받는사람 : </span>
-						<c:if test="${mails.receivers.size() > 0 }">
-							<c:forEach var="receiver" items="${mails.receivers }">
-								<input type="text" name="mailReceiverAddress" value="${receiver.mailReceiverAddress }">
-							</c:forEach>
-						</c:if>
-						<c:if test="${mails.receivers.size() == 0 }">
-							<input type="text" name="mailReceiverAddress" placeholder="받는사람 입력">
-						</c:if>
-					</div>
-					<div class="matilTitleContainer">
-						<c:if test="${not empty mails.mailTitle }">
-							<span>제목 : </span><input type="text" name="mailTitle" value="${mails.mailTitle }">
-						</c:if>
-						<c:if test="${empty mails.mailTitle }">
-							<span>제목 : </span><input type="text" name="mailTitle" placeholder="제목입력">
-						</c:if>
-					</div>
-					<p>파일 업로드 : </p>
-					<div class="fileContainer">
-						<input type="file" class="multiple-files-filepond" name="upFile" multiple>
-					</div>
-				</div>
-		        <div class="row">
-		            <div class="col-12">
-		                <div class="card">
-		                    <div class="card-body">
-		                        <div id="summernote"></div>
-		                    </div>
-		                </div>
-		            </div>
-		        </div>
-		    </section>
-			<button class="btn btn-primary" type="button" onclick="mailContentInputHidden()">테스트버튼</button>
-		    <input type="text" name="mailContent" hidden="true">
-		    <input type="text" name="mailReceiver" hidden="true">
-		    <input type="submit" name="mailStatus" value="전송">
-		    <input type="submit" name="mailStatus" value="임시저장">
-	    </form>
-    </c:if>
-    <c:if test="${empty mails }">
-    	<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="mailContentInputHidden()">
-    	<section>
-    	<div class="sectionHeaderContainer">
 	        <div class="senderContainer flex-divcontainer">
 	            <div class="padding-top3">
-	                <span class="boldtext">보내는 사람</span>
+	                <span class="boldtext">${emp.empName }</span>
 	            </div>
 	            <div class="senderInputContainer">
 	                <input type="text" class="inherit-input" name="senderMailAddress">
@@ -89,7 +41,11 @@
 	                <span class="boldtext">받는사람</span>
 	            </div>
 	            <div class="myborder-bottom width90">
-	                <input type="text" name="mailReceiverAddress" class="nonestyle-input inherit-input" placeholder="받는사람 입력">
+	            	<c:if test="${mail.receivers.size() > 0 }">
+	            		<c:forEach var="receiver" items="${mail.receivers }">
+	                		<input type="text" name="mailReceiverAddress" class="nonestyle-input inherit-input" placeholder="받는사람 입력" value="${receiver.mailReceiverAddress }">
+	                	</c:forEach>
+	                </c:if>
 	            </div>
 	        </div>
 	        <div class="mailTitleContainer flex-divcontainer">
@@ -126,6 +82,63 @@
 			<input type="submit" class="btn btn-success" name="mailStatus" value="전송">
 			<input type="submit" class="btn btn-primary" name="mailStatus" value="임시저장">
 		</div>
+		</section>
+	    </form>
+    </c:if>
+    <c:if test="${empty mail }">
+    	<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="return mailContentInputHidden()">
+    	<section>
+    	<div class="sectionHeaderContainer">
+	        <div class="senderContainer flex-divcontainer">
+	            <div class="padding-top3">
+	                <span class="boldtext">보내는 사람</span>
+	            </div>
+	            <div class="senderInputContainer">
+	                <input type="text" class="nonestyle-input" name="senderMailAddress" value="${emp.empEmail }">
+	            </div>
+	        </div>
+	        <div class="receiverContainer flex-divcontainer">
+	            <div class="padding-top3">
+	                <span class="boldtext">받는사람</span>
+	            </div>
+	            <div class="myborder-bottom width90" style="display : flex;" id="receiverInputContainer">
+	                <div>
+	                    <input type="text" name="mailReceiverAddress" class="nonestyle-input" placeholder="받는사람 입력" onblur="changeInputView(event)">
+	                    <button class="nostyle-btn" onclick="deleteMailReceiver(event)">x</button>
+	                </div>
+	                <div>
+	                    <input type="text" name="mailReceiverAddress" class="nonestyle-input" placeholder="받는사람 입력" onblur="changeInputView(event)">
+	                    <button class="nostyle-btn" onclick="deleteMailReceiver(event)">x</button>
+	                </div>
+	            </div>
+	        </div>
+	        <div class="matilTitleContainer flex-divcontainer">
+	            <div class="padding-top3">
+	                <span class="boldtext">제목</span>
+	            </div>
+	            <div class="myborder-bottom width90">
+	                <input type="text" name="mailTitle" class="nonestyle-input" placeholder="제목입력">
+	            </div>
+	        </div>
+	    </div>
+    
+	    <div class="border-bottom border-top">
+			<div class="row">
+	            <div class="col-12">
+	                <div class="card">
+	                    <div class="card-body">
+	                        <div id="summernote"></div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div>
+			<input type="text" name="mailContent" hidden="true">
+			<input type="text" name="mailReceiver" hidden="true">
+			<input type="submit" class="btn btn-success" name="mailStatus" value="전송">
+			<input type="submit" class="btn btn-primary" name="mailStatus" value="임시저장">
+		</div>
 	    </section>
 
 	    </form>
@@ -137,9 +150,21 @@
     	});
     	
     	const mailContentInputHidden = () => {
+    		const receiverInputs = document.querySelectorAll("input[name='mailReceiver']");
+    		let receiverInputLengthBoolean = true;
+    		for(let i = 0; i < receiverInputs.length - 1; i++) {
+    			if(receiverInputs[i].value.length == 0) {
+    				alert("주소 작성창은 공란일 수 없습니다.");
+    				receiverInputLengthBoolean = false;
+    			}
+    		}
+    		if(receiverInputLengthBoolean) return false;
+    		
     		const mailContent = document.querySelector("div[class='note-editable']").innerHTML
     		document.querySelector("input[name='mailContent']").value = mailContent;
     		document.querySelector("input[name='mailReceiver']").value = document.querySelector("input[name='mailReceiverAddress']").value;
+    		
+    		return true;
     	}
     	
     	const fileUploadTest = () => {
@@ -151,6 +176,50 @@
         		document.querySelector("div[class='note-editable']").innerHTML = tempSaveMailContent;	
     		});
     	</c:if>
+    	
+    	const changeInputView = (e) => {
+    	    const $button = document.createElement("button");
+    	    $button.setAttribute("class", "nostyle-btn");
+    	    $button.setAttribute("onclick", "deleteMailReceiver(event)");
+    	    $button.innerText = "x";
+
+    	    const receiverInput = e.currentTarget;
+    	    const inputDiv = e.currentTarget.parentElement;
+    	    const inputContainer = e.currentTarget.parentElement.parentElement;
+    	    console.log(inputContainer)
+    	    
+    	    const div = document.createElement("div");
+    	    const $input = document.createElement("input");
+    	    $input.setAttribute("type", "text");
+    	    $input.setAttribute("name", "mailReceiverAddress");
+    	    $input.setAttribute("class", "nonestyle-input");
+    	    $input.setAttribute("placeholder", "받는사람 입력");
+    	    $input.setAttribute("onblur", "changeInputView(event)");
+
+    	    receiverInput.setAttribute("class", "finishing-receiver-input");
+
+    	    inputDiv.appendChild($button);
+
+    	    div.appendChild($input);
+    	    inputContainer.appendChild(div);
+    	}
+
+    	const deleteMailReceiver = (e) => {
+    	    const receiverInput = document.querySelectorAll("input[name='mailReceiverAddress']");
+    	    e.currentTarget.parentElement.remove();
+    	    if(receiverInput.length == 1) {
+    	        const $input = document.createElement("input");
+    	        $input.setAttribute("type", "text");
+    	        $input.setAttribute("name", "mailReceiverAddress");
+    	        $input.setAttribute("class", "nonestyle-input");
+    	        $input.setAttribute("placeholder", "받는사람 입력");
+    	        $input.setAttribute("onblur", "changeInputView(event)");
+
+    	        const div = document.createElement("div");
+    	        div.appendChild($input);
+    	        document.getElementById("receiverInputContainer").appendChild(div);
+    	    }
+    	}
     </script>
 	<script src="${path }/assets/static/js/components/dark.js"></script>
 	<script src="${path }/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
