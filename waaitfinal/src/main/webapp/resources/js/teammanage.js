@@ -116,5 +116,44 @@ const cancelModify = (e) => {
 
 const modifyApply = (e) => {
 	const id = e.target.parentElement.parentElement.id;
-	consol.log("id : " + id);
+	const modifyTeamName = e.target.previousElementSibling.value;
+	
+	console.log("id : " + id);
+	console.log("modifyName : " + modifyTeamName);
+	
+	if(modifyTeamName.length == 0) {
+		alert("작성란을 입력해주세요");
+		return;
+	} else if( modifyTeamName.charAt(modifyTeamName.length - 1) == '팀') {
+		alert("팀 명의 끝글자는 팀으로 끝날 수 없습니다.");
+		return;
+	}
+	
+	fetch(path + "manage/checkduplicateteamname.do", {
+		method : "POST",
+		headers : {
+			"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+		},
+		body : "modifyName=" + modifyTeamName
+	})
+	.then(response => response.text())
+	.then(data => {
+		if(data == 0) {
+			fetch(path + "/manage/modifyteamname.do", {
+					method : "POST",
+					headers : {
+						"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+					},
+					body : "teamCode=" + id + "&modifyName=" + modifyTeamName
+				})
+				.then(response => response.text())
+				.then(html => {
+					console.log(html);
+					document.getElementById("teamModifyTable").innerHTML = html;
+					
+				})
+		} else {
+			alert("팀명은 중복될 수 없습니다.");
+		}
+	})
 }

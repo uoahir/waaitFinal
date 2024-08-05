@@ -220,12 +220,13 @@ public class MailController {
 		sb.append("}");
 		sb.append("</script>");
 		
-		
+		System.out.println("recentSearch : " + searchList);
 		model.addAttribute("mails", mailList);
 		model.addAttribute("myMailBoxes", myMailBoxList);
 		model.addAttribute("pageBar", sb.toString());
 		model.addAttribute("notReadCount", notReadCount);
 		model.addAttribute("spamMailCount", spamMailCount);
+		model.addAttribute("recentSearch", searchList);
 		
 		return "mail/mailmain";
 	}
@@ -315,6 +316,14 @@ public class MailController {
 		
 		return newMyMailBoxInfo;
 		
+	}
+	
+	@GetMapping("/refreshmymailboxmodal.do")
+	public String getRecentMyMailBoxInfo(Model model) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		List<MyMailBox> boxList = service.getMyMailBox(empNo);
+		model.addAttribute("myMailBoxes", boxList);
+		return "mail/mailresponse/mymailbox_modal";
 	}
 	
 	@PostMapping("/deletespamdomain.do")
@@ -513,7 +522,7 @@ public class MailController {
 	public String continueWriteMail(int mailNo, Model model) {
 		Mail temporarySaveMail = service.joinTempoSaveMailByMailNo(mailNo);
 		System.out.println("tempSaveMailContinue : " + temporarySaveMail);
-		model.addAttribute("mails", temporarySaveMail);
+		model.addAttribute("mail", temporarySaveMail);
 		
 		return "mail/writemail";
 	}
@@ -733,6 +742,20 @@ public class MailController {
 		service.enrollRecentSearchKeyword(recentSearch);
 		
 		return "mail/mailresponse/search_mail_list";
+	}
+	
+	@GetMapping("/deleterecentsearchhistory.do")
+	public @ResponseBody int deleteRecentSearchHistory(String no) {
+		System.out.println("no : " + no);
+		return service.deleteRecentSearchHistory(no);
+	}
+	
+	@GetMapping("/refreshsearchmodal.do")
+	public String refreshSearchModal(Model model) {
+		long empNo = getLoginEmpInfo().getEmpNo();
+		List<RecentSearch> searchList = service.getRecentSearch(empNo);
+		model.addAttribute("recentSearch", searchList);
+		return "mail/mailresponse/recentsearch_modal";
 	}
 	
 	@GetMapping("/filedownload.do")

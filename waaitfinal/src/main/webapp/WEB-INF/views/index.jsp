@@ -205,8 +205,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">이번주 근태</h6>
-                                    <h6 class="font-extrabold mb-0">값을 넘겨</h6>
+                                    <h6 class="text-muted font-semibold">안읽은 메일</h6>
+                                    <h6 class="font-extrabold mb-0">${notReadReceiveMailCount }</h6>
                                 </div>
                             </div>
                         </div>
@@ -255,8 +255,10 @@
                         <div class="card-header">
                             <h4>전자결재 관련</h4>                            
                         </div>
-                        <div class="card-body" style="display: flex; flex-direction:row">
-                            <div id="chart-profile-visit"></div>                            
+                        <div class="card-body" style="display: flex; flex-direction:row;" >
+                            <div style="width: 1100px;">
+                            	<jsp:include page="${path}/WEB-INF/views/edoc/nodelist.jsp" /> 
+                            </div>                            
                         </div>
                     </div>
                 </div>

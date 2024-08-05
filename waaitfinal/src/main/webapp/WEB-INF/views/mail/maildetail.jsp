@@ -94,20 +94,20 @@
 											제목 : ${mail.mailTitle }										
 										</div>
 										<div id="deleteButtonContainer">
-											<button onclick="deleteMail()">삭제버튼</button>
-										</div>
-										<div id="moveMyMailBoxButtonContainer">
-											<button onclick="moveMyMailBox()">메일함 이동</button>
+											<button class="btn btn-danger" onclick="deleteMail()">삭제버튼</button>
 										</div>
 										<div id="myMailBoxOptionContainer">
 											<c:if test="${not empty myMailBoxes }">
-												<select id="myMailBoxSelect">
+												<select class="form-control" id="myMailBoxSelect">
 													<option value="default" disabled>메일함을 선택하세요</option>
 													<c:forEach var="myMailBox" items="${myMailBoxes }">
 														<option value="${myMailBox.myMailBoxNo }">메일함 이름 : ${myMailBox.myMailBoxName }</option>
 													</c:forEach>
 												</select>
 											</c:if>
+										</div>
+										<div id="moveMyMailBoxButtonContainer">
+											<button class="btn btn-primary" onclick="moveMyMailBox()">메일함 이동</button>
 										</div>
 									</div>
 									<div class="card-body py-1">
