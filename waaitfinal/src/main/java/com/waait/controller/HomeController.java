@@ -58,7 +58,7 @@ public class HomeController {
 		return "redirect:/user";
 	}
 	@GetMapping("/") //화면에 데이터 출력부분
-	public String homeController(Mypage empNo, Model model) {
+	public String homeController(Long empNumber, Model model) {
 		
 		Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
@@ -77,12 +77,18 @@ public class HomeController {
 		// 메인페이지에서 마이페이지 관련 출력 로직
 		Mypage mypage=new Mypage();
 		//Employee employee=getLoginEmpInfo();
-		long empNumber=employee.getEmpNo();
+		empNumber=employee.getEmpNo();
 		
 		List<Mypage> total=service.myInfoList(empNumber);
 		System.out.println(total);
 		mypage.setEmpNo(empNumber);
 		
+		//근태 관련
+		List<Work> workTotal=service.myTodayWork(empNumber);
+		System.out.println("workTotal : " + workTotal);
+		model.addAttribute("workTotal", workTotal);
+		
+		//사원정보관련(+연차)
 		model.addAttribute("total", total);
 		total.forEach(e->{
 			System.out.println(e);
@@ -94,16 +100,18 @@ public class HomeController {
 	}
 	
 	//출퇴근시간 가져오기(근무시간) 
-//		@GetMapping("/")
-//		public String myTodayWork(Long empNo,Model model) {
-//			
-//			Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//			
-//			Work work=service.myTodayWork(empNo);
-//			model.addAttribute("workStart", work.getWorkStart());
-//			
-//			return "index";
-//		}
+//	@GetMapping("/")
+//	public String myTodayWork(Long empNo,Model model) {
+//		
+//		Work work=new Work();
+//		Employee employee=getLoginEmpInfo();
+//		long empNumber=employee.getEmpNo();
+//		
+//		Work total=service.myTodayWork(empNo);
+//		model.addAttribute("workStart", total.getWorkStart());
+//		
+//		return "index";
+//	}
 		
 		
 		

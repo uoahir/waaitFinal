@@ -30,7 +30,7 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public Work myTodayWork(Long empNumber) {
+	public List<Work> myTodayWork(Long empNumber) {
 		return dao.myTodayWork(session,empNumber);
 	}
 	
