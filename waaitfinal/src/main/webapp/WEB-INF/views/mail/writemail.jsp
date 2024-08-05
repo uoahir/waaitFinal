@@ -26,7 +26,7 @@
 <body>
 	<header>
 		<div class="logo" style="height: 100; ">
-        	<a href="${path }/"><img src="/resources/images/logo.png" alt="Logo" srcset="" width="150px" style="height:90px"></a>
+        	<a href="javascript:goMailMain()"><img src="/resources/images/logo.png" alt="Logo" srcset="" width="150px" style="height:90px"></a>
         </div>
 	</header>
 	<c:if test="${not empty mail }">
@@ -109,11 +109,6 @@
 	            <div class="myborder-bottom width90" style="display : flex;" id="receiverInputContainer">
 	                <div>
 	                    <input type="text" name="mailReceiverAddress" class="nonestyle-input" placeholder="받는사람 입력" onblur="changeInputView(event)">
-	                    <button class="nostyle-btn" onclick="deleteMailReceiver(event)">x</button>
-	                </div>
-	                <div>
-	                    <input type="text" name="mailReceiverAddress" class="nonestyle-input" placeholder="받는사람 입력" onblur="changeInputView(event)">
-	                    <button class="nostyle-btn" onclick="deleteMailReceiver(event)">x</button>
 	                </div>
 	            </div>
 	        </div>
@@ -145,7 +140,7 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div>
+	    <div id="actionContainer">
 			<input type="text" name="mailContent" hidden="true">
 			<input type="text" name="mailReceiver" hidden="true">
 			<input type="submit" class="btn btn-success" name="mailStatus" value="전송">
@@ -217,6 +212,7 @@
 	    	    $input.setAttribute("onblur", "changeInputView(event)");
 	
 	    	    receiverInput.setAttribute("class", "finishing-receiver-input");
+	    	    receiverInput.setAttribute("disabled", "true");
 	
 	    	    inputDiv.appendChild($button);
 	
@@ -242,6 +238,14 @@
     	        div.appendChild($input);
     	        document.getElementById("receiverInputContainer").appendChild(div);
     	    }
+    	}
+    	
+    	const goMailMain = () => {
+    		const mailContent = document.querySelector("div[class='note-editable']").innerHTML;
+    		if(mailContent.length > 0) {
+    			const result = confirm("지금까지 작성한것들은 저장되지 않습니다. 정말 나가시겠습니까?");
+    			if(result) loaction.assign("${path }/mail/mailmain.do");
+    		}
     	}
     </script>
 	<script src="${path }/assets/static/js/components/dark.js"></script>
