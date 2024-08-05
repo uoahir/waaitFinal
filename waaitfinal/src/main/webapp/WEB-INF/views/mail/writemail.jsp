@@ -158,13 +158,14 @@
     	
     	const mailContentInputHidden = () => {
     		const receiverInputs = document.querySelectorAll("input[name='mailReceiver']");
-    		let receiverInputLengthBoolean = true;
+    		let receiverInputLengthBoolean = false;
     		for(let i = 0; i < receiverInputs.length - 1; i++) {
     			if(receiverInputs[i].value.length == 0) {
-    				alert("주소 작성창은 공란일 수 없습니다.");
-    				receiverInputLengthBoolean = false;
+    				alert("주소 작성란은 공란일 수 없습니다.");
+    				receiverInputLengthBoolean = true;
     			}
     		}
+    		
     		if(receiverInputLengthBoolean) return false;
     		
     		const mailContent = document.querySelector("div[class='note-editable']").innerHTML
@@ -244,7 +245,7 @@
     		const mailContent = document.querySelector("div[class='note-editable']").innerHTML;
     		if(mailContent.length > 0) {
     			const result = confirm("지금까지 작성한것들은 저장되지 않습니다. 정말 나가시겠습니까?");
-    			if(result) loaction.assign("${path }/mail/mailmain.do");
+    			if(result) location.assign("${path }/mail/mailmain.do");
     		}
     	}
     </script>
