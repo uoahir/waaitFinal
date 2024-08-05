@@ -137,19 +137,19 @@
 							</div>
 							<c:if test="${app.appStat eq '승인전' }">
 								<div class="avatar avatar-xl">
-									<img src="${path }/resources/images/${app.employee.empProfile}">
+									<img src="${path}/resources/upload/emp/profile/${app.employee.empProfile}">
 									<%-- <img src="${path }/resources/upload/emp/profile/${app.employee.empProfile}"> --%>
 								</div>
 							</c:if>
 							<c:if test="${app.appStat eq '승인' }">
 								<div class="avatar avatar-xl profile-image-container">
-									<img class="profile-image" src="${path }/resources/upload/emp/profile/${app.employee.empProfile}">
+									<img class="profile-image" src="${path}/resources/upload/emp/profile/${app.employee.empProfile}">
 									<span class="check-icon"><i class="bi bi-check2"></i></span>							
 								</div>
 							</c:if>
 							<c:if test="${app.appStat eq '반려' }">
 								<div class="avatar avatar-xl profile-image-container-reject">
-									<img class="profile-image" src="${path }/resources/upload/emp/profile/${app.employee.empProfile}">						
+									<img class="profile-image" src="${path}/resources/upload/emp/profile/${app.employee.empProfile}">						
 								</div>
 							</c:if>
 							
