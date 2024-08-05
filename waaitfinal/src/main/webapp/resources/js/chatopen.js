@@ -189,7 +189,8 @@
             //프로필 사진
             //나중에 프로필 생기면 꼭 주소 연결하기
             const empProfile = document.querySelector("#modal_empprofile_top>div:nth-of-type(2)>img");
-            empProfile.src = path+"/resources/프로필들어가있는폴더/${data.empProfile}";
+            empProfile.src = path+"/resources/upload/emp/profile/"+data.empProfile;
+           
             
             //이름 직급
             const empNameLevelName = document.querySelector("#modal_empprofile_top>div:nth-of-type(3)>h2");
@@ -305,7 +306,6 @@
       });
    }
    /* 프로필 모달 채팅바로가기 끝 */
-
 
 
    // 현재는 메세지를 저장할 때 한번에 5개씩 리스트형태로 담아서 저장하기 떄문에 아래 기능을 구현하기에 어려움이 있어 한개씩 바로바로 insert되게 변경해서 구현해야됨.
@@ -475,7 +475,7 @@
             $userprofilep1.innerText = chatuser.jobLevel.levelName;
             $userprofilep2.innerText = chatuser.empName;
             
-            $userprofileimg.setAttribute("src",path+"/resources/프로필들어가있는폴더/"+chatuser.empProfile);
+            $userprofileimg.setAttribute("src",path+"/resources/upload/emp/profile/"+chatuser.empProfile);
             $userprofileimg.setAttribute("alt","프로필");
             $userprofileimg.setAttribute("width","50px");
             $userprofileimg.setAttribute("height","50px");
@@ -627,7 +627,8 @@
                $p5.innerText = chatroom.chatCount;
                
                // chatroom 객체의 프로필 이미지 URL 사용
-               $img.setAttribute("src",path+"/resources/프로필들어가있는폴더/"+chatroom.empProfile);
+               
+               $img.setAttribute("src",path+"/resources/upload/emp/profile/"+chatroom.empProfile);
 			   $img.setAttribute("alt", "프로필");
 			   $img.setAttribute("width", "50");
 			   $img.setAttribute("height", "50");
