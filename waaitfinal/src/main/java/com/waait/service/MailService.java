@@ -302,6 +302,11 @@ public class MailService {
 	public void enrollRecentSearchKeyword(RecentSearch recentSearch) {
 		dao.enrollRecentSearchKeyword(session, recentSearch);
 	}
+	
+	@Transactional
+	public int deleteRecentSearchHistory(String no) {
+		return dao.deleteRecentSearchHistory(session, no);
+	}
 
 	public int joinSendingMailBoxTotalData(long empNo) {
 		return dao.joinSendingMailBoxData(session, empNo);

@@ -163,10 +163,17 @@
 																				+ "</svg>"
 																			+ "</div> " + data.myBoxName
 																		+ "</a>"
+																		+ "<input type='text' name='myMailBoxName' value='" + data.myBoxName + "' hidden='true' disabled>"
 																		+ "<button class='deleteMyMailBoxButton' id='" + data.myMailBoxNo + "' onclick='deleteMyMailBox(event)'>삭제</button>"
 																	+ "</div>";
 																e.target.value = "";
 																e.target.hidden = true;
+																
+																fetch("${path }/mail/refreshmymailboxmodal.do")
+																.then(response => response.text())
+																.then(data => {
+																	document.getElementById("mymailbox-modalmain").innerHTML = data;
+																})
 															}
 														});
 													} else {
@@ -241,9 +248,11 @@
 																<svg class="bi" width="1.5em" height="1.5em" fill="currentColor">
 			                                            			<use xlink:href="${path }/resources/assets/static/images/bootstrap-icons.svg#envelope" />
 			                                        			</svg>
-															</div> ${myBox.myMailBoxName }
+															</div> 
+															${myBox.myMailBoxName }
 														</a>
 														<button class="deleteMyMailBoxButton" id="${myBox.myMailBoxNo }" onclick="deleteMyMailBox(event)">삭제</button>
+														<input type="text" name="myMailBoxName" value="${myBox.myMailBoxName }" hidden="true" disabled>
 													</div>
 												<!-- <a href="#"
 													class="list-group-item d-flex justify-content-between align-items-center">
@@ -912,17 +921,28 @@
 		
 		const deleteMyMailBox = (e) => {
 			const myMailBoxNo = e.currentTarget.id;
-			fetch("${path }/mail/deletemymailbox.do", {
-				method : "POST",
-				headers : {
-					"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
-				},
-				body : "myMailBoxNo=" + myMailBoxNo
-			})
-			.then(response => response.text())
-			.then(data => {
-				document.getElementById("myMailBoxListContainer").innerHTML = data;
-			})
+			const myMailBoxName = e.currentTarget.nextElementSibling.value;
+			const result = confirm(myMailBoxName + "을(를) 삭제하시겠습니까?");
+			if(result == true) {
+				console.log("result : " + result);
+				fetch("${path }/mail/deletemymailbox.do", {
+					method : "POST",
+					headers : {
+						"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+					},
+					body : "myMailBoxNo=" + myMailBoxNo
+				})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("myMailBoxListContainer").innerHTML = data;
+					
+					fetch("${path }/mail/refreshmymailboxmodal.do")
+					.then(response => response.text())
+					.then(data => {
+						document.getElementById("mymailbox-modalmain").innerHTML = data;
+					})
+				})
+			}
 		}
 		
 		const restoreMail = () => {
@@ -1657,24 +1677,28 @@
 		</div>
 		<div id="recentSearchContainer">
 			<p style="margin:0px; padding-left:3px;">최근 검색어</p>
-			<div class="recentButtonContainer padding-top-5" id="recentSearchButtonContainer">
-				<button class="recentSearchButton padding-bottom-5" onclick="searchMailByRecentSearch(event)">
-					<span class="recentSearchType">[보낸사람]</span>
-					<span class="recentContentSpan">waait@waait.com</span>
-				</button>
-				<button class="searchDeleteButton padding-bottom-5" data-searchNo="1" onclick="deleteSearchHistory(event)">
-					x
-				</button>
-			</div>
-			<div class="recentButtonContainer padding-top-5" id="recentSearchButtonContainer">
-				<button class="recentSearchButton padding-bottom-5" onclick="searchMailByRecentSearch(event)">
-					<span class="recentSearchType">[보낸사람]</span>
-					<span class="recentContentSpan">waait@waait.com</span>
-				</button>
-				<button class="searchDeleteButton padding-bottom-5" data-searchNo="1" onclick="deleteSearchHistory(event)">
-					x
-				</button>
-			</div>
+			<c:if test="${not empty recentSearch }">
+				<c:forEach var="recent" items="${recentSearch }">
+					<div class="recentButtonContainer padding-top-5" id="recentSearchButtonContainer">
+						<button class="recentSearchButton padding-bottom-5" onclick="searchMailByRecentSearch(event)">
+							<span class="recentSearchType">
+								<c:if test="${recent.searchType eq 'M.MAILCONTENT' }">[내용]</c:if>
+								<c:if test="${recent.searchType eq 'M.MAILTITLE' }">[타이틀]</c:if>
+								<c:if test="${recent.searchType eq 'E.EMPEMAIL' }">[보낸사람]</c:if>
+							</span>
+							<span class="recentContentSpan">${recent.searchValue }</span>
+						</button>
+						<button class="searchDeleteButton padding-bottom-5" data-searchNo="${recent.recentSearchNo }" onclick="deleteSearchHistory(event)">
+							x
+						</button>
+					</div>
+				</c:forEach>
+			</c:if>
+			<c:if test="${empty recentSearch }">
+				<div>
+					<p>최근 검색어 없음</p>
+				</div>
+			</c:if>
 		</div>
 	</div>
 	<style>
@@ -1711,12 +1735,47 @@
 	<script>
 		const deleteSearchHistory = (e) => {
 			const recentSearchNo = e.currentTarget.dataset.searchno;
-			console.log(recentSearchNo);
+			fetch("${path }/mail/deleterecentsearchhistory.do?no=" + recentSearchNo)
+			.then(response => response.text())
+			.then(result => {
+				if(result > 0) {
+					fetch("${path }/mail/refreshsearchmodal.do")
+					.then(response => response.text())
+					.then(html => {
+						document.getElementById("recentSearchContainer").innerHTML = html;
+					})
+				} else {
+					alert("알 수 없는 오류로 삭제하는데 실패했습니다. 잠시뒤에 다시 시도해주세요");
+				}
+			})
+		}	
+		
+		const searchMailByRecentSearch = (e) => {
+			const searchType = e.currentTarget.firstElementChild.innerText;
+			const searchValue = e.currentTarget.lastElementChild.innerText;
+
+			console.log("searchType : " + searchType);
+			console.log("searchValue : " + searchValue);
+			if(searchValue.length > 0) {
+				fetch("${path }/mail/searchmail.do", {
+					method : "POST",
+					headers : {
+						"Content-Type" : "application/x-www-form-urlencoded;charset=UTF-8"
+					},
+					body : "searchType=" + searchType + "&searchValue=" + searchValue
+				})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById("mailListContainer").innerHTML = data;
+				})
+			} else {
+				alert("입력값이 없습니다.");
+			}
 		}
 	</script>
 	<!-- 내 메일함으로 이동하는 모달 -->
 	<div class="outer-mymailbox-modal modal">
-        <div class="mymailbox-modal">
+        <div class="mymailbox-modal" id="mymailbox-modalmain">
         <c:if test="${not empty myMailBoxes }">
         	<c:forEach var="myBox" items="${myMailBoxes }">
         		<div class="mymailbox-container">
