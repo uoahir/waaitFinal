@@ -153,6 +153,15 @@
             </div>
         </div>
     </div>
+    	<script>
+    	var path = "${path}";
+    	var employee = {
+    		empName : "${employee.empName}",
+    		deptName : "${employee.department.deptName}",
+    		levelName : "${employee.jobLevel.levelName}",
+    		empNo : "${employee.empNo}"
+    	}
+    </script>
     <script type="text/javascript">
         const isFirstOpened = (docId, docType, docWriter) => {
             window.open("${path}/edoc/openedoc"+docId+"/"+docType+"/"+docWriter,"_blank" ,"width=1200, height=1000");

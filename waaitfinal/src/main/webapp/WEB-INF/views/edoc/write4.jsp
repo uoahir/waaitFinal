@@ -58,7 +58,7 @@
 	
     <div class="container d-block">
         <a class="navbar-brand ms-4" href="index.html">
-            <img src="/resources/images/logo.png" style="width:110px; height:80px;">
+            <img src="${path }/resources/images/logo.png" style="width:110px; height:80px;">
         </a>
     </div>
     

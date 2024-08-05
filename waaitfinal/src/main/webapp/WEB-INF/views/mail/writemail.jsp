@@ -193,6 +193,8 @@
     			return;
     		}
     		
+    		if(e.currentTarget.getAttribute("class") == "finishing-receiver-input") return;
+    		
     		if(receiverInputs.length != 4) {
 	    	    const $button = document.createElement("button");
 	    	    $button.setAttribute("class", "nostyle-btn");

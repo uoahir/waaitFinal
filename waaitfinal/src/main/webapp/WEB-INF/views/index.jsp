@@ -40,9 +40,7 @@
 <body>
     <script src="${path }/resources/assets/static/js/initTheme.js"></script>
     
-    <!-- script문 JU -->
-    <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
-    <script>const path = "${path}";</script>
+    
     
     <div id="app">
         <div id="sidebar">
@@ -278,11 +276,7 @@
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row;" >
                             <div style="width: 1100px;">
-<<<<<<< HEAD
-                            	<jsp:include page="/WEB-INF/views/edoc/nodelist.jsp" /> 
-=======
                             	<div id="tree"></div>
->>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
                             </div>                            
                         </div>
                     </div>
@@ -552,7 +546,10 @@
  <!-- 전자결재관련 차트 -->
 <%-- <script src="${path }/resources/assets/extensions/apexcharts/apexcharts.min.js"></script> --%>
 <%-- <script src="${path }/resources/assets/static/js/pages/dashboard.js"></script> --%>
-
+	
+	<!-- script문 JU -->
+    <script>const path = "${path}";</script>
+    <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
 </body>
 
 </html>
