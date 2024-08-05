@@ -24,6 +24,11 @@
 <link rel="stylesheet" href="${path }/resources/waait/mail/writemail_css.css">
 </head>
 <body>
+	<header>
+		<div class="logo" style="height: 100; ">
+        	<a href="javascript:goMailMain()"><img src="/resources/images/logo.png" alt="Logo" srcset="" width="150px" style="height:90px"></a>
+        </div>
+	</header>
 	<c:if test="${not empty mail }">
 		<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="return mailContentInputHidden()">
 			<section class="section">
@@ -104,15 +109,10 @@
 	            <div class="myborder-bottom width90" style="display : flex;" id="receiverInputContainer">
 	                <div>
 	                    <input type="text" name="mailReceiverAddress" class="nonestyle-input" placeholder="받는사람 입력" onblur="changeInputView(event)">
-	                    <button class="nostyle-btn" onclick="deleteMailReceiver(event)">x</button>
-	                </div>
-	                <div>
-	                    <input type="text" name="mailReceiverAddress" class="nonestyle-input" placeholder="받는사람 입력" onblur="changeInputView(event)">
-	                    <button class="nostyle-btn" onclick="deleteMailReceiver(event)">x</button>
 	                </div>
 	            </div>
 	        </div>
-	        <div class="matilTitleContainer flex-divcontainer">
+	        <div class="mailTitleContainer flex-divcontainer">
 	            <div class="padding-top3">
 	                <span class="boldtext">제목</span>
 	            </div>
@@ -121,7 +121,14 @@
 	            </div>
 	        </div>
 	    </div>
-    
+    	<div class="fileContainer flex-divcontainer">
+        	<div class="padding-top3 width-7">
+                <span class="boldtext">파일 첨부</span>
+            </div>
+            <div class="width90 fileinput-container">
+                <input type="file" class="multiple-files-filepond" name="upFile" multiple>
+            </div>
+        </div>
 	    <div class="border-bottom border-top">
 			<div class="row">
 	            <div class="col-12">
@@ -133,7 +140,7 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div>
+	    <div id="actionContainer">
 			<input type="text" name="mailContent" hidden="true">
 			<input type="text" name="mailReceiver" hidden="true">
 			<input type="submit" class="btn btn-success" name="mailStatus" value="전송">
@@ -151,13 +158,14 @@
     	
     	const mailContentInputHidden = () => {
     		const receiverInputs = document.querySelectorAll("input[name='mailReceiver']");
-    		let receiverInputLengthBoolean = true;
+    		let receiverInputLengthBoolean = false;
     		for(let i = 0; i < receiverInputs.length - 1; i++) {
     			if(receiverInputs[i].value.length == 0) {
-    				alert("주소 작성창은 공란일 수 없습니다.");
-    				receiverInputLengthBoolean = false;
+    				alert("주소 작성란은 공란일 수 없습니다.");
+    				receiverInputLengthBoolean = true;
     			}
     		}
+    		
     		if(receiverInputLengthBoolean) return false;
     		
     		const mailContent = document.querySelector("div[class='note-editable']").innerHTML
@@ -178,31 +186,43 @@
     	</c:if>
     	
     	const changeInputView = (e) => {
-    		const receiverInputs = document.querySelectorAll("")
-    	    const $button = document.createElement("button");
-    	    $button.setAttribute("class", "nostyle-btn");
-    	    $button.setAttribute("onclick", "deleteMailReceiver(event)");
-    	    $button.innerText = "x";
-
-    	    const receiverInput = e.currentTarget;
-    	    const inputDiv = e.currentTarget.parentElement;
-    	    const inputContainer = e.currentTarget.parentElement.parentElement;
-    	    console.log(inputContainer)
-    	    
-    	    const div = document.createElement("div");
-    	    const $input = document.createElement("input");
-    	    $input.setAttribute("type", "text");
-    	    $input.setAttribute("name", "mailReceiverAddress");
-    	    $input.setAttribute("class", "nonestyle-input");
-    	    $input.setAttribute("placeholder", "받는사람 입력");
-    	    $input.setAttribute("onblur", "changeInputView(event)");
-
-    	    receiverInput.setAttribute("class", "finishing-receiver-input");
-
-    	    inputDiv.appendChild($button);
-
-    	    div.appendChild($input);
-    	    inputContainer.appendChild(div);
+    		const receiverInputs = document.querySelectorAll("input[name='mailReceiver']");
+    		
+    		if(e.currentTarget.value.length == 0) {
+    			alert("주소를 입력해주세요");
+    			return;
+    		}
+    		
+    		if(receiverInputs.length != 4) {
+	    	    const $button = document.createElement("button");
+	    	    $button.setAttribute("class", "nostyle-btn");
+	    	    $button.setAttribute("onclick", "deleteMailReceiver(event)");
+	    	    $button.innerText = "x";
+	
+	    	    const receiverInput = e.currentTarget;
+	    	    const inputDiv = e.currentTarget.parentElement;
+	    	    const inputContainer = e.currentTarget.parentElement.parentElement;
+	    	    console.log(inputContainer)
+	    	    
+	    	    const div = document.createElement("div");
+	    	    const $input = document.createElement("input");
+	    	    $input.setAttribute("type", "text");
+	    	    $input.setAttribute("name", "mailReceiverAddress");
+	    	    $input.setAttribute("class", "nonestyle-input");
+	    	    $input.setAttribute("placeholder", "받는사람 입력");
+	    	    $input.setAttribute("onblur", "changeInputView(event)");
+	
+	    	    receiverInput.setAttribute("class", "finishing-receiver-input");
+	    	    receiverInput.setAttribute("readOnly", "true");
+	    	    receiverInput.style.backgroundColor = "white";
+	
+	    	    inputDiv.appendChild($button);
+	
+	    	    div.appendChild($input);
+	    	    inputContainer.appendChild(div);
+    		} else {
+    			alert("수령인은 최대 5명까지 가능합니다.");
+    		}
     	}
 
     	const deleteMailReceiver = (e) => {
@@ -220,6 +240,14 @@
     	        div.appendChild($input);
     	        document.getElementById("receiverInputContainer").appendChild(div);
     	    }
+    	}
+    	
+    	const goMailMain = () => {
+    		const mailContent = document.querySelector("div[class='note-editable']").innerHTML;
+    		if(mailContent.length > 0) {
+    			const result = confirm("지금까지 작성한것들은 저장되지 않습니다. 정말 나가시겠습니까?");
+    			if(result) location.assign("${path }/mail/mailmain.do");
+    		}
     	}
     </script>
 	<script src="${path }/assets/static/js/components/dark.js"></script>

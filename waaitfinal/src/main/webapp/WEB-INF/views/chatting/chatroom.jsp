@@ -15,7 +15,7 @@
 <meta charset="UTF-8">
 <title>waait chat</title>
 
-		
+
 		
 <!-- 스타일 적용 -->
 <link rel="stylesheet" href="${path}/resources/css/ju/chatroom.css">
@@ -120,7 +120,7 @@
 						<c:if test="${chatHistory.empNo ne employee.empNo }">
 		            		<div class="chatting_chattingroom_content_user">
 		            			<div>
-		            				<img src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
+		            				<img src="${path}/resources/upload/emp/profile/${chatHistory.empProfile}" alt="프로필" width="50" height="50">
 		            			</div>
 		            			<div>
 		            				<p>${chatHistory.empName}</p>
@@ -430,7 +430,8 @@
 	var chatRoomNo = "${chatName.chatRoomNo}";
 	var chatJoinCount = "${chatName.chatJoinCount - 1}";
 	var chatRoomType = "${chatName.chatRoomType}";
-		
+
+	
 	// 디버깅용 콘솔 로그 추가
     console.log("loginId: " + loginId);
     console.log("loginEmpName: " + loginEmpName);
@@ -440,6 +441,8 @@
     console.log("chatJoinCount: " + chatJoinCount);
     console.log("chatRoomType: " + chatRoomType);
 	
+    
+    
 	//나중에 삭제함
 	/* console.log("chatName : "+"${chatName}");
 	console.log("chatHistorys : "+"${chatHistorys}");
