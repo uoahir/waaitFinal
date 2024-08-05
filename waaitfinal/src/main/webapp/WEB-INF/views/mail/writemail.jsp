@@ -178,6 +178,7 @@
     	</c:if>
     	
     	const changeInputView = (e) => {
+    		const receiverInputs = document.querySelectorAll("")
     	    const $button = document.createElement("button");
     	    $button.setAttribute("class", "nostyle-btn");
     	    $button.setAttribute("onclick", "deleteMailReceiver(event)");
