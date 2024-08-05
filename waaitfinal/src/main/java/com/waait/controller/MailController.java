@@ -709,8 +709,10 @@ public class MailController {
 								@RequestParam(defaultValue = "1") int cPage) {
 		String receiverMailAddress = getLoginEmpInfo().getEmpEmail();
 		long empNo = getLoginEmpInfo().getEmpNo();
+		System.out.println("searchType : " + searchType);
+		String modifySearchType = searchType.substring(1, searchType.lastIndexOf("]"));
 		
-		String modifySearchType = searchType.substring(1, searchType.length() - 1);
+		System.out.println("modifySearchType : " + modifySearchType);
 		
 		switch(modifySearchType) {
 			case "내용" : searchType = "M.MAILCONTENT"; break;

@@ -34,6 +34,14 @@ public class MypageDaoImpl implements MypageDao {
 		return session.selectList("mypage.myTodayWork",empNumber);
 	}
 
+
+	//메인페이지 안읽은 메세지 수 출력
+	@Override
+	public int selectChatHistoryCount(SqlSession session, Long loginEmpNo) {
+		return session.selectOne("mypage.selectChatHistoryCount",loginEmpNo);
+	}
+	
+
 	@Override
 	public List<SpamDomain> getSpamDomain(SqlSession session, long empNo) {
 		return session.selectList("mypage.selectSpamDomainAddress", empNo);
@@ -43,6 +51,7 @@ public class MypageDaoImpl implements MypageDao {
 	public int getNotReadMailCount(SqlSession session, Map<String, Object> sqlParam) {
 		return session.selectOne("mail.notReadDataCount", sqlParam);
 	}
+
 	
 	
 	

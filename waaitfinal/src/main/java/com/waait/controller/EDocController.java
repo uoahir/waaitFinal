@@ -315,7 +315,7 @@ public class EDocController {
 		int pageBarSize = 5;
 		int pageNo = ((cPage1 - 1) / pageBarSize) * pageBarSize + 1;
 		int pageEnd = pageNo + pageBarSize - 1;
-		String url = "main";
+		String url = "/inprogress";
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
@@ -359,7 +359,7 @@ public class EDocController {
 		sb.append("}");
 		sb.append("</script>");
 
-		m.addAttribute("pageBar", sb.toString());
+		m.addAttribute("pageBar1", sb.toString());
 		
 		
 		List<AbstractDocument> waitdocuments = service.awaitingApproval(no, Map.of("cPage", cPage2, "numPerpage", numPerpage2));

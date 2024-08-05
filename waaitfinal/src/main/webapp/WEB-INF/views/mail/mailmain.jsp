@@ -1771,6 +1771,7 @@
 			} else {
 				alert("입력값이 없습니다.");
 			}
+		}
 	</script>
 	<!-- 내 메일함으로 이동하는 모달 -->
 	<div class="outer-mymailbox-modal modal">
