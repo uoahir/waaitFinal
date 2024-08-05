@@ -23,6 +23,18 @@
 	<link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/iconly.css"> 
 	<link rel="stylesheet" href="${path}/resources/css/ju/headerju.css">
   
+	<!-- 조직도 -->
+	<script src="https://balkan.app/js/orgchart.js"></script>
+  	<style>
+  		#chart-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .orgchart {
+            background: #fff;
+        }
+  	</style>
 </head>
 
 <body>
@@ -84,13 +96,15 @@
                 </a>
                 
             </li>
-            <li
-                class="sidebar-item "> 
-                <a href="${path }/manage/managemain.do" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
-                    <span>인사관리</span>
-                </a>                
-            </li>
+            <c:if test="${employee.deptCode eq 'D7' }">
+	            <li
+	                class="sidebar-item "> 
+	                <a href="${path }/manage/managemain.do" class='sidebar-link'>
+	                    <i class="bi bi-grid-fill"></i>
+	                    <span>인사관리</span>
+	                </a>                
+	            </li>
+            </c:if>
             <li
                 class="sidebar-item ">
                 <a href="${path }/schedule/myschedule" class='sidebar-link'>
@@ -264,7 +278,11 @@
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row;" >
                             <div style="width: 1100px;">
-                            	<jsp:include page="${path}/WEB-INF/views/edoc/nodelist.jsp" /> 
+<<<<<<< HEAD
+                            	<jsp:include page="/WEB-INF/views/edoc/nodelist.jsp" /> 
+=======
+                            	<div id="tree"></div>
+>>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
                             </div>                            
                         </div>
                     </div>
