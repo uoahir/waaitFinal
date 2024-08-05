@@ -219,6 +219,7 @@
         eventRemove: function(obj){ // 이벤트가 삭제되면 발생하는 이벤트 
           console.log(obj);
         },
+        //droppable:true, //dropaable을 사용할때 droppable true 드롭이벤트 
         // < 빈 날짜 누르면 일정추가 >
          select: function(info){
           console.log($('#addEventModal'));
