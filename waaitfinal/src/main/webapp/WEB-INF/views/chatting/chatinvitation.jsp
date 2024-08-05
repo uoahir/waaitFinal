@@ -59,7 +59,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 					                       <img class="chatting_userlist_printarea_profile_img_green" onclick="empprofile(${emp.empNo});"
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
@@ -79,7 +79,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 					                       <img class="chatting_userlist_printarea_profile_img_green" onclick="empprofile(${emp.empNo});"
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
@@ -98,7 +98,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 					                       <img class="chatting_userlist_printarea_profile_img_green" onclick="empprofile(${emp.empNo});"
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
@@ -117,7 +117,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 					                       <img class="chatting_userlist_printarea_profile_img_green" onclick="empprofile(${emp.empNo});"
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
@@ -136,7 +136,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 					                       <img class="chatting_userlist_printarea_profile_img_green" onclick="empprofile(${emp.empNo});"
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                           src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
@@ -156,7 +156,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 					                       <img class="chatting_userlist_printarea_profile_img_green" onclick="empprofile(${emp.empNo});"
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
@@ -176,7 +176,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 					                       <img class="chatting_userlist_printarea_profile_img_green" onclick="empprofile(${emp.empNo});"
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
@@ -197,7 +197,7 @@
 			               			<c:if test="${emp.empNo ne employee.empNo }">
 				               			<div class="chatting_userlist_printarea_profile" data-user-no="${emp.empNo}" >
 					                       <img class="chatting_userlist_printarea_profile_img_green" onclick="empprofile(${emp.empNo});"
-					                            src="https://i.pinimg.com/236x/4f/c3/a4/4fc3a4db6c4f400b49f353e045f3f8c9.jpg" alt="" width="50" height="50">
+					                            src="${path}/resources/upload/emp/profile/${emp.empProfile}" alt="프로필" width="50" height="50">
 					                        <p>${emp.jobLevel.levelName}</p>
 				                        	<p>${emp.empName}</p>
 				                        	<input type="checkbox" name="chatemps" value="${emp.empNo}">
