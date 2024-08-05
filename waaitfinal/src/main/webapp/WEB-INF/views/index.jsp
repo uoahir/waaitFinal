@@ -84,13 +84,15 @@
                 </a>
                 
             </li>
-            <li
-                class="sidebar-item "> 
-                <a href="${path }/manage/managemain.do" class='sidebar-link'>
-                    <i class="bi bi-grid-fill"></i>
-                    <span>인사관리</span>
-                </a>                
-            </li>
+            <c:if test="${employee.deptCode eq 'D7' }">
+	            <li
+	                class="sidebar-item "> 
+	                <a href="${path }/manage/managemain.do" class='sidebar-link'>
+	                    <i class="bi bi-grid-fill"></i>
+	                    <span>인사관리</span>
+	                </a>                
+	            </li>
+            </c:if>
             <li
                 class="sidebar-item ">
                 <a href="${path }/schedule/myschedule" class='sidebar-link'>
