@@ -255,8 +255,10 @@
                         <div class="card-header">
                             <h4>전자결재 관련</h4>                            
                         </div>
-                        <div class="card-body" style="display: flex; flex-direction:row">
-                            <div id="chart-profile-visit"></div>                            
+                        <div class="card-body" style="display: flex; flex-direction:row;" >
+                            <div style="width: 1100px;">
+                            	<jsp:include page="${path}/WEB-INF/views/edoc/nodelist.jsp" /> 
+                            </div>                            
                         </div>
                     </div>
                 </div>

@@ -28,6 +28,7 @@
         .orgchart {
             background: #fff;
         }
+        
     </style>
 <!-- <style>
 	.employee {
