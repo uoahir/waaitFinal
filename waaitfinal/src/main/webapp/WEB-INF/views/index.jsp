@@ -40,9 +40,7 @@
 <body>
     <script src="${path }/resources/assets/static/js/initTheme.js"></script>
     
-    <!-- script문 JU -->
-    <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
-    <script>const path = "${path}";</script>
+    
     
     <div id="app">
         <div id="sidebar">
@@ -96,7 +94,7 @@
                 </a>
                 
             </li>
-            <%-- <c:if test="${employee.deptCode eq 'D7' }"> --%>
+            <c:if test="${employee.deptCode eq 'D7' }">
 	            <li
 	                class="sidebar-item "> 
 	                <a href="${path }/manage/managemain.do" class='sidebar-link'>
@@ -104,7 +102,7 @@
 	                    <span>인사관리</span>
 	                </a>                
 	            </li>
-            <%-- </c:if> --%>
+            </c:if>
             <li
                 class="sidebar-item ">
                 <a href="${path }/schedule/myschedule" class='sidebar-link'>
@@ -277,12 +275,17 @@
                             <h4>조직도</h4>                            
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row;" >
+<<<<<<< HEAD
                             <div style="width: 1100px;">
 
                             	<jsp:include page="/WEB-INF/views/edoc/nodelist.jsp" /> 
 
                             	<div id="tree"></div>
 
+=======
+                            <div style="width: 1100px;">
+                            	<div id="tree"></div>
+>>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
                             </div>                            
                         </div>
                     </div>
@@ -551,7 +554,10 @@
  <!-- 전자결재관련 차트 -->
 <%-- <script src="${path }/resources/assets/extensions/apexcharts/apexcharts.min.js"></script> --%>
 <%-- <script src="${path }/resources/assets/static/js/pages/dashboard.js"></script> --%>
-
+	
+	<!-- script문 JU -->
+    <script>const path = "${path}";</script>
+    <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
 </body>
 
 </html>
