@@ -96,7 +96,7 @@
                 </a>
                 
             </li>
-            <c:if test="${employee.deptCode eq 'D7' }">
+            <%-- <c:if test="${employee.deptCode eq 'D7' }"> --%>
 	            <li
 	                class="sidebar-item "> 
 	                <a href="${path }/manage/managemain.do" class='sidebar-link'>
@@ -104,7 +104,7 @@
 	                    <span>인사관리</span>
 	                </a>                
 	            </li>
-            </c:if>
+            <%-- </c:if> --%>
             <li
                 class="sidebar-item ">
                 <a href="${path }/schedule/myschedule" class='sidebar-link'>
