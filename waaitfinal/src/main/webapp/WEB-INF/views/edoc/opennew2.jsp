@@ -85,7 +85,7 @@
 			</div>
 			<div style="width:30%;" class="d-flex gap-2">
 				<c:if test="${employee.empNo eq document.docWriter && document.docStat eq '상신'}">
-					<button style="height: 50px;" class="btn btn-outline-secondary" onclick="return();">회수</button>
+					<button style="height: 50px;" class="btn btn-outline-secondary" onclick="returnDoc('${document.docWriter}');">회수</button>
 				</c:if>
 				<c:forEach items="${document.approvals }" var="app">
 					<c:if test="${employee.empNo eq app.appEmp }">
@@ -336,6 +336,30 @@
 		
 	}
 	
+	const returnDoc = (writer) => {
+		fetch("/edoc/returndoc"){
+			method:"POST",
+			headers: {
+				'Content-Type': 'application/json; charset=UTF-8;',
+			},
+			body : JSON.stringify({
+				docWriter : writer
+			})
+		})
+		.then(response => response.text())
+		.then(res => {
+			if(res === '성공'){
+				alert("반려완료");
+				opener.document.location.reload();
+				self.close();
+			} else {
+				alert("반려실패");
+			}
+		})
+	
+			
+		}
+	}
     
 	
   /*   const inappline = (empName, empNo, deptName, levelName, empProfile)=>{
