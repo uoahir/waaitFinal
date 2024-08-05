@@ -94,8 +94,11 @@ public class HomeController {
 			System.out.println(e);
 		});			
 		
+		//메인페이지 안읽은 채팅 수 띄우기
+		Long empNo = employee.getEmpNo();
+		int chatCount = service.selectChatHistoryCount(empNo);
+		model.addAttribute("chatCount",chatCount);	
 		
-					
 		return "index";
 	}
 	

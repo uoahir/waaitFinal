@@ -31,6 +31,13 @@ public class MypageDaoImpl implements MypageDao {
 	public List<Work> myTodayWork(SqlSession session, long empNumber) {
 		return session.selectList("mypage.myTodayWork",empNumber);
 	}
+
+	//메인페이지 안읽은 메세지 수 출력
+	@Override
+	public int selectChatHistoryCount(SqlSession session, Long empNo) {
+		return session.selectOne("mypage.selectChatHistoryCount",empNo);
+	}
+	
 	
 	
 	

@@ -12,4 +12,5 @@ public interface MypageDao {
 	List<Mypage>myInfoList(SqlSession session, long empNumber);
 	List<Mypage>myVacation(SqlSession session,long empNumber);
 	List<Work> myTodayWork(SqlSession session,long empNumber);
+	int selectChatHistoryCount(SqlSession session, Long empNo);
 }

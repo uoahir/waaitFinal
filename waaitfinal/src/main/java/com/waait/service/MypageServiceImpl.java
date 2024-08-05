@@ -33,6 +33,16 @@ public class MypageServiceImpl implements MypageService {
 	public List<Work> myTodayWork(Long empNumber) {
 		return dao.myTodayWork(session,empNumber);
 	}
+
+	//메인페이지 안읽은 메시지수 출력
+	@Override
+	public int selectChatHistoryCount(Long empNo) {
+		int chatCount = dao.selectChatHistoryCount(session, empNo);
+		return chatCount;
+	}
+
+	
+	
 	
 
 	
