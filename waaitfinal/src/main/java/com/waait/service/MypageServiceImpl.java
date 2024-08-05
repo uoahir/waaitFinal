@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class MypageServiceImpl implements MypageService {
 	
 
+
 	private final MypageDao dao;
 	private final SqlSession session;
 			
@@ -37,7 +38,7 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 
-	//메인페이지 안읽은 메시지수 출력
+	//메인페이지 안읽은 메시지수 출력 (채팅)
 	@Override
 	public int selectChatHistoryCount(Long loginEmpNo) {
 		int chatCount = dao.selectChatHistoryCount(session, loginEmpNo);
@@ -46,7 +47,7 @@ public class MypageServiceImpl implements MypageService {
 
 	
 	
-
+	//안읽은메일
 	@Override
 	public List<SpamDomain> getSpamDomain(long empNo) {
 		return dao.getSpamDomain(session, empNo);
@@ -57,7 +58,11 @@ public class MypageServiceImpl implements MypageService {
 		return dao.getNotReadMailCount(session, sqlParam);
 	}
 
-	
+	//승인 대기중 문서
+	@Override
+	public int awaitingApprovalTotal(Long empNumber) {
+		return 0;
+	}
 
 	
 	
