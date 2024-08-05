@@ -219,6 +219,12 @@ public class EDocDaoImpl implements EDocDao {
 	public List<AbstractDocument> rejectedDocument(SqlSession session, Long empNo, Map<String, Integer> page) {
 		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
 		return session.selectList("edoc.rejectedDocument", empNo , rb);
+	}
+
+	@Override
+	public int inprogressCount(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.inprogressCount", empNo);
 	}	
 	
 	

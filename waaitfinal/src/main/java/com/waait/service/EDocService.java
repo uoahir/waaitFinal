@@ -54,4 +54,7 @@ public interface EDocService {
 //	작성자 정보 뽑아오기
 	Employee getWriter(Long empNo);
 	
+//	진행중인 문서 개수 뽑아오기 ! ! !
+	int inprogressCount(Long empNo);
+	
 }

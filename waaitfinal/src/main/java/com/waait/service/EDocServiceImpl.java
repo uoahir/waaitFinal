@@ -321,6 +321,13 @@ public class EDocServiceImpl implements EDocService {
 		return edocDao.rejectedDocument(session, empNo, page);
 	}
 
+	@Override
+	public int inprogressCount(Long empNo) {
+		// TODO Auto-generated method stub
+		return edocDao.inprogressCount(session, empNo);
+	}
+
+	
 	
 
 	
