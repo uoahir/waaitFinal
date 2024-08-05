@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.waait.dto.Employee;
 import com.waait.dto.Mypage;
+import com.waait.dto.SpamDomain;
 import com.waait.dto.Work;
 import com.waait.service.EmployeeService;
 import com.waait.service.MypageService;
@@ -94,10 +95,23 @@ public class HomeController {
 			System.out.println(e);
 		});			
 		
+
 		//메인페이지 안읽은 채팅 수 띄우기
-		Long empNo = employee.getEmpNo();
-		int chatCount = service.selectChatHistoryCount(empNo);
+		Long loginEmpNo = employee.getEmpNo();
+		int chatCount = service.selectChatHistoryCount(loginEmpNo);
 		model.addAttribute("chatCount",chatCount);	
+
+		//안읽은 메일
+		String mailReceiverAddress = getLoginEmpInfo().getEmpEmail();
+		long empNo = getLoginEmpInfo().getEmpNo();
+		
+		List<SpamDomain> spamDomains = service.getSpamDomain(empNo);;
+		Map<String, Object> sqlParam = Map.of("mailReceiverAddress", mailReceiverAddress,
+												"spamDomains", spamDomains);
+		int notReadMailCount = service.getNotReadMailCount(sqlParam);
+		
+		model.addAttribute("notReadReceiveMailCount", notReadMailCount);
+
 		
 		return "index";
 	}

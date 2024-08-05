@@ -205,8 +205,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">이번주 근태</h6>
-                                    <h6 class="font-extrabold mb-0">값을 넘겨</h6>
+                                    <h6 class="text-muted font-semibold">안읽은 메일</h6>
+                                    <h6 class="font-extrabold mb-0">${notReadReceiveMailCount }</h6>
                                 </div>
                             </div>
                         </div>

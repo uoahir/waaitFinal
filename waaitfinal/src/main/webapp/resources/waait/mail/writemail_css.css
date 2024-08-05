@@ -1,9 +1,54 @@
-@charset "UTF-8";
-
 .senderContainer {
-	border-bottom : 1px solid black;
+    display : flex;
+    margin-bottom : 10px;
 }
-.actionButtonContainer {
-	display : flex;
-	justify-content : right;
+input[name='senderMailAddress'] {
+    border : none;
+}
+.senderInputContainer {
+    border-bottom : 1px solid black;
+    width:90%;
+}
+.width90{
+    width : 90%;
+}
+.senderContainer>div:first-child {
+    width:7%;
+}
+.receiverContainer>div:first-child {
+    width:7%;
+}
+.matilTitleContainer>div:first-child {
+    width:7%;
+}
+.myborder-bottom{
+    border-bottom : 1px solid black;
+}
+.receiverContainer {
+    display : flex;
+    margin-bottom : 10px;
+}
+.nonestyle-input {
+    border : none;
+    background-color : inherit;
+}
+.flex-divcontainer {
+    display:flex;
+}
+.boldtext {
+    font-weight : bold;
+}
+.padding-top3{
+    padding-top : 3px;
+}
+.nostyle-btn {
+    border : none;
+    background-color : inherit;
+}
+.finishing-receiver-input {
+    border-radius : 10px;
+    text-align : center;
+    border : none;
+    background-color : rgb(163, 163, 204);
+    margin-bottom : 3px;
 }

@@ -112,6 +112,14 @@ public class EmployeeManagementDao {
 	public int enrollTeamNoParentDept(SqlSession session, Map<String, Object> sqlParam) {
 		return session.insert("em.enrollTeamNoParentDept", sqlParam);
 	}
+	
+	public int checkDuplication(SqlSession session, String modifyName) {
+		return session.selectOne("em.checkDuplication", modifyName);
+	}
+	
+	public int modifyTeamName(SqlSession session, Map<String, String> sqlParam) {
+		return session.update("em.modifyTeamName", sqlParam);
+	}
 		
 	public int enrollEmployee(SqlSession session, Employee employee) {
 		return session.insert("em.enrollEmployee",employee);
