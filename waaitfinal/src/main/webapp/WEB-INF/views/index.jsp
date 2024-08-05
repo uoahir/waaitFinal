@@ -205,8 +205,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">안읽은 메일</h6>
-                                    <h6 class="font-extrabold mb-0">${notReadReceiveMailCount }</h6>
+                                	<a href="${path}/mail/mailmain.do">
+	                                    <h6 class="text-muted font-semibold">안읽은 메일</h6>
+	                                    <h6 class="font-extrabold mb-0">${notReadReceiveMailCount }</h6>
+	                                </a>                                    
                                 </div>
                             </div>
                         </div>
