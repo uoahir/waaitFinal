@@ -23,6 +23,18 @@
 	<link rel="stylesheet" crossorigin href="${path}/resources/assets/compiled/css/iconly.css"> 
 	<link rel="stylesheet" href="${path}/resources/css/ju/headerju.css">
   
+	<!-- 조직도 -->
+	<script src="https://balkan.app/js/orgchart.js"></script>
+  	<style>
+  		#chart-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .orgchart {
+            background: #fff;
+        }
+  	</style>
 </head>
 
 <body>
@@ -257,7 +269,7 @@
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row;" >
                             <div style="width: 1100px;">
-                            	<jsp:include page="${path}/WEB-INF/views/edoc/nodelist.jsp" /> 
+                            	<div id="tree"></div>
                             </div>                            
                         </div>
                     </div>
