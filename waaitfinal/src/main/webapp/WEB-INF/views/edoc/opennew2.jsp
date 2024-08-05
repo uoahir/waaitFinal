@@ -26,7 +26,7 @@
   <link rel="stylesheet" crossorigin href="${path }/resources/assets/compiled/css/app-dark.css">
 
 </head>
-	<script src="/resources/assets/static/js/initTheme.js"></script>
+	<script src="${path }/resources/assets/static/js/initTheme.js"></script>
     
 <style>
         .check-icon {
@@ -276,7 +276,7 @@
 		console.log(id,endNo,type,writer,reason);
 		
 				
-		fetch("/edoc/approval",{
+		fetch("${path}/edoc/approval",{
 			method : 'POST',
 			headers: {
 				'Content-Type': 'application/json; charset=UTF-8;',
@@ -309,7 +309,7 @@
 		console.log(id,endNo,type,writer,reason);
 		
 				
-		fetch("/edoc/reject",{
+		fetch("${path}/edoc/reject",{
 			method : 'POST',
 			headers: {
 				'Content-Type': 'application/json; charset=UTF-8;',
@@ -337,7 +337,7 @@
 	}
 	
 	const returnDoc = (id, type, writer) => {
-		fetch("/edoc/returndoc",{
+		fetch("${path}/edoc/returndoc",{
 			method:"POST",
 			headers: {
 				'Content-Type': 'application/json; charset=UTF-8;',
