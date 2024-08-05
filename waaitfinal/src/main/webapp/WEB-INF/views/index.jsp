@@ -221,7 +221,7 @@
                                         <i class="iconly-boldAdd-User"></i>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
+                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7" onclick="chattingOpen();" style="cursor: pointer;">
                                     <h6 class="text-muted font-semibold">안읽은 채팅</h6>
                                     <h6 class="font-extrabold mb-0">${chatCount}</h6>
                                 </div>
