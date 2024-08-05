@@ -275,17 +275,17 @@
                             <h4>조직도</h4>                            
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row;" >
-<<<<<<< HEAD
+
                             <div style="width: 1100px;">
 
                             	<jsp:include page="/WEB-INF/views/edoc/nodelist.jsp" /> 
 
                             	<div id="tree"></div>
 
-=======
+
                             <div style="width: 1100px;">
                             	<div id="tree"></div>
->>>>>>> branch 'testwaait' of https://github.com/K-SOLMIN/waaitFinal.git
+
                             </div>                            
                         </div>
                     </div>
