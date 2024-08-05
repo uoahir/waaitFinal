@@ -29,6 +29,9 @@
             background: #fff;
         }
         
+      
+        
+        
     </style>
 <!-- <style>
 	.employee {
@@ -66,6 +69,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 nodes: data
             });
+            
+            setTimeout(() => {
+	            document.getElementById("tree").querySelector("svg").setAttribute("viewBox", "0 -100 1650 700");				
+			}, 1000);
         })
         .catch(error => console.error('Error fetching org chart data:', error));
 });
