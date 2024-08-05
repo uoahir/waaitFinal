@@ -60,7 +60,7 @@ public class EDocDaoImpl implements EDocDao {
 	public List<AbstractDocument> awaitingApproval(SqlSession session, Long empNo, Map<String, Integer> page) {
 		// TODO Auto-generated method stub
 		
-		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
+		RowBounds rb = new RowBounds((page.get("cPage2")-1)*page.get("numPerpage2"), page.get("numPerpage2"));
 		return session.selectList("edoc.awaitingApproval", empNo, rb); // empNo : 로그인된 ID
 	}
 	
@@ -135,7 +135,7 @@ public class EDocDaoImpl implements EDocDao {
 	@Override
 	public List<AbstractDocument> inprogressDocument(SqlSession session, Long empNo, Map<String, Integer> page) {
 		// TODO Auto-generated method stub
-		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
+		RowBounds rb = new RowBounds((page.get("cPage1")-1)*page.get("numPerpage1"), page.get("numPerpage1"));
 		return session.selectList("edoc.inprogressDocument",empNo,rb);
 	}
 
@@ -225,7 +225,60 @@ public class EDocDaoImpl implements EDocDao {
 	public int inprogressCount(SqlSession session, Long empNo) {
 		// TODO Auto-generated method stub
 		return session.selectOne("edoc.inprogressCount", empNo);
+	}
+
+	@Override
+	public int awaitingApprovalTotal(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.awaitingApprovalTotal", empNo);
+	}
+
+	@Override
+	public List<AbstractDocument> savedDocument(SqlSession session, Long empNo, Map<String, Integer> page) {
+		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
+		return session.selectList("edoc.savedDocument",empNo,rb);
+	}
+
+	@Override
+	public int updateDocStatToSave(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateDocStatToSave", empNo);
+	}
+
+	@Override
+	public int updateDocStatToReturn(SqlSession session, Map<String, Object> param) {
+		// TODO Auto-generated method stub
+		return session.update("edoc.updateDocStatToReturn",param); // 작성
+	}
+
+	@Override
+	public int saveDocumentCount(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.saveDocumentCount", empNo);
+	}
+
+	@Override
+	public List<AbstractDocument> approvedAllDocument(SqlSession session, Map<String, Integer> page) {
+		RowBounds rb = new RowBounds((page.get("cPage")-1)*page.get("numPerpage"), page.get("numPerpage"));
+		return session.selectList("edoc.approvedAllDocument",null,rb);
+	}
+
+	@Override
+	public int approvedCount(SqlSession session, Long empNo) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.approvedCount", empNo);
+	}
+
+	@Override
+	public int approvedAllCount(SqlSession session) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.approvedAllCount");
 	}	
+	
+	
+	
+	
+	
 	
 	
 	

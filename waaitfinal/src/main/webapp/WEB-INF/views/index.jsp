@@ -98,17 +98,24 @@
                     <span>캘린더</span>
                 </a>                
             </li>
+<li
+                class="sidebar-item ">
+                <a href="${path }/codereviewboard/main" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>코드리뷰</span>
+                </a>                
+            </li>
             <li
                 class="sidebar-item ">
-                <a href="${path }/edoc/inprogress" class='sidebar-link'>
-                    <i class="bi bi-file-text"></i>
-                    <span>전자결재</span>
+                <a href="${path }/teamproject/main" class='sidebar-link'>
+                    <i class="bi bi-grid-fill"></i>
+                    <span>팀프로젝트</span>
                 </a>                
             </li>
             <li
                 class="sidebar-item  has-sub">
                 <a href="#" class='sidebar-link'>
-                    <i class="bi bi-three-dots"></i>
+                    <i class="bi bi-file-text"></i>
                     <span>워크플로우</span>
                 </a>
                 
@@ -138,12 +145,10 @@
                     </li>
                     
                     <li class="submenu-item">
-                        <a href="#" class="submenu-link">전체 문서함</a>
+                        <a href="${path }/edoc/approvedall" class="submenu-link">전체 문서함</a>
                     </li>
                     
                 </ul>
-                
-
             </li>
             <li class="sidebar-item  ">
                 <a href="${path }/mail/mailmain.do" class='sidebar-link'>

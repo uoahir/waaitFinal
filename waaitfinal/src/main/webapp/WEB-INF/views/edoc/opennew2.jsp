@@ -80,20 +80,20 @@
 <section class="container">
 	<div class="card d-flex align-items-center">
 		<div class="card-header d-flex" style="width:100%;">
-			<div style="width:70%;">
+			<div style="width:90%;">
 				<h2 class="card-title">Basic Report</h2><h6>기본보고서</h6>
 			</div>
-			<div style="width:30%;" class="d-flex gap-2">
+			<div style="width:10%;" class="d-flex gap-2">
 				<c:if test="${employee.empNo eq document.docWriter && document.docStat eq '상신'}">
-					<button style="height: 50px;" class="btn btn-outline-secondary" onclick="returnDoc('${document.docWriter}');">회수</button>
+					<button style="height: 50px;" class="btn btn-outline-secondary" onclick="returnDoc('${document.docId }',${document.docType },'${document.docWriter}');">회수</button>
 				</c:if>
 				<c:forEach items="${document.approvals }" var="app">
-					<c:if test="${employee.empNo eq app.appEmp }">
+					<c:if test="${employee.empNo eq app.appEmp && document.docStat ne '승인' }">
 						<button style="height: 50px;" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#approvalModal">결재</button>
 						<button style="height: 50px;" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#rejectModal">반려</button>
 					</c:if>
 				</c:forEach>
-				<button style="height: 50px;" class="btn btn-outline-secondary">인쇄미리보기</button>
+				<!-- <button style="height: 50px;" class="btn btn-outline-secondary">인쇄미리보기</button> -->
 				<button style="height: 50px;" class="btn btn-outline-secondary" onclick="window.close();">닫기</button>
 			</div>
 	    </div>
@@ -267,7 +267,7 @@
     </script>
 	<script>
 	window.onload = function(){
-		
+		console.log('${document.docId}', '${document.docType}', '${document.docWriter}')
 		
 	}
 	const approval = (id, endNo, type, writer) => {
@@ -336,29 +336,29 @@
 		
 	}
 	
-	const returnDoc = (writer) => {
-		fetch("/edoc/returndoc"){
+	const returnDoc = (id, type, writer) => {
+		fetch("/edoc/returndoc",{
 			method:"POST",
 			headers: {
 				'Content-Type': 'application/json; charset=UTF-8;',
 			},
 			body : JSON.stringify({
-				docWriter : writer
+				docWriter : writer,
+				docId : id,
+				docType : type
 			})
 		})
 		.then(response => response.text())
 		.then(res => {
 			if(res === '성공'){
-				alert("반려완료");
+				alert("회수완료");
 				opener.document.location.reload();
 				self.close();
 			} else {
-				alert("반려실패");
+				alert("회수실패");
 			}
 		})
 	
-			
-		}
 	}
     
 	

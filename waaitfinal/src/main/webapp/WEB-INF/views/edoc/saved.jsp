@@ -16,10 +16,10 @@
 		<div class="card-body ">
 			<div class="d-flex">
 				<div style="width: 90%; margin-left:5px;">
-					<h5>Rejected Documents</h5>
+					<h5>Saved Documents</h5>
 				</div>
 			</div>
-			<div>
+			<div class="mt-5">
 	        	<table class="table" id="table1">
 					<thead>
 						<tr>
@@ -28,8 +28,7 @@
 							<th>Title</th>
 							<th>Writer</th>
 							<th>Submission Date</th>
-							<th>Rejected Date</th>
-							<th>Reason</th>
+							<th>Status</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -39,12 +38,16 @@
 									<td>${d.rnum }</td>
 									<td>${d.type.type }</td>
 									<td>${d.docTitle }</td>
-									<td>${d.employee.empName }</td>
+									<td>
+										<div class="avatar avatar-sm">
+										<img src="${path }/resources/upload/emp/profile/${d.employee.empProfile }">
+										</div>
+										${d.employee.empName }
+									</td>
 									<td>${d.docDate }</td>
 									<td>
-										<fmt:formatDate value="${d.approvalOne.appDate }" pattern="yyyy-MM-dd"/>
+		                            	<span class="badge bg-light-primary">${d.docStat }</span>	
 									</td>
-									<td>${d.approvalOne.reason }</td>
 								</tr>
 							</c:forEach>
 						</c:if>
@@ -52,6 +55,7 @@
 	                        
 					</tbody>
 				</table>
+				${pageBar1 }
 			</div>
 		</div> 
 	</div>    

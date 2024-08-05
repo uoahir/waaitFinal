@@ -135,19 +135,13 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="text-bold-500">연차시작일</td>
+						<td class="text-bold-500">출장시작일</td>
 						<td>
 							<input type="date" class="form-control" id="startDate" name="startDate">
 						</td>
-						<td class="text-bold-500">연차종료일</td>
+						<td class="text-bold-500">출장종료일</td>
 						<td>
 							<input type="date" class="form-control" id="endDate" name ="endDate">							
-						</td>
-					</tr>
-					<tr>
-						<td class="text-bold-500">연차사유</td>
-						<td  colspan="3">
-							<textarea id="reason" rows = "5" placeholder="연차사유를 입력하세요." style="width:100%; color:#000; border:none; resize:none;"></textarea>
 						</td>
 					</tr>
 					<tr>
@@ -255,7 +249,7 @@
 	<script>	
 	
 	window.onload = function(){
-		document.getElementById('vacaType').addEventListener('change', calculateDays);
+		/* document.getElementById('vacaType').addEventListener('change', calculateDays);
 	    document.getElementById('startDate').addEventListener('change', calculateDays);
 	    document.getElementById('endDate').addEventListener('change', calculateDays);
 	    
@@ -277,7 +271,7 @@
 
 	    document.getElementById('startDate').setAttribute('min', formattedDate);
 	    document.getElementById('endDate').setAttribute('min', formattedDate);
-	    
+	     */
 		
 		fetch("/edoc/docwriter")
 		.then(response => response.json())

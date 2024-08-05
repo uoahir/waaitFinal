@@ -44,6 +44,9 @@ public interface EDocDao {
 //	승인완료된 내문서 select
 	List<AbstractDocument> approvedDocument(SqlSession session, Long empNo, Map<String,Integer> page);
 	
+//	임시저장 문서 select
+	List<AbstractDocument> savedDocument(SqlSession session, Long empNo, Map<String,Integer> page);
+	
 //	문서선택 ~ 
 	AbstractDocument selectDocumentById(SqlSession session, int docId);
 	
@@ -54,6 +57,8 @@ public interface EDocDao {
 	OffDocument selectOffDocument(SqlSession session, Map<String,Object> param);
 	
 	List<Approval> selectApprovalByDocId(SqlSession session, int docId);
+	
+	List<AbstractDocument> approvedAllDocument(SqlSession session, Map<String,Integer> page);
 	
 	Approval selectApprovalByDocIdAndEmpNo(SqlSession session, Map<String,Object> param);
 	
@@ -96,4 +101,17 @@ public interface EDocDao {
 //	진행 중인 문서 개수 뽑아오기
 	int inprogressCount(SqlSession session, Long empNo);
 	
+	int awaitingApprovalTotal(SqlSession session, Long empNo);
+	
+//	임시저장
+	int updateDocStatToSave(SqlSession session,Long empNo);
+	
+//	회수
+	int updateDocStatToReturn(SqlSession session,Map<String,Object> param);
+	
+	int saveDocumentCount(SqlSession session, Long empNo);
+		
+	int approvedCount(SqlSession session, Long empNo);
+	
+	int approvedAllCount(SqlSession session);
 }
