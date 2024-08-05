@@ -24,6 +24,11 @@
 <link rel="stylesheet" href="${path }/resources/waait/mail/writemail_css.css">
 </head>
 <body>
+	<header>
+		<div class="logo" style="height: 100; ">
+        	<a href="${path }/"><img src="/resources/images/logo.png" alt="Logo" srcset="" width="150px" style="height:90px"></a>
+        </div>
+	</header>
 	<c:if test="${not empty mail }">
 		<form action="${path }/mail/sendmail.do" method="post" enctype="multipart/form-data" onsubmit="return mailContentInputHidden()">
 			<section class="section">
@@ -112,7 +117,7 @@
 	                </div>
 	            </div>
 	        </div>
-	        <div class="matilTitleContainer flex-divcontainer">
+	        <div class="mailTitleContainer flex-divcontainer">
 	            <div class="padding-top3">
 	                <span class="boldtext">제목</span>
 	            </div>
@@ -121,7 +126,14 @@
 	            </div>
 	        </div>
 	    </div>
-    
+    	<div class="fileContainer flex-divcontainer">
+        	<div class="padding-top3 width-7">
+                <span class="boldtext">파일 첨부</span>
+            </div>
+            <div class="width90 fileinput-container">
+                <input type="file" class="multiple-files-filepond" name="upFile" multiple>
+            </div>
+        </div>
 	    <div class="border-bottom border-top">
 			<div class="row">
 	            <div class="col-12">
@@ -178,31 +190,41 @@
     	</c:if>
     	
     	const changeInputView = (e) => {
-    		const receiverInputs = document.querySelectorAll("")
-    	    const $button = document.createElement("button");
-    	    $button.setAttribute("class", "nostyle-btn");
-    	    $button.setAttribute("onclick", "deleteMailReceiver(event)");
-    	    $button.innerText = "x";
-
-    	    const receiverInput = e.currentTarget;
-    	    const inputDiv = e.currentTarget.parentElement;
-    	    const inputContainer = e.currentTarget.parentElement.parentElement;
-    	    console.log(inputContainer)
-    	    
-    	    const div = document.createElement("div");
-    	    const $input = document.createElement("input");
-    	    $input.setAttribute("type", "text");
-    	    $input.setAttribute("name", "mailReceiverAddress");
-    	    $input.setAttribute("class", "nonestyle-input");
-    	    $input.setAttribute("placeholder", "받는사람 입력");
-    	    $input.setAttribute("onblur", "changeInputView(event)");
-
-    	    receiverInput.setAttribute("class", "finishing-receiver-input");
-
-    	    inputDiv.appendChild($button);
-
-    	    div.appendChild($input);
-    	    inputContainer.appendChild(div);
+    		const receiverInputs = document.querySelectorAll("input[name='mailReceiver']");
+    		
+    		if(e.currentTarget.value.length == 0) {
+    			alert("주소를 입력해주세요");
+    			return;
+    		}
+    		
+    		if(receiverInputs.length != 4) {
+	    	    const $button = document.createElement("button");
+	    	    $button.setAttribute("class", "nostyle-btn");
+	    	    $button.setAttribute("onclick", "deleteMailReceiver(event)");
+	    	    $button.innerText = "x";
+	
+	    	    const receiverInput = e.currentTarget;
+	    	    const inputDiv = e.currentTarget.parentElement;
+	    	    const inputContainer = e.currentTarget.parentElement.parentElement;
+	    	    console.log(inputContainer)
+	    	    
+	    	    const div = document.createElement("div");
+	    	    const $input = document.createElement("input");
+	    	    $input.setAttribute("type", "text");
+	    	    $input.setAttribute("name", "mailReceiverAddress");
+	    	    $input.setAttribute("class", "nonestyle-input");
+	    	    $input.setAttribute("placeholder", "받는사람 입력");
+	    	    $input.setAttribute("onblur", "changeInputView(event)");
+	
+	    	    receiverInput.setAttribute("class", "finishing-receiver-input");
+	
+	    	    inputDiv.appendChild($button);
+	
+	    	    div.appendChild($input);
+	    	    inputContainer.appendChild(div);
+    		} else {
+    			alert("수령인은 최대 5명까지 가능합니다.");
+    		}
     	}
 
     	const deleteMailReceiver = (e) => {

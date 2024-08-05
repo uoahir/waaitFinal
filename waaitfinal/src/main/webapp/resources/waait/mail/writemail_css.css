@@ -18,7 +18,7 @@ input[name='senderMailAddress'] {
 .receiverContainer>div:first-child {
     width:7%;
 }
-.matilTitleContainer>div:first-child {
+.mailTitleContainer>div:first-child {
     width:7%;
 }
 .myborder-bottom{
@@ -45,10 +45,16 @@ input[name='senderMailAddress'] {
     border : none;
     background-color : inherit;
 }
+.mailTitleContainer {
+	margin-bottom : 10px;
+}
 .finishing-receiver-input {
     border-radius : 10px;
     text-align : center;
     border : none;
-    background-color : rgb(163, 163, 204);
+    background-color : white;
     margin-bottom : 3px;
+}
+.width-7 {
+	width : 7%;
 }
