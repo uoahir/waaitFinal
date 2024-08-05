@@ -221,9 +221,9 @@
                                         <i class="iconly-boldAdd-User"></i>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">이번달 근태</h6>
-                                    <h6 class="font-extrabold mb-0">줘야함~</h6>
+                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7" onclick="chattingOpen();" style="cursor: pointer;">
+                                    <h6 class="text-muted font-semibold">안읽은 채팅</h6>
+                                    <h6 class="font-extrabold mb-0">${chatCount}</h6>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +253,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>전자결재 관련</h4>                            
+                            <h4>조직도</h4>                            
                         </div>
                         <div class="card-body" style="display: flex; flex-direction:row;" >
                             <div style="width: 1100px;">

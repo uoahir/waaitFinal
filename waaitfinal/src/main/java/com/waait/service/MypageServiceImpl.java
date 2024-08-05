@@ -36,6 +36,17 @@ public class MypageServiceImpl implements MypageService {
 		return dao.myTodayWork(session,empNumber);
 	}
 
+
+	//메인페이지 안읽은 메시지수 출력
+	@Override
+	public int selectChatHistoryCount(Long loginEmpNo) {
+		int chatCount = dao.selectChatHistoryCount(session, loginEmpNo);
+		return chatCount;
+	}
+
+	
+	
+
 	@Override
 	public List<SpamDomain> getSpamDomain(long empNo) {
 		return dao.getSpamDomain(session, empNo);
@@ -45,6 +56,7 @@ public class MypageServiceImpl implements MypageService {
 	public int getNotReadMailCount(Map<String, Object> sqlParam) {
 		return dao.getNotReadMailCount(session, sqlParam);
 	}
+
 	
 
 	

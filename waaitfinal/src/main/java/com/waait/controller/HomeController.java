@@ -95,6 +95,12 @@ public class HomeController {
 			System.out.println(e);
 		});			
 		
+
+		//메인페이지 안읽은 채팅 수 띄우기
+		Long loginEmpNo = employee.getEmpNo();
+		int chatCount = service.selectChatHistoryCount(loginEmpNo);
+		model.addAttribute("chatCount",chatCount);	
+
 		//안읽은 메일
 		String mailReceiverAddress = getLoginEmpInfo().getEmpEmail();
 		long empNo = getLoginEmpInfo().getEmpNo();
@@ -105,8 +111,8 @@ public class HomeController {
 		int notReadMailCount = service.getNotReadMailCount(sqlParam);
 		
 		model.addAttribute("notReadReceiveMailCount", notReadMailCount);
+
 		
-					
 		return "index";
 	}
 	
