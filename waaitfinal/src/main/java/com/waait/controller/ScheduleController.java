@@ -58,7 +58,7 @@ public class ScheduleController {
 		
 	// 
 	@RequestMapping("/insertSchedule.do")
-	public String insertSchedule(Schedule s,String scheTimeData, String scheEndData) {
+	public String insertSchedule(Schedule s,String scheTimeData, String scheEndData,Model model) {
 		try {
 			//사용자가 입력한 날짜 및 시간 데이터를 Timestamp 객체로 변환하여 Schedule 객체의 scheTime 필드에 설정하는 역할
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"); //Timestamp로 들어가서 파싱해주기
@@ -80,9 +80,21 @@ public class ScheduleController {
 //		if(s.getSchePrivate()==null) {
 //			s.setSchePrivate("N");
 //		}       
+		
 		System.out.println(s);
 		int result=service.insertSchedule(s);
-		return "redirect:/schedule/myschedule";
+		
+		String msg,loc;		
+		if(result>0) {
+			msg="일정 등록 성공";
+		}else {
+			msg="일정 등록 실패. 다시 시도하세요.";
+		}
+		loc="/schedule/myschedule";
+		model.addAttribute("msg", msg);
+		model.addAttribute("loc", loc);		
+		
+		return "common/msg";
 		
 	}
 	

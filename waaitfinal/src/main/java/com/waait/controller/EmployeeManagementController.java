@@ -393,7 +393,7 @@ public class EmployeeManagementController {
 		}
 		
 		String initialPwd = "0000";
-		String userId = engName;
+		String userId = engName + (int) (Math.random() * 1000) + 1;
 		emp.setEmpId(userId);
 		
 		

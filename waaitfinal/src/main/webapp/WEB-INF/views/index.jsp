@@ -48,7 +48,7 @@
     <div class="sidebar-header position-relative">
         <div class="d-flex justify-content-between align-items-center">
             <div class="logo" style="height: 100; ">
-                <a href="${path }/"><img src="${path }/resources/images/logo.png" alt="Logo" srcset="" width="150px" style="height:90px"></a>
+                <a href="${path }/"><img src="/resources/images/logo.png" alt="Logo" srcset="" width="150px" style="height:90px"></a>
             </div>
             <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -484,7 +484,7 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h4>To Do List 투두리스트</h4>
+                    <h4>MY WORK LIST</h4>
                 </div>
                 <div class="card-content pb-4">
                     <div class="recent-message d-flex px-4 py-3">
@@ -492,8 +492,8 @@
                             <img src="${path}/resources/assets/compiled/jpg/4.jpg">
                         </div>
                         <div class="name ms-4">
-                            <h5 class="mb-1">Hank Schrader</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
+                            <h5 class="mb-1">팀회의록 업데이트</h5>
+                            <h6 class="text-muted mb-0">프로젝트</h6>
                         </div>
                     </div>
                     <div class="recent-message d-flex px-4 py-3">
@@ -501,8 +501,8 @@
                             <img src="${path}/resources/assets/compiled/jpg/5.jpg">
                         </div>
                         <div class="name ms-4">
-                            <h5 class="mb-1">Dean Winchester</h5>
-                            <h6 class="text-muted mb-0">@imdean</h6>
+                            <h5 class="mb-1">08/27 판교 출장</h5>
+                            <h6 class="text-muted mb-0">일정</h6>
                         </div>
                     </div>
                     <div class="recent-message d-flex px-4 py-3">
@@ -510,18 +510,19 @@
                             <img src="${path}/resources/assets/compiled/jpg/1.jpg">
                         </div>
                         <div class="name ms-4">
-                            <h5 class="mb-1">John Dodol</h5>
-                            <h6 class="text-muted mb-0">@dodoljohn</h6>
+                            <h5 class="mb-1">연말 정산 서류 제출</h5>
+                            <h6 class="text-muted mb-0">행정</h6>
                         </div>
                     </div>
                     <div class="px-4">
-                        <button class='btn btn-block btn-xl btn-outline-primary font-bold mt-3'>Start Conversation</button>
+                        <button class='btn btn-block btn-xl btn-outline-primary font-bold mt-3'>TO DO LIST</button>
                     </div>
                 </div>
             </div> 
             <div class="card">
                 <div class="card-header">
-                    <h4>이번주 일정</h4>
+                    <h4>승인 대기중 문서</h4>
+                    <h3></h3>
                 </div>
                 <div class="card-body">
                     <div id="chart-visitors-profile"></div>                                                                              
