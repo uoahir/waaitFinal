@@ -153,7 +153,9 @@
             </div>
         </div>
     </div>
-    	<script>
+
+
+   	<script>
     	var path = "${path}";
     	var employee = {
     		empName : "${employee.empName}",
@@ -167,5 +169,14 @@
             window.open("${path}/edoc/openedoc"+docId+"/"+docType+"/"+docWriter,"_blank" ,"width=1200, height=1000");
         }
     </script>
+  	<script src="${path }/resources/assets/static/js/components/dark.js"></script>
+    <script src="${path }/resources/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="${path }/resources/assets/compiled/js/app.js"></script>
+    <script src="/resources/assets/static/js/components/dark.js"></script>
+    <script src="/resources/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="/resources/assets/compiled/js/app.js"></script>
 </section>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
+
+
+

@@ -60,8 +60,8 @@ public class EDocDaoImpl implements EDocDao {
 	public List<AbstractDocument> awaitingApproval(SqlSession session, Long empNo, Map<String, Integer> page) {
 		// TODO Auto-generated method stub
 		
-		RowBounds rb = new RowBounds((page.get("cPage2")-1)*page.get("numPerpage2"), page.get("numPerpage2"));
-		return session.selectList("edoc.awaitingApproval", empNo, rb); // empNo : 로그인된 ID
+//		RowBounds rb = new RowBounds((page.get("cPage2")-1)*page.get("numPerpage2"), page.get("numPerpage2"));
+		return session.selectList("edoc.awaitingApproval", empNo); // empNo : 로그인된 ID
 	}
 	
 //	승인대기문서 중 클릭한 문서 select 로직 (상세문서)
@@ -135,8 +135,8 @@ public class EDocDaoImpl implements EDocDao {
 	@Override
 	public List<AbstractDocument> inprogressDocument(SqlSession session, Long empNo, Map<String, Integer> page) {
 		// TODO Auto-generated method stub
-		RowBounds rb = new RowBounds((page.get("cPage1")-1)*page.get("numPerpage1"), page.get("numPerpage1"));
-		return session.selectList("edoc.inprogressDocument",empNo,rb);
+//		RowBounds rb = new RowBounds((page.get("cPage1")-1)*page.get("numPerpage1"), page.get("numPerpage1"));
+		return session.selectList("edoc.inprogressDocument",empNo);
 	}
 
 	@Override

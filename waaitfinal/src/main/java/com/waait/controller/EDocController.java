@@ -325,7 +325,7 @@ public class EDocController {
 		int pageBarSize = 5;
 		int pageNo = ((cPage1 - 1) / pageBarSize) * pageBarSize + 1;
 		int pageEnd = pageNo + pageBarSize - 1;
-		String url = "/edoc/inprogress";
+		String url = "/GDJ79_WAAIT_final/edoc/inprogress";
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
@@ -378,7 +378,7 @@ public class EDocController {
 		int pageBarSize1 = 5;
 		int pageNo1 = ((cPage2 - 1) / pageBarSize1) * pageBarSize1 + 1;
 		int pageEnd1 = pageNo1 + pageBarSize1 - 1;
-		String url1 = "/edoc/inprogress";
+		String url1 = "/GDJ79_WAAIT_final/edoc/inprogress";
 		
 		StringBuffer sb1 = new StringBuffer();
 		sb1.append("<ul class='pagination justify-content-center pagination-sm'>");
@@ -418,7 +418,7 @@ public class EDocController {
 		
 		sb1.append("<script>");
 		sb1.append("function fn_paging1(pageNo1) {");
-		sb1.append("location.assign('" + url + "?cPage2='+pageNo1+'&numPerpage2=" + numPerpage2 + "')");
+		sb1.append("location.assign('" + url1 + "?cPage2='+pageNo1+'&numPerpage2=" + numPerpage2 + "')");
 		sb1.append("}");
 		sb1.append("</script>");
 		
@@ -462,7 +462,7 @@ public class EDocController {
 		int pageBarSize = 5;
 		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
 		int pageEnd = pageNo + pageBarSize - 1;
-		String url = "/edoc/inprogress";
+		String url = "/GDJ79_WAAIT_final/edoc/inprogress";
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
@@ -526,7 +526,7 @@ public class EDocController {
 		int pageBarSize = 5;
 		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
 		int pageEnd = pageNo + pageBarSize - 1;
-		String url = "/edoc/inprogress";
+		String url = "/GDJ79_WAAIT_final/edoc/inprogress";
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
@@ -589,7 +589,7 @@ public class EDocController {
 		int pageBarSize = 5;
 		int pageNo = ((cPage - 1) / pageBarSize) * pageBarSize + 1;
 		int pageEnd = pageNo + pageBarSize - 1;
-		String url = "/edoc/inprogress";
+		String url = "/GDJ79_WAAIT_final/edoc/inprogress";
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("<ul class='pagination justify-content-center pagination-sm'>");
