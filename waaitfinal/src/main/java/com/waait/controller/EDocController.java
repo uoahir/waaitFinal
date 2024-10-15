@@ -71,9 +71,9 @@ public class EDocController {
 		List<Department> depts = service.deptList();
 		m.addAttribute("depts", depts);
 		List<Employee> employees = service.employeeList();
-		m.addAttribute("employees", employees);
-		
+		m.addAttribute("employees", employees);	
 	}
+	
 	@GetMapping("/write3")
 	public void writeDocumentBasic(@RequestParam String type, Model m) {
 		System.out.println(type);
@@ -81,9 +81,9 @@ public class EDocController {
 		List<Department> depts = service.deptList();
 		m.addAttribute("depts", depts);
 		List<Employee> employees = service.employeeList();
-		m.addAttribute("employees", employees);
-		
+		m.addAttribute("employees", employees);	
 	}
+	
 	@GetMapping("/write4")
 	public void writeTrip(@RequestParam String type, Model m) {
 		System.out.println(type);
@@ -92,7 +92,6 @@ public class EDocController {
 		m.addAttribute("depts", depts);
 		List<Employee> employees = service.employeeList();
 		m.addAttribute("employees", employees);
-		
 	}
 	
 	@PostMapping(value = "/offedocend",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -283,6 +282,17 @@ public class EDocController {
 		List<Employee> employees = service.employeeList();
 
 		return employees;
+	}
+	
+	@ResponseBody
+	@GetMapping("/appcount")
+	public List<Integer> appCount() {
+		List<Integer> appCount = new ArrayList<>();
+		Long empNo = getEmployeeH().getEmpNo();
+		appCount.add(service.awaitingApprovalTotal(empNo));
+		appCount.add(service.inprogressCount(empNo));
+		
+		return appCount;
 	}
 	
 	@GetMapping("/appline2") // jstree

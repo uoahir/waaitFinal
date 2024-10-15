@@ -345,9 +345,9 @@ public class MailService {
 		return result;
 	}
 
-	public List<RecentSearch> getRecentSearch(long empNo) {
-		return dao.getRecentSearch(session, empNo);
-	}
+//	public List<RecentSearch> getRecentSearch(long empNo) {
+//		return dao.getRecentSearch(session, empNo);
+//	}
 
 
 

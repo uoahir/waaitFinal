@@ -26,7 +26,7 @@ public class WorkController {
 	@PostMapping("/insert/work") //출근시 
 	public ResponseEntity<Map<String,String>> insertWorkStart() {
 		
-		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now(); 
 		Timestamp timestamp = Timestamp.valueOf(now);
 		Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		 Work work = Work.builder()

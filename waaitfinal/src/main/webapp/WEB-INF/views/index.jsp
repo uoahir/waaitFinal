@@ -186,10 +186,10 @@
                 </a>
             </header>
             
-<div class="page-heading">
-    <h3>Profile Statistics</h3>
-    <%-- <c:forEach var="m" items="${total }"> --%>
-</div> 
+<%-- <div class="page-heading">
+    <!-- <h3>Profile Statistics</h3> -->
+    <c:forEach var="m" items="${total }">
+</div> --%> 
 <div class="page-content"> 
     <section class="row">
         <div class="col-12 col-lg-9">
@@ -204,9 +204,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">근무시간</h6>
-                                    <h6>${workTotal.get(0).workStart}</h6>                                                                    
-                                    <h6>${workTotal.get(0).workEnd}</h6>
+                                    <h6 class="text-muted font-semibold">승인대기중인문서<br>상신한문서</h6>
+                                    <h6 id="edoc"></h6>                                                                  
+                                    <%-- <h6>${workTotal.get(0).workEnd}</h6> --%>
                                 </div>
                             </div> 
                         </div>
@@ -224,7 +224,7 @@
                                 <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                 	<a href="${path}/mail/mailmain.do">
 	                                    <h6 class="text-muted font-semibold">안읽은 메일</h6>
-	                                    <h6 class="font-extrabold mb-0">${notReadReceiveMailCount }</h6>
+	                                    <h6 class="font-extrabold mb-0">${notReadReceiveMailCount }</h6><br>
 	                                </a>                                    
                                 </div>
                             </div>
@@ -466,12 +466,12 @@
                             <h5 class="font-bold">${employee.empName }</h5>
                             <h6 class="text-muted mb-0">${employee.empEmail}</h6><br>
 								<c:if test="${work!=null}">
-								<button>${work.workStart.getHours()}:${work.workStart.getMinutes()} </button>
+								<button class="btn btn-primary">출근 ${work.workStart.getHours()}:${work.workStart.getMinutes()} </button>
 								<c:if test="${work.workEnd == null }">
-								<button onclick="leaveWork()">퇴근</button>
+								<button onclick="leaveWork()" class="btn btn-primary">퇴근</button>
 								</c:if>
 								<c:if test="${work.workEnd != null }">
-								<button>${work.workEnd.getHours()}:${work.workEnd.getMinutes()} </button>
+								<button class="btn btn-primary">퇴근 ${work.workEnd.getHours()}:${work.workEnd.getMinutes()} </button>
 								</c:if>	
 								</c:if>
 								<c:if test="${work==null}">
@@ -540,8 +540,7 @@
     
     
     <script src="${path }/resources/assets/compiled/js/app.js"></script>
-    <!-- 출퇴근 관련 onclick이벤트 -->
-    <script src="${path }/resources/waait/index.js"></script>
+    
 
  <!-- 전자결재관련 차트 -->
 <%-- <script src="${path }/resources/assets/extensions/apexcharts/apexcharts.min.js"></script> --%>
@@ -550,6 +549,8 @@
 	<!-- script문 JU -->
     <script>const path = "${path}";</script>
     <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
+    <!-- 출퇴근 관련 onclick이벤트 -->
+    <script src="${path }/resources/waait/index.js"></script>
 </body>
 
 </html>

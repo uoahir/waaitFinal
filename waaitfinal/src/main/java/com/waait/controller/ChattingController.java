@@ -250,8 +250,6 @@ public class ChattingController {
 		return employee;
 	}
 	
-	
-	
 	// 1:1 채팅 방이있으면 방 열기 -> chatRoomOpen (@RequestParam int chatroomNo)
 	// 없으면 방생성해서 열기 -> insertChatRoom (@RequestParam(value = "chatRoomName", defaultValue = "") String chatRoomName,
 	//										@RequestParam("chatemps") List<Long> chatEmpNo)
@@ -270,8 +268,8 @@ public class ChattingController {
 		Long empNo = loginEmployee.getEmpNo();
 		
 		Map<String, Object> param = new HashMap<>();
-		param.put("empNo", empNo);
-		param.put("chatEmpNo", chatEmpNo);
+		param.put("empNo", empNo); // 현재 로그인한 사원의 사원번호
+		param.put("chatEmpNo", chatEmpNo); // 상대방 사원의 사원번호
 		
 		System.out.println("컨트롤러 - profilechatopen - empNos : "+param);
 		Integer chatRoomNo = service.selectProfilechatOpen(param);

@@ -32,7 +32,7 @@ public class HomeController {
 	private final EmployeeService employeeService;
 	private final BCryptPasswordEncoder encoder;
 	private final WorkService workService;
-	private final MypageService service;
+	private final MypageService service; 
 
 	@GetMapping("/login")
 	public String loginForm() {
@@ -111,6 +111,7 @@ public class HomeController {
 		int notReadMailCount = service.getNotReadMailCount(sqlParam);
 		
 		model.addAttribute("notReadReceiveMailCount", notReadMailCount);
+		
 
 		
 		return "index";

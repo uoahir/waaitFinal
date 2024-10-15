@@ -164,7 +164,7 @@ public class MailController {
 		
 		int notReadCount = service.notReadDataCount(mailSettings);
 		
-		List<RecentSearch> searchList = service.getRecentSearch(empNo);
+//		List<RecentSearch> searchList = service.getRecentSearch(empNo);
 //		List<MyMailBoxDetail> myMailBoxList = service.getMyMailBox(empNo);
 		
 		System.out.println("가져온 mailList : " + mailList);
@@ -220,13 +220,13 @@ public class MailController {
 		sb.append("}");
 		sb.append("</script>");
 		
-		System.out.println("recentSearch : " + searchList);
+//		System.out.println("recentSearch : " + searchList);
 		model.addAttribute("mails", mailList);
 		model.addAttribute("myMailBoxes", myMailBoxList);
 		model.addAttribute("pageBar", sb.toString());
 		model.addAttribute("notReadCount", notReadCount);
 		model.addAttribute("spamMailCount", spamMailCount);
-		model.addAttribute("recentSearch", searchList);
+//		model.addAttribute("recentSearch", searchList);
 		
 		return "mail/mailmain";
 	}
@@ -755,8 +755,8 @@ public class MailController {
 	@GetMapping("/refreshsearchmodal.do")
 	public String refreshSearchModal(Model model) {
 		long empNo = getLoginEmpInfo().getEmpNo();
-		List<RecentSearch> searchList = service.getRecentSearch(empNo);
-		model.addAttribute("recentSearch", searchList);
+//		List<RecentSearch> searchList = service.getRecentSearch(empNo);
+//		model.addAttribute("recentSearch", searchList);
 		return "mail/mailresponse/recentsearch_modal";
 	}
 	
