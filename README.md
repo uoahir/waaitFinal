@@ -36,6 +36,7 @@ WAAIT은 IT 기업이 사용하는 그룹웨어로 다양한 팀이 더욱 원�
 ## 💡 &nbsp;프로젝트 주요 기능
 - 로그인 : Spring Security 를 이용한 로그인 기능, 로그인 계정 별 권한에 따른 페이지 접근 제한 기능
 - 메인페이지 : 출퇴근 기능, 채팅/메일 연결 기능, 조직도
+- 사내메일 : 메일작성, 보낸메일함, 받은메일함, 휴지통
 - 채팅기능 : Web Socket 을 이용한 채팅 기능
 - 코드리뷰 기능 : 자신의 코드를 올리면 팀원들이 코드리뷰해주는 기능
 - 부서관리 기능 : 팀 등록, 수정, 삭제 기능
@@ -49,4 +50,18 @@ WAAIT은 IT 기업이 사용하는 그룹웨어로 다양한 팀이 더욱 원�
 | 로그인<br>프로젝트<br>코드리뷰 | 사내메일<br>인사관리 |  1:1채팅  |  전자결재 | 일정관리<br> |
 
 ## 💡 &nbsp;프로젝트 화면
+로그인
 <img width="1498" alt="image" src="https://github.com/user-attachments/assets/668f57b4-45f0-407f-82ce-494650a2373a">
+
+메인화면
+<img width="1498" alt="image" src="https://github.com/user-attachments/assets/bc745ce4-a568-484e-a6d4-9c72b3811165">
+
+사내메일
+<img width="1498" alt="image" src="https://github.com/user-attachments/assets/1b4cfbf1-7bf2-4246-95e0-5c8de54d01bd">
+<img width="1498" alt="스크린샷 2024-10-15 오후 10 52 20" src="https://github.com/user-attachments/assets/5fba380c-4e60-4ac6-947e-fc2a71a6f184">
+<img width="1498" alt="스크린샷 2024-10-15 오후 10 52 33" src="https://github.com/user-attachments/assets/97cc673a-17ba-4ae1-9188-752140470da9">
+
+인사관리
+<img width="1498" alt="인사조회" src="https://github.com/user-attachments/assets/8c203d00-f6ce-4d4c-ada5-8d600bbd17f6">
+<img width="1022" alt="인사등록" src="https://github.com/user-attachments/assets/cb71216f-1783-4519-99fe-cb0647ba73d0">
+
