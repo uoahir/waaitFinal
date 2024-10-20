@@ -61,6 +61,12 @@ WAAIT은 IT 기업이 사용하는 그룹웨어로 다양한 팀이 더욱 원�
 ## 💡 &nbsp;담당 : 전자결재 테이블 설계, 전자결재 기능 구현
 https://github.com/user-attachments/assets/1c463307-7930-4d36-824e-1282f92e984e
 
+#### 문서 보존연한 
+보존연한 기능을 추가할 때 해당 문서에 대한 보존기간이 만료될 때 문서를 삭제하는 로직을 짜야했는데 기존 테이블에는 문서가 결재완료 되었을 때의 최종 문서번호만 INSERT 될 수 있도록 설계가 되어있어
+문서가 결재완료된 시점을 기준으로 문서가 보존기간이 종료되는 날짜를 INSERT 할 수 있도록 테이블을 수정하였음.
+Spring Scheduler VS Spring Batch VS Spring Quartz
+
+
 ## 💡 &nbsp;프로젝트 화면
 
 
