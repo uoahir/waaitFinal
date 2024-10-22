@@ -146,6 +146,21 @@
 		    <groupId>org.springframework.boot</groupId>
 		    <artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+		
+
+	    <!-- Spring Boot Starter -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter</artifactId>
+	    </dependency>
+	
+	    <!-- Spring Boot Starter Quartz -->
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-quartz</artifactId>
+	    </dependency>
+
+		
 
 	</dependencies>
 

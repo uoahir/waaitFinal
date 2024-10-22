@@ -403,7 +403,7 @@
             const $divProfile = document.createElement("div");
             $divProfile.classList.add('avatar','avatar-xl');
             const $avatar = document.createElement("img");
-            $avatar.setAttribute("src","${path}/resources/images/"+e.empProfile);
+            $avatar.setAttribute("src","${path}/resources/upload/emp/profile/"+e.empProfile);
             $divProfile.appendChild($avatar);
             
             const $divTeam = document.createElement("div");
