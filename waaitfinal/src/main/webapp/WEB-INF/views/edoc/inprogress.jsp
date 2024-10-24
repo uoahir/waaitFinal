@@ -166,7 +166,7 @@
     </script>
     <script type="text/javascript">
         const isFirstOpened = (docId, docType, docWriter) => {
-            window.open("${path}/edoc/openedoc"+docId+"/"+docType+"/"+docWriter,"_blank" ,"width=1200, height=1000");
+            window.open("${path}/edoc/openedoc"+docId+"/"+docType+"/"+docWriter,"_blank" ,"width=1200, height=1000"); // UUID 사용해서 url 구성해보기
         }
     </script>
   	<script src="${path }/resources/assets/static/js/components/dark.js"></script>

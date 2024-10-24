@@ -9,10 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
-import com.waait.dto.AttatchFile;
 import com.waait.dto.BasicDocument;
 import com.waait.dto.Department;
-import com.waait.dto.Document;
 import com.waait.dto.Employee;
 import com.waait.dto.OffDocument;
 import com.waait.dto.TripDocument;
@@ -273,7 +271,16 @@ public class EDocDaoImpl implements EDocDao {
 	public int approvedAllCount(SqlSession session) {
 		// TODO Auto-generated method stub
 		return session.selectOne("edoc.approvedAllCount");
-	}	
+	}
+
+	@Override
+	public int selectDocLife(SqlSession session, Map<String, Object>param) {
+		// TODO Auto-generated method stub
+		return session.selectOne("edoc.selectDocLife", param);
+	}
+
+
+	
 	
 	
 	

@@ -43,7 +43,7 @@ public class QuartzConfig {
 				.withIdentity("myTrigger", "group1")
 				.startNow()
 				.withSchedule(SimpleScheduleBuilder.simpleSchedule()
-						.withIntervalInMinutes(10)
+						.withIntervalInHours(1)
 						.repeatForever())
 				.build();
 	}

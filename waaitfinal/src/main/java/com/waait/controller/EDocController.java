@@ -664,7 +664,7 @@ public class EDocController {
 		String tableName="";
 	
 		switch(docType) {
-			case "T01": tableName = "basic_form"; page="edoc/opennew2"; break;
+			case "T01": tableName = "basic_form"; page="edoc/openbasic"; break;
 			case "T02": tableName = ""; break;
 			case "T03": tableName = "trip_form"; page="edoc/opentrip"; break;
 			case "T04": tableName = "off_form"; page="edoc/opennew"; break;
@@ -672,7 +672,7 @@ public class EDocController {
 		AbstractDocument doc = service.selectDocumentById(docId); // 문서유형과는 상관 없음
 		
 		if(docWriter != empNo.longValue() && doc.getIsFirstOpened()==0) {
-			System.out.println("이게 되면 안된다고 !!!! ");
+			System.out.println("처음열었음");
 			service.updateFirstOpened(docId);
 			// 처음 열었을 때만, 문서 상태 update ! docStatus, isFirstOpened
 			// getIsFirstOpened == 0 일 때만 실행되고, 1일 때는 update 가 실행되지 않음

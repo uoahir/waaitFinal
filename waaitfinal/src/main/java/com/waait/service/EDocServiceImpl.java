@@ -1,5 +1,9 @@
 package com.waait.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -241,7 +245,35 @@ public class EDocServiceImpl implements EDocService {
 	@Override
 	public int updateFinalApproval(Map<String, Object> param) {
 		int updateCount = 0;
+		
 		System.out.println("service" + param);
+		int docLife = edocDao.selectDocLife(session, param);
+		// 현재 날짜에 docLife(년수)를 더해줌 !
+		if(docLife != 0) {
+			Date today = new Date();
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(today);
+			
+			cal.add(Calendar.YEAR, docLife);
+			String expDateString = format.format(cal.getTime());
+			
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				// String -> 날짜로 변환
+				java.util.Date expDate = sdf.parse(expDateString);
+				
+				// java.sql.Date 로 변환
+				java.sql.Date sqlDate = new java.sql.Date(expDate.getTime());
+				param.put("expDate", sqlDate);
+				
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		
 		String docType = (String)param.get("docType");
 		System.out.println(docType);
@@ -256,7 +288,7 @@ public class EDocServiceImpl implements EDocService {
 			}
 			
 		} catch(Exception e) {
-			throw new RuntimeException("One of the task failed", e);
+			throw new RuntimeException("One of the task failed_SQL", e);
 		}
 		return updateCount;
 	}

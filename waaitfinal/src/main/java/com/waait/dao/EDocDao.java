@@ -114,4 +114,8 @@ public interface EDocDao {
 	int approvedCount(SqlSession session, Long empNo);
 	
 	int approvedAllCount(SqlSession session);
+	
+//	보존연한 선택
+	int selectDocLife(SqlSession session, Map<String, Object>param);
+
 }
