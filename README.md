@@ -10,8 +10,16 @@ WAAIT은 IT 기업이 사용하는 그룹웨어로 다양한 팀이 더욱 원�
 ##  💡 &nbsp;프로젝트 개요
 - 기간 : 2024.06.27. - 2024.08.05.
 - ERD 설계 : [ERD CLOUD](https://www.erdcloud.com/d/hRYtxf69Hw43my5mG)
+  ![image](https://github.com/user-attachments/assets/7879e6f3-a75e-422f-bee2-16d9a509008d)
+
 - 프로젝트 회의록 : [NOTION 회의록](https://fortunate-word-f96.notion.site/Team-a5e12bb2249541b1999bb8489675ca61)
+  ![image](https://github.com/user-attachments/assets/11e96ae5-8e25-4886-9b9d-06ea1757d4ea)
+
+- 기능정의서 : [Google SpreadSheet](https://docs.google.com/spreadsheets/d/1GxJZL3pG7vRkc11CAoEY2ljEmi4etDBdfLPEB_gPUiw/edit?usp=sharing)
+ ![image](https://github.com/user-attachments/assets/2466006d-1fe4-438b-9b8b-39c82cce1d8a)
 - 화면 설계 : [FIGMA](https://www.figma.com/design/MUzkgccFZssPBiEpQxcY9o/waait-final?node-id=0-1&node-type=canvas&t=2mFHxanBaUmopPs2-0)
+
+
 
 ## 💡 &nbsp;개발환경
 #### Language
@@ -97,7 +105,7 @@ Cron 표현식을 사용하여 복잡한 스케줄을 설정할 수 있음.
 따라서, 특정 요일이나 시간에 작업을 실행하도록 설정할 수 있는 Spring Quartz를 선택해, JOB 과 TRIGGER 이용하여 로직을 구성하였습니다.
 
 ### CSS 와 JavaScript 파일 분리의 중요성
-프로젝트 이후, jsp 화면에서 css 와 javascript 를 수정할 때, 유지보수가 어렵다는 것을 느꼈습니다. 이후 프로젝트를 업그레이드 하면서 가독성을 높이기 위해 CSS와 JS 파일을 분리할 예정입니다.
+프로젝트 이후, jsp 화면에서 CSS 와 JavaScript 를 수정할 때, 유지보수가 어렵다는 것을 느꼈습니다. 이후 프로젝트를 업그레이드 하면서 가독성을 높이기 위해 CSS와 JS 파일을 분리할 예정입니다.
 이를 통해 코드의 재사용성을 높이고, 변경 사항을 쉽게 관리할 수 있을 것입니다.
 
 ### RESTful API 활용
