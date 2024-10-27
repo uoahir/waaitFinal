@@ -1,5 +1,7 @@
 package com.waait.config;
 
+import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -37,15 +39,24 @@ public class QuartzConfig {
 	@Bean
 	public Trigger deleteDocumnetTrigger() {
 		
-		// Trigger 생성
 		return TriggerBuilder.newTrigger()
 				.forJob(deleteDocumentJobDetail())
 				.withIdentity("myTrigger", "group1")
 				.startNow()
 				.withSchedule(SimpleScheduleBuilder.simpleSchedule()
-						.withIntervalInHours(1)
+						.withIntervalInHours(1) //한 시간 마다 한번씩 실행
 						.repeatForever())
 				.build();
+	}
+	
+	@Bean
+	public CronTrigger deleteDocumentTrigger() {
+		return TriggerBuilder.newTrigger()
+				.forJob(deleteDocumentJobDetail())
+				.withIdentity("deleteDocumentCronTrigger", "group1")
+				.withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?")) // 순서대로 초 분 시 일 월 요일 [년도] 매일 자정 실행 
+				.build();
+				
 	}
 }
 	
