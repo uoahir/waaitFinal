@@ -12,12 +12,12 @@ WAAIT은 IT 기업이 사용하는 그룹웨어로 다양한 팀이 더욱 원�
 - ERD 설계 : [ERD CLOUD](https://www.erdcloud.com/d/hRYtxf69Hw43my5mG)
   ![image](https://github.com/user-attachments/assets/7879e6f3-a75e-422f-bee2-16d9a509008d)
 
-- 프로젝트 회의록 : [NOTION 회의록](https://fortunate-word-f96.notion.site/Team-a5e12bb2249541b1999bb8489675ca61)
+- 프로젝트 회의록 : Notion
   ![image](https://github.com/user-attachments/assets/11e96ae5-8e25-4886-9b9d-06ea1757d4ea)
 
 - 기능정의서 : [Google SpreadSheet](https://docs.google.com/spreadsheets/d/1GxJZL3pG7vRkc11CAoEY2ljEmi4etDBdfLPEB_gPUiw/edit?usp=sharing)
  ![image](https://github.com/user-attachments/assets/2466006d-1fe4-438b-9b8b-39c82cce1d8a)
-- 화면 설계 : [FIGMA](https://www.figma.com/design/MUzkgccFZssPBiEpQxcY9o/waait-final?node-id=0-1&node-type=canvas&t=2mFHxanBaUmopPs2-0)
+- 화면 설계 : FIGMA
 
 
 
