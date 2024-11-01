@@ -53,18 +53,18 @@ public class EDocController {
 	
 	private final EDocService service;
 	
-	@GetMapping("/basicedoc")
-	public void basicEdoc(@RequestParam String type,Model m) {
-		System.out.println(type);
-		m.addAttribute("type", type);
-	}
-	@GetMapping("/offedoc")
-	public void offEdoc(@RequestParam String type,Model m) {
-		System.out.println(type);
-		m.addAttribute("type", type);
-	}
+//	@GetMapping("/basicedoc")
+//	public void basicEdoc(@RequestParam String type,Model m) {
+//		System.out.println(type);
+//		m.addAttribute("type", type);
+//	}
+//	@GetMapping("/offedoc")
+//	public void offEdoc(@RequestParam String type,Model m) {
+//		System.out.println(type);
+//		m.addAttribute("type", type);
+//	}
 	
-	@GetMapping("/write2")
+	@GetMapping("/write/leave")
 	public void writeDocument(@RequestParam String type, Model m) {
 		System.out.println(type);
 		m.addAttribute("type", type);
@@ -74,7 +74,7 @@ public class EDocController {
 		m.addAttribute("employees", employees);	
 	}
 	
-	@GetMapping("/write3")
+	@GetMapping("/write/basic")
 	public void writeDocumentBasic(@RequestParam String type, Model m) {
 		System.out.println(type);
 		m.addAttribute("type", type);
@@ -82,16 +82,6 @@ public class EDocController {
 		m.addAttribute("depts", depts);
 		List<Employee> employees = service.employeeList();
 		m.addAttribute("employees", employees);	
-	}
-	
-	@GetMapping("/write4")
-	public void writeTrip(@RequestParam String type, Model m) {
-		System.out.println(type);
-		m.addAttribute("type", type);
-		List<Department> depts = service.deptList();
-		m.addAttribute("depts", depts);
-		List<Employee> employees = service.employeeList();
-		m.addAttribute("employees", employees);
 	}
 	
 	@PostMapping(value = "/offedocend",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})

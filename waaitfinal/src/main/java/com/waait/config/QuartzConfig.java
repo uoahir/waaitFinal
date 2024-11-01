@@ -36,18 +36,18 @@ public class QuartzConfig {
 	}
 	
 	
-	@Bean
-	public Trigger deleteDocumnetTrigger() {
-		
-		return TriggerBuilder.newTrigger()
-				.forJob(deleteDocumentJobDetail())
-				.withIdentity("myTrigger", "group1")
-				.startNow()
-				.withSchedule(SimpleScheduleBuilder.simpleSchedule()
-						.withIntervalInHours(1) //한 시간 마다 한번씩 실행
-						.repeatForever())
-				.build();
-	}
+//	@Bean
+//	public Trigger deleteDocumnetTrigger() {
+//		
+//		return TriggerBuilder.newTrigger()
+//				.forJob(deleteDocumentJobDetail())
+//				.withIdentity("myTrigger", "group1")
+//				.startNow()
+//				.withSchedule(SimpleScheduleBuilder.simpleSchedule()
+//						.withIntervalInHours(1) //한 시간 마다 한번씩 실행
+//						.repeatForever())
+//				.build();
+//	}
 	
 	@Bean
 	public CronTrigger deleteDocumentTrigger() {

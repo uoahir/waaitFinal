@@ -16,7 +16,8 @@ public class TeamProjectDaoImpl implements TeamProjectDao {
 	@Override 		//스케줄러로 업데이트함
 	public int projectUpdateStatus(SqlSession sqlSession, String today) {
 		
-		return sqlSession.update("teamProject.projectUpdateStatus",today);
+//		return sqlSession.update("teamProject.projectUpdateStatus",today);
+		return 0;
 	}
 
 	@Override
