@@ -279,7 +279,11 @@ public class EDocDaoImpl implements EDocDao {
 		return session.selectOne("edoc.selectDocLife", param);
 	}
 
-
+	@Override
+	public int deleteEdoc(SqlSession session) {
+		// TODO Auto-generated method stub
+		return session.delete("edoc.deleteedoc");
+	}
 	
 	
 	

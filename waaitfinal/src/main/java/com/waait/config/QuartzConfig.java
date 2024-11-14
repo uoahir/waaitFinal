@@ -18,24 +18,24 @@ import com.waait.controller.DeleteEdocController;
 @Configuration
 public class QuartzConfig {
 
-	@Bean
-	public Scheduler scheduler() throws SchedulerException{
-		Scheduler scheduler = new StdSchedulerFactory().getScheduler();
-		scheduler.start();
-		return scheduler;
-	}
+//	@Bean
+//	public Scheduler scheduler() throws SchedulerException{
+//		Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+//		scheduler.start();
+//		return scheduler;
+//	}
 	
-	@Bean
-	public JobDetail deleteDocumentJobDetail() {
-		
-		// Job 생성
-		return JobBuilder.newJob(DeleteEdocController.class)
-				.withIdentity("deleteDocumentJob", "group1")
-				.storeDurably() // Job 을 저장소에 저장
-				.build();
-	}
-	
-	
+//	@Bean
+//	public JobDetail deleteDocumentJobDetail() {
+//		
+//		// Job 생성
+//		return JobBuilder.newJob(DeleteEdocController.class)
+//				.withIdentity("deleteDocumentJob", "group1")
+//				.storeDurably() // Job 을 저장소에 저장
+//				.build();
+//	}
+//	
+//	
 //	@Bean
 //	public Trigger deleteDocumnetTrigger() {
 //		
@@ -49,14 +49,14 @@ public class QuartzConfig {
 //				.build();
 //	}
 	
-	@Bean
-	public CronTrigger deleteDocumentTrigger() {
-		return TriggerBuilder.newTrigger()
-				.forJob(deleteDocumentJobDetail())
-				.withIdentity("deleteDocumentCronTrigger", "group1")
-				.withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?")) // 순서대로 초 분 시 일 월 요일 [년도] 매일 자정 실행 
-				.build();
-				
-	}
+//	@Bean
+//	public CronTrigger deleteDocumentTrigger() {
+//		return TriggerBuilder.newTrigger()
+//				.forJob(deleteDocumentJobDetail())
+//				.withIdentity("deleteDocumentCronTrigger", "group1")
+//				.withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?")) // 순서대로 초 분 시 일 월 요일 [년도] 매일 자정 실행 
+//				.build();
+//				
+//	}
 }
 	

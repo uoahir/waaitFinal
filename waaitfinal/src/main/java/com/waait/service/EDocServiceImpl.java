@@ -420,6 +420,11 @@ public class EDocServiceImpl implements EDocService {
 	}
 	
 	
+	@Override
+	public int deleteEdoc() {
+		// TODO Auto-generated method stub
+		return edocDao.deleteEdoc(session);
+	}
 	
 	
 	

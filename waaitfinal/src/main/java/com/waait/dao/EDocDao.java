@@ -118,4 +118,6 @@ public interface EDocDao {
 //	보존연한 선택
 	int selectDocLife(SqlSession session, Map<String, Object>param);
 
+//	만료일 지난 문서 삭제
+	int deleteEdoc(SqlSession session);
 }

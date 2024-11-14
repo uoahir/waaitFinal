@@ -27,7 +27,7 @@ public interface EDocService {
 	List<AbstractDocument> approvedAllDocument(Map<String,Integer> page); // 승인완료된 문서 출력(내가올린문서 중 승인완료된 건 !)
 	AbstractDocument selectDocumentById(int docId); // 문서 조회 
 	AbstractDocument selectDocumentDetail(Map<String, Object> param); // 결재자가 해당 문서 클릭 시 실행되는 로직 ~ ! ~ ! 
-	// update 는 언제해죠야하지 ?
+	// update 는 언제해줘야 하지?
 	int updateFirstOpened(int docId); // 결재자들 중 최초 결재자가 문서를 처음으로 열었을 때, 문서 상태를 상신 -> 검토 중 // 결재 상태를 승인전 -> 검토중 으로 update
 	
 //	반려로직
@@ -80,5 +80,7 @@ public interface EDocService {
 	
 	int savedDocumentCount(Long empNo);
 	
+//	만료일 지난 문서 삭제하는 로직
+	int deleteEdoc();
 	
 }

@@ -12,8 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,6 +65,20 @@ public class EDocController {
 //		System.out.println(type);
 //		m.addAttribute("type", type);
 //	}
+	
+	@Value("${schedule.use}")
+	private boolean useSchedule;
+	
+	@Scheduled(cron = "${schedule.cron}")
+	public void deleteExpiredDocument() {
+		try {
+			if(useSchedule) {
+				service.deleteEdoc();
+			}
+		} catch (Exception e) {
+			log.info("* 시스템이 예기치 않게 종료되었습니다.");
+		}
+	}
 	
 	@GetMapping("/write/leave")
 	public void writeDocument(@RequestParam String type, Model m) {
