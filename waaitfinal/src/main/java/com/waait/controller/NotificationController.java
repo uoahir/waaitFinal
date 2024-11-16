@@ -28,29 +28,12 @@ import lombok.extern.slf4j.Slf4j;
 public class NotificationController {
 	
 	private final NotificationService notificationService;
-	private final Map<Long, SseEmitter> userEmitters = new HashMap<>();
 	
 	@GetMapping(value = "/notification", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter Notifications(@AuthenticationPrincipal Employee employee,
 									@RequestHeader(value = "Last-Event-ID", required = false, defaultValue="") String lastEventId) {
-		
-		SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
-		log.info(emitter.toString());
-		try {
-			emitter.send(SseEmitter.event().name("connect").data(Notification.builder().message("hi").build()));
-			log.info("Sent connect event");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		long empNo = employee.getEmpNo();
-		
-		userEmitters.put(empNo, emitter);
-		
-		emitter.onCompletion(()-> userEmitters.remove(empNo));
-		emitter.onTimeout(()-> userEmitters.remove(empNo));
-		emitter.onError((e)-> userEmitters.remove(empNo));
-		
-		return emitter;
+		log.info(lastEventId);		
+		return notificationService.createEmitter(employee.getEmpNo());
 	}
 	
 }
