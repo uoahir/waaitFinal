@@ -11,6 +11,37 @@ window.onload = function(){
 		document.getElementById("edoc").innerText=data[0]+'건 / '+data[1]+'건';
 	})
 }
+
+
+
+console.log(`${empNo}`);
+if(empNo.length > 0) {
+	console.log('sse');
+	const eventSource = new EventSource(`${path}/api/user/notification`, {
+		withCredentials: true,
+	});
+	console.log("EventSource readyState:", eventSource.readyState);
+
+	console.log('sse222')
+	eventSource.addEventListener("connect", (event) => {
+		console.log("Connected to SSE : ", event)
+		console.log(event.data);
+		console.log("EventSource readyState", eventSource.readyState);
+	});
+	console.log("EventSource readyState", eventSource.readyState);
+
+	
+	eventSource.onmessage = (event) => {
+	    console.log("Message received: ", event.data);
+	};
+	eventSource.onerror = (err) => {
+		console.error("SSE Error", err);
+	};
+
+	
+}
+
+
 const time = new Date().toISOString();
 console.log(time);
 

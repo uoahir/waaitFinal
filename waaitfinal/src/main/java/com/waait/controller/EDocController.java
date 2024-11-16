@@ -66,20 +66,6 @@ public class EDocController {
 //		m.addAttribute("type", type);
 //	}
 	
-	@Value("${schedule.use}")
-	private boolean useSchedule;
-	
-	@Scheduled(cron = "${schedule.cron}")
-	public void deleteExpiredDocument() {
-		try {
-			if(useSchedule) {
-				service.deleteEdoc();
-			}
-		} catch (Exception e) {
-			log.info("* 시스템이 예기치 않게 종료되었습니다.");
-		}
-	}
-	
 	@GetMapping("/write/leave")
 	public void writeDocument(@RequestParam String type, Model m) {
 		System.out.println(type);

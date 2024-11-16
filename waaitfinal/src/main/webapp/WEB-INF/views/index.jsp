@@ -486,7 +486,7 @@
                 <div class="card-header">
                     <h4>MY WORK LIST</h4>
                 </div>
-                <div class="card-content pb-4">
+                <div class="card-content pb-4" id="list">
                     <div class="recent-message d-flex px-4 py-3">
                         <div class="avatar avatar-lg">
                             <img src="${path}/resources/assets/compiled/jpg/4.jpg">
@@ -547,7 +547,10 @@
 <%-- <script src="${path }/resources/assets/static/js/pages/dashboard.js"></script> --%>
 	
 	<!-- script문 JU -->
-    <script>const path = "${path}";</script>
+    <script>
+    const path = "${path}";
+    const empNo = "${employee.empNo}";
+    </script>
     <script type="text/javascript" src="${path}/resources/js/headerju.js"></script>
     <!-- 출퇴근 관련 onclick이벤트 -->
     <script src="${path }/resources/waait/index.js"></script>
