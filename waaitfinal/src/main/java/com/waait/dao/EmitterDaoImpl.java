@@ -1,7 +1,7 @@
 package com.waait.dao;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
@@ -12,12 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Repository
 public class EmitterDaoImpl implements EmitterDao{
-	private final Map<String, SseEmitter> emitters = new HashMap<>();
-	private final Map<String, Object> eventCache = new HashMap<>();
+	private final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
+	private final Map<String, Object> eventCache = new ConcurrentHashMap<>();
 
 	@Override
 	public SseEmitter save(String id, SseEmitter sseEmitter) {
 		emitters.put(id, sseEmitter);
+		log.info("지금현재연결된 ID : " + id + ", Emitter : " + sseEmitter + "저장된 Emitters : " + emitters);
 		return sseEmitter;
 	}
 
@@ -43,13 +44,23 @@ public class EmitterDaoImpl implements EmitterDao{
 
 	@Override
 	public void delete(String id) {
+		log.info(emitters.toString());
 		if(emitters.containsKey(id)) {
 			emitters.remove(id);
-			log.info("emitter 삭제 완료");
+			log.info("emitter 삭제 완료" + id +"여기있어 ? " +emitters.toString());
 		} else {
-			log.error("Emitter 삭제 실패");
+			log.error("Emitter 삭제 실패" + id +"여기없어 ? "+ emitters.toString());
 		}
 	}
+
+	@Override
+	public Map<String, SseEmitter> findById(String id) {
+		return emitters.entrySet().stream()
+				.filter(entry -> entry.getKey().equals(id))
+				.collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+	}
+	
+	
 	
 	
 }

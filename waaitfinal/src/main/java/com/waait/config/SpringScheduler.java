@@ -133,9 +133,9 @@ public class SpringScheduler {
 	public void deleteExpiredDocument() {
 		try {
 			if(useSchedule) {
-				log.info("hi 이거 문서삭제 로직");
+				log.info("문서삭제 로직 실행");
 				edocService.deleteEdoc();
-				log.info("완료됨~");
+				log.info("완료");
 			}
 		} catch (Exception e) {
 			log.info("* 만료일이 지난 문서를 삭제하는 시스템이 예기치 않게 종료되었습니다.");

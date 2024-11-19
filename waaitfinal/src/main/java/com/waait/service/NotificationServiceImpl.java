@@ -1,13 +1,16 @@
 package com.waait.service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waait.dao.EmitterDao;
 import com.waait.dao.NotificationDao;
 import com.waait.dto.Employee;
@@ -29,6 +32,9 @@ public class NotificationServiceImpl implements NotificationService{
 	@Override
 	public SseEmitter connection(Employee employee, String lastEventId) {
 		// Last-Event-Id를 구분하려는 용도 == data 유실지점 파악
+		if(employee!=null) {
+			
+		}
 		String id = employee.getEmpNo()+ "_" + System.currentTimeMillis(); 
 		// 클라이언트의 SSE 연결 요청에 응답하기 위한 SseEmitter 객체 생성
 		// 유효시간 지정으로 시간이 지나면 클라이언트에서 자동으로 재연결 요청함
@@ -36,11 +42,32 @@ public class NotificationServiceImpl implements NotificationService{
 		log.info(emitter.toString());
 		log.info(lastEventId);
 		
-		emitterDao.save(id, emitter);
+//		emitter.onCompletion(()-> emitterDao.delete(id));
+//		emitter.onTimeout(()-> emitterDao.delete(id));
+//		emitter.onError((e)-> emitterDao.delete(id));
 		
-		emitter.onCompletion(()-> emitterDao.delete(id));
-		emitter.onTimeout(()-> emitterDao.delete(id));
-		emitter.onError((e)-> emitterDao.delete(id));
+//		Map<String, SseEmitter> emitters = emitterDao.findAllStartById(id); // startsById 로 emitters 를 찾아오는 게 아니라, 전체가 일치하는 Id를 없애줘야 함..
+		Map<String, SseEmitter> emitters = emitterDao.findById(id);
+		emitter.onCompletion(() -> {
+		    // emitter가 완료되었을 때, 존재 여부 확인 후 삭제
+		    if (emitters.containsKey(id)) {
+		        emitterDao.delete(id);
+		    }
+		});
+
+		emitter.onTimeout(() -> {
+		    // 타임아웃 시, 존재 여부 확인 후 삭제
+		    if (emitters.containsKey(id)) {
+		        emitterDao.delete(id);
+		    }
+		});
+
+		emitter.onError((e) -> {
+		    // 에러 시, 존재 여부 확인 후 삭제
+		    if (emitters.containsKey(id)) {
+		        emitterDao.delete(id);
+		    }
+		});
 		
 		sendToClient(emitter, id, "연결되었습니다" + employee.getEmpName() + "님");
 		
@@ -52,7 +79,7 @@ public class NotificationServiceImpl implements NotificationService{
 		// 해당 유저가 로그인해서 접속해 있는 상황이어야 실시간으로 알림을 보내줄 수 있다.
 		// 알림은, 전자결재/채팅/메일/일정/프로젝트 등에 따라 내용이 달라진다. 따라서, Message 내용만 각자 로직에서 구현해서 send() 메소드를 사용하면 된다.
 		Notification noti = createNotification(receiver, message); // 받는 사람과 메시지를 전달하면, Notification 객체를 생성하게 된다.
-		Map<String, Object> notification = new HashMap<>();
+		Map<String, Object> notification = new ConcurrentHashMap<>();
 		notification.put("receiver", receiver);
 		notification.put("message", message);
 		
@@ -64,33 +91,28 @@ public class NotificationServiceImpl implements NotificationService{
 		
 		if(!emitters.isEmpty()) {
 			// 해당되는 SseEmitter 객체가 존재할 경우 실행되는 로직 
-			// 여러 객체가 있을 수 있다(웹, 모바일, 여러 창을 띄워둔 경우 등) 
 			emitters.forEach(
 					(key,emitter) -> {
 						emitterDao.saveEventCache(key, noti);
 						sendToClient(emitter, key, noti);
 					});
 		} else if(emitters.isEmpty()) {
-			// 만약 알림을 받는 클라이언트가 접속해있지 않다면 실행되는 로직
-			// 해당 emitter가 없으니까, 알림을 저장해야 하는데(id를 receiver + '특정할 수 있는 단어'로 설정해서)
-			// 나중에 해당 receiver가 접속했을 때, 보낼 수 있게 할까 ?
-			// 아니면 그냥 해당 receiver에게 notification 전체 데이터를 띄워주고, 이후에 오는 실시간 알림만 받을 수 있게 할까 ?
+	
 		}
 		
 	}
 	
 	@Override
 	public void sendToClient(SseEmitter emitter, String id, Object data) {
-		try {
-			emitter.send(SseEmitter.event()
-							.id(id)
-							.name("alarm")
-							.data(data));
-		} catch(IOException e) {
-			log.error("SSE 연결 오류 발생", e);
-		}
-		
-		
+        try {
+            emitter.send(SseEmitter.event()
+                            .id(id)
+                            .name("alarm")
+                            .data(data)); // 객체 그대로 전달
+        } catch (IOException e) {
+            log.error("SSE 연결 오류 발생", e);
+            emitterDao.delete(id);
+        }
 	}
 	
 	@Override

@@ -8,6 +8,7 @@ public interface EmitterDao {
 	SseEmitter save(String id, SseEmitter sseEmitter);
 	void saveEventCache(String id, Object event);
 	Map<String, SseEmitter> findAllStartById(String id);
+	Map<String, SseEmitter> findById(String id);
 	void deleteAllStartsByWithId(String id);
 	void delete(String id);
 }
