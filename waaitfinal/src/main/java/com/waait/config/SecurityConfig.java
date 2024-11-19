@@ -42,9 +42,11 @@ public class SecurityConfig {
 						.usernameParameter("user")
 						.passwordParameter("password"))
 				.authenticationProvider(provider)
-				.logout(logout -> logout.logoutSuccessUrl("/login").invalidateHttpSession(true)
-				).sessionManagement(session->
-				session.maximumSessions(1)
+				.logout(logout -> logout.logoutSuccessUrl("/login")
+						.invalidateHttpSession(true)
+						.clearAuthentication(true) // clearAuthentication(true)설정 추가
+				).sessionManagement(session -> session.maximumSessions(1)
+						.expiredUrl("/login") // expiredUrl 설정함. server에서 logout처리가 되었을 때,페이지 전환이 되지 않아 계속해서 event연결 요청
 				)
 				;
 		return http.build();

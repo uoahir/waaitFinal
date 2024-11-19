@@ -59,9 +59,15 @@ function connectSSE(){
 
 	    // 연결이 끊어졌을 때 처리
 	    if (eventSource.readyState === EventSource.CLOSED) {
-	        console.log("서버와의 연결이 끊어졌습니다. 다시 연결을 시도합니다.");
-	        eventSource.close(); // 기존 연결 종료
-	        reconnectSSE(); // 새로 연결 시도
+	        console.log("서버와의 연결이 끊어졌습니다.");
+			
+			if(isUserLoggedIn()){
+				console.log('로그인 상태입니다. 연결을 다시 시도합니다.');
+		        eventSource.close(); // 기존 연결 종료
+		        reconnectSSE(); // 새로 연결 시도
+			} else {
+				console.log('로그인되지 않았습니다. 재연결을 시도하지 않습니다.');
+			}
 	    }
 	};
 }
@@ -97,8 +103,10 @@ function addRealTimeNotification(notification) {
 	
 }
 
-if(empNo.length > 0) {
+if(empNo && empNo.length > 0) {
 	connectSSE();
+} else {
+	console.log("USER is not logged in or empNo is empty");
 }
 
 

@@ -482,21 +482,12 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card col-30 col-xl-20">
                 <div class="card-header">
                     <h4>NOTIFICATION</h4>
                 </div>
-                <div class="card-content pb-4" id="list">
+                <div class="card-body" id="list" style="height:650px;">
              		<!-- 여기에 알림이 들어감 -->
-                </div>
-            </div> 
-            <div class="card">
-                <div class="card-header">
-                    <h4>승인 대기중 문서</h4>
-                    <h3></h3>
-                </div>
-                <div class="card-body">
-                    <div id="chart-visitors-profile"></div>                                                                              
                 </div>
             </div>
         </div>
