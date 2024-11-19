@@ -12,10 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,7 +86,7 @@ public class EDocController {
 	}
 	
 	@PostMapping(value = "/offedocend",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String insertOff(@RequestPart String data, @RequestPart(value = "files", required = false) List<MultipartFile> files, HttpSession session) throws JsonMappingException, JsonProcessingException {
+	public String insertOff(@RequestPart String data, @RequestPart(value = "files", required = false) List<MultipartFile> files, HttpSession session, @AuthenticationPrincipal Employee employee) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper ob = new ObjectMapper();
 		OffDocument offDocument = ob.readValue(data, OffDocument.class);
 		
@@ -147,7 +146,7 @@ public class EDocController {
 					}
 				}
 			}
-			service.insertOffEdoc(offDocument, offDocument.getEmpNo(), param, attatchFiles);
+			service.insertOffEdoc(offDocument, offDocument.getEmpNo(), param, attatchFiles, employee);
 			
 		} catch(RuntimeException e) {
 			e.printStackTrace();
@@ -156,7 +155,7 @@ public class EDocController {
 		return "redirect:/edoc/home";
 	}
 	@PostMapping(value = "/basicedocend",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-	public String insertBasic(@RequestPart String data, @RequestPart(value = "files", required = false) List<MultipartFile> files, HttpSession session) throws JsonMappingException, JsonProcessingException {
+	public String insertBasic(@RequestPart String data, @RequestPart(value = "files", required = false) List<MultipartFile> files, HttpSession session,@AuthenticationPrincipal Employee employee) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper ob = new ObjectMapper();
 		BasicDocument basicDocument = ob.readValue(data, BasicDocument.class);
 		
@@ -204,7 +203,7 @@ public class EDocController {
 					}
 				}
 			}
-			service.insertBasicEdoc(basicDocument, basicDocument.getEmpNo(), param, attatchFiles);
+			service.insertBasicEdoc(basicDocument, basicDocument.getEmpNo(), param, attatchFiles, employee);
 			
 		} catch(RuntimeException e) {
 			e.printStackTrace();

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import com.waait.dto.AbstractDocument;
 import com.waait.dto.Approval;
@@ -19,8 +20,8 @@ public interface EDocService {
 	List<Department> deptList();
 	
 //	결재 로직
-	int insertBasicEdoc(AbstractDocument document, int[] approval, Map<String, Object> param, List<AttatchFile> files); // 내부보고서(기본문서 작성)
-	int insertOffEdoc(AbstractDocument document, int[] approval, Map<String, Object> param, List<AttatchFile> files); // 휴가신청서(기본문서 작성)
+	int insertBasicEdoc(AbstractDocument document, int[] approval, Map<String, Object> param, List<AttatchFile> files, @AuthenticationPrincipal Employee employee); // 내부보고서(기본문서 작성)
+	int insertOffEdoc(AbstractDocument document, int[] approval, Map<String, Object> param, List<AttatchFile> files, @AuthenticationPrincipal Employee employee); // 휴가신청서(기본문서 작성)
 	List<AbstractDocument> awaitingApproval(Long empNo, Map<String,Integer> page); // 승인대기문서 출력(결재자)
 	List<AbstractDocument> inprogressDocument(Long empNo, Map<String,Integer> page); // 진행중인문서 출력(상신자)
 	List<AbstractDocument> approvedDocument(Long empNo, Map<String,Integer> page); // 승인완료된 문서 출력(내가올린문서 중 승인완료된 건 !)

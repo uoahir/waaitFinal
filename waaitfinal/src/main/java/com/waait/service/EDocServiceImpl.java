@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +30,7 @@ public class EDocServiceImpl implements EDocService {
 
 	private final EDocDao edocDao;
 	private final SqlSession session;
+	private final NotificationService notiService;
 	
 //	결재선 지정 로직
 	@Override
@@ -46,7 +48,7 @@ public class EDocServiceImpl implements EDocService {
 //	휴가신청서 insert 로직 (트랜잭셔널 ~ )
 	@Transactional
 	@Override
-	public int insertOffEdoc(AbstractDocument document, int[] approval, Map<String,Object> param, List<AttatchFile> files) {
+	public int insertOffEdoc(AbstractDocument document, int[] approval, Map<String,Object> param, List<AttatchFile> files, @AuthenticationPrincipal Employee employee) {
 		
 		int successCount = 0;
 		
@@ -81,6 +83,8 @@ public class EDocServiceImpl implements EDocService {
 				edocDao.insertApproval(session, app);
 			}	
 			
+			notiService.send(Long.valueOf(approval[0]), employee.getEmpName()+"님의 휴가신청서 결재가 요청되었습니다.");
+			
 			successCount++;
 			// approval line 데이터가 생성됨. -> 결재라인에 결재자들이 순서대로 들어가있음
 			// Document에 있는 현재결재자 컬럼값을 바로 업데이트 해줘야 함. 
@@ -98,7 +102,7 @@ public class EDocServiceImpl implements EDocService {
 //	기본보고서 insert 로직 (트랜잭셔널 ~ )
 	@Transactional
 	@Override
-	public int insertBasicEdoc(AbstractDocument document, int[] approval, Map<String,Object> param, List<AttatchFile> files) {
+	public int insertBasicEdoc(AbstractDocument document, int[] approval, Map<String,Object> param, List<AttatchFile> files, @AuthenticationPrincipal Employee employee) {
 		
 		int successCount = 0;
 		

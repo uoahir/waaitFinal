@@ -36,6 +36,8 @@ public class SpringScheduler {
 	// 30일 지난 메세지 삭제
 
 	// 채팅방에 참여된 모든 사원이 나가면 채팅방을 delete하면서 채팅기록도 같이 delete해주기...?
+	
+	
 	@Scheduled(cron = "0 59 23 * * ?") //하루 기준으로 해당 날에 값 넣어준거  
 	public void yourScheduledMethod() {
 		// 오늘 날짜 출력
@@ -131,11 +133,17 @@ public class SpringScheduler {
 	public void deleteExpiredDocument() {
 		try {
 			if(useSchedule) {
+				log.info("hi 이거 문서삭제 로직");
 				edocService.deleteEdoc();
+				log.info("완료됨~");
 			}
 		} catch (Exception e) {
-			log.info("* 시스템이 예기치 않게 종료되었습니다.");
+			log.info("* 만료일이 지난 문서를 삭제하는 시스템이 예기치 않게 종료되었습니다.");
+			log.info(e.toString());
 			// 작업 실패 시 재시도하는 로직
+			
+			// 전자결재관리자에게 이메일을 보내는 로직 (오늘 날짜 기준 만료일이 지난 문서 삭제처리가 되지 않았다 ~ )
+			
 		}
 	}
 }

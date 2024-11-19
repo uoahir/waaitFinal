@@ -12,9 +12,46 @@ window.onload = function(){
 	})
 }
 
+let eventSource;
 
 
-console.log(`${empNo}`);
+function connectSSE(){
+	eventSource = new EventSource(`${path}/api/user/notification`, {
+		withCredentials: true,
+	});
+	
+	eventSource.onopen = function(event){
+		console.log('SSE 연결이 열렸습니다.');
+	};
+	
+	eventSource.onmessage = function(event){
+		console.log('새로운 이벤트 :' + event.data);
+	};
+	
+	eventSource.addEventListener("alarm", (event)=>{
+		console.log(event);
+		console.log(event.data);
+			
+	});
+
+	eventSource.onerror = function(event) {
+	    console.error("SSE 연결 오류:", event);
+	    // 연결이 끊어졌을 때 처리하는 로직
+	    if (event.eventPhase === EventSource.CLOSED) {
+	        console.log("서버와의 연결이 끊어졌습니다. 다시 연결을 시도합니다.");
+	        eventSource.close();
+	        connectSSE(); // 다시 연결 시도
+	    }
+	};
+}
+
+
+if(empNo.length > 0) {
+	connectSSE();
+}
+
+
+/* console.log(`${empNo}`);
 if(empNo.length > 0) {
 	console.log('sse');
 	const eventSource = new EventSource(`${path}/api/user/notification`, {
@@ -27,7 +64,18 @@ if(empNo.length > 0) {
 		console.log("Connected to SSE : ", event)
 		console.log(event.data);
 		console.log("EventSource readyState", eventSource.readyState);
+		const list = document.getElementById("list");
+		const li = document.createElement("li");
+		li.innerText=event.data;
+		list.appendChild(li);
+		
 	});
+	
+	eventSource.addEventListener("alarm", (event)=>{
+		console.log(event);
+		console.log(event.data);
+		
+	})
 	console.log("EventSource readyState", eventSource.readyState);
 
 	
@@ -39,7 +87,7 @@ if(empNo.length > 0) {
 	};
 
 	
-}
+} */
 
 
 const time = new Date().toISOString();

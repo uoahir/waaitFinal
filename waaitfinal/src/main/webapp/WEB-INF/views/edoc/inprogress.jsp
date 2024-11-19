@@ -52,9 +52,9 @@
                         Write
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <div class="dropdown-item" onclick="window.open('${path}/edoc/write3?type=T01','_blank','width=1200, height=1000')">기본보고서</div>
+                        <div class="dropdown-item" onclick="window.open('${path}/edoc/write/basic?type=T01','_blank','width=1200, height=1000')">기본보고서</div>
                         <div class="dropdown-item" onclick="window.open('${path}/edoc/write4?type=T03','_blank','width=1200, height=1000')">출장신청서</div>
-                        <div class="dropdown-item" onclick="window.open('${path}/edoc/write2?type=T04','_blank','width=1200, height=1000')">휴가신청서</div>
+                        <div class="dropdown-item" onclick="window.open('${path}/edoc/write/leave?type=T04','_blank','width=1200, height=1000')">휴가신청서</div>
                     </div>
                 </div>
             </div>

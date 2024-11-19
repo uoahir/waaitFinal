@@ -31,9 +31,9 @@ public class NotificationController {
 	
 	@GetMapping(value = "/notification", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public SseEmitter Notifications(@AuthenticationPrincipal Employee employee,
-									@RequestHeader(value = "Last-Event-ID", required = false, defaultValue="") String lastEventId) {
+									@RequestHeader(value = "Last-Event-Id", required = false, defaultValue="") String lastEventId) {
 		log.info(lastEventId);		
-		return notificationService.createEmitter(employee.getEmpNo());
+		return notificationService.connection(employee, lastEventId);
 	}
 	
 }

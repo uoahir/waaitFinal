@@ -2,9 +2,9 @@ package com.waait.dao;
 
 import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+
 public interface NotificationDao {
-	int saveEmitter(Map<String,Object> param); // empNo + time, emitter
-	int saveNotice(Map<String,Object> param);
-	int delete(String id);
+	int saveNotification(Map<String,Object> param, SqlSession session);
 
 }
