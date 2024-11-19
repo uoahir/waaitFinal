@@ -14,7 +14,6 @@ window.onload = function(){
 
 let eventSource;
 
-
 function connectSSE(){
 	eventSource = new EventSource(`${path}/api/user/notification`, {
 		withCredentials: true,
@@ -47,7 +46,7 @@ function connectSSE(){
 		        addRealTimeNotification(notification);
 				
 		    } catch (error) {
-		        console.warn('JSON 파싱 실패 : ' + event.data + "왜? " + error);
+		        console.warn('JSON 파싱 실패 : ' + event.data + " : " + error);
 		    }
 		}
 		console.log(eventSource.readyState);

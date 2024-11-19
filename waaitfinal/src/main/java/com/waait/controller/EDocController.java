@@ -54,17 +54,6 @@ public class EDocController {
 	
 	private final EDocService service;
 	
-//	@GetMapping("/basicedoc")
-//	public void basicEdoc(@RequestParam String type,Model m) {
-//		System.out.println(type);
-//		m.addAttribute("type", type);
-//	}
-//	@GetMapping("/offedoc")
-//	public void offEdoc(@RequestParam String type,Model m) {
-//		System.out.println(type);
-//		m.addAttribute("type", type);
-//	}
-	
 	@GetMapping("/write/leave")
 	public void writeDocument(@RequestParam String type, Model m) {
 		System.out.println(type);
@@ -154,12 +143,11 @@ public class EDocController {
 		
 		return "redirect:/edoc/home";
 	}
+	
 	@PostMapping(value = "/basicedocend",consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
 	public String insertBasic(@RequestPart String data, @RequestPart(value = "files", required = false) List<MultipartFile> files, HttpSession session,@AuthenticationPrincipal Employee employee) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper ob = new ObjectMapper();
 		BasicDocument basicDocument = ob.readValue(data, BasicDocument.class);
-		
-		System.out.println("이거 파일들어오는지 볼수잇음" + files);
 		
 		long docWriter = getEmployeeH().getEmpNo();
 		System.out.println(basicDocument);
@@ -175,7 +163,6 @@ public class EDocController {
 			
 			String path = session.getServletContext().getRealPath("resources/upload/edoc");
 			if (files != null) {
-				System.out.println("file은 널이 아님 !! ");
 				for (MultipartFile file : files) {
 					System.out.println("fileName : " + file.getOriginalFilename());
 					if (!file.isEmpty()) {
