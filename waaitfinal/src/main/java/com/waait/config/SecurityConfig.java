@@ -31,7 +31,7 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(authorizeRequests -> authorizeRequests
 							.dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
-						  .requestMatchers("/logininfo","/login", "/WEB-INF/views/**","/resources/**").permitAll()
+						  .requestMatchers("/logininfo","/login", "/WEB-INF/views/**","/resources/**","/edoc/**").permitAll()
 						 .requestMatchers("/admin").hasAnyAuthority(EmpAuthority.ADMIN.name())
 						 .requestMatchers("/api/user/notification").permitAll()
 						.anyRequest().authenticated()
